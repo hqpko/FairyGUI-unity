@@ -4,9 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Relations
     {
         GObject _owner;
@@ -20,9 +18,7 @@ namespace FairyGUI
             _items = new List<RelationItem>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void Add(GObject target, RelationType relationType)
@@ -30,9 +26,7 @@ namespace FairyGUI
             Add(target, relationType, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         /// <param name="usePercent"></param>
@@ -54,9 +48,7 @@ namespace FairyGUI
             _items.Add(newItem);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void Remove(GObject target, RelationType relationType)
@@ -83,9 +75,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <returns></returns>
         public bool Contains(GObject target)
@@ -100,9 +90,7 @@ namespace FairyGUI
             return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         public void ClearFor(GObject target)
         {
@@ -122,9 +110,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ClearAll()
         {
             int cnt = _items.Count;
@@ -136,9 +122,7 @@ namespace FairyGUI
             _items.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="source"></param>
         public void CopyFrom(Relations source)
         {
@@ -153,18 +137,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Dispose()
         {
             ClearAll();
             handling = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="dWidth"></param>
         /// <param name="dHeight"></param>
         /// <param name="applyPivot"></param>
@@ -178,9 +158,7 @@ namespace FairyGUI
                 _items[i].ApplyOnSelfSizeChanged(dWidth, dHeight, applyPivot);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isEmpty
         {
             get

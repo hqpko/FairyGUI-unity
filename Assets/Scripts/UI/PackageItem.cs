@@ -3,9 +3,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PackageItem
     {
         public UIPackage owner;

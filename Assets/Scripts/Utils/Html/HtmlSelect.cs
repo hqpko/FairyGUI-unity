@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlSelect : IHtmlObject
     {
         public GComboBox comboBox { get; private set; }

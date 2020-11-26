@@ -26,9 +26,7 @@ namespace FairyGUI
             _scrollPerc = 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="vertical"></param>
         public void SetScrollPane(ScrollPane target, bool vertical)
@@ -37,9 +35,7 @@ namespace FairyGUI
             _vertical = vertical;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SetDisplayPerc(float value)
         {
             if (_vertical)
@@ -58,9 +54,7 @@ namespace FairyGUI
             _grip.visible = value != 0 && value != 1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void setScrollPerc(float value)
         {
             _scrollPerc = value;
@@ -70,9 +64,7 @@ namespace FairyGUI
                 _grip.x = Mathf.RoundToInt(_bar.x + (_bar.width - _grip.width) * _scrollPerc);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float minSize
         {
             get
@@ -84,9 +76,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool gripDragging
         {
             get

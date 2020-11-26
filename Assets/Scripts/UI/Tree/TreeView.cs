@@ -3,9 +3,7 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [Obsolete("Use GTree and GTreeNode instead")]
     public class TreeView : EventDispatcher
     {
@@ -53,9 +51,7 @@ namespace FairyGUI
         /// </summary>
         public EventListener onRightClickNode { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="list"></param>
         public TreeView(GList list)
         {
@@ -75,9 +71,7 @@ namespace FairyGUI
             onRightClickNode = new EventListener(this, "onRightClickNode");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public TreeNode GetSelectedNode()
         {
@@ -87,9 +81,7 @@ namespace FairyGUI
                 return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public List<TreeNode> GetSelection()
         {
@@ -104,9 +96,7 @@ namespace FairyGUI
             return ret;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         /// <param name="scrollItToView"></param>
         public void AddSelection(TreeNode node, bool scrollItToView = false)
@@ -120,26 +110,20 @@ namespace FairyGUI
             list.AddSelection(list.GetChildIndex(node.cell), scrollItToView);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         public void RemoveSelection(TreeNode node)
         {
             list.RemoveSelection(list.GetChildIndex(node.cell));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ClearSelection()
         {
             list.ClearSelection();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         /// <returns></returns>
         public int GetNodeIndex(TreeNode node)
@@ -147,9 +131,7 @@ namespace FairyGUI
             return list.GetChildIndex(node.cell);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         public void UpdateNode(TreeNode node)
         {
@@ -160,9 +142,7 @@ namespace FairyGUI
                 treeNodeRender(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="nodes"></param>
         public void UpdateNodes(List<TreeNode> nodes)
         {
@@ -178,9 +158,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         public void ExpandAll(TreeNode folderNode)
         {
@@ -194,9 +172,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         public void CollapseAll(TreeNode folderNode)
         {
@@ -211,9 +187,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         void CreateCell(TreeNode node)
         {
@@ -247,9 +221,7 @@ namespace FairyGUI
                 treeNodeRender(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void AfterInserted(TreeNode node)
         {
@@ -264,9 +236,7 @@ namespace FairyGUI
                 CheckChildren(node, index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         /// <returns></returns>
         int GetInsertIndexForNode(TreeNode node)
@@ -289,18 +259,14 @@ namespace FairyGUI
             return insertIndex;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void AfterRemoved(TreeNode node)
         {
             RemoveNode(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void AfterExpanded(TreeNode node)
         {
@@ -324,9 +290,7 @@ namespace FairyGUI
                 CheckChildren(node, list.GetChildIndex(node.cell));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void AfterCollapsed(TreeNode node)
         {
@@ -350,9 +314,7 @@ namespace FairyGUI
                 HideFolderNode(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void AfterMoved(TreeNode node)
         {
@@ -368,9 +330,7 @@ namespace FairyGUI
                 CheckChildren(node, index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -394,9 +354,7 @@ namespace FairyGUI
             return index;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         void HideFolderNode(TreeNode folderNode)
         {
@@ -417,9 +375,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         void RemoveNode(TreeNode node)
         {

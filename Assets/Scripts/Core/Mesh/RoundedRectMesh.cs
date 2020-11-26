@@ -4,44 +4,28 @@ namespace FairyGUI
 {
     public class RoundedRectMesh : IMeshFactory, IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect? drawRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32 lineColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? fillColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float topLeftRadius;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float topRightRadius;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float bottomLeftRadius;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float bottomRightRadius;
 
         public RoundedRectMesh()

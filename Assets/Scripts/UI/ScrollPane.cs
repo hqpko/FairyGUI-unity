@@ -4,9 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class ScrollPane : EventDispatcher
     {
         /// <summary>
@@ -236,9 +234,7 @@ namespace FairyGUI
             SetSize(owner.width, owner.height);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Dispose()
         {
             RemoveEventListeners();
@@ -294,41 +290,31 @@ namespace FairyGUI
             get { return _onPullUpRelease ?? (_onPullUpRelease = new EventListener(this, "onPullUpRelease")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent owner
         {
             get { return _owner; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GScrollBar hzScrollBar
         {
             get { return _hzScrollBar; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GScrollBar vtScrollBar
         {
             get { return _vtScrollBar; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent header
         {
             get { return _header; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent footer
         {
             get { return _footer; }
@@ -402,9 +388,7 @@ namespace FairyGUI
             set { _pageMode = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Controller pageController
         {
             get { return _pageController; }
@@ -713,51 +697,39 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollTop()
         {
             ScrollTop(false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="ani"></param>
         public void ScrollTop(bool ani)
         {
             this.SetPercY(0, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollBottom()
         {
             ScrollBottom(false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="ani"></param>
         public void ScrollBottom(bool ani)
         {
             this.SetPercY(1, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollUp()
         {
             ScrollUp(1, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="ratio"></param>
         /// <param name="ani"></param>
         public void ScrollUp(float ratio, bool ani)
@@ -768,17 +740,13 @@ namespace FairyGUI
                 SetPosY(_yPos - _scrollStep * ratio, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollDown()
         {
             ScrollDown(1, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="ratio"></param>
         /// <param name="ani"></param>
         public void ScrollDown(float ratio, bool ani)
@@ -789,17 +757,13 @@ namespace FairyGUI
                 SetPosY(_yPos + _scrollStep * ratio, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollLeft()
         {
             ScrollLeft(1, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="speed"></param>
         /// <param name="ani"></param>
         public void ScrollLeft(float ratio, bool ani)
@@ -810,17 +774,13 @@ namespace FairyGUI
                 SetPosX(_xPos - _scrollStep * ratio, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ScrollRight()
         {
             ScrollRight(1, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="ratio"></param>
         /// <param name="ani"></param>
         public void ScrollRight(float ratio, bool ani)
@@ -831,18 +791,14 @@ namespace FairyGUI
                 SetPosX(_xPos + _scrollStep * ratio, ani);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj">obj can be any object on stage, not limited to the direct child of this container.</param>
         public void ScrollToView(GObject obj)
         {
             ScrollToView(obj, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj">obj can be any object on stage, not limited to the direct child of this container.</param>
         /// <param name="ani">If moving to target position with animation</param>
         public void ScrollToView(GObject obj, bool ani)
@@ -850,9 +806,7 @@ namespace FairyGUI
             ScrollToView(obj, ani, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj">obj can be any object on stage, not limited to the direct child of this container.</param>
         /// <param name="ani">If moving to target position with animation</param>
         /// <param name="setFirst">If true, scroll to make the target on the top/left; If false, scroll to make the target any position in view.</param>
@@ -868,9 +822,7 @@ namespace FairyGUI
             ScrollToView(rect, ani, setFirst);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="rect">Rect in local coordinates</param>
         /// <param name="ani">If moving to target position with animation</param>
         /// <param name="setFirst">If true, scroll to make the target on the top/left; If false, scroll to make the target any position in view.</param>
@@ -924,9 +876,7 @@ namespace FairyGUI
                 Refresh();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj">obj must be the direct child of this container</param>
         /// <returns></returns>
         public bool IsChildInView(GObject obj)

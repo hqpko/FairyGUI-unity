@@ -12,9 +12,7 @@ namespace FairyGUI
     /// <param name="item">Item object.</param>
     public delegate void ListItemRenderer(int index, GObject item);
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     /// <param name="index"></param>
     /// <returns></returns>
     public delegate string ListItemProvider(int index);
@@ -50,9 +48,7 @@ namespace FairyGUI
         /// </summary>
         public ListItemProvider itemProvider;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool scrollItemToViewOnClick;
 
         ListLayoutType _layout;
@@ -160,9 +156,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int lineCount
         {
             get { return _lineCount; }
@@ -181,9 +175,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int columnCount
         {
             get { return _columnCount; }
@@ -202,9 +194,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int lineGap
         {
             get { return _lineGap; }
@@ -220,9 +210,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int columnGap
         {
             get { return _columnGap; }
@@ -238,9 +226,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align
         {
             get { return _align; }
@@ -256,9 +242,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertAlignType verticalAlign
         {
             get { return _verticalAlign; }
@@ -291,9 +275,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public Vector2 defaultItemSize
         {
@@ -312,17 +294,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObjectPool itemPool
         {
             get { return _pool; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         /// <returns></returns>
         public GObject GetFromPool(string url)
@@ -364,9 +342,7 @@ namespace FairyGUI
             return AddChild(obj);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -386,9 +362,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <param name="dispose"></param>
         /// <returns></returns>
@@ -401,9 +375,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         public void RemoveChildToPoolAt(int index)
         {
@@ -411,9 +383,7 @@ namespace FairyGUI
             ReturnToPool(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         public void RemoveChildToPool(GObject child)
         {
@@ -421,17 +391,13 @@ namespace FairyGUI
             ReturnToPool(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void RemoveChildrenToPool()
         {
             RemoveChildrenToPool(0, -1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
         public void RemoveChildrenToPool(int beginIndex, int endIndex)
@@ -443,9 +409,7 @@ namespace FairyGUI
                 RemoveChildToPoolAt(beginIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int selectedIndex
         {
             get
@@ -492,27 +456,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Controller selectionController
         {
             get { return _selectionController; }
             set { _selectionController = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public List<int> GetSelection()
         {
             return GetSelection(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public List<int> GetSelection(List<int> result)
         {
@@ -551,9 +509,7 @@ namespace FairyGUI
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <param name="scrollItToView"></param>
         public void AddSelection(int index, bool scrollItToView)
@@ -588,9 +544,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         public void RemoveSelection(int index)
         {
@@ -612,9 +566,7 @@ namespace FairyGUI
                 obj.selected = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ClearSelection()
         {
             if (_virtual)
@@ -668,9 +620,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SelectAll()
         {
             CheckVirtualList();
@@ -708,17 +658,13 @@ namespace FairyGUI
                 UpdateSelectionController(last);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SelectNone()
         {
             ClearSelection();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SelectReverse()
         {
             CheckVirtualList();
@@ -758,9 +704,7 @@ namespace FairyGUI
                 UpdateSelectionController(last);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="enabled"></param>
         public void EnableSelectionFocusEvents(bool enabled)
         {
@@ -794,9 +738,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void EnableArrowKeyNavigation(bool enabled)
         {
             if (enabled)
@@ -843,9 +785,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="dir"></param>
         public int HandleArrowKey(int dir)
         {
@@ -1211,9 +1151,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         override protected void HandleSizeChanged()
         {
             base.HandleSizeChanged();

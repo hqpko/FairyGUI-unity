@@ -5,9 +5,7 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlParser
     {
         public static HtmlParser inst = new HtmlParser();

@@ -2,29 +2,19 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class FillMesh : IMeshFactory
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FillMethod method;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int origin;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float amount;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool clockwise;
 
         public FillMesh()

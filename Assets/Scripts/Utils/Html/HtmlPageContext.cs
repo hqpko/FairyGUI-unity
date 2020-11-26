@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlPageContext : IHtmlPageContext
     {
         Stack<IHtmlObject> _imagePool;

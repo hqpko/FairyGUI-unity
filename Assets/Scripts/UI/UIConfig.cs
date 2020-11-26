@@ -135,19 +135,13 @@ namespace FairyGUI
         /// </summary>
         public static bool bringWindowToFrontOnClick = true;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static float inputCaretSize = 1;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static Color inputHighlightColor = new Color32(255, 223, 141, 128);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static float frameTimeForAsyncUIConstruction = 0.002f;
 
         /// <summary>
@@ -444,9 +438,7 @@ namespace FairyGUI
 
         public delegate NAudioClip SoundLoader(string url);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static SoundLoader soundLoader = null;
     }
 }

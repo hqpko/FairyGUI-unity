@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class FontManager
     {
         public static Dictionary<string, BaseFont> sFontFactory = new Dictionary<string, BaseFont>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="font"></param>
         /// <param name="alias"></param>
         static public void RegisterFont(BaseFont font, string alias = null)
@@ -23,9 +19,7 @@ namespace FairyGUI
                 sFontFactory[alias] = font;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="font"></param>
         static public void UnregisterFont(BaseFont font)
         {
@@ -40,9 +34,7 @@ namespace FairyGUI
                 sFontFactory.Remove(key);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         static public BaseFont GetFont(string name)
@@ -132,9 +124,7 @@ namespace FairyGUI
             return font;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         static public void Clear()
         {
             foreach (KeyValuePair<string, BaseFont> kv in sFontFactory)

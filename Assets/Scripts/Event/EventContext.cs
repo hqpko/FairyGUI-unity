@@ -2,14 +2,10 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class EventContext
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventDispatcher sender { get; internal set; }
 
         /// <summary>
@@ -22,14 +18,10 @@ namespace FairyGUI
         /// </summary>
         public InputEvent inputEvent { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string type;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public object data;
 
         internal bool _defaultPrevented;
@@ -38,33 +30,25 @@ namespace FairyGUI
 
         internal List<EventBridge> callChain = new List<EventBridge>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void StopPropagation()
         {
             _stopsPropagation = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void PreventDefault()
         {
             _defaultPrevented = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void CaptureTouch()
         {
             _touchCapture = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isDefaultPrevented
         {
             get { return _defaultPrevented; }

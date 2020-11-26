@@ -15,9 +15,7 @@ namespace FairyGUI.Utils
         Instruction
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class XMLIterator
     {
         public static string tagName;

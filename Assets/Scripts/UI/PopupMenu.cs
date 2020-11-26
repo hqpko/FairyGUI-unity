@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PopupMenu : EventDispatcher
     {
         protected GComponent _contentPane;
@@ -29,9 +27,7 @@ namespace FairyGUI
             Create(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="resourceURL"></param>
         public PopupMenu(string resourceURL)
         {
@@ -79,9 +75,7 @@ namespace FairyGUI
             _closeSubMenu = CloseSubMenu;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="caption"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -93,9 +87,7 @@ namespace FairyGUI
             return item;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="caption"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -107,9 +99,7 @@ namespace FairyGUI
             return item;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="caption"></param>
         /// <param name="index"></param>
         /// <param name="callback"></param>
@@ -122,9 +112,7 @@ namespace FairyGUI
             return item;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="caption"></param>
         /// <param name="index"></param>
         /// <param name="callback"></param>
@@ -157,17 +145,13 @@ namespace FairyGUI
             return item;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void AddSeperator()
         {
             AddSeperator(-1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void AddSeperator(int index)
         {
             if (UIConfig.popupMenu_seperator == null)
@@ -185,9 +169,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public string GetItemName(int index)
@@ -196,9 +178,7 @@ namespace FairyGUI
             return item.name;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="caption"></param>
         public void SetItemText(string name, string caption)
@@ -207,9 +187,7 @@ namespace FairyGUI
             item.title = caption;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="visible"></param>
         public void SetItemVisible(string name, bool visible)
@@ -222,9 +200,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="grayed"></param>
         public void SetItemGrayed(string name, bool grayed)
@@ -233,9 +209,7 @@ namespace FairyGUI
             item.grayed = grayed;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="checkable"></param>
         public void SetItemCheckable(string name, bool checkable)
@@ -254,9 +228,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="check"></param>
         public void SetItemChecked(string name, bool check)
@@ -273,9 +245,7 @@ namespace FairyGUI
             return IsItemChecked(name);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         public bool IsItemChecked(string name)
@@ -288,9 +258,7 @@ namespace FairyGUI
                 return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         public void RemoveItem(string name)
         {
@@ -308,33 +276,25 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ClearItems()
         {
             _list.RemoveChildrenToPool();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int itemCount
         {
             get { return _list.numChildren; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent contentPane
         {
             get { return _contentPane; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GList list
         {
             get { return _list; }
@@ -352,17 +312,13 @@ namespace FairyGUI
             _contentPane.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Show()
         {
             Show(null, PopupDirection.Auto);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         public void Show(GObject target)
         {
@@ -375,9 +331,7 @@ namespace FairyGUI
             Show(target, downward == null ? PopupDirection.Auto : ((bool)downward == true ? PopupDirection.Down : PopupDirection.Up), null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="dir"></param>
         public void Show(GObject target, PopupDirection dir)
@@ -385,9 +339,7 @@ namespace FairyGUI
             Show(target, PopupDirection.Auto, null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="dir"></param>
         /// <param name="parentMenu"></param>

@@ -3,24 +3,16 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GTreeNode
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public object data;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTreeNode parent { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTree tree { get; private set; }
 
         List<GTreeNode> _children;
@@ -29,18 +21,14 @@ namespace FairyGUI
         internal GComponent _cell;
         internal string _resURL;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="hasChild"></param>
         public GTreeNode(bool hasChild) : this(hasChild, null)
         {
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="hasChild"></param>
         /// <param name="resURL"></param>
         public GTreeNode(bool hasChild, string resURL)
@@ -50,25 +38,19 @@ namespace FairyGUI
             _resURL = resURL;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent cell
         {
             get { return _cell; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int level
         {
             get { return _level; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool expanded
         {
             get
@@ -95,9 +77,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ExpandToRoot()
         {
             GTreeNode p = this;
@@ -108,17 +88,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isFolder
         {
             get { return _children != null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string text
         {
             get
@@ -136,9 +112,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string icon
         {
             get
@@ -156,9 +130,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public GTreeNode AddChild(GTreeNode child)
@@ -167,9 +139,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -212,9 +182,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public GTreeNode RemoveChild(GTreeNode child)
@@ -227,9 +195,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public GTreeNode RemoveChildAt(int index)
@@ -254,9 +220,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
         public void RemoveChildren(int beginIndex = 0, int endIndex = -1)
@@ -268,9 +232,7 @@ namespace FairyGUI
                 RemoveChildAt(beginIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public GTreeNode GetChildAt(int index)
@@ -281,9 +243,7 @@ namespace FairyGUI
                 throw new Exception("Invalid child index");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public int GetChildIndex(GTreeNode child)
@@ -291,9 +251,7 @@ namespace FairyGUI
             return _children.IndexOf(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public GTreeNode GetPrevSibling()
         {
@@ -307,9 +265,7 @@ namespace FairyGUI
             return parent._children[i - 1];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public GTreeNode GetNextSibling()
         {
@@ -323,9 +279,7 @@ namespace FairyGUI
             return parent._children[i + 1];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <param name="index"></param>
         public void SetChildIndex(GTreeNode child, int index)
@@ -349,9 +303,7 @@ namespace FairyGUI
                 tree._AfterMoved(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child1"></param>
         /// <param name="child2"></param>
         public void SwapChildren(GTreeNode child1, GTreeNode child2)
@@ -363,9 +315,7 @@ namespace FairyGUI
             SwapChildrenAt(index1, index2);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index1"></param>
         /// <param name="index2"></param>
         public void SwapChildrenAt(int index1, int index2)
@@ -377,9 +327,7 @@ namespace FairyGUI
             SetChildIndex(child2, index1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int numChildren
         {
             get { return (null == _children) ? 0 : _children.Count; }

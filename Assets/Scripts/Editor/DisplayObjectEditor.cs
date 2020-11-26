@@ -4,9 +4,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [CustomEditor(typeof(DisplayObjectInfo))]
     public class DisplayObjectEditor : Editor
     {

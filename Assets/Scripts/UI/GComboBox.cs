@@ -15,9 +15,7 @@ namespace FairyGUI
         /// </summary>
         public int visibleItemCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent dropdown;
 
         /// <summary>
@@ -139,9 +137,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int titleFontSize
         {
             get
@@ -182,9 +178,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string[] icons
         {
             get { return _icons != null ? _icons.ToArray() : null; }
@@ -211,25 +205,19 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<string> itemList
         {
             get { return _items; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<string> valueList
         {
             get { return _values; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<string> iconList
         {
             get { return _icons ?? (_icons = new List<string>()); }
@@ -294,9 +282,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Controller selectionController
         {
             get { return _selectionController; }
@@ -326,18 +312,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public PopupDirection popupDirection
         {
             get { return _popupDirection; }
             set { _popupDirection = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public GTextField GetTextField()
         {

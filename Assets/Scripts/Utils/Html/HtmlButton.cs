@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlButton : IHtmlObject
     {
         public GComponent button { get; private set; }

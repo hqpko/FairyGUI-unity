@@ -4,9 +4,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [CustomEditor(typeof(UIConfig))]
     public class UIConfigEditor : Editor
     {

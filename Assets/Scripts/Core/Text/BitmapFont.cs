@@ -3,14 +3,10 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class BitmapFont : BaseFont
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public class BMGlyph
         {
             public float x;
@@ -23,14 +19,10 @@ namespace FairyGUI
             public int channel;//0-n/a, 1-r,2-g,3-b,4-alpha
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int size;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool resizable;
 
         /// <summary>

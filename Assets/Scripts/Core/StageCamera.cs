@@ -10,14 +10,10 @@ namespace FairyGUI
     [AddComponentMenu("FairyGUI/UI Camera")]
     public class StageCamera : MonoBehaviour
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool constantSize = true;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         [NonSerialized]
         public float unitsPerPixel = 0.02f;
 
@@ -35,15 +31,11 @@ namespace FairyGUI
         [NonSerialized]
         Display _display;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         [NonSerialized]
         public static Camera main;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         [NonSerialized]
         public static int screenSizeVer = 1;
 
@@ -150,9 +142,7 @@ namespace FairyGUI
             HitTestContext.cachedMainCamera = Camera.main;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void CheckCaptureCamera()
         {
             if (GameObject.Find(Name) == null)
@@ -162,9 +152,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="cullingMask"></param>
         /// <returns></returns>

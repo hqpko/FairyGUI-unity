@@ -2,14 +2,10 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class ShapeHitTest : IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public DisplayObject shape;
 
         public ShapeHitTest(DisplayObject obj)
@@ -17,9 +13,7 @@ namespace FairyGUI
             shape = obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>

@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PolygonMesh : IMeshFactory, IHitTest
     {
         /// <summary>
@@ -18,29 +16,19 @@ namespace FairyGUI
         /// </summary>
         public readonly List<Vector2> texcoords;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32 lineColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? fillColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32[] colors;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool usePercentPositions;
 
         static List<int> sRestIndices = new List<int>();
@@ -51,18 +39,14 @@ namespace FairyGUI
             texcoords = new List<Vector2>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="point"></param>
         public void Add(Vector2 point)
         {
             points.Add(point);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="point"></param>
         /// <param name="texcoord"></param>
         public void Add(Vector2 point, Vector2 texcoord)

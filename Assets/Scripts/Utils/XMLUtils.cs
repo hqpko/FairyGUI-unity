@@ -3,9 +3,7 @@ using System.Text;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class XMLUtils
     {
         public static string DecodeString(string aSource)

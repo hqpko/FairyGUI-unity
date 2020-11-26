@@ -9,9 +9,7 @@ namespace FairyGUI
     /// </summary>
     public class RotationGesture : EventDispatcher
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject host { get; private set; }
 
         /// <summary>

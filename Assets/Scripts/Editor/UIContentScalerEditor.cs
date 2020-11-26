@@ -3,9 +3,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [CustomEditor(typeof(UIContentScaler))]
     public class UIContentScalerEditor : Editor
     {

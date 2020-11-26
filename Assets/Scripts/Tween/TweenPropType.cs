@@ -1,8 +1,6 @@
 ﻿namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum TweenPropType
     {
         None,

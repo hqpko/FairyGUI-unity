@@ -156,9 +156,7 @@ namespace FairyGUI
         /// </summary>
         public EaseType easeType;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public CustomEase customEase;
 
         /// <summary>

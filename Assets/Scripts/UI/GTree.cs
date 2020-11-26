@@ -4,9 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GTree : GList
     {
         public delegate void TreeNodeRenderDelegate(GTreeNode node, GComponent obj);
@@ -29,9 +27,7 @@ namespace FairyGUI
 
         private static List<int> helperIntList = new List<int>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTree()
         {
             _indent = 30;
@@ -59,18 +55,14 @@ namespace FairyGUI
             set { _indent = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int clickToExpand
         {
             get { return _clickToExpand; }
             set { _clickToExpand = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public GTreeNode GetSelectedNode()
         {
@@ -81,18 +73,14 @@ namespace FairyGUI
                 return null;
         }
 
-        /// <summary>
-		/// 
-		/// </summary>
+
 		/// <returns></returns>
 		public List<GTreeNode> GetSelectedNodes()
         {
             return GetSelectedNodes(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="result"></param>
         /// <returns></returns>
         public List<GTreeNode> GetSelectedNodes(List<GTreeNode> result)
@@ -109,18 +97,14 @@ namespace FairyGUI
             }
             return result;
         }
-        /// <summary>
-		/// 
-		/// </summary>
+
 		/// <param name="node"></param>
         public void SelectNode(GTreeNode node)
         {
             SelectNode(node, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         /// <param name="scrollItToView"></param>
         public void SelectNode(GTreeNode node, bool scrollItToView)
@@ -134,26 +118,20 @@ namespace FairyGUI
             AddSelection(GetChildIndex(node.cell), scrollItToView);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         public void UnselectNode(GTreeNode node)
         {
             RemoveSelection(GetChildIndex(node.cell));
         }
 
-        /// <summary>
-		/// 
-		/// </summary>
+
         public void ExpandAll()
         {
             ExpandAll(_rootNode);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         public void ExpandAll(GTreeNode folderNode)
         {
@@ -167,18 +145,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         public void CollapseAll()
         {
             CollapseAll(_rootNode);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         public void CollapseAll(GTreeNode folderNode)
         {
@@ -193,9 +167,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         void CreateCell(GTreeNode node)
         {
@@ -230,9 +202,7 @@ namespace FairyGUI
                 treeNodeRender(node, node._cell);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void _AfterInserted(GTreeNode node)
         {
@@ -248,9 +218,7 @@ namespace FairyGUI
                 CheckChildren(node, index);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         /// <returns></returns>
         int GetInsertIndexForNode(GTreeNode node)
@@ -273,18 +241,14 @@ namespace FairyGUI
             return insertIndex;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void _AfterRemoved(GTreeNode node)
         {
             RemoveNode(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void _AfterExpanded(GTreeNode node)
         {
@@ -311,9 +275,7 @@ namespace FairyGUI
                 CheckChildren(node, GetChildIndex(node._cell));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void _AfterCollapsed(GTreeNode node)
         {
@@ -340,9 +302,7 @@ namespace FairyGUI
                 HideFolderNode(node);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         internal void _AfterMoved(GTreeNode node)
         {
@@ -386,9 +346,7 @@ namespace FairyGUI
             return cnt;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -412,9 +370,7 @@ namespace FairyGUI
             return index;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="folderNode"></param>
         void HideFolderNode(GTreeNode folderNode)
         {
@@ -430,9 +386,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="node"></param>
         void RemoveNode(GTreeNode node)
         {

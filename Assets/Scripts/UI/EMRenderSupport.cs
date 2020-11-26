@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public interface EMRenderTarget
     {
         int EM_sortingOrder { get; }
@@ -21,30 +19,22 @@ namespace FairyGUI
     /// </summary>
     public class EMRenderSupport
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static bool orderChanged;
 
         static UpdateContext _updateContext;
         static List<EMRenderTarget> _targets = new List<EMRenderTarget>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static bool packageListReady { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static bool hasTarget
         {
             get { return _targets.Count > 0; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public static void Add(EMRenderTarget value)
         {
@@ -53,9 +43,7 @@ namespace FairyGUI
             orderChanged = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public static void Remove(EMRenderTarget value)
         {

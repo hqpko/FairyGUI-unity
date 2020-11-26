@@ -2,9 +2,7 @@
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public static class ToolSet
     {
         public static Color ConvertFromHtmlColor(string str)

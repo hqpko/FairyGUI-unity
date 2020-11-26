@@ -3,29 +3,19 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class RichTextField : Container
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public IHtmlPageContext htmlPageContext { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public HtmlParseOptions htmlParseOptions { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Dictionary<uint, Emoji> emojies { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TextField textField { get; private set; }
 
         public RichTextField()
@@ -41,36 +31,28 @@ namespace FairyGUI
             AddChild(textField);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public string text
         {
             get { return textField.text; }
             set { textField.text = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public string htmlText
         {
             get { return textField.htmlText; }
             set { textField.htmlText = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public TextFormat textFormat
         {
             get { return textField.textFormat; }
             set { textField.textFormat = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         public HtmlElement GetHtmlElement(string name)
@@ -87,9 +69,7 @@ namespace FairyGUI
             return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public HtmlElement GetHtmlElementAt(int index)
@@ -97,17 +77,13 @@ namespace FairyGUI
             return textField.htmlElements[index];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int htmlElementCount
         {
             get { return textField.htmlElements.Count; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <param name="show"></param>
         public void ShowHtmlObject(int index, bool show)

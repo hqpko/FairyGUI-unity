@@ -2,9 +2,7 @@
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlInput : IHtmlObject
     {
         public GTextInput textInput { get; private set; }

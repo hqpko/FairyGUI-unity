@@ -6,34 +6,22 @@ using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class NGraphics : IMeshFactory
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GameObject gameObject { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public MeshFilter meshFilter { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public MeshRenderer meshRenderer { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Mesh mesh { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public BlendMode blendMode;
 
         /// <summary>
@@ -81,9 +69,7 @@ namespace FairyGUI
         MaterialPropertyBlock _propertyBlock;
         bool _blockUpdated;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="gameObject"></param>
         public NGraphics(GameObject gameObject)
         {
@@ -113,9 +99,7 @@ namespace FairyGUI
             Stats.LatestGraphicsCreation++;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public IMeshFactory meshFactory
         {
             get { return _meshFactory; }
@@ -129,9 +113,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T GetMeshFactory<T>() where T : IMeshFactory, new()
@@ -144,9 +126,7 @@ namespace FairyGUI
             return (T)_meshFactory;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect contentRect
         {
             get { return _contentRect; }
@@ -157,9 +137,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FlipType flip
         {
             get { return _flip; }
@@ -173,9 +151,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NTexture texture
         {
             get { return _texture; }
@@ -197,9 +173,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string shader
         {
             get { return _shader; }
@@ -210,9 +184,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="shader"></param>
         /// <param name="texture"></param>
         public void SetShaderAndTexture(string shader, NTexture texture)
@@ -224,9 +196,7 @@ namespace FairyGUI
                 UpdateManager();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Material material
         {
             get
@@ -269,9 +239,7 @@ namespace FairyGUI
             _customMatarial |= 128;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string[] materialKeywords
         {
             get { return _shaderKeywords; }
@@ -282,9 +250,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="keyword"></param>
         /// <param name="enabled"></param>
         public void ToggleKeyword(string keyword, bool enabled)
@@ -339,36 +305,28 @@ namespace FairyGUI
                 _materialFlags = 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool enabled
         {
             get { return meshRenderer.enabled; }
             set { meshRenderer.enabled = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int sortingOrder
         {
             get { return meshRenderer.sortingOrder; }
             set { meshRenderer.sortingOrder = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         internal void _SetStencilEraserOrder(int value)
         {
             _stencilEraser.meshRenderer.sortingOrder = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public Color color
         {
@@ -376,9 +334,7 @@ namespace FairyGUI
             set { _color = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Tint()
         {
             if (_meshDirty)
@@ -444,9 +400,7 @@ namespace FairyGUI
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertexMatrix vertexMatrix
         {
             get { return _vertexMatrix; }
@@ -457,9 +411,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public MaterialPropertyBlock materialPropertyBlock
         {
@@ -473,17 +425,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SetMeshDirty()
         {
             _meshDirty = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public bool UpdateMesh()
         {
@@ -496,9 +444,7 @@ namespace FairyGUI
                 return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Dispose()
         {
             if (mesh != null)
@@ -526,9 +472,7 @@ namespace FairyGUI
             meshModifier = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="context"></param>
         /// <param name="alpha"></param>
         /// <param name="grayed"></param>

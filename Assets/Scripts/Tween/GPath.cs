@@ -3,40 +3,26 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [System.Serializable]
     public struct GPathPoint
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 pos;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 control1;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 control2;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public CurveType curveType;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool smooth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public enum CurveType
         {
             CRSpline,
@@ -45,9 +31,7 @@ namespace FairyGUI
             Straight
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pos"></param>
         public GPathPoint(Vector3 pos)
         {
@@ -58,9 +42,7 @@ namespace FairyGUI
             this.smooth = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pos"></param>
         /// <param name="control"></param>
         public GPathPoint(Vector3 pos, Vector3 control)
@@ -72,9 +54,7 @@ namespace FairyGUI
             this.smooth = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pos"></param>
         /// <param name="control1"></param>
         /// <param name="control2"></param>
@@ -87,9 +67,7 @@ namespace FairyGUI
             this.smooth = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pos"></param>
         /// <param name="curveType"></param>
         public GPathPoint(Vector3 pos, CurveType curveType)
@@ -102,9 +80,7 @@ namespace FairyGUI
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GPath
     {
         protected struct Segment
@@ -128,17 +104,13 @@ namespace FairyGUI
             _points = new List<Vector3>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float length
         {
             get { return _fullLength; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
         public void Create(GPathPoint pt1, GPathPoint pt2)
@@ -149,9 +121,7 @@ namespace FairyGUI
             Create(helperList);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
         /// <param name="pt3"></param>
@@ -164,9 +134,7 @@ namespace FairyGUI
             Create(helperList);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
         /// <param name="pt3"></param>
@@ -181,9 +149,7 @@ namespace FairyGUI
             Create(helperList);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="points"></param>
         public void Create(IEnumerable<GPathPoint> points)
         {
@@ -275,18 +241,14 @@ namespace FairyGUI
             splinePoints.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Clear()
         {
             _segments.Clear();
             _points.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="t"></param>
         /// <returns></returns>
         public Vector3 GetPointAt(float t)
@@ -334,17 +296,13 @@ namespace FairyGUI
             return pt;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int segmentCount
         {
             get { return _segments.Count; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="segmentIndex"></param>
         /// <returns></returns>
         public float GetSegmentLength(int segmentIndex)
@@ -352,9 +310,7 @@ namespace FairyGUI
             return _segments[segmentIndex].length;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="segmentIndex"></param>
         /// <param name="t0"></param>
         /// <param name="t1"></param>
@@ -410,9 +366,7 @@ namespace FairyGUI
                 ts.Add(t1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="points"></param>
         public void GetAllPoints(List<Vector3> points, float pointDensity = 0.1f)
         {

@@ -3,9 +3,7 @@ using System.Text;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class UBBParser
     {
         public static UBBParser inst = new UBBParser();

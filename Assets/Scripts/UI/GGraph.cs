@@ -116,9 +116,7 @@ namespace FairyGUI
             HandlePositionChanged();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get
@@ -162,9 +160,7 @@ namespace FairyGUI
             _shape.DrawRect(lineSize, lineColor, fillColor);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
         /// <param name="fillColor"></param>
@@ -175,9 +171,7 @@ namespace FairyGUI
             this.shape.DrawRoundRect(0, Color.white, fillColor, corner[0], corner[1], corner[2], corner[3]);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
         /// <param name="fillColor"></param>
@@ -187,9 +181,7 @@ namespace FairyGUI
             _shape.DrawEllipse(fillColor);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
         /// <param name="points"></param>
@@ -200,9 +192,7 @@ namespace FairyGUI
             _shape.DrawPolygon(points, fillColor);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
         /// <param name="points"></param>

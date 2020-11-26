@@ -7,9 +7,7 @@ using UnityEditor;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum FitScreen
     {
         None,
@@ -18,36 +16,24 @@ namespace FairyGUI
         FitHeightAndSetCenter
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     [ExecuteInEditMode]
     [AddComponentMenu("FairyGUI/UI Panel")]
     public class UIPanel : MonoBehaviour, EMRenderTarget
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Container container { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string packageName;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string componentName;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FitScreen fitScreen;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int sortingOrder;
 
         [SerializeField]
@@ -206,9 +192,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent ui
         {
             get
@@ -225,9 +209,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void CreateUI()
         {
             if (_ui != null)
@@ -253,9 +235,7 @@ namespace FairyGUI
                 Stage.inst.ApplyPanelOrder(container);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void SetHitTestMode(HitTestMode value)
         {
@@ -282,9 +262,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void CacheNativeChildrenRenderers()
         {
             if (_renders == null)

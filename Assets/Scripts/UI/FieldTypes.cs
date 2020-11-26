@@ -199,9 +199,7 @@
         Down
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum FlipType
     {
         None,
@@ -210,9 +208,7 @@
         Both
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum FillMethod
     {
         None = 0,
@@ -243,27 +239,21 @@
         Radial360 = 5,
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum OriginHorizontal
     {
         Left,
         Right,
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum OriginVertical
     {
         Top,
         Bottom
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum Origin90
     {
         TopLeft,
@@ -272,9 +262,7 @@
         BottomRight
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum Origin180
     {
         Top,
@@ -283,9 +271,7 @@
         Right
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum Origin360
     {
         Top,

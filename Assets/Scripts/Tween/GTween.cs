@@ -2,19 +2,13 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GTween
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static bool catchCallbackExceptions = false;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -24,9 +18,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -36,9 +28,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -48,9 +38,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -60,9 +48,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -72,9 +58,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="endValue"></param>
         /// <param name="duration"></param>
@@ -84,9 +68,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._To(startValue, endValue, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="delay"></param>
         /// <returns></returns>
         public static GTweener DelayedCall(float delay)
@@ -94,9 +76,7 @@ namespace FairyGUI
             return TweenManager.CreateTween().SetDelay(delay);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startValue"></param>
         /// <param name="amplitude"></param>
         /// <param name="duration"></param>
@@ -106,9 +86,7 @@ namespace FairyGUI
             return TweenManager.CreateTween()._Shake(startValue, amplitude, duration);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <returns></returns>
         public static bool IsTweening(object target)
@@ -116,9 +94,7 @@ namespace FairyGUI
             return TweenManager.IsTweening(target, TweenPropType.None);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="propType"></param>
         /// <returns></returns>
@@ -127,18 +103,14 @@ namespace FairyGUI
             return TweenManager.IsTweening(target, propType);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         public static void Kill(object target)
         {
             TweenManager.KillTweens(target, TweenPropType.None, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="complete"></param>
         public static void Kill(object target, bool complete)
@@ -146,9 +118,7 @@ namespace FairyGUI
             TweenManager.KillTweens(target, TweenPropType.None, complete);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="propType"></param>
         /// <param name="complete"></param>
@@ -157,9 +127,7 @@ namespace FairyGUI
             TweenManager.KillTweens(target, propType, complete);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <returns></returns>
         public static GTweener GetTween(object target)
@@ -167,9 +135,7 @@ namespace FairyGUI
             return TweenManager.GetTween(target, TweenPropType.None);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="propType"></param>
         /// <returns></returns>
@@ -178,9 +144,7 @@ namespace FairyGUI
             return TweenManager.GetTween(target, propType);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void Clean()
         {
             TweenManager.Clean();

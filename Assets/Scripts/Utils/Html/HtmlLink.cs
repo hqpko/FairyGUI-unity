@@ -1,9 +1,7 @@
 ﻿
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlLink : IHtmlObject
     {
         RichTextField _owner;

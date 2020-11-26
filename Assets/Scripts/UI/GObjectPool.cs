@@ -47,17 +47,13 @@ namespace FairyGUI
             _pool.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int count
         {
             get { return _pool.Count; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         /// <returns></returns>
         public GObject GetObject(string url)
@@ -81,9 +77,7 @@ namespace FairyGUI
             return obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj"></param>
         public void ReturnObject(GObject obj)
         {

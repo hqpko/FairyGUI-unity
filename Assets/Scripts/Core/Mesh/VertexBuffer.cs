@@ -3,54 +3,34 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public sealed class VertexBuffer
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect contentRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect uvRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32 vertexColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 textureSize;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<Vector3> vertices;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<Color32> colors;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<Vector2> uvs;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<Vector2> uvs2;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<int> triangles;
 
         static public Vector2[] NormalizedUV = new Vector2[] {
@@ -64,9 +44,7 @@ namespace FairyGUI
 
         static Stack<VertexBuffer> _pool = new Stack<VertexBuffer>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public static VertexBuffer Begin()
         {
@@ -80,9 +58,7 @@ namespace FairyGUI
                 return new VertexBuffer();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="source"></param>
         public static VertexBuffer Begin(VertexBuffer source)
         {
@@ -104,17 +80,13 @@ namespace FairyGUI
             triangles = new List<int>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void End()
         {
             _pool.Push(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Clear()
         {
             vertices.Clear();
@@ -127,9 +99,7 @@ namespace FairyGUI
             _alphaInVertexColor = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int currentVertCount
         {
             get
@@ -138,9 +108,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="position"></param>
         public void AddVert(Vector3 position)
         {
@@ -154,9 +122,7 @@ namespace FairyGUI
                     Mathf.Lerp(uvRect.yMax, uvRect.yMin, (-position.y - contentRect.yMin) / contentRect.height)));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="position"></param>
         /// <param name="color"></param>
         public void AddVert(Vector3 position, Color32 color)
@@ -171,9 +137,7 @@ namespace FairyGUI
                     Mathf.Lerp(uvRect.yMax, uvRect.yMin, (-position.y - contentRect.yMin) / contentRect.height)));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="position"></param>
         /// <param name="color"></param>
         /// <param name="uv"></param>
@@ -202,9 +166,7 @@ namespace FairyGUI
             AddVert(new Vector3(vertRect.xMax, vertRect.yMax, 0f));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="vertRect"></param>
         /// <param name="color"></param>
         public void AddQuad(Rect vertRect, Color32 color)
@@ -215,9 +177,7 @@ namespace FairyGUI
             AddVert(new Vector3(vertRect.xMax, vertRect.yMax, 0f), color);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="vertRect"></param>
         /// <param name="color"></param>
         /// <param name="uvRect"></param>
@@ -283,9 +243,7 @@ namespace FairyGUI
             return helperV4List;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <param name="startIndex"></param>
         /// <param name="count"></param>
@@ -303,9 +261,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="idx0"></param>
         /// <param name="idx1"></param>
         /// <param name="idx2"></param>
@@ -316,9 +272,7 @@ namespace FairyGUI
             triangles.Add(idx2);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="idxList"></param>
         /// <param name="startVertexIndex"></param>
         public void AddTriangles(int[] idxList, int startVertexIndex = 0)
@@ -336,9 +290,7 @@ namespace FairyGUI
                 triangles.AddRange(idxList);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startVertexIndex"></param>
         public void AddTriangles(int startVertexIndex = 0)
         {
@@ -358,9 +310,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public Vector3 GetPosition(int index)
@@ -373,9 +323,7 @@ namespace FairyGUI
             return vec;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="position"></param>
         /// <param name="usePercent"></param>
         /// <returns></returns>
@@ -391,9 +339,7 @@ namespace FairyGUI
                     Mathf.Lerp(uvRect.yMax, uvRect.yMin, (position.y - contentRect.yMin) / contentRect.height));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="vb"></param>
         public void Append(VertexBuffer vb)
         {
@@ -415,9 +361,7 @@ namespace FairyGUI
                 _alphaInVertexColor = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="vb"></param>
         public void Insert(VertexBuffer vb)
         {

@@ -3,14 +3,10 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Shape : DisplayObject
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Shape()
         {
             CreateGameObject("Shape");
@@ -19,9 +15,7 @@ namespace FairyGUI
             graphics.meshFactory = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get
@@ -35,9 +29,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="lineSize"></param>
         /// <param name="lineColor"></param>
         /// <param name="fillColor"></param>
@@ -53,9 +45,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="lineSize"></param>
         /// <param name="colors"></param>
         public void DrawRect(float lineSize, Color32[] colors)
@@ -67,9 +57,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="lineSize"></param>
         /// <param name="lineColor"></param>
         /// <param name="fillColor"></param>
@@ -93,9 +81,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="fillColor"></param>
         public void DrawEllipse(Color fillColor)
         {
@@ -110,9 +96,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="lineSize"></param>
         /// <param name="centerColor"></param>
         /// <param name="lineColor"></param>
@@ -136,9 +120,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="points"></param>
         /// <param name="fillColor"></param>
         public void DrawPolygon(IList<Vector2> points, Color fillColor)
@@ -153,9 +135,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="points"></param>
         /// <param name="colors"></param>
         public void DrawPolygon(IList<Vector2> points, Color32[] colors)
@@ -169,9 +149,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="points"></param>
         /// <param name="fillColor"></param>
         /// <param name="lineSize"></param>
@@ -190,9 +168,7 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="sides"></param>
         /// <param name="lineSize"></param>
         /// <param name="centerColor"></param>
@@ -215,17 +191,13 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Clear()
         {
             graphics.meshFactory = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isEmpty
         {
             get { return graphics.meshFactory == null; }

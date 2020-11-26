@@ -2,16 +2,11 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [ExecuteInEditMode]
     [AddComponentMenu("FairyGUI/UI Content Scaler")]
     public class UIContentScaler : MonoBehaviour
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public enum ScaleMode
         {
             ConstantPixelSize,
@@ -19,9 +14,6 @@ namespace FairyGUI
             ConstantPhysicalSize
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public enum ScreenMatchMode
         {
             MatchWidthOrHeight,
@@ -29,39 +21,23 @@ namespace FairyGUI
             MatchHeight
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ScaleMode scaleMode;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public ScreenMatchMode screenMatchMode;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int designResolutionX;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int designResolutionY;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int fallbackScreenDPI = 96;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int defaultSpriteDPI = 96;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float constantScaleFactor = 1;
 
         /// <summary>
@@ -130,17 +106,13 @@ namespace FairyGUI
         }
 
         //For UIContentScalerEditor Only, as the Screen.width/height is not correct in OnInspectorGUI
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ApplyModifiedProperties()
         {
             _changed = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ApplyChange()
         {
             float screenWidth;

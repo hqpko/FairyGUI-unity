@@ -9,49 +9,31 @@ namespace FairyGUI
     /// </summary>
     public class LineMesh : IMeshFactory
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GPath path;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AnimationCurve lineWidthCurve;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Gradient gradient;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool roundEdge;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float fillStart;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float fillEnd;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float pointDensity;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool repeatFill;
 
         static List<Vector3> points = new List<Vector3>();

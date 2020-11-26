@@ -2,38 +2,26 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class MovieClip : Image
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public class Frame
         {
             public NTexture texture;
             public float addDelay;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float interval;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool swing;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float repeatDelay;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float timeScale;
 
         /// <summary>
@@ -58,9 +46,7 @@ namespace FairyGUI
 
         EventListener _onPlayEnd;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public MovieClip()
         {
             interval = 0.1f;
@@ -78,17 +64,13 @@ namespace FairyGUI
             SetPlaySettings();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onPlayEnd
         {
             get { return _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Frame[] frames
         {
             get
@@ -129,9 +111,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool playing
         {
             get { return _playing; }
@@ -145,9 +125,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int frame
         {
             get { return _frame; }
@@ -165,9 +143,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Rewind()
         {
             _frame = 0;
@@ -177,9 +153,7 @@ namespace FairyGUI
             DrawFrame();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="anotherMc"></param>
         public void SyncStatus(MovieClip anotherMc)
         {
@@ -190,9 +164,7 @@ namespace FairyGUI
             DrawFrame();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="time"></param>
         public void Advance(float time)
         {
@@ -255,9 +227,7 @@ namespace FairyGUI
             DrawFrame();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SetPlaySettings()
         {
             SetPlaySettings(0, -1, 0, -1);

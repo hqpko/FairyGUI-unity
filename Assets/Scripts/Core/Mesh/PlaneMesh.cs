@@ -2,9 +2,7 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PlaneMesh : IMeshFactory
     {
         public int gridSize = 30;

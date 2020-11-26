@@ -4,9 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class SelectionShape : DisplayObject, IMeshFactory
     {
         public readonly List<Rect> rects;
@@ -21,9 +19,7 @@ namespace FairyGUI
             rects = new List<Rect>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get

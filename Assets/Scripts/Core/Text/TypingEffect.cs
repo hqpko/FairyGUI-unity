@@ -25,9 +25,7 @@ namespace FairyGUI
 
         protected bool _started;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="textField"></param>
         public TypingEffect(TextField textField)
         {
@@ -35,9 +33,7 @@ namespace FairyGUI
             _textField.EnableCharPositionSupport();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="textField"></param>
         public TypingEffect(GTextField textField)
         {

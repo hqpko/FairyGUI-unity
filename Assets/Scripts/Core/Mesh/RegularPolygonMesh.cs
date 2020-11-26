@@ -2,49 +2,31 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class RegularPolygonMesh : IMeshFactory, IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect? drawRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int sides;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32 lineColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? centerColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? fillColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float[] distances;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float rotation;
 
         public RegularPolygonMesh()

@@ -7,9 +7,6 @@ namespace FairyGUI
         但因为Image着色器本身就有多个关键字，复制一个这样的着色器代价太大，所有为了节省Shader数量便增加了这样一种模式，也是可以接受的。
     */
 
-    /// <summary>
-    /// 
-    /// </summary>
     public enum BlendMode
     {
         Normal,
@@ -27,9 +24,6 @@ namespace FairyGUI
         Custom3
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class BlendModeUtils
     {
         public class BlendFactor
@@ -77,9 +71,6 @@ namespace FairyGUI
             new BlendFactor(NativeBlendMode.SrcAlpha, NativeBlendMode.OneMinusSrcAlpha)
         };
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="mat"></param>
         /// <param name="blendMode"></param>
         public static void Apply(Material mat, BlendMode blendMode)
@@ -94,9 +85,6 @@ namespace FairyGUI
                 mat.SetFloat(ShaderConfig.ID_ColorOption, 0);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="blendMode"></param>
         /// <param name="srcFactor"></param>
         /// <param name="dstFactor"></param>

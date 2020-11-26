@@ -6,9 +6,6 @@ namespace FairyGUI
     public delegate void EventCallback0();
     public delegate void EventCallback1(EventContext context);
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class EventDispatcher : IEventDispatcher
     {
         Dictionary<string, EventBridge> _dic;
@@ -17,9 +14,6 @@ namespace FairyGUI
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void AddEventListener(string strType, EventCallback1 callback)
@@ -27,9 +21,6 @@ namespace FairyGUI
             GetBridge(strType).Add(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void AddEventListener(string strType, EventCallback0 callback)
@@ -37,9 +28,6 @@ namespace FairyGUI
             GetBridge(strType).Add(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void RemoveEventListener(string strType, EventCallback1 callback)
@@ -52,9 +40,6 @@ namespace FairyGUI
                 bridge.Remove(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void RemoveEventListener(string strType, EventCallback0 callback)
@@ -67,9 +52,6 @@ namespace FairyGUI
                 bridge.Remove(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void AddCapture(string strType, EventCallback1 callback)
@@ -77,9 +59,6 @@ namespace FairyGUI
             GetBridge(strType).AddCapture(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <param name="callback"></param>
         public void RemoveCapture(string strType, EventCallback1 callback)
@@ -92,17 +71,11 @@ namespace FairyGUI
                 bridge.RemoveCapture(callback);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void RemoveEventListeners()
         {
             RemoveEventListeners(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         public void RemoveEventListeners(string strType)
         {
@@ -122,9 +95,6 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <returns></returns>
         public bool hasEventListeners(string strType)
@@ -136,9 +106,6 @@ namespace FairyGUI
             return !bridge.isEmpty;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="strType"></param>
         /// <returns></returns>
         public bool isDispatching(string strType)
@@ -174,9 +141,7 @@ namespace FairyGUI
             return bridge;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="strType"></param>
         /// <returns></returns>
         public bool DispatchEvent(string strType)
@@ -184,9 +149,7 @@ namespace FairyGUI
             return DispatchEvent(strType, null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -246,9 +209,7 @@ namespace FairyGUI
                 return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="context"></param>
         /// <returns></returns>
         public bool DispatchEvent(EventContext context)
@@ -276,9 +237,7 @@ namespace FairyGUI
             return context._defaultPrevented;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <param name="addChain"></param>
@@ -349,9 +308,7 @@ namespace FairyGUI
             return context._defaultPrevented;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -360,9 +317,7 @@ namespace FairyGUI
             return BubbleEvent(strType, data, null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <returns></returns>

@@ -6,44 +6,30 @@ using LuaInterface;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public delegate void GTweenCallback();
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     /// <param name="tweener"></param>
     public delegate void GTweenCallback1(GTweener tweener);
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public interface ITweenListener
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="tweener"></param>
         void OnTweenStart(GTweener tweener);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="tweener"></param>
         void OnTweenUpdate(GTweener tweener);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="tweener"></param>
         void OnTweenComplete(GTweener tweener);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GTweener
     {
         internal object _target;
@@ -94,9 +80,7 @@ namespace FairyGUI
             _deltaValue = new TweenValue();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetDelay(float value)
@@ -105,17 +89,13 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float delay
         {
             get { return _delay; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetDuration(float value)
@@ -124,17 +104,13 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float duration
         {
             get { return _duration; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetBreakpoint(float value)
@@ -143,9 +119,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEase(EaseType value)
@@ -154,9 +128,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <param name="customEase"></param>
         /// <returns></returns>
@@ -167,9 +139,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEasePeriod(float value)
@@ -178,9 +148,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEaseOvershootOrAmplitude(float value)
@@ -189,9 +157,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="times"></param>
         /// <param name="yoyo"></param>
         /// <returns></returns>
@@ -202,17 +168,13 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int repeat
         {
             get { return _repeat; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetTimeScale(float value)
@@ -221,9 +183,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetIgnoreEngineTimeScale(bool value)
@@ -232,9 +192,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetSnapping(bool value)
@@ -243,9 +201,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetPath(GPath value)
@@ -254,9 +210,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetTarget(object value)
@@ -266,9 +220,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <param name="propType"></param>
         /// <returns></returns>
@@ -279,17 +231,13 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public object target
         {
             get { return _target; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetUserData(object value)
@@ -298,17 +246,13 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public object userData
         {
             get { return _userData; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
 #if FAIRYGUI_TOLUA
@@ -320,9 +264,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
 #if FAIRYGUI_TOLUA
@@ -334,9 +276,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
 #if FAIRYGUI_TOLUA
@@ -348,9 +288,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
         public GTweener OnUpdate(GTweenCallback1 callback)
@@ -359,9 +297,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
         public GTweener OnStart(GTweenCallback1 callback)
@@ -370,9 +306,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="callback"></param>
         /// <returns></returns>
         public GTweener OnComplete(GTweenCallback1 callback)
@@ -381,9 +315,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetListener(ITweenListener value)
@@ -392,65 +324,49 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TweenValue startValue
         {
             get { return _startValue; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TweenValue endValue
         {
             get { return _endValue; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TweenValue value
         {
             get { return _value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TweenValue deltaValue
         {
             get { return _deltaValue; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float normalizedTime
         {
             get { return _normalizedTime; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool completed
         {
             get { return _ended != 0; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool allCompleted
         {
             get { return _ended == 1; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="paused"></param>
         /// <returns></returns>
         public GTweener SetPaused(bool paused)
@@ -461,9 +377,7 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="time"></param>
         public void Seek(float time)
         {
@@ -482,9 +396,7 @@ namespace FairyGUI
             Update();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="complete"></param>
         public void Kill(bool complete = false)
         {

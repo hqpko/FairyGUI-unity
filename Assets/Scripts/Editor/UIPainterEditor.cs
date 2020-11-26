@@ -7,9 +7,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [CustomEditor(typeof(UIPainter))]
     public class UIPainterEditor : Editor
     {

@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class BlurFilter : IFilter
     {
         //ref http://blog.csdn.net/u011047171/article/details/47947397
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float blurSize;
 
         DisplayObject _target;

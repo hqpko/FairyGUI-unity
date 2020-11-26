@@ -12,9 +12,7 @@ namespace FairyGUI
     /// </summary>
     public class InputTextField : RichTextField
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int maxLength { get; set; }
 
         /// <summary>
@@ -23,39 +21,25 @@ namespace FairyGUI
         /// </summary>
         public bool keyboardInput { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int keyboardType { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool hideInput { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool disableIME { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool mouseWheelEnabled { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static Action<InputTextField, string> onCopy;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static Action<InputTextField> onPaste;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static PopupMenu contextMenu;
 
         string _text;
@@ -118,25 +102,19 @@ namespace FairyGUI
             onRightClick.Add(__rightClick);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onChanged
         {
             get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onSubmit
         {
             get { return _onSubmit ?? (_onSubmit = new EventListener(this, "onSubmit")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public override string text
         {
             get
@@ -151,9 +129,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public override TextFormat textFormat
         {
             get
@@ -171,9 +147,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string restrict
         {
             get { return _restrict; }
@@ -187,9 +161,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int caretPosition
         {
             get
@@ -213,9 +185,7 @@ namespace FairyGUI
             get { return _selectionStart < _caretPosition ? _caretPosition : _selectionStart; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string promptText
         {
             get
@@ -233,9 +203,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool displayAsPassword
         {
             get { return _displayAsPassword; }
@@ -249,9 +217,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool editable
         {
             get { return _editable; }
@@ -263,9 +229,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int border
         {
             get { return _border; }
@@ -276,9 +240,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int corner
         {
             get { return _corner; }
@@ -289,9 +251,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color borderColor
         {
             get { return _borderColor; }
@@ -302,9 +262,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color backgroundColor
         {
             get { return _backgroundColor; }
@@ -336,9 +294,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="start"></param>
         /// <param name="length">-1 means the rest count from start</param>
         public void SetSelection(int start, int length)
@@ -359,9 +315,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void ReplaceSelection(string value)
         {
@@ -425,9 +379,7 @@ namespace FairyGUI
             OnChanged();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void ReplaceText(string value)
         {

@@ -2,44 +2,28 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class EllipseMesh : IMeshFactory, IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect? drawRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32 lineColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? centerColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32? fillColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float startDegree;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float endDegreee;
 
         static int[] SECTOR_CENTER_TRIANGLES = new int[] {

@@ -3,43 +3,29 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [Obsolete("Use GTree and GTreeNode instead")]
     public class TreeNode
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public object data;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TreeNode parent { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TreeView tree { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent cell { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int level { get; private set; }
 
         private List<TreeNode> _children;
         private bool _expanded;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="hasChild"></param>
         public TreeNode(bool hasChild)
         {
@@ -47,9 +33,7 @@ namespace FairyGUI
                 _children = new List<TreeNode>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool expanded
         {
             get
@@ -76,17 +60,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isFolder
         {
             get { return _children != null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string text
         {
             get
@@ -98,9 +78,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public TreeNode AddChild(TreeNode child)
@@ -109,9 +87,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -154,9 +130,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public TreeNode RemoveChild(TreeNode child)
@@ -169,9 +143,7 @@ namespace FairyGUI
             return child;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public TreeNode RemoveChildAt(int index)
@@ -196,9 +168,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
         public void RemoveChildren(int beginIndex = 0, int endIndex = -1)
@@ -210,9 +180,7 @@ namespace FairyGUI
                 RemoveChildAt(beginIndex);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public TreeNode GetChildAt(int index)
@@ -223,9 +191,7 @@ namespace FairyGUI
                 throw new Exception("Invalid child index");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <returns></returns>
         public int GetChildIndex(TreeNode child)
@@ -233,9 +199,7 @@ namespace FairyGUI
             return _children.IndexOf(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public TreeNode GetPrevSibling()
         {
@@ -249,9 +213,7 @@ namespace FairyGUI
             return parent._children[i - 1];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public TreeNode GetNextSibling()
         {
@@ -265,9 +227,7 @@ namespace FairyGUI
             return parent._children[i + 1];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child"></param>
         /// <param name="index"></param>
         public void SetChildIndex(TreeNode child, int index)
@@ -291,9 +251,7 @@ namespace FairyGUI
                 tree.AfterMoved(child);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="child1"></param>
         /// <param name="child2"></param>
         public void SwapChildren(TreeNode child1, TreeNode child2)
@@ -305,9 +263,7 @@ namespace FairyGUI
             SwapChildrenAt(index1, index2);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index1"></param>
         /// <param name="index2"></param>
         public void SwapChildrenAt(int index1, int index2)
@@ -319,9 +275,7 @@ namespace FairyGUI
             SetChildIndex(child2, index1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int numChildren
         {
             get { return (null == _children) ? 0 : _children.Count; }

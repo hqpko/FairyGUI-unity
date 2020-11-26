@@ -5,19 +5,13 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public delegate void PlayCompleteCallback();
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public delegate void TransitionHook();
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Transition : ITweenListener
     {
         /// <summary>
@@ -68,26 +62,20 @@ namespace FairyGUI
             _checkAllDelegate = CheckAllComplete;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Play()
         {
             _Play(1, 0, 0, -1, null, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="onComplete"></param>
         public void Play(PlayCompleteCallback onComplete)
         {
             _Play(1, 0, 0, -1, onComplete, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="times"></param>
         /// <param name="delay"></param>
         /// <param name="onComplete"></param>
@@ -96,9 +84,7 @@ namespace FairyGUI
             _Play(times, delay, 0, -1, onComplete, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="times"></param>
         /// <param name="delay"></param>
         /// <param name="startTime"></param>
@@ -109,26 +95,20 @@ namespace FairyGUI
             _Play(times, delay, startTime, endTime, onComplete, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void PlayReverse()
         {
             _Play(1, 0, 0, -1, null, true);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="onComplete"></param>
         public void PlayReverse(PlayCompleteCallback onComplete)
         {
             _Play(1, 0, 0, -1, onComplete, true);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="times"></param>
         /// <param name="delay"></param>
         /// <param name="onComplete"></param>
@@ -137,9 +117,7 @@ namespace FairyGUI
             _Play(times, delay, 0, -1, onComplete, true);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void ChangePlayTimes(int value)
         {
@@ -240,17 +218,13 @@ namespace FairyGUI
                 GTween.DelayedCall(delay).SetTarget(this).OnComplete(_delayedCallDelegate);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Stop()
         {
             Stop(true, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="setToComplete"></param>
         /// <param name="processCallback"></param>
         public void Stop(bool setToComplete, bool processCallback)
@@ -326,9 +300,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="paused"></param>
         public void SetPaused(bool paused)
         {
@@ -393,17 +365,13 @@ namespace FairyGUI
             _onComplete = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool playing
         {
             get { return _playing; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="label"></param>
         /// <param name="aParams"></param>
         public void SetValue(string label, params object[] aParams)
@@ -518,9 +486,7 @@ namespace FairyGUI
                 throw new Exception("label not exists");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="label"></param>
         /// <param name="callback"></param>
         public void SetHook(string label, TransitionHook callback)
@@ -547,9 +513,7 @@ namespace FairyGUI
                 throw new Exception("label not exists");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ClearHooks()
         {
             int cnt = _items.Length;
@@ -562,9 +526,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="label"></param>
         /// <param name="newTarget"></param>
         public void SetTarget(string label, GObject newTarget)
@@ -593,9 +555,7 @@ namespace FairyGUI
                 throw new Exception("label not exists");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="label"></param>
         /// <param name="value"></param>
         public void SetDuration(string label, float value)
@@ -616,9 +576,7 @@ namespace FairyGUI
                 throw new Exception("label not exists or not a tween label");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="label"></param>
         /// <returns></returns>
         public float GetLabelTime(string label)
@@ -636,9 +594,7 @@ namespace FairyGUI
             return float.NaN;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float timeScale
         {
             get { return _timeScale; }
@@ -669,9 +625,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool ignoreEngineTimeScale
         {
             get { return _ignoreEngineTimeScale; }

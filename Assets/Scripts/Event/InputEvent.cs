@@ -2,9 +2,7 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class InputEvent
     {
         /// <summary>
@@ -17,29 +15,19 @@ namespace FairyGUI
         /// </summary>
         public float y { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public KeyCode keyCode { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public char character { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventModifiers modifiers { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float mouseWheelDelta { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int touchId { get; internal set; }
 
         /// <summary>
@@ -47,9 +35,7 @@ namespace FairyGUI
         /// </summary>
         public int button { get; internal set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public int clickCount { get; internal set; }
 
@@ -71,25 +57,19 @@ namespace FairyGUI
             mouseWheelDelta = 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 position
         {
             get { return new Vector2(x, y); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isDoubleClick
         {
             get { return clickCount > 1 && button == 0; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool ctrlOrCmd
         {
             get
@@ -98,9 +78,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool ctrl
         {
             get
@@ -109,9 +87,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool shift
         {
             get
@@ -120,9 +96,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool alt
         {
             get
@@ -131,9 +105,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool command
         {
             get

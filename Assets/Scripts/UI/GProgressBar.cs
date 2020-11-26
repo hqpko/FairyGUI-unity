@@ -32,9 +32,7 @@ namespace FairyGUI
             _max = 100;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public ProgressTitleType titleType
         {
 
@@ -52,9 +50,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double min
         {
             get
@@ -71,9 +67,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double max
         {
             get
@@ -90,9 +84,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double value
         {
             get
@@ -141,9 +133,7 @@ namespace FairyGUI
                 .SetTarget(this, TweenPropType.Progress);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="newValue"></param>
         public void Update(double newValue)
         {

@@ -2,9 +2,7 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Image : DisplayObject, IMeshFactory
     {
         protected Rect? _scale9Grid;
@@ -17,9 +15,7 @@ namespace FairyGUI
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="texture"></param>
         public Image(NTexture texture)
             : base()
@@ -37,9 +33,7 @@ namespace FairyGUI
                 UpdateTexture(texture);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NTexture texture
         {
             get { return graphics.texture; }
@@ -59,9 +53,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get
@@ -75,9 +67,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FillMethod fillMethod
         {
             get { return _fillMesh != null ? _fillMesh.method : FillMethod.None; }
@@ -98,9 +88,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int fillOrigin
         {
             get { return _fillMesh != null ? _fillMesh.origin : 0; }
@@ -117,9 +105,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool fillClockwise
         {
             get { return _fillMesh != null ? _fillMesh.clockwise : true; }
@@ -136,9 +122,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float fillAmount
         {
             get { return _fillMesh != null ? _fillMesh.amount : 0; }
@@ -155,9 +139,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect? scale9Grid
         {
             get { return _scale9Grid; }
@@ -171,9 +153,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool scaleByTile
         {
             get { return _scaleByTile; }
@@ -187,9 +167,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int tileGridIndice
         {
             get { return _tileGridIndice; }
@@ -203,9 +181,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SetNativeSize()
         {
             if (graphics.texture != null)

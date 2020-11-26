@@ -6,9 +6,7 @@ using LuaInterface;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class UIObjectFactory
     {
         public delegate GComponent GComponentCreator();
@@ -17,9 +15,7 @@ namespace FairyGUI
         static Dictionary<string, GComponentCreator> packageItemExtensions = new Dictionary<string, GComponentCreator>();
         static GLoaderCreator loaderCreator;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         /// <param name="type"></param>
         public static void SetPackageItemExtension(string url, System.Type type)
@@ -27,9 +23,7 @@ namespace FairyGUI
             SetPackageItemExtension(url, () => { return (GComponent)Activator.CreateInstance(type); });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         /// <param name="creator"></param>
         public static void SetPackageItemExtension(string url, GComponentCreator creator)
@@ -62,18 +56,14 @@ namespace FairyGUI
         }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="type"></param>
         public static void SetLoaderExtension(System.Type type)
         {
             loaderCreator = () => { return (GLoader)Activator.CreateInstance(type); };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="creator"></param>
         public static void SetLoaderExtension(GLoaderCreator creator)
         {
@@ -93,9 +83,7 @@ namespace FairyGUI
             loaderCreator = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pi"></param>
         /// <param name="userClass"></param>
         /// <returns></returns>
@@ -126,9 +114,7 @@ namespace FairyGUI
             return obj;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="type"></param>
         /// <returns></returns>
         public static GObject NewObject(ObjectType type)

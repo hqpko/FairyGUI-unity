@@ -23,17 +23,13 @@ namespace FairyGUI
             displayObject = _content;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onPlayEnd
         {
             get { return _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool playing
         {
             get { return _content.playing; }
@@ -44,9 +40,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int frame
         {
             get { return _content.frame; }
@@ -57,9 +51,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get { return _content.color; }
@@ -70,71 +62,55 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FlipType flip
         {
             get { return _content.graphics.flip; }
             set { _content.graphics.flip = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Material material
         {
             get { return _content.material; }
             set { _content.material = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string shader
         {
             get { return _content.shader; }
             set { _content.shader = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float timeScale
         {
             get { return _content.timeScale; }
             set { _content.timeScale = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool ignoreEngineTimeScale
         {
             get { return _content.ignoreEngineTimeScale; }
             set { _content.ignoreEngineTimeScale = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Rewind()
         {
             _content.Rewind();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="anotherMc"></param>
         public void SyncStatus(GMovieClip anotherMc)
         {
             _content.SyncStatus(anotherMc._content);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="time"></param>
         public void Advance(float time)
         {

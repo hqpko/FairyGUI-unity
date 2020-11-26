@@ -1,9 +1,7 @@
 ﻿
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public interface IHtmlPageContext
     {
         IHtmlObject CreateObject(RichTextField owner, HtmlElement element);

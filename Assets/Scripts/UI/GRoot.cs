@@ -9,17 +9,13 @@ namespace FairyGUI
     /// </summary>
     public class GRoot : GComponent
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static float contentScaleFactor
         {
             get { return UIContentScaler.scaleFactor; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static int contentScaleLevel
         {
             get { return UIContentScaler.scaleLevel; }
@@ -93,9 +89,7 @@ namespace FairyGUI
             ApplyContentScaleFactor();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="constantScaleFactor"></param>
         public void SetContentScaleFactor(float constantScaleFactor)
         {
@@ -262,9 +256,7 @@ namespace FairyGUI
             return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GGraph modalLayer
         {
             get
@@ -315,9 +307,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj"></param>
         /// <returns></returns>
         public GObject DisplayObjectToGObject(DisplayObject obj)
@@ -468,9 +458,7 @@ namespace FairyGUI
                 downward == null ? PopupDirection.Auto : ((bool)downward == true ? PopupDirection.Down : PopupDirection.Up));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="popup"></param>
         /// <param name="target"></param>
         /// <param name="dir"></param>
@@ -516,9 +504,7 @@ namespace FairyGUI
             TogglePopup(popup, null, PopupDirection.Auto, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="popup"></param>
         /// <param name="target"></param>
         public void TogglePopup(GObject popup, GObject target)
@@ -534,9 +520,7 @@ namespace FairyGUI
                 false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="popup"></param>
         /// <param name="target"></param>
         /// <param name="dir"></param>
@@ -545,9 +529,7 @@ namespace FairyGUI
             TogglePopup(popup, target, dir, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="popup"></param>
         /// <param name="target"></param>
         /// <param name="dir"></param>
@@ -598,9 +580,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool hasAnyPopup
         {
             get { return _popupStack.Count > 0; }
@@ -617,18 +597,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="msg"></param>
         public void ShowTooltips(string msg)
         {
             ShowTooltips(msg, 0.1f);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="msg"></param>
         /// <param name="delay"></param>
         public void ShowTooltips(string msg, float delay)
@@ -651,18 +627,14 @@ namespace FairyGUI
             ShowTooltipsWin(_defaultTooltipWin, delay);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="tooltipWin"></param>
         public void ShowTooltipsWin(GObject tooltipWin)
         {
             ShowTooltipsWin(tooltipWin, 0.1f);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="tooltipWin"></param>
         /// <param name="delay"></param>
         public void ShowTooltipsWin(GObject tooltipWin, float delay)
@@ -699,9 +671,7 @@ namespace FairyGUI
             AddChild(_tooltipWin);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void HideTooltips()
         {
             if (_tooltipWin != null)
@@ -712,9 +682,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject focus
         {
             get
@@ -800,25 +768,19 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void EnableSound()
         {
             Stage.inst.EnableSound();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void DisableSound()
         {
             Stage.inst.DisableSound();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="clip"></param>
         /// <param name="volumeScale"></param>
         public void PlayOneShotSound(AudioClip clip, float volumeScale)
@@ -826,18 +788,14 @@ namespace FairyGUI
             Stage.inst.PlayOneShotSound(clip, volumeScale);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="clip"></param>
         public void PlayOneShotSound(AudioClip clip)
         {
             Stage.inst.PlayOneShotSound(clip);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float soundVolume
         {
             get { return Stage.inst.soundVolume; }

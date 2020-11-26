@@ -42,9 +42,7 @@ namespace FairyGUI
         const int internalKeywordsCount = 6;
         static string[] internalKeywords = new[] { "CLIPPED", "SOFT_CLIPPED", null, "ALPHA_MASK", "GRAYED", "COLOR_FILTER" };
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="texture"></param>
         /// <param name="shader"></param>
         internal MaterialManager(NTexture texture, Shader shader)
@@ -55,9 +53,7 @@ namespace FairyGUI
             _combineTexture = texture.alphaTexture != null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="keywords"></param>
         /// <returns></returns>
         public int GetFlagsByKeywords(IList<string> keywords)
@@ -83,9 +79,7 @@ namespace FairyGUI
             return flags;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="flags"></param>
         /// <param name="blendMode"></param>
         /// <param name="group"></param>
@@ -148,9 +142,7 @@ namespace FairyGUI
             return result.material;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         Material CreateMaterial(int flags)
         {
@@ -189,9 +181,7 @@ namespace FairyGUI
             return mat;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void DestroyMaterials()
         {
             var iter = _materials.GetEnumerator();
@@ -215,9 +205,7 @@ namespace FairyGUI
             iter.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void RefreshMaterials()
         {
             _combineTexture = _texture.alphaTexture != null;

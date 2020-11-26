@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class DynamicFont : BaseFont
     {
         Font _font;
@@ -29,9 +27,7 @@ namespace FairyGUI
             this.shader = ShaderConfig.textShader;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="font"></param>
         /// <returns></returns>

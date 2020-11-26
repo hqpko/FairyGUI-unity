@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class ColorFilter : IFilter
     {
         // Most of the color transformation math was taken from the excellent ColorMatrixFilter class in Starling Framework
@@ -187,9 +185,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="values"></param>
         public void ConcatValues(params float[] values)
         {

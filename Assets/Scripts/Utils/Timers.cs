@@ -6,9 +6,7 @@ namespace FairyGUI
 {
     public delegate void TimerCallback(object param);
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Timers
     {
         public static int repeat;

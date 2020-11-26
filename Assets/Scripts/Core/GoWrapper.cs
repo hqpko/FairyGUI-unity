@@ -31,9 +31,7 @@ namespace FairyGUI
 
         protected static List<Transform> helperTransformList = new List<Transform>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GoWrapper()
         {
             _flags |= Flags.SkipBatching;
@@ -44,9 +42,7 @@ namespace FairyGUI
             CreateGameObject("GoWrapper");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="go">包装对象。</param>
         public GoWrapper(GameObject go) : this()
         {

@@ -9,9 +9,7 @@ namespace FairyGUI
     /// </summary>
     public class GRichTextField : GTextField
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public RichTextField richTextField { get; private set; }
 
         public GRichTextField()
@@ -41,9 +39,7 @@ namespace FairyGUI
                 richTextField.htmlText = str;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Dictionary<uint, Emoji> emojies
         {
             get { return richTextField.emojies; }

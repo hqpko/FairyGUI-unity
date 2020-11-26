@@ -2,43 +2,29 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class TweenValue
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float x;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float y;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float z;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float w;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double d;
 
         public TweenValue()
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 vec2
         {
             get { return new Vector2(x, y); }
@@ -49,9 +35,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 vec3
         {
             get { return new Vector3(x, y, z); }
@@ -63,9 +47,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector4 vec4
         {
             get { return new Vector4(x, y, z, w); }
@@ -78,9 +60,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get { return new Color(x, y, z, w); }
@@ -93,9 +73,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="index"></param>
         /// <returns></returns>
         public float this[int index]
@@ -139,9 +117,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void SetZero()
         {
             x = y = z = w = 0;

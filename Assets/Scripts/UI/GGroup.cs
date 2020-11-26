@@ -52,9 +52,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int lineGap
         {
             get { return _lineGap; }
@@ -68,9 +66,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int columnGap
         {
             get { return _columnGap; }
@@ -84,9 +80,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool excludeInvisibles
         {
             get { return _excludeInvisibles; }
@@ -100,9 +94,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool autoSizeDisabled
         {
             get { return _autoSizeDisabled; }
@@ -116,9 +108,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int mainGridMinSize
         {
             get { return _mainGridMinSize; }
@@ -132,9 +122,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int mainGridIndex
         {
             get { return _mainGridIndex; }

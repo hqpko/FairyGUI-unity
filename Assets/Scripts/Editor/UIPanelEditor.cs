@@ -6,9 +6,7 @@ using UnityEditor;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [CustomEditor(typeof(FairyGUI.UIPanel))]
     public class UIPanelEditor : Editor
     {

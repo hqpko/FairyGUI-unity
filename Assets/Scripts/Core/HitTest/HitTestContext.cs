@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HitTestContext
     {
         //set before hit test
@@ -22,9 +20,7 @@ namespace FairyGUI
 
         static Dictionary<Camera, RaycastHit?> raycastHits = new Dictionary<Camera, RaycastHit?>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="camera"></param>
         /// <param name="hit"></param>
         /// <returns></returns>
@@ -57,9 +53,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="camera"></param>
         /// <param name="hit"></param>
         public static void CacheRaycastHit(Camera camera, ref RaycastHit hit)
@@ -67,9 +61,7 @@ namespace FairyGUI
             raycastHits[camera] = hit;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void ClearRaycastHitCache()
         {
             raycastHits.Clear();

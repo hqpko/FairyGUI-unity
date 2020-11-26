@@ -9,9 +9,7 @@ namespace FairyGUI
     /// </summary>
     public class PinchGesture : EventDispatcher
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject host { get; private set; }
 
         /// <summary>

@@ -56,9 +56,7 @@ namespace FairyGUI
         /// <returns></returns>
         public delegate void LoadResourceAsync(string name, string extension, System.Type type, PackageItem item);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="result"></param>
         public delegate void CreateObjectCallback(GObject result);
 
@@ -119,9 +117,7 @@ namespace FairyGUI
             _branchIndex = -1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string branch
         {
             get { return _branch; }
@@ -142,9 +138,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string GetVar(string key)
         {
             string value;
@@ -154,9 +148,7 @@ namespace FairyGUI
                 return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void SetVar(string key, string value)
         {
             if (value == null)
@@ -398,9 +390,7 @@ namespace FairyGUI
             _packageList.Remove(pkg);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void RemoveAllPackages()
         {
             if (_packageInstById.Count > 0)
@@ -417,9 +407,7 @@ namespace FairyGUI
             _packageInstByName.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public static List<UIPackage> GetPackages()
         {
@@ -624,9 +612,7 @@ namespace FairyGUI
             TranslationHelper.LoadFromXML(source);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string assetPath
         {
             get { return _assetPath; }
@@ -648,9 +634,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AssetBundle resBundle
         {
             get { return _resBundle; }
@@ -957,9 +941,7 @@ namespace FairyGUI
                 return 0;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void LoadAllAssets()
         {
             int cnt = _items.Count;
@@ -967,9 +949,7 @@ namespace FairyGUI
                 GetItemAsset(_items[i]);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void UnloadAssets()
         {
             int cnt = _items.Count;
@@ -996,9 +976,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ReloadAssets()
         {
             if (_fromBundle)
@@ -1007,9 +985,7 @@ namespace FairyGUI
             ReloadAssets(null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ReloadAssets(AssetBundle resBundle)
         {
             _resBundle = resBundle;
@@ -1065,9 +1041,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="resName"></param>
         /// <returns></returns>
         public GObject CreateObject(string resName)
@@ -1082,9 +1056,7 @@ namespace FairyGUI
             return CreateObject(pi, null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="resName"></param>
         /// <param name="userClass"></param>
         /// <returns></returns>
@@ -1131,9 +1103,7 @@ namespace FairyGUI
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="resName"></param>
         /// <returns></returns>
         public object GetItemAsset(string resName)
@@ -1223,9 +1193,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="item"></param>
         /// <param name="asset"></param>
         /// <param name="destroyMethod"></param>

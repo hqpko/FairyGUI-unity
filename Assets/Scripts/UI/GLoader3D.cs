@@ -3,9 +3,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public partial class GLoader3D : GObject, IAnimationGear, IColorGear
     {
         string _url;
@@ -51,9 +49,7 @@ namespace FairyGUI
             base.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string url
         {
             get { return _url; }
@@ -75,9 +71,7 @@ namespace FairyGUI
             set { this.url = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align
         {
             get { return _align; }
@@ -91,9 +85,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertAlignType verticalAlign
         {
             get { return _verticalAlign; }
@@ -107,9 +99,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FillType fill
         {
             get { return _fill; }
@@ -123,9 +113,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool shrinkOnly
         {
             get { return _shrinkOnly; }
@@ -139,9 +127,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool autoSize
         {
             get { return _autoSize; }
@@ -210,9 +196,7 @@ namespace FairyGUI
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool loop
         {
             get { return _loop; }
@@ -226,9 +210,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public string animationName
         {
@@ -240,9 +222,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public string skinName
         {
@@ -254,27 +234,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Material material
         {
             get { return _content.material; }
             set { _content.material = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string shader
         {
             get { return _content.shader; }
             set { _content.shader = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get { return _color; }
@@ -290,17 +264,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GameObject wrapTarget
         {
             get { return _content.wrapTarget; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="gameObject"></param>
         /// <param name="cloneMaterial"></param>
         /// <param name="width"></param>
@@ -327,9 +297,7 @@ namespace FairyGUI
             set { _content.blendMode = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         protected void LoadContent()
         {
             ClearContent();

@@ -2,19 +2,13 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class CaptureCamera : MonoBehaviour
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         [System.NonSerialized]
         public Transform cachedTransform;
-        /// <summary>
-        /// 
-        /// </summary>
+
         [System.NonSerialized]
         public Camera cachedCamera;
 
@@ -38,9 +32,7 @@ namespace FairyGUI
                 _main = this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void CheckMain()
         {
             if (_main != null && _main.cachedCamera != null)
@@ -75,9 +67,7 @@ namespace FairyGUI
             cameraObject.AddComponent<CaptureCamera>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static int layer
         {
             get
@@ -96,9 +86,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static int hiddenLayer
         {
             get
@@ -117,9 +105,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="stencilSupport"></param>
@@ -136,9 +122,7 @@ namespace FairyGUI
             return texture;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="texture"></param>
         /// <param name="contentHeight"></param>

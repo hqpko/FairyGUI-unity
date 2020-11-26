@@ -5,24 +5,16 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class ByteBuffer
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool littleEndian;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string[] stringTable;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int version;
 
         int _pointer;
@@ -32,9 +24,7 @@ namespace FairyGUI.Utils
 
         static byte[] temp = new byte[8];
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="data"></param>
         /// <param name="offset"></param>
         /// <param name="length"></param>
@@ -50,34 +40,26 @@ namespace FairyGUI.Utils
             littleEndian = false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int position
         {
             get { return _pointer; }
             set { _pointer = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int length
         {
             get { return _length; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool bytesAvailable
         {
             get { return _pointer < _length; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public byte[] buffer
         {
             get { return _data; }
@@ -90,9 +72,7 @@ namespace FairyGUI.Utils
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="count"></param>
         /// <returns></returns>
         public int Skip(int count)
@@ -101,18 +81,14 @@ namespace FairyGUI.Utils
             return _pointer;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public byte ReadByte()
         {
             return _data[_offset + _pointer++];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="output"></param>
         /// <param name="destIndex"></param>
         /// <param name="count"></param>
@@ -127,9 +103,7 @@ namespace FairyGUI.Utils
             return output;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="count"></param>
         /// <returns></returns>
         public byte[] ReadBytes(int count)
@@ -143,9 +117,7 @@ namespace FairyGUI.Utils
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public ByteBuffer ReadBuffer()
         {
@@ -157,18 +129,14 @@ namespace FairyGUI.Utils
             return ba;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public char ReadChar()
         {
             return (char)ReadShort();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public bool ReadBool()
         {
@@ -177,9 +145,7 @@ namespace FairyGUI.Utils
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public short ReadShort()
         {
@@ -191,18 +157,14 @@ namespace FairyGUI.Utils
                 return (short)((_data[startIndex] << 8) | _data[startIndex + 1]);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public ushort ReadUshort()
         {
             return (ushort)ReadShort();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public int ReadInt()
         {
@@ -214,18 +176,14 @@ namespace FairyGUI.Utils
                 return (_data[startIndex] << 24) | (_data[startIndex + 1] << 16) | (_data[startIndex + 2] << 8) | (_data[startIndex + 3]);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public uint ReadUint()
         {
             return (uint)ReadInt();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public float ReadFloat()
         {
@@ -243,9 +201,7 @@ namespace FairyGUI.Utils
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public long ReadLong()
         {
@@ -265,9 +221,7 @@ namespace FairyGUI.Utils
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public double ReadDouble()
         {
@@ -289,9 +243,7 @@ namespace FairyGUI.Utils
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public string ReadString()
         {
@@ -301,9 +253,7 @@ namespace FairyGUI.Utils
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="len"></param>
         /// <returns></returns>
         public string ReadString(int len)
@@ -313,9 +263,7 @@ namespace FairyGUI.Utils
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public string ReadS()
         {
@@ -328,9 +276,7 @@ namespace FairyGUI.Utils
                 return stringTable[index];
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="cnt"></param>
         /// <returns></returns>
         public string[] ReadSArray(int cnt)
@@ -344,9 +290,7 @@ namespace FairyGUI.Utils
 
         private static List<GPathPoint> helperPoints = new List<GPathPoint>();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="result"></param>
         public List<GPathPoint> ReadPath()
         {
@@ -381,9 +325,7 @@ namespace FairyGUI.Utils
             return helperPoints;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void WriteS(string value)
         {
@@ -392,9 +334,7 @@ namespace FairyGUI.Utils
                 stringTable[index] = value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public Color ReadColor()
         {
@@ -408,9 +348,7 @@ namespace FairyGUI.Utils
             return new Color32(r, g, b, a);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="indexTablePos"></param>
         /// <param name="blockIndex"></param>
         /// <returns></returns>

@@ -5,54 +5,34 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class DisplayObject : EventDispatcher
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string name;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Container parent { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GameObject gameObject { get; protected set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Transform cachedTransform { get; protected set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NGraphics graphics { get; protected set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NGraphics paintingGraphics { get; protected set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public event Action onPaint;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject gOwner;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public uint id;
 
         bool _visible;
@@ -113,113 +93,85 @@ namespace FairyGUI
                 _flags |= Flags.PixelPerfect;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onClick
         {
             get { return _onClick ?? (_onClick = new EventListener(this, "onClick")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onRightClick
         {
             get { return _onRightClick ?? (_onRightClick = new EventListener(this, "onRightClick")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onTouchBegin
         {
             get { return _onTouchBegin ?? (_onTouchBegin = new EventListener(this, "onTouchBegin")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onTouchMove
         {
             get { return _onTouchMove ?? (_onTouchMove = new EventListener(this, "onTouchMove")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onTouchEnd
         {
             get { return _onTouchEnd ?? (_onTouchEnd = new EventListener(this, "onTouchEnd")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onRollOver
         {
             get { return _onRollOver ?? (_onRollOver = new EventListener(this, "onRollOver")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onRollOut
         {
             get { return _onRollOut ?? (_onRollOut = new EventListener(this, "onRollOut")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onMouseWheel
         {
             get { return _onMouseWheel ?? (_onMouseWheel = new EventListener(this, "onMouseWheel")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onAddedToStage
         {
             get { return _onAddedToStage ?? (_onAddedToStage = new EventListener(this, "onAddedToStage")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onRemovedFromStage
         {
             get { return _onRemovedFromStage ?? (_onRemovedFromStage = new EventListener(this, "onRemovedFromStage")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onKeyDown
         {
             get { return _onKeyDown ?? (_onKeyDown = new EventListener(this, "onKeyDown")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onClickLink
         {
             get { return _onClickLink ?? (_onClickLink = new EventListener(this, "onClickLink")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onFocusIn
         {
             get { return _onFocusIn ?? (_onFocusIn = new EventListener(this, "onFocusIn")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onFocusOut
         {
             get { return _onFocusOut ?? (_onFocusOut = new EventListener(this, "onFocusOut")); }
@@ -263,27 +215,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float alpha
         {
             get { return _alpha; }
             set { _alpha = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool grayed
         {
             get { return _grayed; }
             set { _grayed = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool visible
         {
             get { return _visible; }
@@ -306,9 +252,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float x
         {
             get { return cachedTransform.localPosition.x; }
@@ -318,9 +262,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float y
         {
             get { return -cachedTransform.localPosition.y; }
@@ -330,9 +272,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float z
         {
             get { return cachedTransform.localPosition.z; }
@@ -342,27 +282,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 xy
         {
             get { return new Vector2(this.x, this.y); }
             set { SetPosition(value.x, value.y, cachedTransform.localPosition.z); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 position
         {
             get { return new Vector3(this.x, this.y, this.z); }
             set { SetPosition(value.x, value.y, value.z); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="xv"></param>
         /// <param name="yv"></param>
         public void SetXY(float xv, float yv)
@@ -370,9 +304,7 @@ namespace FairyGUI
             SetPosition(xv, yv, cachedTransform.localPosition.z);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="xv"></param>
         /// <param name="yv"></param>
         /// <param name="zv"></param>
@@ -410,9 +342,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float width
         {
             get
@@ -432,9 +362,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float height
         {
             get
@@ -454,9 +382,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 size
         {
             get
@@ -470,9 +396,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="wv"></param>
         /// <param name="hv"></param>
         public void SetSize(float wv, float hv)
@@ -509,9 +433,7 @@ namespace FairyGUI
             _flags |= Flags.OutlineChanged;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float scaleX
         {
             get { return cachedTransform.localScale.x; }
@@ -525,9 +447,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float scaleY
         {
             get { return cachedTransform.localScale.y; }
@@ -541,9 +461,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="xv"></param>
         /// <param name="yv"></param>
         public void SetScale(float xv, float yv)
@@ -573,9 +491,7 @@ namespace FairyGUI
             return value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 scale
         {
             get { return cachedTransform.localScale; }
@@ -585,9 +501,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float rotation
         {
             get
@@ -609,9 +523,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float rotationX
         {
             get
@@ -632,9 +544,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float rotationY
         {
             get
@@ -655,9 +565,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 skew
         {
             get { return _skew; }
@@ -698,9 +606,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int focalLength
         {
             get { return _focalLength; }
@@ -753,9 +659,7 @@ namespace FairyGUI
             _flags |= Flags.OutlineChanged;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 pivot
         {
             get { return _pivot; }
@@ -828,9 +732,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public Material material
         {
             get
@@ -847,9 +749,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public string shader
         {
             get
@@ -866,9 +766,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public int renderingOrder
         {
             get
@@ -891,9 +789,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int layer
         {
             get
@@ -963,9 +859,7 @@ namespace FairyGUI
                 return false;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public string cursor
         {
@@ -981,9 +875,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isDisposed
         {
             get { return (_flags & Flags.Disposed) != 0 || gameObject == null; }
@@ -1004,9 +896,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Container topmost
         {
             get
@@ -1018,9 +908,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Stage stage
         {
             get
@@ -1029,9 +917,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Container worldSpaceContainer
         {
             get
@@ -1052,9 +938,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool touchable
         {
             get { return _touchable; }
@@ -1073,9 +957,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public bool touchDisabled
         {
@@ -1187,9 +1069,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool paintingMode
         {
             get { return _paintingMode > 0; }
@@ -1218,9 +1098,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="extend"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
@@ -1249,9 +1127,7 @@ namespace FairyGUI
             return output;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public IFilter filter
         {
             get
@@ -1279,9 +1155,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public BlendMode blendMode
         {
             get { return _blendMode; }
@@ -1308,9 +1182,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="targetSpace"></param>
         /// <returns></returns>
         virtual public Rect GetBounds(DisplayObject targetSpace)
@@ -1475,9 +1347,7 @@ namespace FairyGUI
             return localPoint;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="localPoint"></param>
         /// <returns></returns>
         public Vector3 LocalToWorld(Vector3 localPoint)
@@ -1502,9 +1372,7 @@ namespace FairyGUI
             return this.cachedTransform.TransformPoint(localPoint);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="point"></param>
         /// <param name="targetSpace">null if to world space</param>
         /// <returns></returns>
@@ -1520,9 +1388,7 @@ namespace FairyGUI
             return point;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="rect"></param>
         /// <param name="targetSpace">null if to world space</param>
         /// <returns></returns>
@@ -1560,18 +1426,14 @@ namespace FairyGUI
             if (vec4.w < v.y) vec4.w = v.y;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void RemoveFromParent()
         {
             if (parent != null)
                 parent.RemoveChild(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void InvalidateBatchingState()
         {
             if (parent != null)
@@ -1858,9 +1720,7 @@ namespace FairyGUI
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class DisplayObjectInfo : MonoBehaviour
     {
         /// <summary>

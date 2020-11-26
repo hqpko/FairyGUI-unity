@@ -49,9 +49,7 @@ namespace FairyGUI
             _clipStack = new Stack<ClipInfo>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Begin()
         {
             current = this;
@@ -83,9 +81,7 @@ namespace FairyGUI
             working = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void End()
         {
             working = false;
@@ -96,9 +92,7 @@ namespace FairyGUI
             OnEnd = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="clipId"></param>
         /// <param name="clipRect"></param>
         /// <param name="softness"></param>
@@ -155,9 +149,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="clipId"></param>
         /// <param name="reversedMask"></param>
         public void EnterClipping(uint clipId, bool reversedMask)
@@ -185,9 +177,7 @@ namespace FairyGUI
             clipped = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void LeaveClipping()
         {
             clipInfo = _clipStack.Pop();

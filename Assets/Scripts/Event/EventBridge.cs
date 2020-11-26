@@ -5,9 +5,7 @@ using LuaInterface;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     class EventBridge
     {
         public EventDispatcher owner;

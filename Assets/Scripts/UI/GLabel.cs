@@ -109,9 +109,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int titleFontSize
         {
             get
@@ -134,18 +132,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get { return this.titleColor; }
             set { this.titleColor = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public GTextField GetTextField()
         {

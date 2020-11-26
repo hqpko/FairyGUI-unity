@@ -11,9 +11,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PackagesWindow : EditorWindow
     {
         Vector2 scrollPos1;

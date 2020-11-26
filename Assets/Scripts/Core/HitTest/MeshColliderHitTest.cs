@@ -2,25 +2,19 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class MeshColliderHitTest : ColliderHitTest
     {
         public Vector2 lastHit;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="collider"></param>
         public MeshColliderHitTest(MeshCollider collider)
         {
             this.collider = collider;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>

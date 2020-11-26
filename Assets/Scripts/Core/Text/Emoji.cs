@@ -3,9 +3,7 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class Emoji
     {
         /// <summary>
@@ -23,9 +21,7 @@ namespace FairyGUI
         /// </summary>
         public int height;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
@@ -36,9 +32,7 @@ namespace FairyGUI
             this.height = height;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="url"></param>
         public Emoji(string url)
         {

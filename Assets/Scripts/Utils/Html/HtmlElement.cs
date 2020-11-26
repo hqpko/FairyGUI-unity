@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum HtmlElementType
     {
         Text,
@@ -20,9 +18,7 @@ namespace FairyGUI.Utils
         LinkEnd,
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class HtmlElement
     {
         public HtmlElementType type;

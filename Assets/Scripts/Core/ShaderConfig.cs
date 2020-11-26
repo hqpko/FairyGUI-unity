@@ -2,41 +2,27 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public static class ShaderConfig
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         public delegate Shader GetFunction(string name);
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static GetFunction Get = Shader.Find;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string imageShader = "FairyGUI/Image";
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string textShader = "FairyGUI/Text";
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string bmFontShader = "FairyGUI/BMFont";
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static string TMPFontShader = "FairyGUI/TMP";
 
         public static int ID_ClipBox;
@@ -74,9 +60,7 @@ namespace FairyGUI
             ID_Stencil2 = Shader.PropertyToID("_StencilRef");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         public static Shader GetShader(string name)

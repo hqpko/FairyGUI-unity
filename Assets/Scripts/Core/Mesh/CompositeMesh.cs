@@ -3,14 +3,10 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class CompositeMesh : IMeshFactory, IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public readonly List<IMeshFactory> elements;
 
         /// <summary>

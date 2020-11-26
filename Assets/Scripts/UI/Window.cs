@@ -17,9 +17,7 @@ namespace FairyGUI
     /// </summary>
     public class Window : GComponent
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool bringToFontOnClick;
 
         GComponent _frame;
@@ -71,9 +69,7 @@ namespace FairyGUI
             _uiSources.Add(source);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent contentPane
         {
             set
@@ -113,17 +109,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent frame
         {
             get { return _frame; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject closeButton
         {
             get { return _closeButton; }
@@ -137,9 +129,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject dragArea
         {
             get { return _dragArea; }
@@ -166,43 +156,33 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject contentArea
         {
             get { return _contentArea; }
             set { _contentArea = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject modalWaitingPane
         {
             get { return _modalWaitPane; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Show()
         {
             GRoot.inst.ShowWindow(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="r"></param>
         public void ShowOn(GRoot r)
         {
             r.ShowWindow(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Hide()
         {
             if (this.isShowing)
@@ -243,42 +223,32 @@ namespace FairyGUI
                 Show();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isShowing
         {
             get { return parent != null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isTop
         {
             get { return parent != null && parent.GetChildIndex(this) == parent.numChildren - 1; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool modal
         {
             get { return _modal; }
             set { _modal = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void BringToFront()
         {
             this.root.BringToFront(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ShowModalWait()
         {
             ShowModalWait(0);
@@ -322,9 +292,7 @@ namespace FairyGUI
                 _modalWaitPane.SetSize(this.width, this.height);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public bool CloseModalWait()
         {
@@ -353,17 +321,13 @@ namespace FairyGUI
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool modalWaiting
         {
             get { return (_modalWaitPane != null) && _modalWaitPane.inContainer; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Init()
         {
             if (_inited || _loading)
@@ -390,9 +354,7 @@ namespace FairyGUI
                 _init();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual protected void OnInit()
         {
 #if FAIRYGUI_TOLUA
@@ -404,9 +366,7 @@ namespace FairyGUI
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual protected void OnShown()
         {
 #if FAIRYGUI_TOLUA
@@ -418,9 +378,7 @@ namespace FairyGUI
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual protected void OnHide()
         {
 #if FAIRYGUI_TOLUA
@@ -432,9 +390,7 @@ namespace FairyGUI
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual protected void DoShowAnimation()
         {
 #if FAIRYGUI_TOLUA
@@ -450,9 +406,7 @@ namespace FairyGUI
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual protected void DoHideAnimation()
         {
 #if FAIRYGUI_TOLUA

@@ -2,34 +2,22 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class StraightLineMesh : IMeshFactory
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 origin;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector3 end;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lineWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool repeatFill;
 
         public StraightLineMesh()
@@ -38,9 +26,7 @@ namespace FairyGUI
             lineWidth = 1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="lineWidth"></param>
         /// <param name="color"></param>
         /// <param name="repeatFill"></param>

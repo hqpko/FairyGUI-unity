@@ -49,9 +49,7 @@ namespace FairyGUI
         /// </summary>
         public bool keepCrisp;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int version;
 
         protected internal static bool textRebuildFlag;

@@ -5,9 +5,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GTextField : GObject, ITextColorGear
     {
         protected TextField _textField;
@@ -39,9 +37,7 @@ namespace FairyGUI
             displayObject = _textField;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         override public string text
         {
             get
@@ -74,9 +70,7 @@ namespace FairyGUI
                 _textField.text = str;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Dictionary<string, string> templateVars
         {
             get { return _templateVars; }
@@ -91,9 +85,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -106,18 +98,14 @@ namespace FairyGUI
             return this;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void FlushVars()
         {
             SetTextFieldText();
             UpdateSize();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool HasCharacter(char ch)
         {
             return _textField.HasCharacter(ch);
@@ -175,9 +163,7 @@ namespace FairyGUI
             return buffer.ToString();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TextFormat textFormat
         {
             get
@@ -192,9 +178,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get
@@ -213,45 +197,35 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align
         {
             get { return _textField.align; }
             set { _textField.align = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertAlignType verticalAlign
         {
             get { return _textField.verticalAlign; }
             set { _textField.verticalAlign = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool singleLine
         {
             get { return _textField.singleLine; }
             set { _textField.singleLine = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float stroke
         {
             get { return _textField.stroke; }
             set { _textField.stroke = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color strokeColor
         {
             get { return _textField.strokeColor; }
@@ -262,27 +236,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 shadowOffset
         {
             get { return _textField.shadowOffset; }
             set { _textField.shadowOffset = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool UBBEnabled
         {
             get { return _ubbEnabled; }
             set { _ubbEnabled = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AutoSizeType autoSize
         {
             get { return _textField.autoSize; }
@@ -314,17 +282,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float textWidth
         {
             get { return _textField.textWidth; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float textHeight
         {
             get { return _textField.textHeight; }

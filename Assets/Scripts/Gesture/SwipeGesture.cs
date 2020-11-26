@@ -10,9 +10,7 @@ namespace FairyGUI
     /// </summary>
     public class SwipeGesture : EventDispatcher
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GObject host { get; private set; }
 
         /// <summary>

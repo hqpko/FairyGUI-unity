@@ -2,9 +2,7 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public partial class TextFormat
     {
         public enum SpecialStyle
@@ -14,84 +12,52 @@ namespace FairyGUI
             Subscript
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int size;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string font;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int lineSpacing;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int letterSpacing;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool bold;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool underline;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool italic;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool strikethrough;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color32[] gradientColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public SpecialStyle specialStyle;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float outline;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color outlineColor;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 shadowOffset;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color shadowColor;
 
         public TextFormat()
@@ -102,9 +68,7 @@ namespace FairyGUI
             outlineColor = shadowColor = Color.black;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="value"></param>
         public void SetColor(uint value)
         {
@@ -117,9 +81,7 @@ namespace FairyGUI
             color = new Color(r, g, b, 1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="aFormat"></param>
         /// <returns></returns>
         public bool EqualStyle(TextFormat aFormat)

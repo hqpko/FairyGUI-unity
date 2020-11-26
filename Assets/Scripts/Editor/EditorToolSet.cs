@@ -5,9 +5,7 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class EditorToolSet
     {
         public static GUIContent[] packagesPopupContents;

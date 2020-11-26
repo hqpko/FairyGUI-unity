@@ -5,9 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum DestroyMethod
     {
         Destroy,
@@ -17,9 +15,7 @@ namespace FairyGUI
         Custom
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class NTexture
     {
         /// <summary>
@@ -27,29 +23,19 @@ namespace FairyGUI
         /// </summary>
         public static event Action<Texture> CustomDestroyMethod;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Rect uvRect;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool rotated;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int refCount;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float lastActive;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public DestroyMethod destroyMethod;
 
         /// <summary>
@@ -84,9 +70,7 @@ namespace FairyGUI
 
         static NTexture _empty;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static NTexture Empty
         {
             get
@@ -98,9 +82,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public static void DisposeEmpty()
         {
             if (_empty != null)
@@ -111,17 +93,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="texture"></param>
         public NTexture(Texture texture) : this(texture, null, 1, 1)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="texture"></param>
         /// <param name="xScale"></param>
         /// <param name="yScale"></param>
@@ -146,9 +124,7 @@ namespace FairyGUI
             _region = new Rect(0, 0, _originalSize.x, _originalSize.y);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="texture"></param>
         /// <param name="region"></param>
         public NTexture(Texture texture, Rect region)
@@ -164,9 +140,7 @@ namespace FairyGUI
                 uvRect.Set(0, 0, 1, 1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="root"></param>
         /// <param name="region"></param>
         /// <param name="rotated"></param>
@@ -192,9 +166,7 @@ namespace FairyGUI
             _originalSize = _region.size;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="root"></param>
         /// <param name="region"></param>
         /// <param name="rotated"></param>
@@ -207,9 +179,7 @@ namespace FairyGUI
             _offset = offset;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="sprite"></param>
         public NTexture(Sprite sprite)
         {
@@ -224,43 +194,33 @@ namespace FairyGUI
                 _region.width / _nativeTexture.width, _region.height / _nativeTexture.height);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int width
         {
             get { return (int)_region.width; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int height
         {
             get { return (int)_region.height; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 offset
         {
             get { return _offset; }
             set { _offset = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 originalSize
         {
             get { return _originalSize; }
             set { _originalSize = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="drawRect"></param>
         /// <returns></returns>
         public Rect GetDrawRect(Rect drawRect)
@@ -273,9 +233,7 @@ namespace FairyGUI
             return new Rect(_offset.x * sx, _offset.y * sy, _region.width * sx, _region.height * sy);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="uv"></param>
         public void GetUV(Vector2[] uv)
         {
@@ -301,41 +259,31 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NTexture root
         {
             get { return _root; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool disposed
         {
             get { return _root == null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Texture nativeTexture
         {
             get { return _root != null ? _root._nativeTexture : null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Texture alphaTexture
         {
             get { return _root != null ? _root._alphaTexture : null; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public MaterialManager GetMaterialManager(string shaderName)
         {
             if (_root != this)
@@ -359,17 +307,13 @@ namespace FairyGUI
             return mm;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Unload()
         {
             Unload(false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Unload(bool destroyMaterials)
         {
             if (this == _empty)
@@ -389,9 +333,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="nativeTexture"></param>
         /// <param name="alphaTexture"></param>
         public void Reload(Texture nativeTexture, Texture alphaTexture)
@@ -503,9 +445,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Dispose()
         {
             if (this == _empty)

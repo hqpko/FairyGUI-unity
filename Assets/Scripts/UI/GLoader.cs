@@ -72,9 +72,7 @@ namespace FairyGUI
             base.Dispose();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string url
         {
             get { return _url; }
@@ -96,9 +94,7 @@ namespace FairyGUI
             set { this.url = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align
         {
             get { return _align; }
@@ -112,9 +108,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertAlignType verticalAlign
         {
             get { return _verticalAlign; }
@@ -128,9 +122,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FillType fill
         {
             get { return _fill; }
@@ -144,9 +136,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool shrinkOnly
         {
             get { return _shrinkOnly; }
@@ -160,9 +150,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool autoSize
         {
             get { return _autoSize; }
@@ -176,9 +164,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool playing
         {
             get { return _content.playing; }
@@ -189,9 +175,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int frame
         {
             get { return _content.frame; }
@@ -202,54 +186,42 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float timeScale
         {
             get { return _content.timeScale; }
             set { _content.timeScale = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool ignoreEngineTimeScale
         {
             get { return _content.ignoreEngineTimeScale; }
             set { _content.ignoreEngineTimeScale = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="time"></param>
         public void Advance(float time)
         {
             _content.Advance(time);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Material material
         {
             get { return _content.material; }
             set { _content.material = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string shader
         {
             get { return _content.shader; }
             set { _content.shader = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color color
         {
             get { return _content.color; }
@@ -263,69 +235,53 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public FillMethod fillMethod
         {
             get { return _content.fillMethod; }
             set { _content.fillMethod = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int fillOrigin
         {
             get { return _content.fillOrigin; }
             set { _content.fillOrigin = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool fillClockwise
         {
             get { return _content.fillClockwise; }
             set { _content.fillClockwise = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float fillAmount
         {
             get { return _content.fillAmount; }
             set { _content.fillAmount = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Image image
         {
             get { return _content; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public MovieClip movieClip
         {
             get { return _content; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent component
         {
             get { return _content2; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public NTexture texture
         {
             get
@@ -364,9 +320,7 @@ namespace FairyGUI
             set { _content.blendMode = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         protected void LoadContent()
         {
             ClearContent();

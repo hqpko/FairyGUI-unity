@@ -3,9 +3,7 @@ using System.Collections.Generic;
 
 namespace FairyGUI.Utils
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class XMLList
     {
         public List<XML> rawList;

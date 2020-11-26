@@ -3,35 +3,25 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class NAudioClip
     {
         public static Action<AudioClip> CustomDestroyMethod;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public DestroyMethod destroyMethod;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AudioClip nativeClip;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="audioClip"></param>
         public NAudioClip(AudioClip audioClip)
         {
             nativeClip = audioClip;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void Unload()
         {
             if (nativeClip == null)
@@ -52,9 +42,7 @@ namespace FairyGUI
             nativeClip = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="audioClip"></param>
         public void Reload(AudioClip audioClip)
         {

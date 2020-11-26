@@ -6,9 +6,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class TextField : DisplayObject, IMeshFactory
     {
         VertAlignType _verticalAlign;
@@ -89,9 +87,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public TextFormat textFormat
         {
             get { return _textFormat; }
@@ -102,9 +98,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void ApplyFormat()
         {
             string fontName = _textFormat.font;
@@ -122,9 +116,7 @@ namespace FairyGUI
                 _textChanged = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AlignType align
         {
             get { return _textFormat.align; }
@@ -139,9 +131,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public VertAlignType verticalAlign
         {
             get
@@ -159,9 +149,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string text
         {
             get { return _text; }
@@ -176,9 +164,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string htmlText
         {
             get { return _text; }
@@ -198,9 +184,7 @@ namespace FairyGUI
             get { return _parsedText; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public AutoSizeType autoSize
         {
             get { return _autoSize; }
@@ -214,9 +198,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool wordWrap
         {
             get { return _wordWrap; }
@@ -230,9 +212,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool singleLine
         {
             get { return _singleLine; }
@@ -246,9 +226,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float stroke
         {
             get
@@ -265,9 +243,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Color strokeColor
         {
             get
@@ -284,9 +260,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 shadowOffset
         {
             get
@@ -300,9 +274,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float textWidth
         {
             get
@@ -314,9 +286,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float textHeight
         {
             get
@@ -328,9 +298,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int maxWidth
         {
             get { return _maxWidth; }
@@ -344,9 +312,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<HtmlElement> htmlElements
         {
             get
@@ -358,9 +324,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<LineInfo> lines
         {
             get
@@ -372,9 +336,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public List<CharPosition> charPositions
         {
             get
@@ -388,17 +350,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public RichTextField richTextField
         {
             get { return _richTextField; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool Redraw()
         {
             if (_font == null)
@@ -430,17 +388,13 @@ namespace FairyGUI
             return graphics.UpdateMesh();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool HasCharacter(char ch)
         {
             return _font.HasCharacter(ch);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="startLine"></param>
         /// <param name="startCharX"></param>
         /// <param name="endLine"></param>
@@ -1537,9 +1491,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public class LineInfo
         {
             /// <summary>
@@ -1579,9 +1531,7 @@ namespace FairyGUI
 
             static Stack<LineInfo> pool = new Stack<LineInfo>();
 
-            /// <summary>
-            /// 
-            /// </summary>
+    
             /// <returns></returns>
             public static LineInfo Borrow()
             {
@@ -1597,18 +1547,14 @@ namespace FairyGUI
                     return new LineInfo();
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
+    
             /// <param name="value"></param>
             public static void Return(LineInfo value)
             {
                 pool.Push(value);
             }
 
-            /// <summary>
-            /// 
-            /// </summary>
+    
             /// <param name="values"></param>
             public static void Return(List<LineInfo> values)
             {
@@ -1620,9 +1566,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public struct LineCharInfo
         {
             public float width;
@@ -1630,9 +1574,7 @@ namespace FairyGUI
             public float baseline;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public struct CharPosition
         {
             /// <summary>

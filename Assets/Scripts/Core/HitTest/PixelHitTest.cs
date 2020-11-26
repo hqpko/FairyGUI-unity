@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PixelHitTestData
     {
         public int pixelWidth;
@@ -26,9 +24,7 @@ namespace FairyGUI
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class PixelHitTest : IHitTest
     {
         public int offsetX;
@@ -38,9 +34,7 @@ namespace FairyGUI
 
         PixelHitTestData _data;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="data"></param>
         /// <param name="offsetX"></param>
         /// <param name="offsetY"></param>
@@ -53,9 +47,7 @@ namespace FairyGUI
             this.sourceHeight = sourceHeight;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>

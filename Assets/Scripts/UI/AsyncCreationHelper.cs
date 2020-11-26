@@ -169,9 +169,7 @@ namespace FairyGUI
             return listItemCount;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         class DisplayListItem
         {
             public PackageItem packageItem;

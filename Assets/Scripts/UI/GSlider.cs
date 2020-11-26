@@ -4,9 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class GSlider : GComponent
     {
         double _min;
@@ -43,25 +41,19 @@ namespace FairyGUI
             canDrag = true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onChanged
         {
             get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onGripTouchEnd
         {
             get { return _onGripTouchEnd ?? (_onGripTouchEnd = new EventListener(this, "onGripTouchEnd")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public ProgressTitleType titleType
         {
             get
@@ -78,9 +70,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double min
         {
             get
@@ -97,9 +87,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double max
         {
             get
@@ -116,9 +104,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public double value
         {
             get
@@ -135,9 +121,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool wholeNumbers
         {
             get

@@ -2,19 +2,13 @@
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class ColliderHitTest : IHitTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Collider collider;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>

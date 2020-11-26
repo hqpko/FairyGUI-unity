@@ -3,32 +3,22 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [ExecuteInEditMode]
     [AddComponentMenu("FairyGUI/UI Painter")]
     [RequireComponent(typeof(MeshCollider), typeof(MeshRenderer))]
     public class UIPainter : MonoBehaviour, EMRenderTarget
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Container container { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string packageName;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string componentName;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int sortingOrder;
 
         [SerializeField]
@@ -139,9 +129,7 @@ namespace FairyGUI
                 Stage.inst.ApplyPanelOrder(container);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent ui
         {
             get
@@ -153,9 +141,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void CreateUI()
         {
             if (_ui != null)

@@ -4,9 +4,7 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     public enum EaseType
     {
         Linear,
@@ -43,9 +41,7 @@ namespace FairyGUI
         Custom
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+
     public class CustomEase
     {
         Vector2[] _points;
@@ -53,9 +49,7 @@ namespace FairyGUI
 
         static GPath helperPath = new GPath();
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pointDensity"></param>
         public CustomEase(int pointDensity = 200)
         {
@@ -63,9 +57,7 @@ namespace FairyGUI
             _pointDensity = pointDensity;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pathPoints"></param>
         public void Create(IEnumerable<GPathPoint> pathPoints)
         {
@@ -84,9 +76,7 @@ namespace FairyGUI
             });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="time"></param>
         /// <returns></returns>
         public float Evaluate(float time)

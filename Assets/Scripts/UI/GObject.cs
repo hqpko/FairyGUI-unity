@@ -42,24 +42,16 @@ namespace FairyGUI
         /// </summary>
         public int initHeight;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int minWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int maxWidth;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int minHeight;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int maxHeight;
 
         /// <summary>
@@ -87,9 +79,7 @@ namespace FairyGUI
         /// </summary>
         public static GObject draggingObject { get; private set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public PackageItem packageItem;
 
         float _x;
@@ -191,9 +181,7 @@ namespace FairyGUI
             get { return _onTouchBegin ?? (_onTouchBegin = new EventListener(this, "onTouchBegin")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onTouchMove
         {
             get { return _onTouchMove ?? (_onTouchMove = new EventListener(this, "onTouchMove")); }
@@ -295,25 +283,19 @@ namespace FairyGUI
             get { return _onDragEnd ?? (_onDragEnd = new EventListener(this, "onDragEnd")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onGearStop
         {
             get { return _onGearStop ?? (_onGearStop = new EventListener(this, "onGearStop")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onFocusIn
         {
             get { return _onFocusIn ?? (_onFocusIn = new EventListener(this, "onFocusIn")); }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public EventListener onFocusOut
         {
             get { return _onFocusOut ?? (_onFocusOut = new EventListener(this, "onFocusOut")); }
@@ -383,9 +365,7 @@ namespace FairyGUI
             SetPosition(xv, yv, _z);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="xv"></param>
         /// <param name="yv"></param>
         /// <param name="topLeft"></param>
@@ -610,9 +590,7 @@ namespace FairyGUI
             _height = hv;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float xMin
         {
             get
@@ -628,9 +606,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public float yMin
         {
             get
@@ -696,9 +672,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public Vector2 skew
         {
             get
@@ -1053,9 +1027,7 @@ namespace FairyGUI
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public string cursor
         {
@@ -1077,18 +1049,14 @@ namespace FairyGUI
             this.root.HideTooltips();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public IFilter filter
         {
             get { return displayObject != null ? displayObject.filter : null; }
             set { if (displayObject != null) displayObject.filter = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public BlendMode blendMode
         {
             get { return displayObject != null ? displayObject.blendMode : BlendMode.None; }
@@ -1115,9 +1083,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj"></param>
         public void SetHome(GObject obj)
         {
@@ -1328,9 +1294,7 @@ namespace FairyGUI
             CheckGearDisplay();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void AddRelation(GObject target, RelationType relationType)
@@ -1338,9 +1302,7 @@ namespace FairyGUI
             AddRelation(target, relationType, false);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         /// <param name="usePercent"></param>
@@ -1349,9 +1311,7 @@ namespace FairyGUI
             relations.Add(target, relationType, usePercent);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void RemoveRelation(GObject target, RelationType relationType)
@@ -1359,9 +1319,7 @@ namespace FairyGUI
             relations.Remove(target, relationType);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void RemoveFromParent()
         {
             if (parent != null)
@@ -1390,9 +1348,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GRoot root
         {
             get
@@ -1415,27 +1371,21 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public string text
         {
             get { return null; }
             set { /*override in child*/}
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public string icon
         {
             get { return null; }
             set { /*override in child*/}
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool draggable
         {
             get { return _draggable; }
@@ -1449,17 +1399,13 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void StartDrag()
         {
             StartDrag(-1);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="touchId"></param>
         public void StartDrag(int touchId)
         {
@@ -1469,17 +1415,13 @@ namespace FairyGUI
             DragBegin(touchId);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public void StopDrag()
         {
             DragEnd();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool dragging
         {
             get { return draggingObject == this; }
@@ -1516,9 +1458,7 @@ namespace FairyGUI
             return pt;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="rect"></param>
         /// <returns></returns>
         public Rect LocalToGlobal(Rect rect)
@@ -1533,9 +1473,7 @@ namespace FairyGUI
             return ret;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="rect"></param>
         /// <returns></returns>
         public Rect GlobalToLocal(Rect rect)
@@ -1589,9 +1527,7 @@ namespace FairyGUI
             return GlobalToLocal(pt);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pt"></param>
         /// <returns></returns>
         public Vector2 WorldToLocal(Vector3 pt)
@@ -1599,9 +1535,7 @@ namespace FairyGUI
             return WorldToLocal(pt, HitTestContext.cachedMainCamera);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="pt"></param>
         /// <param name="camera"></param>
         /// <returns></returns>
@@ -1613,9 +1547,7 @@ namespace FairyGUI
             return GlobalToLocal(v);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="point"></param>
         /// <param name="targetSpace"></param>
         /// <returns></returns>
@@ -1629,9 +1561,7 @@ namespace FairyGUI
             return this.displayObject.TransformPoint(pt, targetSpace != null ? targetSpace.displayObject : Stage.inst);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="rect"></param>
         /// <param name="targetSpace"></param>
         /// <returns></returns>
@@ -1645,17 +1575,13 @@ namespace FairyGUI
             return this.displayObject.TransformRect(rect, targetSpace != null ? targetSpace.displayObject : Stage.inst);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool isDisposed
         {
             get { return _disposed; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         virtual public void Dispose()
         {
             if (_disposed)
@@ -1681,145 +1607,109 @@ namespace FairyGUI
             data = null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GImage asImage
         {
             get { return this as GImage; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComponent asCom
         {
             get { return this as GComponent; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GButton asButton
         {
             get { return this as GButton; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GLabel asLabel
         {
             get { return this as GLabel; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GProgressBar asProgress
         {
             get { return this as GProgressBar; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GSlider asSlider
         {
             get { return this as GSlider; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GComboBox asComboBox
         {
             get { return this as GComboBox; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTextField asTextField
         {
             get { return this as GTextField; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GRichTextField asRichTextField
         {
             get { return this as GRichTextField; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTextInput asTextInput
         {
             get { return this as GTextInput; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GLoader asLoader
         {
             get { return this as GLoader; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GLoader3D asLoader3D
         {
             get { return this as GLoader3D; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GList asList
         {
             get { return this as GList; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GGraph asGraph
         {
             get { return this as GGraph; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GGroup asGroup
         {
             get { return this as GGroup; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GMovieClip asMovieClip
         {
             get { return this as GMovieClip; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTree asTree
         {
             get { return this as GTree; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public GTreeNode treeNode
         {
             get { return _treeNode; }

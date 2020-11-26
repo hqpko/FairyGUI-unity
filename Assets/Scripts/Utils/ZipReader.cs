@@ -5,9 +5,7 @@
     /// </summary>
     public class ZipReader
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
         public class ZipEntry
         {
             public string name;
@@ -24,9 +22,7 @@
         int _pos;
         int _index;
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="stream"></param>
         public ZipReader(byte[] data)
         {
@@ -40,17 +36,13 @@
             _pos = _stream.ReadInt();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int entryCount
         {
             get { return _entryCount; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <returns></returns>
         public bool GetNextEntry(ZipEntry entry)
         {
@@ -94,9 +86,7 @@
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="name"></param>
         /// <returns></returns>
         public byte[] GetEntryData(ZipEntry entry)

@@ -126,9 +126,7 @@ namespace FairyGUI
             set { rootContainer.fairyBatching = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="childChanged"></param>
         public void InvalidateBatchingState(bool childChanged)
         {
@@ -147,9 +145,7 @@ namespace FairyGUI
             set { rootContainer.opaque = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <value></value>
         public Margin margin
         {
@@ -163,9 +159,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public ChildrenRenderOrder childrenRenderOrder
         {
             get { return _childrenRenderOrder; }
@@ -179,9 +173,7 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public int apexIndex
         {
             get { return _apexIndex; }
@@ -641,9 +633,7 @@ namespace FairyGUI
             get { return _children.Count; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="obj"></param>
         /// <returns></returns>
         public bool IsAncestorOf(GObject obj)
@@ -663,9 +653,7 @@ namespace FairyGUI
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         /// <param name="objs"></param>
         public void ChangeChildrenOrder(IList<GObject> objs)
         {
@@ -991,18 +979,14 @@ namespace FairyGUI
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public bool reversedMask
         {
             get { return container.reversedMask; }
             set { container.reversedMask = value; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         public string baseUserData
         {
             get
