@@ -109,7 +109,7 @@ namespace FairyGUI
             GObject obj = GRoot.inst.touchTarget;
             while (obj != null)
             {
-                if (obj.hasEventListeners("onDrop"))
+                if (obj.HasEventListeners("onDrop"))
                 {
                     obj.RequestFocus();
                     obj.DispatchEvent("onDrop", sourceData, source);

@@ -921,7 +921,7 @@ namespace FairyGUI
                 return;
 
             _headerLockedSize = size;
-            if (!isDispatching("onPullDownRelease") && _container.xy[_refreshBarAxis] >= 0)
+            if (!IsDispatching("onPullDownRelease") && _container.xy[_refreshBarAxis] >= 0)
             {
                 _tweenStart = _container.xy;
                 _tweenChange = Vector2.zero;
@@ -941,7 +941,7 @@ namespace FairyGUI
                 return;
 
             _footerLockedSize = size;
-            if (!isDispatching("onPullUpRelease") && _container.xy[_refreshBarAxis] <= -_overlapSize[_refreshBarAxis])
+            if (!IsDispatching("onPullUpRelease") && _container.xy[_refreshBarAxis] <= -_overlapSize[_refreshBarAxis])
             {
                 _tweenStart = _container.xy;
                 _tweenChange = Vector2.zero;

@@ -150,7 +150,7 @@ namespace FairyGUI
         {
             get
             {
-                return !_bridge.owner.hasEventListeners(_type);
+                return !_bridge.owner.HasEventListeners(_type);
             }
         }
 
@@ -159,7 +159,7 @@ namespace FairyGUI
         {
             get
             {
-                return _bridge.owner.isDispatching(_type);
+                return _bridge.owner.IsDispatching(_type);
             }
         }
 
