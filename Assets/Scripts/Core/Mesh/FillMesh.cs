@@ -2,18 +2,13 @@
 
 namespace FairyGUI
 {
-
     public class FillMesh : IMeshFactory
     {
-
         public FillMethod method;
-
 
         public int origin;
 
-
         public float amount;
-
 
         public bool clockwise;
 
@@ -25,7 +20,7 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            float amount = Mathf.Clamp01(this.amount);
+            var amount = Mathf.Clamp01(this.amount);
             switch (method)
             {
                 case FillMethod.Horizontal:
@@ -37,35 +32,35 @@ namespace FairyGUI
                     break;
 
                 case FillMethod.Radial90:
-                    FillRadial90(vb, vb.contentRect, (Origin90)origin, amount, clockwise);
+                    FillRadial90(vb, vb.contentRect, (Origin90) origin, amount, clockwise);
                     break;
 
                 case FillMethod.Radial180:
-                    FillRadial180(vb, vb.contentRect, (Origin180)origin, amount, clockwise);
+                    FillRadial180(vb, vb.contentRect, (Origin180) origin, amount, clockwise);
                     break;
 
                 case FillMethod.Radial360:
-                    FillRadial360(vb, vb.contentRect, (Origin360)origin, amount, clockwise);
+                    FillRadial360(vb, vb.contentRect, (Origin360) origin, amount, clockwise);
                     break;
             }
         }
 
-        static void FillHorizontal(VertexBuffer vb, Rect vertRect, int origin, float amount)
+        private static void FillHorizontal(VertexBuffer vb, Rect vertRect, int origin, float amount)
         {
-            float a = vertRect.width * amount;
-            if ((OriginHorizontal)origin == OriginHorizontal.Right || (OriginVertical)origin == OriginVertical.Bottom)
-                vertRect.x += (vertRect.width - a);
+            var a = vertRect.width * amount;
+            if ((OriginHorizontal) origin == OriginHorizontal.Right || (OriginVertical) origin == OriginVertical.Bottom)
+                vertRect.x += vertRect.width - a;
             vertRect.width = a;
 
             vb.AddQuad(vertRect);
             vb.AddTriangles();
         }
 
-        static void FillVertical(VertexBuffer vb, Rect vertRect, int origin, float amount)
+        private static void FillVertical(VertexBuffer vb, Rect vertRect, int origin, float amount)
         {
-            float a = vertRect.height * amount;
-            if ((OriginHorizontal)origin == OriginHorizontal.Right || (OriginVertical)origin == OriginVertical.Bottom)
-                vertRect.y += (vertRect.height - a);
+            var a = vertRect.height * amount;
+            if ((OriginHorizontal) origin == OriginHorizontal.Right || (OriginVertical) origin == OriginVertical.Bottom)
+                vertRect.y += vertRect.height - a;
             vertRect.height = a;
 
             vb.AddQuad(vertRect);
@@ -73,32 +68,32 @@ namespace FairyGUI
         }
 
         //4 vertex
-        static void FillRadial90(VertexBuffer vb, Rect vertRect, Origin90 origin, float amount, bool clockwise)
+        private static void FillRadial90(VertexBuffer vb, Rect vertRect, Origin90 origin, float amount, bool clockwise)
         {
-            bool flipX = origin == Origin90.TopRight || origin == Origin90.BottomRight;
-            bool flipY = origin == Origin90.BottomLeft || origin == Origin90.BottomRight;
+            var flipX = origin == Origin90.TopRight || origin == Origin90.BottomRight;
+            var flipY = origin == Origin90.BottomLeft || origin == Origin90.BottomRight;
             if (flipX != flipY)
                 clockwise = !clockwise;
 
-            float ratio = clockwise ? amount : (1 - amount);
-            float tan = Mathf.Tan(Mathf.PI * 0.5f * ratio);
-            bool thresold = false;
+            var ratio = clockwise ? amount : 1 - amount;
+            var tan = Mathf.Tan(Mathf.PI * 0.5f * ratio);
+            var thresold = false;
             if (ratio != 1)
-                thresold = (vertRect.height / vertRect.width - tan) > 0;
+                thresold = vertRect.height / vertRect.width - tan > 0;
             if (!clockwise)
                 thresold = !thresold;
-            float x = vertRect.x + (ratio == 0 ? float.MaxValue : (vertRect.height / tan));
-            float y = vertRect.y + (ratio == 1 ? float.MaxValue : (vertRect.width * tan));
-            float x2 = x;
-            float y2 = y;
+            var x = vertRect.x + (ratio == 0 ? float.MaxValue : vertRect.height / tan);
+            var y = vertRect.y + (ratio == 1 ? float.MaxValue : vertRect.width * tan);
+            var x2 = x;
+            var y2 = y;
             if (flipX)
                 x2 = vertRect.width - x;
             if (flipY)
                 y2 = vertRect.height - y;
-            float xMin = flipX ? (vertRect.width - vertRect.x) : vertRect.xMin;
-            float yMin = flipY ? (vertRect.height - vertRect.y) : vertRect.yMin;
-            float xMax = flipX ? -vertRect.xMin : vertRect.xMax;
-            float yMax = flipY ? -vertRect.yMin : vertRect.yMax;
+            var xMin = flipX ? vertRect.width - vertRect.x : vertRect.xMin;
+            var yMin = flipY ? vertRect.height - vertRect.y : vertRect.yMin;
+            var xMax = flipX ? -vertRect.xMin : vertRect.xMax;
+            var yMax = flipY ? -vertRect.yMin : vertRect.yMax;
 
             vb.AddVert(new Vector3(xMin, yMin, 0));
 
@@ -113,7 +108,9 @@ namespace FairyGUI
                     vb.AddVert(new Vector3(xMax, yMax, 0));
             }
             else
+            {
                 vb.AddVert(new Vector3(xMax, y2, 0));
+            }
 
             if (x > vertRect.xMax)
             {
@@ -123,7 +120,9 @@ namespace FairyGUI
                     vb.AddVert(new Vector3(xMax, yMax, 0));
             }
             else
+            {
                 vb.AddVert(new Vector3(x2, yMax, 0));
+            }
 
             if (!clockwise)
                 vb.AddVert(new Vector3(xMin, yMax, 0));
@@ -141,7 +140,8 @@ namespace FairyGUI
         }
 
         //8 vertex
-        static void FillRadial180(VertexBuffer vb, Rect vertRect, Origin180 origin, float amount, bool clockwise)
+        private static void FillRadial180(VertexBuffer vb, Rect vertRect, Origin180 origin, float amount,
+            bool clockwise)
         {
             switch (origin)
             {
@@ -152,8 +152,9 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopLeft : Origin90.TopRight, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-4);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopLeft : Origin90.TopRight, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-4);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -163,7 +164,8 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopRight : Origin90.TopLeft, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopRight : Origin90.TopLeft,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.x += vertRect.width;
@@ -172,6 +174,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
 
                 case Origin180.Bottom:
@@ -181,8 +184,9 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomRight : Origin90.BottomLeft, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-4);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomRight : Origin90.BottomLeft,
+                            amount / 0.5f, clockwise);
+                        var vec = vb.GetPosition(-4);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -192,7 +196,8 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomLeft : Origin90.BottomRight, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomLeft : Origin90.BottomRight,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.x -= vertRect.width;
@@ -201,6 +206,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
 
                 case Origin180.Left:
@@ -210,8 +216,9 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomLeft : Origin90.TopLeft, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-4);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomLeft : Origin90.TopLeft, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-4);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -221,7 +228,8 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopLeft : Origin90.BottomLeft, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopLeft : Origin90.BottomLeft,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.y -= vertRect.height;
@@ -230,6 +238,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
 
                 case Origin180.Right:
@@ -239,8 +248,9 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopRight : Origin90.BottomRight, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-4);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.TopRight : Origin90.BottomRight, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-4);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -250,7 +260,8 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomRight : Origin90.TopRight, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial90(vb, vertRect, clockwise ? Origin90.BottomRight : Origin90.TopRight,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.y += vertRect.height;
@@ -259,12 +270,14 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
             }
         }
 
         //12 vertex
-        static void FillRadial360(VertexBuffer vb, Rect vertRect, Origin360 origin, float amount, bool clockwise)
+        private static void FillRadial360(VertexBuffer vb, Rect vertRect, Origin360 origin, float amount,
+            bool clockwise)
         {
             switch (origin)
             {
@@ -275,8 +288,9 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Left : Origin180.Right, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-8);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Left : Origin180.Right, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-8);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -286,7 +300,8 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Right : Origin180.Left, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Right : Origin180.Left,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.x += vertRect.width;
@@ -305,8 +320,9 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Right : Origin180.Left, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-8);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Right : Origin180.Left, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-8);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -316,7 +332,8 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.x += vertRect.width;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Left : Origin180.Right, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Left : Origin180.Right,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.x -= vertRect.width;
@@ -325,6 +342,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
 
                 case Origin360.Left:
@@ -334,8 +352,9 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Bottom : Origin180.Top, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-8);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Bottom : Origin180.Top, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-8);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -345,7 +364,8 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Top : Origin180.Bottom, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Top : Origin180.Bottom,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.y -= vertRect.height;
@@ -354,6 +374,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
 
                 case Origin360.Right:
@@ -363,8 +384,9 @@ namespace FairyGUI
                         if (clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Top : Origin180.Bottom, amount / 0.5f, clockwise);
-                        Vector3 vec = vb.GetPosition(-8);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Top : Origin180.Bottom, amount / 0.5f,
+                            clockwise);
+                        var vec = vb.GetPosition(-8);
                         vb.AddQuad(new Rect(vec.x, vec.y, 0, 0));
                         vb.AddTriangles(-4);
                     }
@@ -374,7 +396,8 @@ namespace FairyGUI
                         if (!clockwise)
                             vertRect.y += vertRect.height;
 
-                        FillRadial180(vb, vertRect, clockwise ? Origin180.Bottom : Origin180.Top, (amount - 0.5f) / 0.5f, clockwise);
+                        FillRadial180(vb, vertRect, clockwise ? Origin180.Bottom : Origin180.Top,
+                            (amount - 0.5f) / 0.5f, clockwise);
 
                         if (clockwise)
                             vertRect.y += vertRect.height;
@@ -383,6 +406,7 @@ namespace FairyGUI
                         vb.AddQuad(vertRect);
                         vb.AddTriangles(-4);
                     }
+
                     break;
             }
         }

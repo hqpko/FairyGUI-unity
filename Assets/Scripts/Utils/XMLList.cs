@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace FairyGUI.Utils
 {
-
     public class XMLList
     {
         public List<XML> rawList;
@@ -28,15 +27,9 @@ namespace FairyGUI.Utils
             rawList.Clear();
         }
 
-        public int Count
-        {
-            get { return rawList.Count; }
-        }
+        public int Count => rawList.Count;
 
-        public XML this[int index]
-        {
-            get { return rawList[index]; }
-        }
+        public XML this[int index] => rawList[index];
 
         public Enumerator GetEnumerator()
         {
@@ -48,15 +41,16 @@ namespace FairyGUI.Utils
             return new Enumerator(rawList, selector);
         }
 
-        static List<XML> _tmpList = new List<XML>();
+        private static List<XML> _tmpList = new List<XML>();
+
         public XMLList Filter(string selector)
         {
-            bool allFit = true;
+            var allFit = true;
             _tmpList.Clear();
-            int cnt = rawList.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = rawList.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                XML xml = rawList[i];
+                var xml = rawList[i];
                 if (xml.name == selector)
                     _tmpList.Add(xml);
                 else
@@ -64,10 +58,12 @@ namespace FairyGUI.Utils
             }
 
             if (allFit)
+            {
                 return this;
+            }
             else
             {
-                XMLList ret = new XMLList(_tmpList);
+                var ret = new XMLList(_tmpList);
                 _tmpList = new List<XML>();
                 return ret;
             }
@@ -75,13 +71,14 @@ namespace FairyGUI.Utils
 
         public XML Find(string selector)
         {
-            int cnt = rawList.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = rawList.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                XML xml = rawList[i];
+                var xml = rawList[i];
                 if (xml.name == selector)
                     return xml;
             }
+
             return null;
         }
 
@@ -92,11 +89,11 @@ namespace FairyGUI.Utils
 
         public struct Enumerator
         {
-            List<XML> _source;
-            string _selector;
-            int _index;
-            int _total;
-            XML _current;
+            private List<XML> _source;
+            private string _selector;
+            private int _index;
+            private int _total;
+            private XML _current;
 
             public Enumerator(List<XML> source, string selector)
             {
@@ -110,10 +107,7 @@ namespace FairyGUI.Utils
                 _current = null;
             }
 
-            public XML Current
-            {
-                get { return _current; }
-            }
+            public XML Current => _current;
 
             public bool MoveNext()
             {

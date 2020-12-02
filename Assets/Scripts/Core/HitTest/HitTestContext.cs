@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class HitTestContext
     {
         //set before hit test
@@ -18,8 +17,7 @@ namespace FairyGUI
 
         public static Camera cachedMainCamera;
 
-        static Dictionary<Camera, RaycastHit?> raycastHits = new Dictionary<Camera, RaycastHit?>();
-
+        private static Dictionary<Camera, RaycastHit?> raycastHits = new Dictionary<Camera, RaycastHit?>();
 
         /// <param name="camera"></param>
         /// <param name="hit"></param>
@@ -29,7 +27,7 @@ namespace FairyGUI
             RaycastHit? hitRef;
             if (!raycastHits.TryGetValue(camera, out hitRef))
             {
-                Ray ray = camera.ScreenPointToRay(screenPoint);
+                var ray = camera.ScreenPointToRay(screenPoint);
                 if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
                 {
                     raycastHits[camera] = hit;
@@ -48,11 +46,10 @@ namespace FairyGUI
             }
             else
             {
-                hit = (RaycastHit)hitRef;
+                hit = (RaycastHit) hitRef;
                 return true;
             }
         }
-
 
         /// <param name="camera"></param>
         /// <param name="hit"></param>
@@ -61,11 +58,9 @@ namespace FairyGUI
             raycastHits[camera] = hit;
         }
 
-
         public static void ClearRaycastHitCache()
         {
             raycastHits.Clear();
         }
     }
-
 }

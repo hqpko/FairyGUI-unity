@@ -3,22 +3,21 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public partial class GLoader3D : GObject, IAnimationGear, IColorGear
     {
-        string _url;
-        AlignType _align;
-        VertAlignType _verticalAlign;
-        bool _autoSize;
-        FillType _fill;
-        bool _shrinkOnly;
-        string _animationName;
-        string _skinName;
-        bool _playing;
-        int _frame;
-        bool _loop;
-        bool _updatingLayout;
-        Color _color;
+        private string _url;
+        private AlignType _align;
+        private VertAlignType _verticalAlign;
+        private bool _autoSize;
+        private FillType _fill;
+        private bool _shrinkOnly;
+        private string _animationName;
+        private string _skinName;
+        private bool _playing;
+        private int _frame;
+        private bool _loop;
+        private bool _updatingLayout;
+        private Color _color;
 
         protected PackageItem _contentItem;
         protected GoWrapper _content;
@@ -32,27 +31,26 @@ namespace FairyGUI
             _color = Color.white;
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             displayObject = new Container("GLoader3D");
             displayObject.gOwner = this;
 
             _content = new GoWrapper();
             _content.onUpdate += OnUpdateContent;
-            ((Container)displayObject).AddChild(_content);
-            ((Container)displayObject).opaque = true;
+            ((Container) displayObject).AddChild(_content);
+            ((Container) displayObject).opaque = true;
         }
 
-        override public void Dispose()
+        public override void Dispose()
         {
             _content.Dispose();
             base.Dispose();
         }
 
-
         public string url
         {
-            get { return _url; }
+            get => _url;
             set
             {
                 if (_url == value)
@@ -65,16 +63,15 @@ namespace FairyGUI
             }
         }
 
-        override public string icon
+        public override string icon
         {
-            get { return _url; }
-            set { this.url = value; }
+            get => _url;
+            set => url = value;
         }
-
 
         public AlignType align
         {
-            get { return _align; }
+            get => _align;
             set
             {
                 if (_align != value)
@@ -85,10 +82,9 @@ namespace FairyGUI
             }
         }
 
-
         public VertAlignType verticalAlign
         {
-            get { return _verticalAlign; }
+            get => _verticalAlign;
             set
             {
                 if (_verticalAlign != value)
@@ -99,10 +95,9 @@ namespace FairyGUI
             }
         }
 
-
         public FillType fill
         {
-            get { return _fill; }
+            get => _fill;
             set
             {
                 if (_fill != value)
@@ -113,10 +108,9 @@ namespace FairyGUI
             }
         }
 
-
         public bool shrinkOnly
         {
-            get { return _shrinkOnly; }
+            get => _shrinkOnly;
             set
             {
                 if (_shrinkOnly != value)
@@ -127,10 +121,9 @@ namespace FairyGUI
             }
         }
 
-
         public bool autoSize
         {
-            get { return _autoSize; }
+            get => _autoSize;
             set
             {
                 if (_autoSize != value)
@@ -143,7 +136,7 @@ namespace FairyGUI
 
         public bool playing
         {
-            get { return _playing; }
+            get => _playing;
             set
             {
                 if (_playing != value)
@@ -157,10 +150,9 @@ namespace FairyGUI
 
         public int frame
         {
-            get { return _frame; }
+            get => _frame;
             set
             {
-
                 if (_frame != value)
                 {
                     _frame = value;
@@ -173,20 +165,12 @@ namespace FairyGUI
         /// <summary>
         /// Not implemented
         /// </summary>
-        public float timeScale
-        {
-            get;
-            set;
-        }
+        public float timeScale { get; set; }
 
         /// <summary>
         /// Not implemented
         /// </summary>
-        public bool ignoreEngineTimeScale
-        {
-            get;
-            set;
-        }
+        public bool ignoreEngineTimeScale { get; set; }
 
         /// <summary>
         /// Not implemented
@@ -196,10 +180,9 @@ namespace FairyGUI
         {
         }
 
-
         public bool loop
         {
-            get { return _loop; }
+            get => _loop;
             set
             {
                 if (_loop != value)
@@ -210,11 +193,10 @@ namespace FairyGUI
             }
         }
 
-
         /// <value></value>
         public string animationName
         {
-            get { return _animationName; }
+            get => _animationName;
             set
             {
                 _animationName = value;
@@ -222,11 +204,10 @@ namespace FairyGUI
             }
         }
 
-
         /// <value></value>
         public string skinName
         {
-            get { return _skinName; }
+            get => _skinName;
             set
             {
                 _skinName = value;
@@ -234,24 +215,21 @@ namespace FairyGUI
             }
         }
 
-
         public Material material
         {
-            get { return _content.material; }
-            set { _content.material = value; }
+            get => _content.material;
+            set => _content.material = value;
         }
-
 
         public string shader
         {
-            get { return _content.shader; }
-            set { _content.shader = value; }
+            get => _content.shader;
+            set => _content.shader = value;
         }
-
 
         public Color color
         {
-            get { return _color; }
+            get => _color;
             set
             {
                 if (_color != value)
@@ -264,12 +242,7 @@ namespace FairyGUI
             }
         }
 
-
-        public GameObject wrapTarget
-        {
-            get { return _content.wrapTarget; }
-        }
-
+        public GameObject wrapTarget => _content.wrapTarget;
 
         /// <param name="gameObject"></param>
         /// <param name="cloneMaterial"></param>
@@ -285,18 +258,17 @@ namespace FairyGUI
             UpdateLayout();
         }
 
-        override public IFilter filter
+        public override IFilter filter
         {
-            get { return _content.filter; }
-            set { _content.filter = value; }
+            get => _content.filter;
+            set => _content.filter = value;
         }
 
-        override public BlendMode blendMode
+        public override BlendMode blendMode
         {
-            get { return _content.blendMode; }
-            set { _content.blendMode = value; }
+            get => _content.blendMode;
+            set => _content.blendMode = value;
         }
-
 
         protected void LoadContent()
         {
@@ -327,14 +299,15 @@ namespace FairyGUI
                 }
             }
             else
+            {
                 LoadExternal();
+            }
         }
 
-        virtual protected void OnChange(string propertyName)
+        protected virtual void OnChange(string propertyName)
         {
             if (_contentItem == null)
                 return;
-
 
             if (_contentItem.type == PackageItemType.Spine)
             {
@@ -350,13 +323,13 @@ namespace FairyGUI
             }
         }
 
-        virtual protected void LoadExternal()
+        protected virtual void LoadExternal()
         {
         }
 
-        virtual protected void FreeExternal()
+        protected virtual void FreeExternal()
         {
-            GameObject.DestroyImmediate(_content.wrapTarget);
+            Object.DestroyImmediate(_content.wrapTarget);
         }
 
         protected void UpdateLayout()
@@ -383,21 +356,26 @@ namespace FairyGUI
                     InvalidateBatchingState();
                     return;
                 }
+
                 //如果不相等，可能是由于大小限制造成的，要后续处理
             }
 
             float sx = 1, sy = 1;
             if (_fill != FillType.None)
             {
-                sx = this.width / sourceWidth;
-                sy = this.height / sourceHeight;
+                sx = width / sourceWidth;
+                sy = height / sourceHeight;
 
                 if (sx != 1 || sy != 1)
                 {
                     if (_fill == FillType.ScaleMatchHeight)
+                    {
                         sx = sy;
+                    }
                     else if (_fill == FillType.ScaleMatchWidth)
+                    {
                         sy = sx;
+                    }
                     else if (_fill == FillType.Scale)
                     {
                         if (sx > sy)
@@ -431,15 +409,15 @@ namespace FairyGUI
             float nx;
             float ny;
             if (_align == AlignType.Center)
-                nx = (this.width - contentWidth) / 2;
+                nx = (width - contentWidth) / 2;
             else if (_align == AlignType.Right)
-                nx = this.width - contentWidth;
+                nx = width - contentWidth;
             else
                 nx = 0;
             if (_verticalAlign == VertAlignType.Middle)
-                ny = (this.height - contentHeight) / 2;
+                ny = (height - contentHeight) / 2;
             else if (_verticalAlign == VertAlignType.Bottom)
-                ny = this.height - contentHeight;
+                ny = height - contentHeight;
             else
                 ny = 0;
             _content.SetXY(nx, ny);
@@ -467,8 +445,11 @@ namespace FairyGUI
                     }
                 }
                 else
+                {
                     FreeExternal();
+                }
             }
+
             _content.wrapTarget = null;
             _contentItem = null;
         }
@@ -477,7 +458,6 @@ namespace FairyGUI
         {
             if (_contentItem == null)
                 return;
-
 
             if (_contentItem.type == PackageItemType.Spine)
             {
@@ -493,7 +473,7 @@ namespace FairyGUI
             }
         }
 
-        override protected void HandleSizeChanged()
+        protected override void HandleSizeChanged()
         {
             base.HandleSizeChanged();
 
@@ -501,16 +481,16 @@ namespace FairyGUI
                 UpdateLayout();
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
             buffer.Seek(beginPos, 5);
 
             _url = buffer.ReadS();
-            _align = (AlignType)buffer.ReadByte();
-            _verticalAlign = (VertAlignType)buffer.ReadByte();
-            _fill = (FillType)buffer.ReadByte();
+            _align = (AlignType) buffer.ReadByte();
+            _verticalAlign = (VertAlignType) buffer.ReadByte();
+            _fill = (FillType) buffer.ReadByte();
             _shrinkOnly = buffer.ReadBool();
             _autoSize = buffer.ReadBool();
             _animationName = buffer.ReadS();
@@ -520,7 +500,7 @@ namespace FairyGUI
             _loop = buffer.ReadBool();
 
             if (buffer.ReadBool())
-                this.color = buffer.ReadColor(); //color
+                color = buffer.ReadColor(); //color
 
             if (!string.IsNullOrEmpty(_url))
                 LoadContent();

@@ -2,10 +2,8 @@
 
 namespace FairyGUI
 {
-
     public class EventContext
     {
-
         public EventDispatcher sender { get; internal set; }
 
         /// <summary>
@@ -18,9 +16,7 @@ namespace FairyGUI
         /// </summary>
         public InputEvent inputEvent { get; internal set; }
 
-
         public string type;
-
 
         public object data;
 
@@ -30,43 +26,39 @@ namespace FairyGUI
 
         internal List<EventBridge> callChain = new List<EventBridge>();
 
-
         public void StopPropagation()
         {
             _stopsPropagation = true;
         }
-
 
         public void PreventDefault()
         {
             _defaultPrevented = true;
         }
 
-
         public void CaptureTouch()
         {
             _touchCapture = true;
         }
 
+        public bool isDefaultPrevented => _defaultPrevented;
 
-        public bool isDefaultPrevented
-        {
-            get { return _defaultPrevented; }
-        }
+        private static Stack<EventContext> pool = new Stack<EventContext>();
 
-        static Stack<EventContext> pool = new Stack<EventContext>();
         internal static EventContext Get()
         {
             if (pool.Count > 0)
             {
-                EventContext context = pool.Pop();
+                var context = pool.Pop();
                 context._stopsPropagation = false;
                 context._defaultPrevented = false;
                 context._touchCapture = false;
                 return context;
             }
             else
+            {
                 return new EventContext();
+            }
         }
 
         internal static void Return(EventContext value)
@@ -74,5 +66,4 @@ namespace FairyGUI
             pool.Push(value);
         }
     }
-
 }

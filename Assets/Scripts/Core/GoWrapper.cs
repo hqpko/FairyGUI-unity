@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
@@ -53,8 +54,8 @@ namespace FairyGUI
         /// </summary>
         public GameObject wrapTarget
         {
-            get { return _wrapTarget; }
-            set { SetWrapTarget(value, false); }
+            get => _wrapTarget;
+            set => SetWrapTarget(value, false);
         }
 
         [Obsolete("setWrapTarget is deprecated. Use SetWrapTarget instead.")]
@@ -83,7 +84,7 @@ namespace FairyGUI
 
             if (_wrapTarget != null)
             {
-                _wrapTarget.transform.SetParent(this.cachedTransform, false);
+                _wrapTarget.transform.SetParent(cachedTransform, false);
                 _canvas = _wrapTarget.GetComponent<Canvas>();
                 if (_canvas != null)
                 {
@@ -91,18 +92,18 @@ namespace FairyGUI
                     _canvas.worldCamera = StageCamera.main;
                     _canvas.overrideSorting = true;
 
-                    RectTransform rt = _canvas.GetComponent<RectTransform>();
+                    var rt = _canvas.GetComponent<RectTransform>();
                     rt.pivot = new Vector2(0, 1);
                     rt.position = new Vector3(0, 0, 0);
-                    this.SetSize(rt.rect.width, rt.rect.height);
+                    SetSize(rt.rect.width, rt.rect.height);
                 }
                 else
                 {
                     CacheRenderers();
-                    this.SetSize(0, 0);
+                    SetSize(0, 0);
                 }
 
-                SetGoLayers(this.layer);
+                SetGoLayers(layer);
             }
         }
 
@@ -120,15 +121,15 @@ namespace FairyGUI
             RecoverMaterials();
             _renderers.Clear();
 
-            Renderer[] items = _wrapTarget.GetComponentsInChildren<Renderer>(true);
+            var items = _wrapTarget.GetComponentsInChildren<Renderer>(true);
 
-            int cnt = items.Length;
+            var cnt = items.Length;
             _renderers.Capacity = cnt;
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                Renderer r = items[i];
-                Material[] mats = r.sharedMaterials;
-                RendererInfo ri = new RendererInfo()
+                var r = items[i];
+                var mats = r.sharedMaterials;
+                var ri = new RendererInfo()
                 {
                     renderer = r,
                     materials = mats,
@@ -142,24 +143,24 @@ namespace FairyGUI
             _shouldCloneMaterial = true;
         }
 
-        void CloneMaterials()
+        private void CloneMaterials()
         {
             _shouldCloneMaterial = false;
 
-            int cnt = _renderers.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _renderers.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                RendererInfo ri = _renderers[i];
-                Material[] mats = ri.materials;
+                var ri = _renderers[i];
+                var mats = ri.materials;
                 if (mats == null)
                     continue;
 
-                bool shouldSetRQ = (ri.renderer is SkinnedMeshRenderer) || (ri.renderer is MeshRenderer);
+                var shouldSetRQ = ri.renderer is SkinnedMeshRenderer || ri.renderer is MeshRenderer;
 
-                int mcnt = mats.Length;
-                for (int j = 0; j < mcnt; j++)
+                var mcnt = mats.Length;
+                for (var j = 0; j < mcnt; j++)
                 {
-                    Material mat = mats[j];
+                    var mat = mats[j];
                     if (mat == null)
                         continue;
 
@@ -183,58 +184,58 @@ namespace FairyGUI
             }
         }
 
-        void RecoverMaterials()
+        private void RecoverMaterials()
         {
             if (_materialsBackup.Count == 0)
                 return;
 
-            int cnt = _renderers.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _renderers.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                RendererInfo ri = _renderers[i];
+                var ri = _renderers[i];
                 if (ri.renderer == null)
                     continue;
 
-                Material[] mats = ri.materials;
+                var mats = ri.materials;
                 if (mats == null)
                     continue;
 
-                int mcnt = mats.Length;
-                for (int j = 0; j < mcnt; j++)
+                var mcnt = mats.Length;
+                for (var j = 0; j < mcnt; j++)
                 {
-                    Material mat = mats[j];
+                    var mat = mats[j];
 
-                    foreach (KeyValuePair<Material, Material> kv in _materialsBackup)
-                    {
+                    foreach (var kv in _materialsBackup)
                         if (kv.Value == mat)
                             mats[j] = kv.Key;
-                    }
                 }
 
                 ri.renderer.sharedMaterials = mats;
             }
 
-            foreach (KeyValuePair<Material, Material> kv in _materialsBackup)
-                Material.DestroyImmediate(kv.Value);
+            foreach (var kv in _materialsBackup)
+                Object.DestroyImmediate(kv.Value);
 
             _materialsBackup.Clear();
         }
 
         public override int renderingOrder
         {
-            get { return base.renderingOrder; }
+            get => base.renderingOrder;
             set
             {
                 base.renderingOrder = value;
 
                 if (_canvas != null)
+                {
                     _canvas.sortingOrder = value;
+                }
                 else
                 {
-                    int cnt = _renderers.Count;
-                    for (int i = 0; i < cnt; i++)
+                    var cnt = _renderers.Count;
+                    for (var i = 0; i < cnt; i++)
                     {
-                        RendererInfo ri = _renderers[i];
+                        var ri = _renderers[i];
                         if (ri.renderer != null)
                         {
                             if (i != 0 && _renderers[i].sortingOrder != _renderers[i - 1].sortingOrder)
@@ -246,7 +247,7 @@ namespace FairyGUI
             }
         }
 
-        override protected bool SetLayer(int value, bool fromParent)
+        protected override bool SetLayer(int value, bool fromParent)
         {
             if (base.SetLayer(value, fromParent))
             {
@@ -254,7 +255,9 @@ namespace FairyGUI
                 return true;
             }
             else
+            {
                 return false;
+            }
         }
 
         protected void SetGoLayers(int layer)
@@ -263,13 +266,13 @@ namespace FairyGUI
                 return;
 
             _wrapTarget.GetComponentsInChildren<Transform>(true, helperTransformList);
-            int cnt = helperTransformList.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = helperTransformList.Count;
+            for (var i = 0; i < cnt; i++)
                 helperTransformList[i].gameObject.layer = layer;
             helperTransformList.Clear();
         }
 
-        override public void Update(UpdateContext context)
+        public override void Update(UpdateContext context)
         {
             if (onUpdate != null)
                 onUpdate(context);
@@ -284,22 +287,22 @@ namespace FairyGUI
 
         private List<Material> helperMaterials = new List<Material>();
 
-        virtual protected void ApplyClipping(UpdateContext context)
+        protected virtual void ApplyClipping(UpdateContext context)
         {
 #if UNITY_2018_2_OR_NEWER
-            int cnt = _renderers.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _renderers.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                Renderer renderer = _renderers[i].renderer;
+                var renderer = _renderers[i].renderer;
                 if (renderer == null)
                     continue;
 
                 renderer.GetMaterials(helperMaterials);
 
-                int cnt2 = helperMaterials.Count;
-                for (int j = 0; j < cnt2; j++)
+                var cnt2 = helperMaterials.Count;
+                for (var j = 0; j < cnt2; j++)
                 {
-                    Material mat = helperMaterials[j];
+                    var mat = helperMaterials[j];
                     if (mat != null)
                         context.ApplyClippingProperties(mat, false);
                 }
@@ -332,15 +335,13 @@ namespace FairyGUI
 
             if (_wrapTarget != null)
             {
-                UnityEngine.Object.Destroy(_wrapTarget);
+                Object.Destroy(_wrapTarget);
                 _wrapTarget = null;
 
                 if (_materialsBackup.Count > 0)
-                {
                     //如果有备份，说明材质是复制出来的，应该删除
-                    foreach (KeyValuePair<Material, Material> kv in _materialsBackup)
-                        Material.DestroyImmediate(kv.Value);
-                }
+                    foreach (var kv in _materialsBackup)
+                        Object.DestroyImmediate(kv.Value);
             }
 
             _renderers = null;

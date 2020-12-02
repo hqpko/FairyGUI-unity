@@ -11,28 +11,28 @@ public class Window2 : Window
 
     protected override void OnInit()
     {
-        this.contentPane = UIPackage.CreateObject("Basics", "WindowB").asCom;
-        this.Center();
+        contentPane = UIPackage.CreateObject("Basics", "WindowB").asCom;
+        Center();
     }
 
-    override protected void DoShowAnimation()
+    protected override void DoShowAnimation()
     {
-        this.SetScale(0.1f, 0.1f);
-        this.SetPivot(0.5f, 0.5f);
-        this.TweenScale(new Vector2(1, 1), 0.3f).OnComplete(this.OnShown);
+        SetScale(0.1f, 0.1f);
+        SetPivot(0.5f, 0.5f);
+        TweenScale(new Vector2(1, 1), 0.3f).OnComplete(OnShown);
     }
 
-    override protected void DoHideAnimation()
+    protected override void DoHideAnimation()
     {
-        this.TweenScale(new Vector2(0.1f, 0.1f), 0.3f).OnComplete(this.HideImmediately);
+        TweenScale(new Vector2(0.1f, 0.1f), 0.3f).OnComplete(HideImmediately);
     }
 
-    override protected void OnShown()
+    protected override void OnShown()
     {
         contentPane.GetTransition("t1").Play();
     }
 
-    override protected void OnHide()
+    protected override void OnHide()
     {
         contentPane.GetTransition("t1").Stop();
     }

@@ -3,13 +3,12 @@ using System.Text;
 
 namespace FairyGUI.Utils
 {
-
     public class XMLUtils
     {
         public static string DecodeString(string aSource)
         {
-            int len = aSource.Length;
-            StringBuilder sb = new StringBuilder();
+            var len = aSource.Length;
+            var sb = new StringBuilder();
             int pos1 = 0, pos2 = 0;
 
             while (true)
@@ -20,20 +19,19 @@ namespace FairyGUI.Utils
                     sb.Append(aSource.Substring(pos1));
                     break;
                 }
+
                 sb.Append(aSource.Substring(pos1, pos2 - pos1));
 
                 pos1 = pos2 + 1;
                 pos2 = pos1;
-                int end = Math.Min(len, pos2 + 10);
+                var end = Math.Min(len, pos2 + 10);
                 for (; pos2 < end; pos2++)
-                {
                     if (aSource[pos2] == ';')
                         break;
-                }
                 if (pos2 < end && pos2 > pos1)
                 {
-                    string entity = aSource.Substring(pos1, pos2 - pos1);
-                    int u = 0;
+                    var entity = aSource.Substring(pos1, pos2 - pos1);
+                    var u = 0;
                     if (entity[0] == '#')
                     {
                         if (entity.Length > 1)
@@ -42,11 +40,13 @@ namespace FairyGUI.Utils
                                 u = Convert.ToInt16(entity.Substring(2), 16);
                             else
                                 u = Convert.ToInt16(entity.Substring(1));
-                            sb.Append((char)u);
+                            sb.Append((char) u);
                             pos1 = pos2 + 1;
                         }
                         else
+                        {
                             sb.Append('&');
+                        }
                     }
                     else
                     {
@@ -76,13 +76,16 @@ namespace FairyGUI.Utils
                                 u = 34;
                                 break;
                         }
+
                         if (u > 0)
                         {
-                            sb.Append((char)u);
+                            sb.Append((char) u);
                             pos1 = pos2 + 1;
                         }
                         else
+                        {
                             sb.Append('&');
+                        }
                     }
                 }
                 else
@@ -94,18 +97,20 @@ namespace FairyGUI.Utils
             return sb.ToString();
         }
 
-        private static string[] ESCAPES = new string[] {
+        private static string[] ESCAPES = new string[]
+        {
             "&", "&amp;",
             "<", "&lt;",
             ">", "&gt;",
             "'", "&apos;",
             "\"", "&quot;"
         };
+
         public static void EncodeString(StringBuilder sb, int start, bool encodeQuotes = false)
         {
             int count;
-            int len = encodeQuotes ? ESCAPES.Length : ESCAPES.Length - 4;
-            for (int i = 0; i < len; i += 2)
+            var len = encodeQuotes ? ESCAPES.Length : ESCAPES.Length - 4;
+            for (var i = 0; i < len; i += 2)
             {
                 count = sb.Length - start;
                 sb.Replace(ESCAPES[i], ESCAPES[i + 1], start, count);
@@ -115,10 +120,12 @@ namespace FairyGUI.Utils
         public static string EncodeString(string str, bool encodeQuotes = false)
         {
             if (string.IsNullOrEmpty(str))
+            {
                 return "";
+            }
             else
             {
-                StringBuilder sb = new StringBuilder(str);
+                var sb = new StringBuilder(str);
                 EncodeString(sb, 0);
                 return sb.ToString();
             }

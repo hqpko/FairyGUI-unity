@@ -4,11 +4,11 @@ using FairyGUI;
 
 public class EmitNumbersMain : MonoBehaviour
 {
-    Transform _npc1;
-    Transform _npc2;
-    bool _finished;
+    private Transform _npc1;
+    private Transform _npc2;
+    private bool _finished;
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -19,26 +19,23 @@ public class EmitNumbersMain : MonoBehaviour
         StartCoroutine(RunTest());
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         _finished = true;
     }
 
-    IEnumerator RunTest()
+    private IEnumerator RunTest()
     {
         while (!_finished)
         {
-            EmitManager.inst.Emit(_npc1, 0, UnityEngine.Random.Range(100, 100000), UnityEngine.Random.Range(0, 10) == 5);
-            EmitManager.inst.Emit(_npc2, 1, UnityEngine.Random.Range(100, 100000), UnityEngine.Random.Range(0, 10) == 5);
+            EmitManager.inst.Emit(_npc1, 0, Random.Range(100, 100000), Random.Range(0, 10) == 5);
+            EmitManager.inst.Emit(_npc2, 1, Random.Range(100, 100000), Random.Range(0, 10) == 5);
             yield return new WaitForSeconds(0.3f);
         }
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

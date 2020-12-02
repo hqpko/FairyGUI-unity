@@ -4,20 +4,19 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-
     [CustomEditor(typeof(UIConfig))]
     public class UIConfigEditor : Editor
     {
-        string[] propertyToExclude;
-        bool itemsFoldout;
-        bool packagesFoldOut;
-        int errorState;
+        private string[] propertyToExclude;
+        private bool itemsFoldout;
+        private bool packagesFoldOut;
+        private int errorState;
 
         private const float kButtonWidth = 18f;
 
-        void OnEnable()
+        private void OnEnable()
         {
-            propertyToExclude = new string[] { "m_Script", "Items", "PreloadPackages" };
+            propertyToExclude = new string[] {"m_Script", "Items", "PreloadPackages"};
 
             itemsFoldout = EditorPrefs.GetBool("itemsFoldOut");
             packagesFoldOut = EditorPrefs.GetBool("packagesFoldOut");
@@ -29,8 +28,8 @@ namespace FairyGUIEditor
             serializedObject.Update();
 
             DrawPropertiesExcluding(serializedObject, propertyToExclude);
-            
-            UIConfig config = (UIConfig)target;
+
+            var config = (UIConfig) target;
 
             EditorGUILayout.BeginHorizontal();
             EditorGUI.BeginChangeCheck();
@@ -39,35 +38,36 @@ namespace FairyGUIEditor
                 EditorPrefs.SetBool("itemsFoldOut", itemsFoldout);
             EditorGUILayout.EndHorizontal();
 
-            bool modified = false;
+            var modified = false;
 
             if (itemsFoldout)
             {
                 Undo.RecordObject(config, "Items");
 
-                int len = config.Items.Count;
+                var len = config.Items.Count;
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel("Add");
-                UIConfig.ConfigKey selectedKey = (UIConfig.ConfigKey)EditorGUILayout.EnumPopup((System.Enum)UIConfig.ConfigKey.PleaseSelect);
+                var selectedKey =
+                    (UIConfig.ConfigKey) EditorGUILayout.EnumPopup((System.Enum) UIConfig.ConfigKey.PleaseSelect);
 
                 if (selectedKey != UIConfig.ConfigKey.PleaseSelect)
                 {
-                    int index = (int)selectedKey;
+                    var index = (int) selectedKey;
 
                     if (index > len - 1)
                     {
-                        for (int i = len; i < index; i++)
+                        for (var i = len; i < index; i++)
                             config.Items.Add(new UIConfig.ConfigValue());
 
-                        UIConfig.ConfigValue value = new UIConfig.ConfigValue();
+                        var value = new UIConfig.ConfigValue();
                         value.valid = true;
                         UIConfig.SetDefaultValue(selectedKey, value);
                         config.Items.Add(value);
                     }
                     else
                     {
-                        UIConfig.ConfigValue value = config.Items[index];
+                        var value = config.Items[index];
                         if (value == null)
                         {
                             value = new UIConfig.ConfigValue();
@@ -82,17 +82,18 @@ namespace FairyGUIEditor
                         }
                     }
                 }
+
                 EditorGUILayout.EndHorizontal();
 
-                for (int i = 0; i < len; i++)
+                for (var i = 0; i < len; i++)
                 {
-                    UIConfig.ConfigValue value = config.Items[i];
+                    var value = config.Items[i];
                     if (value == null || !value.valid)
                         continue;
 
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel(((UIConfig.ConfigKey)i).ToString());
-                    switch ((UIConfig.ConfigKey)i)
+                    EditorGUILayout.PrefixLabel(((UIConfig.ConfigKey) i).ToString());
+                    switch ((UIConfig.ConfigKey) i)
                     {
                         case UIConfig.ConfigKey.ClickDragSensitivity:
                         case UIConfig.ConfigKey.DefaultComboBoxVisibleItemCount:
@@ -141,12 +142,14 @@ namespace FairyGUIEditor
                             break;
                     }
 
-                    if (GUILayout.Button(new GUIContent("X", "Delete Item"), EditorStyles.miniButtonRight, GUILayout.Width(30)))
+                    if (GUILayout.Button(new GUIContent("X", "Delete Item"), EditorStyles.miniButtonRight,
+                        GUILayout.Width(30)))
                     {
                         config.Items[i].Reset();
-                        UIConfig.SetDefaultValue((UIConfig.ConfigKey)i, config.Items[i]);
+                        UIConfig.SetDefaultValue((UIConfig.ConfigKey) i, config.Items[i]);
                         modified = true;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
@@ -168,17 +171,18 @@ namespace FairyGUIEditor
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel("Add");
-                    int selected = EditorGUILayout.Popup(EditorToolSet.packagesPopupContents.Length - 1, EditorToolSet.packagesPopupContents);
+                    var selected = EditorGUILayout.Popup(EditorToolSet.packagesPopupContents.Length - 1,
+                        EditorToolSet.packagesPopupContents);
                     EditorGUILayout.EndHorizontal();
 
                     if (selected != EditorToolSet.packagesPopupContents.Length - 1)
                     {
-                        UIPackage pkg = UIPackage.GetPackages()[selected];
-                        string tmp = pkg.assetPath.ToLower();
-                        int pos = tmp.LastIndexOf("resources/");
+                        var pkg = UIPackage.GetPackages()[selected];
+                        var tmp = pkg.assetPath.ToLower();
+                        var pos = tmp.LastIndexOf("resources/");
                         if (pos != -1)
                         {
-                            string packagePath = pkg.assetPath.Substring(pos + 10);
+                            var packagePath = pkg.assetPath.Substring(pos + 10);
                             if (config.PreloadPackages.IndexOf(packagePath) == -1)
                                 config.PreloadPackages.Add(packagePath);
 
@@ -197,25 +201,31 @@ namespace FairyGUIEditor
                     EditorGUILayout.HelpBox("Package is not in resources folder.", MessageType.Warning);
                 }
 
-                int cnt = config.PreloadPackages.Count;
-                int pi = 0;
+                var cnt = config.PreloadPackages.Count;
+                var pi = 0;
                 while (pi < cnt)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel("" + pi + ".");
                     config.PreloadPackages[pi] = EditorGUILayout.TextField(config.PreloadPackages[pi]);
-                    if (GUILayout.Button(new GUIContent("X", "Delete Item"), EditorStyles.miniButtonRight, GUILayout.Width(30)))
+                    if (GUILayout.Button(new GUIContent("X", "Delete Item"), EditorStyles.miniButtonRight,
+                        GUILayout.Width(30)))
                     {
                         config.PreloadPackages.RemoveAt(pi);
                         cnt--;
                     }
                     else
+                    {
                         pi++;
+                    }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
             else
+            {
                 errorState = 0;
+            }
 
             if (serializedObject.ApplyModifiedProperties() || modified)
                 (target as UIConfig).ApplyModifiedProperties();

@@ -4,11 +4,10 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class Relations
     {
-        GObject _owner;
-        List<RelationItem> _items;
+        private GObject _owner;
+        private List<RelationItem> _items;
 
         public GObject handling;
 
@@ -18,7 +17,6 @@ namespace FairyGUI
             _items = new List<RelationItem>();
         }
 
-
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void Add(GObject target, RelationType relationType)
@@ -26,38 +24,37 @@ namespace FairyGUI
             Add(target, relationType, false);
         }
 
-
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         /// <param name="usePercent"></param>
         public void Add(GObject target, RelationType relationType, bool usePercent)
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                RelationItem item = _items[i];
+                var item = _items[i];
                 if (item.target == target)
                 {
                     item.Add(relationType, usePercent);
                     return;
                 }
             }
-            RelationItem newItem = new RelationItem(_owner);
+
+            var newItem = new RelationItem(_owner);
             newItem.target = target;
             newItem.Add(relationType, usePercent);
             _items.Add(newItem);
         }
 
-
         /// <param name="target"></param>
         /// <param name="relationType"></param>
         public void Remove(GObject target, RelationType relationType)
         {
-            int cnt = _items.Count;
-            int i = 0;
+            var cnt = _items.Count;
+            var i = 0;
             while (i < cnt)
             {
-                RelationItem item = _items[i];
+                var item = _items[i];
                 if (item.target == target)
                 {
                     item.Remove(relationType);
@@ -69,36 +66,38 @@ namespace FairyGUI
                         continue;
                     }
                     else
+                    {
                         i++;
+                    }
                 }
+
                 i++;
             }
         }
-
 
         /// <param name="target"></param>
         /// <returns></returns>
         public bool Contains(GObject target)
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                RelationItem item = _items[i];
+                var item = _items[i];
                 if (item.target == target)
                     return true;
             }
+
             return false;
         }
-
 
         /// <param name="target"></param>
         public void ClearFor(GObject target)
         {
-            int cnt = _items.Count;
-            int i = 0;
+            var cnt = _items.Count;
+            var i = 0;
             while (i < cnt)
             {
-                RelationItem item = _items[i];
+                var item = _items[i];
                 if (item.target == target)
                 {
                     item.Dispose();
@@ -106,37 +105,37 @@ namespace FairyGUI
                     cnt--;
                 }
                 else
+                {
                     i++;
+                }
             }
         }
-
 
         public void ClearAll()
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                RelationItem item = _items[i];
+                var item = _items[i];
                 item.Dispose();
             }
+
             _items.Clear();
         }
-
 
         /// <param name="source"></param>
         public void CopyFrom(Relations source)
         {
             ClearAll();
 
-            List<RelationItem> arr = source._items;
-            foreach (RelationItem ri in arr)
+            var arr = source._items;
+            foreach (var ri in arr)
             {
-                RelationItem item = new RelationItem(_owner);
+                var item = new RelationItem(_owner);
                 item.CopyFrom(ri);
                 _items.Add(item);
             }
         }
-
 
         public void Dispose()
         {
@@ -144,52 +143,44 @@ namespace FairyGUI
             handling = null;
         }
 
-
         /// <param name="dWidth"></param>
         /// <param name="dHeight"></param>
         /// <param name="applyPivot"></param>
         public void OnOwnerSizeChanged(float dWidth, float dHeight, bool applyPivot)
         {
-            int cnt = _items.Count;
+            var cnt = _items.Count;
             if (cnt == 0)
                 return;
 
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
                 _items[i].ApplyOnSelfSizeChanged(dWidth, dHeight, applyPivot);
         }
 
-
-        public bool isEmpty
-        {
-            get
-            {
-                return _items.Count == 0;
-            }
-        }
+        public bool isEmpty => _items.Count == 0;
 
         public void Setup(ByteBuffer buffer, bool parentToChild)
         {
             int cnt = buffer.ReadByte();
             GObject target;
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 int targetIndex = buffer.ReadShort();
                 if (targetIndex == -1)
                     target = _owner.parent;
                 else if (parentToChild)
-                    target = ((GComponent)_owner).GetChildAt(targetIndex);
+                    target = ((GComponent) _owner).GetChildAt(targetIndex);
                 else
                     target = _owner.parent.GetChildAt(targetIndex);
 
-                RelationItem newItem = new RelationItem(_owner);
+                var newItem = new RelationItem(_owner);
                 newItem.target = target;
                 _items.Add(newItem);
 
                 int cnt2 = buffer.ReadByte();
-                for (int j = 0; j < cnt2; j++)
+                for (var j = 0; j < cnt2; j++)
                 {
-                    RelationType rt = (RelationType)buffer.ReadByte();
-                    bool usePercent = buffer.ReadBool();
+                    var rt = (RelationType) buffer.ReadByte();
+                    var usePercent = buffer.ReadBool();
                     newItem.InternalAdd(rt, usePercent);
                 }
             }

@@ -8,8 +8,8 @@ namespace FairyGUI
     /// </summary>
     public class GearFontSize : GearBase
     {
-        Dictionary<string, int> _storage;
-        int _default;
+        private Dictionary<string, int> _storage;
+        private int _default;
 
         public GearFontSize(GObject owner)
             : base(owner)
@@ -18,11 +18,11 @@ namespace FairyGUI
 
         protected override void Init()
         {
-            _default = ((GTextField)_owner).textFormat.size;
+            _default = ((GTextField) _owner).textFormat.size;
             _storage = new Dictionary<string, int>();
         }
 
-        override protected void AddStatus(string pageId, ByteBuffer buffer)
+        protected override void AddStatus(string pageId, ByteBuffer buffer)
         {
             if (pageId == null)
                 _default = buffer.ReadInt();
@@ -30,7 +30,7 @@ namespace FairyGUI
                 _storage[pageId] = buffer.ReadInt();
         }
 
-        override public void Apply()
+        public override void Apply()
         {
             _owner._gearLocked = true;
 
@@ -38,16 +38,16 @@ namespace FairyGUI
             if (!_storage.TryGetValue(_controller.selectedPageId, out cv))
                 cv = _default;
 
-            TextFormat tf = ((GTextField)_owner).textFormat;
+            var tf = ((GTextField) _owner).textFormat;
             tf.size = cv;
-            ((GTextField)_owner).textFormat = tf;
+            ((GTextField) _owner).textFormat = tf;
 
             _owner._gearLocked = false;
         }
 
-        override public void UpdateState()
+        public override void UpdateState()
         {
-            _storage[_controller.selectedPageId] = ((GTextField)_owner).textFormat.size;
+            _storage[_controller.selectedPageId] = ((GTextField) _owner).textFormat.size;
         }
     }
 }

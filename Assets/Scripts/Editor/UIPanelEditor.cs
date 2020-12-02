@@ -3,31 +3,31 @@
 using UnityEditor.SceneManagement;
 #endif
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 namespace FairyGUIEditor
 {
-
     [CustomEditor(typeof(FairyGUI.UIPanel))]
     public class UIPanelEditor : Editor
     {
-        SerializedProperty packageName;
-        SerializedProperty componentName;
-        SerializedProperty packagePath;
-        SerializedProperty renderMode;
-        SerializedProperty renderCamera;
-        SerializedProperty sortingOrder;
-        SerializedProperty position;
-        SerializedProperty scale;
-        SerializedProperty rotation;
-        SerializedProperty fairyBatching;
-        SerializedProperty fitScreen;
-        SerializedProperty touchDisabled;
-        SerializedProperty hitTestMode;
-        SerializedProperty setNativeChildrenOrder;
+        private SerializedProperty packageName;
+        private SerializedProperty componentName;
+        private SerializedProperty packagePath;
+        private SerializedProperty renderMode;
+        private SerializedProperty renderCamera;
+        private SerializedProperty sortingOrder;
+        private SerializedProperty position;
+        private SerializedProperty scale;
+        private SerializedProperty rotation;
+        private SerializedProperty fairyBatching;
+        private SerializedProperty fitScreen;
+        private SerializedProperty touchDisabled;
+        private SerializedProperty hitTestMode;
+        private SerializedProperty setNativeChildrenOrder;
 
-        string[] propertyToExclude;
+        private string[] propertyToExclude;
 
-        void OnEnable()
+        private void OnEnable()
         {
             packageName = serializedObject.FindProperty("packageName");
             componentName = serializedObject.FindProperty("componentName");
@@ -44,10 +44,12 @@ namespace FairyGUIEditor
             hitTestMode = serializedObject.FindProperty("hitTestMode");
             setNativeChildrenOrder = serializedObject.FindProperty("setNativeChildrenOrder");
 
-
-            propertyToExclude = new string[] { "m_Script", "packageName", "componentName", "packagePath", "renderMode",
-                "renderCamera", "sortingOrder", "position", "scale", "rotation", "fairyBatching", "fitScreen","touchDisabled",
-                "hitTestMode","cachedUISize","setNativeChildrenOrder"
+            propertyToExclude = new string[]
+            {
+                "m_Script", "packageName", "componentName", "packagePath", "renderMode",
+                "renderCamera", "sortingOrder", "position", "scale", "rotation", "fairyBatching", "fitScreen",
+                "touchDisabled",
+                "hitTestMode", "cachedUISize", "setNativeChildrenOrder"
             };
         }
 
@@ -55,60 +57,63 @@ namespace FairyGUIEditor
         {
             serializedObject.Update();
 
-            FairyGUI.UIPanel panel = target as FairyGUI.UIPanel;
+            var panel = target as FairyGUI.UIPanel;
 
             DrawPropertiesExcluding(serializedObject, propertyToExclude);
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Package Name");
             if (GUILayout.Button(packageName.stringValue, "ObjectField"))
-                EditorWindow.GetWindow<PackagesWindow>(true, "Select a UI Component").SetSelection(packageName.stringValue, componentName.stringValue);
+                EditorWindow.GetWindow<PackagesWindow>(true, "Select a UI Component")
+                    .SetSelection(packageName.stringValue, componentName.stringValue);
 
             if (GUILayout.Button("Clear", GUILayout.Width(50)))
             {
 #if UNITY_2018_3_OR_NEWER
-                bool isPrefab = PrefabUtility.GetPrefabAssetType(panel) != PrefabAssetType.NotAPrefab;
+                var isPrefab = PrefabUtility.GetPrefabAssetType(panel) != PrefabAssetType.NotAPrefab;
 #else
                 bool isPrefab = PrefabUtility.GetPrefabType(panel) == PrefabType.Prefab;
 #endif
-                panel.SendMessage("OnUpdateSource", new object[] { null, null, null, !isPrefab });
+                panel.SendMessage("OnUpdateSource", new object[] {null, null, null, !isPrefab});
 
 #if UNITY_5_3_OR_NEWER
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 #elif UNITY_5
                 EditorApplication.MarkSceneDirty();
 #else
                 EditorUtility.SetDirty(panel);
 #endif
             }
+
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Component Name");
             if (GUILayout.Button(componentName.stringValue, "ObjectField"))
-                EditorWindow.GetWindow<PackagesWindow>(true, "Select a UI Component").SetSelection(packageName.stringValue, componentName.stringValue);
+                EditorWindow.GetWindow<PackagesWindow>(true, "Select a UI Component")
+                    .SetSelection(packageName.stringValue, componentName.stringValue);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Package Path");
-            EditorGUILayout.LabelField(packagePath.stringValue, (GUIStyle)"helpbox");
+            EditorGUILayout.LabelField(packagePath.stringValue, (GUIStyle) "helpbox");
             EditorGUILayout.EndHorizontal();
 
             if (Application.isPlaying)
                 EditorGUILayout.EnumPopup("Render Mode", panel.container.renderMode);
             else
                 EditorGUILayout.PropertyField(renderMode);
-            if ((RenderMode)renderMode.enumValueIndex != RenderMode.ScreenSpaceOverlay)
+            if ((RenderMode) renderMode.enumValueIndex != RenderMode.ScreenSpaceOverlay)
                 EditorGUILayout.PropertyField(renderCamera);
 
-            int oldSortingOrder = panel.sortingOrder;
+            var oldSortingOrder = panel.sortingOrder;
             EditorGUILayout.PropertyField(sortingOrder);
             EditorGUILayout.PropertyField(fairyBatching);
             EditorGUILayout.PropertyField(hitTestMode);
             EditorGUILayout.PropertyField(touchDisabled);
             EditorGUILayout.PropertyField(setNativeChildrenOrder);
             EditorGUILayout.Separator();
-            EditorGUILayout.LabelField("UI Transform", (GUIStyle)"OL Title");
+            EditorGUILayout.LabelField("UI Transform", (GUIStyle) "OL Title");
             EditorGUILayout.Separator();
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(position);
@@ -116,43 +121,44 @@ namespace FairyGUIEditor
             EditorGUILayout.PropertyField(scale);
             EditorGUILayout.Space();
 
-            FairyGUI.FitScreen oldFitScreen = (FairyGUI.FitScreen)fitScreen.enumValueIndex;
+            var oldFitScreen = (FairyGUI.FitScreen) fitScreen.enumValueIndex;
             EditorGUILayout.PropertyField(fitScreen);
 
             if (serializedObject.ApplyModifiedProperties())
             {
 #if UNITY_2018_3_OR_NEWER
-                bool isPrefab = PrefabUtility.GetPrefabAssetType(panel) != PrefabAssetType.NotAPrefab;
+                var isPrefab = PrefabUtility.GetPrefabAssetType(panel) != PrefabAssetType.NotAPrefab;
 #else
                 bool isPrefab = PrefabUtility.GetPrefabType(panel) == PrefabType.Prefab;
 #endif
                 if (!isPrefab)
-                {
-                    panel.ApplyModifiedProperties(sortingOrder.intValue != oldSortingOrder, (FairyGUI.FitScreen)fitScreen.enumValueIndex != oldFitScreen);
-                }
+                    panel.ApplyModifiedProperties(sortingOrder.intValue != oldSortingOrder,
+                        (FairyGUI.FitScreen) fitScreen.enumValueIndex != oldFitScreen);
             }
         }
 
-        void OnSceneGUI()
+        private void OnSceneGUI()
         {
-            FairyGUI.UIPanel panel = (target as FairyGUI.UIPanel);
+            var panel = target as FairyGUI.UIPanel;
             if (panel.container == null)
                 return;
 
-            Vector3 pos = panel.GetUIWorldPosition();
-            float sizeFactor = HandleUtility.GetHandleSize(pos);
+            var pos = panel.GetUIWorldPosition();
+            var sizeFactor = HandleUtility.GetHandleSize(pos);
 #if UNITY_2017_1_OR_NEWER
-            Vector3 newPos = Handles.FreeMoveHandle(pos, Quaternion.identity, sizeFactor, Vector3.one, Handles.ArrowHandleCap);
+            var newPos = Handles.FreeMoveHandle(pos, Quaternion.identity, sizeFactor, Vector3.one,
+                Handles.ArrowHandleCap);
 #else
-            Vector3 newPos = Handles.FreeMoveHandle(pos, Quaternion.identity, sizeFactor, Vector3.one, Handles.ArrowCap);
+            Vector3 newPos =
+ Handles.FreeMoveHandle(pos, Quaternion.identity, sizeFactor, Vector3.one, Handles.ArrowCap);
 #endif
             if (newPos != pos)
             {
-                Vector2 v1 = HandleUtility.WorldToGUIPoint(pos);
-                Vector2 v2 = HandleUtility.WorldToGUIPoint(newPos);
+                var v1 = HandleUtility.WorldToGUIPoint(pos);
+                var v2 = HandleUtility.WorldToGUIPoint(newPos);
                 Vector3 delta = v2 - v1;
-                delta.x = (int)delta.x;
-                delta.y = (int)delta.y;
+                delta.x = (int) delta.x;
+                delta.y = (int) delta.y;
 
                 panel.MoveUI(delta);
             }

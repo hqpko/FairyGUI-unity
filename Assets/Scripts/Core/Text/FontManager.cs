@@ -4,40 +4,34 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class FontManager
     {
         public static Dictionary<string, BaseFont> sFontFactory = new Dictionary<string, BaseFont>();
 
-
         /// <param name="font"></param>
         /// <param name="alias"></param>
-        static public void RegisterFont(BaseFont font, string alias = null)
+        public static void RegisterFont(BaseFont font, string alias = null)
         {
             sFontFactory[font.name] = font;
             if (alias != null)
                 sFontFactory[alias] = font;
         }
 
-
         /// <param name="font"></param>
-        static public void UnregisterFont(BaseFont font)
+        public static void UnregisterFont(BaseFont font)
         {
-            List<string> toDelete = new List<string>();
-            foreach (KeyValuePair<string, BaseFont> kv in sFontFactory)
-            {
+            var toDelete = new List<string>();
+            foreach (var kv in sFontFactory)
                 if (kv.Value == font)
                     toDelete.Add(kv.Key);
-            }
 
-            foreach (string key in toDelete)
+            foreach (var key in toDelete)
                 sFontFactory.Remove(key);
         }
 
-
         /// <param name="name"></param>
         /// <returns></returns>
-        static public BaseFont GetFont(string name)
+        public static BaseFont GetFont(string name)
         {
             BaseFont font;
             if (name.StartsWith(UIPackage.URL_PREFIX))
@@ -59,14 +53,16 @@ namespace FairyGUI
             {
                 if (name.IndexOf(",") != -1)
                 {
-                    string[] arr = name.Split(',');
-                    int cnt = arr.Length;
-                    for (int i = 0; i < cnt; i++)
+                    var arr = name.Split(',');
+                    var cnt = arr.Length;
+                    for (var i = 0; i < cnt; i++)
                         arr[i] = arr[i].Trim();
                     asset = Font.CreateDynamicFontFromOSFont(arr, 16);
                 }
                 else
+                {
                     asset = Font.CreateDynamicFontFromOSFont(name, 16);
+                }
             }
 
             if (asset == null)
@@ -78,7 +74,7 @@ namespace FairyGUI
                 font.name = name;
                 sFontFactory.Add(name, font);
 
-                ((DynamicFont)font).nativeFont = (Font)asset;
+                ((DynamicFont) font).nativeFont = (Font) asset;
             }
 #if FAIRYGUI_TMPRO
             else if (asset is TMPro.TMP_FontAsset)
@@ -100,7 +96,7 @@ namespace FairyGUI
             return font;
         }
 
-        static BaseFont Fallback(string name)
+        private static BaseFont Fallback(string name)
         {
             if (name != UIConfig.defaultFont)
             {
@@ -112,22 +108,21 @@ namespace FairyGUI
                 }
             }
 
-            Font asset = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            var asset = (Font) Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
             if (asset == null)
                 throw new Exception("Failed to load font '" + name + "'");
 
             BaseFont font = new DynamicFont();
             font.name = name;
-            ((DynamicFont)font).nativeFont = asset;
+            ((DynamicFont) font).nativeFont = asset;
 
             sFontFactory.Add(name, font);
             return font;
         }
 
-
-        static public void Clear()
+        public static void Clear()
         {
-            foreach (KeyValuePair<string, BaseFont> kv in sFontFactory)
+            foreach (var kv in sFontFactory)
                 kv.Value.Dispose();
 
             sFontFactory.Clear();

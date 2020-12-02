@@ -4,51 +4,38 @@ using System.Text;
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlImage : IHtmlObject
     {
         public GLoader loader { get; private set; }
 
-        RichTextField _owner;
-        HtmlElement _element;
-        bool _externalTexture;
+        private RichTextField _owner;
+        private HtmlElement _element;
+        private bool _externalTexture;
 
         public HtmlImage()
         {
-            loader = (GLoader)UIObjectFactory.NewObject(ObjectType.Loader);
+            loader = (GLoader) UIObjectFactory.NewObject(ObjectType.Loader);
             loader.gameObjectName = "HtmlImage";
             loader.fill = FillType.ScaleFree;
             loader.touchable = false;
         }
 
-        public DisplayObject displayObject
-        {
-            get { return loader.displayObject; }
-        }
+        public DisplayObject displayObject => loader.displayObject;
 
-        public HtmlElement element
-        {
-            get { return _element; }
-        }
+        public HtmlElement element => _element;
 
-        public float width
-        {
-            get { return loader.width; }
-        }
+        public float width => loader.width;
 
-        public float height
-        {
-            get { return loader.height; }
-        }
+        public float height => loader.height;
 
         public void Create(RichTextField owner, HtmlElement element)
         {
             _owner = owner;
             _element = element;
 
-            int sourceWidth = 0;
-            int sourceHeight = 0;
-            NTexture texture = owner.htmlPageContext.GetImageTexture(this);
+            var sourceWidth = 0;
+            var sourceHeight = 0;
+            var texture = owner.htmlPageContext.GetImageTexture(this);
             if (texture != null)
             {
                 sourceWidth = texture.width;
@@ -59,10 +46,10 @@ namespace FairyGUI.Utils
             }
             else
             {
-                string src = element.GetString("src");
+                var src = element.GetString("src");
                 if (src != null)
                 {
-                    PackageItem pi = UIPackage.GetItemByURL(src);
+                    var pi = UIPackage.GetItemByURL(src);
                     if (pi != null)
                     {
                         sourceWidth = pi.width;
@@ -74,8 +61,8 @@ namespace FairyGUI.Utils
                 _externalTexture = false;
             }
 
-            int width = element.GetInt("width", sourceWidth);
-            int height = element.GetInt("height", sourceHeight);
+            var width = element.GetInt("width", sourceWidth);
+            var height = element.GetInt("height", sourceHeight);
 
             if (width == 0)
                 width = 5;

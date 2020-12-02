@@ -3,7 +3,8 @@ using FairyGUI.Utils;
 
 public class EmojiParser : UBBParser
 {
-    static EmojiParser _instance;
+    private static EmojiParser _instance;
+
     public new static EmojiParser inst
     {
         get
@@ -15,16 +16,14 @@ public class EmojiParser : UBBParser
     }
 
     private static string[] TAGS = new string[]
-        { "88","am","bs","bz","ch","cool","dhq","dn","fd","gz","han","hx","hxiao","hxiu" };
-    public EmojiParser ()
+        {"88", "am", "bs", "bz", "ch", "cool", "dhq", "dn", "fd", "gz", "han", "hx", "hxiao", "hxiu"};
+
+    public EmojiParser()
     {
-        foreach (string ss in TAGS)
-        {
-            this.handlers[":"+ss] = OnTag_Emoji;
-        }
+        foreach (var ss in TAGS) handlers[":" + ss] = OnTag_Emoji;
     }
 
-    string OnTag_Emoji(string tagName, bool end, string attr)
+    private string OnTag_Emoji(string tagName, bool end, string attr)
     {
         return "<img src='" + UIPackage.GetItemURL("Emoji", tagName.Substring(1).ToLower()) + "'/>";
     }

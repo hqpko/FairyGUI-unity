@@ -3,16 +3,16 @@ using FairyGUI;
 
 public class EmitComponent : GComponent
 {
-    GLoader _symbolLoader;
-    GTextField _numberText;
-    Transform _owner;
+    private GLoader _symbolLoader;
+    private GTextField _numberText;
+    private Transform _owner;
 
-    const float OFFSET_ADDITION = 2.2f;
-    static Vector2 JITTER_FACTOR = new Vector2(80, 80);
+    private const float OFFSET_ADDITION = 2.2f;
+    private static Vector2 JITTER_FACTOR = new Vector2(80, 80);
 
     public EmitComponent()
     {
-        this.touchable = false;
+        touchable = false;
 
         _symbolLoader = new GLoader();
         _symbolLoader.autoSize = true;
@@ -28,7 +28,7 @@ public class EmitComponent : GComponent
     {
         _owner = owner;
 
-        TextFormat tf = _numberText.textFormat;
+        var tf = _numberText.textFormat;
         if (type == 0)
             tf.font = EmitManager.inst.hurtFont1;
         else
@@ -43,38 +43,38 @@ public class EmitComponent : GComponent
 
         UpdateLayout();
 
-        this.alpha = 1;
+        alpha = 1;
         UpdatePosition(Vector2.zero);
-        Vector2 rnd = Vector2.Scale(UnityEngine.Random.insideUnitCircle, JITTER_FACTOR);
-        int toX = (int)rnd.x * 2;
-        int toY = (int)rnd.y * 2;
+        var rnd = Vector2.Scale(Random.insideUnitCircle, JITTER_FACTOR);
+        var toX = (int) rnd.x * 2;
+        var toY = (int) rnd.y * 2;
 
         EmitManager.inst.view.AddChild(this);
         GTween.To(Vector2.zero, new Vector2(toX, toY), 1f).SetTarget(this)
-            .OnUpdate((GTweener tweener) => { this.UpdatePosition(tweener.value.vec2); }).OnComplete(this.OnCompleted);
-        this.TweenFade(0, 0.5f).SetDelay(0.5f);
+            .OnUpdate((GTweener tweener) => { UpdatePosition(tweener.value.vec2); }).OnComplete(OnCompleted);
+        TweenFade(0, 0.5f).SetDelay(0.5f);
     }
 
-    void UpdateLayout()
+    private void UpdateLayout()
     {
-        this.SetSize(_symbolLoader.width + _numberText.width, Mathf.Max(_symbolLoader.height, _numberText.height));
-        _numberText.SetXY(_symbolLoader.width > 0 ? (_symbolLoader.width + 2) : 0,
-        (this.height - _numberText.height) / 2);
-        _symbolLoader.y = (this.height - _symbolLoader.height) / 2;
+        SetSize(_symbolLoader.width + _numberText.width, Mathf.Max(_symbolLoader.height, _numberText.height));
+        _numberText.SetXY(_symbolLoader.width > 0 ? _symbolLoader.width + 2 : 0,
+            (height - _numberText.height) / 2);
+        _symbolLoader.y = (height - _symbolLoader.height) / 2;
     }
 
-    void UpdatePosition(Vector2 pos)
+    private void UpdatePosition(Vector2 pos)
     {
-        Vector3 ownerPos = _owner.position;
+        var ownerPos = _owner.position;
         ownerPos.y += OFFSET_ADDITION;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(ownerPos);
+        var screenPos = Camera.main.WorldToScreenPoint(ownerPos);
         screenPos.y = Screen.height - screenPos.y; //convert to Stage coordinates system
 
         Vector3 pt = GRoot.inst.GlobalToLocal(screenPos);
-        this.SetXY(Mathf.RoundToInt(pt.x + pos.x - this.actualWidth / 2), Mathf.RoundToInt(pt.y + pos.y - this.height));
+        SetXY(Mathf.RoundToInt(pt.x + pos.x - actualWidth / 2), Mathf.RoundToInt(pt.y + pos.y - height));
     }
 
-    void OnCompleted()
+    private void OnCompleted()
     {
         _owner = null;
         EmitManager.inst.view.RemoveChild(this);
@@ -84,11 +84,12 @@ public class EmitComponent : GComponent
     public void Cancel()
     {
         _owner = null;
-        if (this.parent != null)
+        if (parent != null)
         {
             GTween.Kill(this);
             EmitManager.inst.view.RemoveChild(this);
         }
+
         EmitManager.inst.ReturnComponent(this);
     }
 }

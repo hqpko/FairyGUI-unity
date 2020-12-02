@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlButton : IHtmlObject
     {
         public GComponent button { get; private set; }
@@ -13,43 +12,30 @@ namespace FairyGUI.Utils
 
         public static string resource;
 
-        RichTextField _owner;
-        HtmlElement _element;
-        EventCallback1 _clickHandler;
+        private RichTextField _owner;
+        private HtmlElement _element;
+        private EventCallback1 _clickHandler;
 
         public HtmlButton()
         {
             if (resource != null)
             {
                 button = UIPackage.CreateObjectFromURL(resource).asCom;
-                _clickHandler = (EventContext context) =>
-                {
-                    _owner.DispatchEvent(CLICK_EVENT, context.data, this);
-                };
+                _clickHandler = (EventContext context) => { _owner.DispatchEvent(CLICK_EVENT, context.data, this); };
             }
             else
+            {
                 Debug.LogWarning("FairyGUI: Set HtmlButton.resource first");
+            }
         }
 
-        public DisplayObject displayObject
-        {
-            get { return button != null ? button.displayObject : null; }
-        }
+        public DisplayObject displayObject => button != null ? button.displayObject : null;
 
-        public HtmlElement element
-        {
-            get { return _element; }
-        }
+        public HtmlElement element => _element;
 
-        public float width
-        {
-            get { return button != null ? button.width : 0; }
-        }
+        public float width => button != null ? button.width : 0;
 
-        public float height
-        {
-            get { return button != null ? button.height : 0; }
-        }
+        public float height => button != null ? button.height : 0;
 
         public void Create(RichTextField owner, HtmlElement element)
         {
@@ -60,8 +46,8 @@ namespace FairyGUI.Utils
                 return;
 
             button.onClick.Add(_clickHandler);
-            int width = element.GetInt("width", button.sourceWidth);
-            int height = element.GetInt("height", button.sourceHeight);
+            var width = element.GetInt("width", button.sourceWidth);
+            var height = element.GetInt("height", button.sourceHeight);
             button.SetSize(width, height);
             button.text = element.GetString("value");
         }

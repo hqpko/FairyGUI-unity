@@ -8,24 +8,24 @@ using UnityEditor.SceneManagement;
 using UnityEditor.Experimental.SceneManagement;
 #endif
 using FairyGUI;
+using UnityEngine.SceneManagement;
 
 namespace FairyGUIEditor
 {
-
     public class PackagesWindow : EditorWindow
     {
-        Vector2 scrollPos1;
-        Vector2 scrollPos2;
-        GUIStyle itemStyle;
+        private Vector2 scrollPos1;
+        private Vector2 scrollPos2;
+        private GUIStyle itemStyle;
 
-        int selectedPackage;
-        string selectedPackageName;
-        string selectedComponentName;
+        private int selectedPackage;
+        private string selectedPackageName;
+        private string selectedComponentName;
 
         public PackagesWindow()
         {
-            this.maxSize = new Vector2(550, 400);
-            this.minSize = new Vector2(550, 400);
+            maxSize = new Vector2(550, 400);
+            minSize = new Vector2(550, 400);
         }
 
         public void SetSelection(string packageName, string componentName)
@@ -34,7 +34,7 @@ namespace FairyGUIEditor
             selectedComponentName = componentName;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             if (itemStyle == null)
             {
@@ -59,15 +59,16 @@ namespace FairyGUIEditor
 
             EditorGUILayout.BeginVertical();
             GUILayout.Space(10);
-            EditorGUILayout.LabelField("Packages", (GUIStyle)"OL Title", GUILayout.Width(300));
+            EditorGUILayout.LabelField("Packages", (GUIStyle) "OL Title", GUILayout.Width(300));
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(4);
 
-            scrollPos1 = EditorGUILayout.BeginScrollView(scrollPos1, (GUIStyle)"CN Box", GUILayout.Height(300), GUILayout.Width(300));
+            scrollPos1 = EditorGUILayout.BeginScrollView(scrollPos1, (GUIStyle) "CN Box", GUILayout.Height(300),
+                GUILayout.Width(300));
             EditorToolSet.LoadPackages();
-            List<UIPackage> pkgs = UIPackage.GetPackages();
-            int cnt = pkgs.Count;
+            var pkgs = UIPackage.GetPackages();
+            var cnt = pkgs.Count;
             if (cnt == 0)
             {
                 selectedPackage = -1;
@@ -75,18 +76,21 @@ namespace FairyGUIEditor
             }
             else
             {
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(4);
-                    if (GUILayout.Toggle(selectedPackageName == pkgs[i].name, pkgs[i].name, itemStyle, GUILayout.ExpandWidth(true)))
+                    if (GUILayout.Toggle(selectedPackageName == pkgs[i].name, pkgs[i].name, itemStyle,
+                        GUILayout.ExpandWidth(true)))
                     {
                         selectedPackage = i;
                         selectedPackageName = pkgs[i].name;
                     }
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
+
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.EndHorizontal();
@@ -104,29 +108,30 @@ namespace FairyGUIEditor
 
             EditorGUILayout.BeginVertical();
             GUILayout.Space(10);
-            EditorGUILayout.LabelField("Components", (GUIStyle)"OL Title", GUILayout.Width(220));
+            EditorGUILayout.LabelField("Components", (GUIStyle) "OL Title", GUILayout.Width(220));
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Space(4);
 
-            scrollPos2 = EditorGUILayout.BeginScrollView(scrollPos2, (GUIStyle)"CN Box", GUILayout.Height(300), GUILayout.Width(220));
+            scrollPos2 = EditorGUILayout.BeginScrollView(scrollPos2, (GUIStyle) "CN Box", GUILayout.Height(300),
+                GUILayout.Width(220));
             if (selectedPackage >= 0)
             {
-                List<PackageItem> items = pkgs[selectedPackage].GetItems();
-                int i = 0;
-                foreach (PackageItem pi in items)
-                {
+                var items = pkgs[selectedPackage].GetItems();
+                var i = 0;
+                foreach (var pi in items)
                     if (pi.type == PackageItemType.Component && pi.exported)
                     {
                         EditorGUILayout.BeginHorizontal();
                         GUILayout.Space(4);
-                        if (GUILayout.Toggle(selectedComponentName == pi.name, pi.name, itemStyle, GUILayout.ExpandWidth(true)))
+                        if (GUILayout.Toggle(selectedComponentName == pi.name, pi.name, itemStyle,
+                            GUILayout.ExpandWidth(true)))
                             selectedComponentName = pi.name;
                         i++;
                         EditorGUILayout.EndHorizontal();
                     }
-                }
             }
+
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.EndHorizontal();
@@ -154,10 +159,10 @@ namespace FairyGUIEditor
             GUILayout.Space(20);
             if (GUILayout.Button("OK", GUILayout.Width(100)) && selectedPackage >= 0)
             {
-                UIPackage selectedPkg = pkgs[selectedPackage];
-                string tmp = selectedPkg.assetPath.ToLower();
+                var selectedPkg = pkgs[selectedPackage];
+                var tmp = selectedPkg.assetPath.ToLower();
                 string packagePath;
-                int pos = tmp.LastIndexOf("resources/");
+                var pos = tmp.LastIndexOf("resources/");
                 if (pos != -1)
                     packagePath = selectedPkg.assetPath.Substring(pos + 10);
                 else
@@ -165,17 +170,18 @@ namespace FairyGUIEditor
                 if (Selection.activeGameObject != null)
                 {
 #if UNITY_2018_3_OR_NEWER
-                    bool isPrefab = PrefabUtility.GetPrefabAssetType(Selection.activeGameObject) != PrefabAssetType.NotAPrefab;
+                    var isPrefab = PrefabUtility.GetPrefabAssetType(Selection.activeGameObject) !=
+                                   PrefabAssetType.NotAPrefab;
 #else
                     bool isPrefab = PrefabUtility.GetPrefabType(Selection.activeGameObject) == PrefabType.Prefab;
 #endif
                     Selection.activeGameObject.SendMessage("OnUpdateSource",
-                        new object[] { selectedPkg.name, packagePath, selectedComponentName, !isPrefab },
+                        new object[] {selectedPkg.name, packagePath, selectedComponentName, !isPrefab},
                         SendMessageOptions.DontRequireReceiver);
                 }
 
 #if UNITY_2018_3_OR_NEWER
-                PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+                var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
                 if (prefabStage != null)
                     EditorSceneManager.MarkSceneDirty(prefabStage.scene);
                 else
@@ -183,16 +189,16 @@ namespace FairyGUIEditor
 #else
                 ApplyChange();
 #endif
-                this.Close();
+                Close();
             }
 
             EditorGUILayout.EndHorizontal();
         }
 
-        void ApplyChange()
+        private void ApplyChange()
         {
 #if UNITY_5_3_OR_NEWER
-            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 #elif UNITY_5
             EditorApplication.MarkSceneDirty();
 #else

@@ -9,12 +9,12 @@ namespace FairyGUI
 
         public static bool beingQuit;
 
-        void Start()
+        private void Start()
         {
             useGUILayout = false;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             Stage.inst.InternalUpdate();
 
@@ -22,7 +22,7 @@ namespace FairyGUI
             GraphicsOnStage = Stats.GraphicsCount;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             Stage.inst.HandleGUIEvents(Event.current);
         }
@@ -34,7 +34,7 @@ namespace FairyGUI
         }
 #endif
 
-        void OnApplicationQuit()
+        private void OnApplicationQuit()
         {
             if (Application.isEditor)
             {

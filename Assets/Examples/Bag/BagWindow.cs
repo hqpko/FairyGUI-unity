@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BagWindow : Window
 {
-    GList _list;
+    private GList _list;
 
     public BagWindow()
     {
@@ -11,39 +11,39 @@ public class BagWindow : Window
 
     protected override void OnInit()
     {
-        this.contentPane = UIPackage.CreateObject("Bag", "BagWin").asCom;
-        this.Center();
-        this.modal = true;
+        contentPane = UIPackage.CreateObject("Bag", "BagWin").asCom;
+        Center();
+        modal = true;
 
-        _list = this.contentPane.GetChild("list").asList;
+        _list = contentPane.GetChild("list").asList;
         _list.onClickItem.Add(__clickItem);
         _list.itemRenderer = RenderListItem;
         _list.numItems = 45;
     }
 
-    void RenderListItem(int index, GObject obj)
+    private void RenderListItem(int index, GObject obj)
     {
-        GButton button = (GButton)obj;
-        button.icon = "i" + UnityEngine.Random.Range(0, 10);
-        button.title = "" + UnityEngine.Random.Range(0, 100);
+        var button = (GButton) obj;
+        button.icon = "i" + Random.Range(0, 10);
+        button.title = "" + Random.Range(0, 100);
     }
 
-    override protected void DoShowAnimation()
+    protected override void DoShowAnimation()
     {
-        this.SetScale(0.1f, 0.1f);
-        this.SetPivot(0.5f, 0.5f);
-        this.TweenScale(new Vector2(1, 1), 0.3f).OnComplete(this.OnShown);
+        SetScale(0.1f, 0.1f);
+        SetPivot(0.5f, 0.5f);
+        TweenScale(new Vector2(1, 1), 0.3f).OnComplete(OnShown);
     }
 
-    override protected void DoHideAnimation()
+    protected override void DoHideAnimation()
     {
-        this.TweenScale(new Vector2(0.1f, 0.1f), 0.3f).OnComplete(this.HideImmediately);
+        TweenScale(new Vector2(0.1f, 0.1f), 0.3f).OnComplete(HideImmediately);
     }
 
-    void __clickItem(EventContext context)
+    private void __clickItem(EventContext context)
     {
-        GButton item = (GButton)context.data;
-        this.contentPane.GetChild("n11").asLoader.url = item.icon;
-        this.contentPane.GetChild("n13").text = item.icon;
+        var item = (GButton) context.data;
+        contentPane.GetChild("n11").asLoader.url = item.icon;
+        contentPane.GetChild("n13").text = item.icon;
     }
 }

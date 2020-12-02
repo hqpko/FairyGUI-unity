@@ -6,31 +6,28 @@ using FairyGUI;
 /// </summary>
 public class BagMain : MonoBehaviour
 {
-    GComponent _mainView;
-    BagWindow _bagWindow;
+    private GComponent _mainView;
+    private BagWindow _bagWindow;
 
-    void Awake()
+    private void Awake()
     {
         //Register custom loader class
         UIObjectFactory.SetLoaderExtension(typeof(MyGLoader));
     }
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
         GRoot.inst.SetContentScaleFactor(1136, 640);
-        _mainView = this.GetComponent<UIPanel>().ui;
-        
+        _mainView = GetComponent<UIPanel>().ui;
+
         _bagWindow = new BagWindow();
         _mainView.GetChild("bagBtn").onClick.Add(() => { _bagWindow.Show(); });
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

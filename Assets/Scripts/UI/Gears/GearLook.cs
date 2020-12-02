@@ -4,7 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    class GearLookValue
+    internal class GearLookValue
     {
         public float alpha;
         public float rotation;
@@ -25,8 +25,8 @@ namespace FairyGUI
     /// </summary>
     public class GearLook : GearBase, ITweenListener
     {
-        Dictionary<string, GearLookValue> _storage;
-        GearLookValue _default;
+        private Dictionary<string, GearLookValue> _storage;
+        private GearLookValue _default;
 
         public GearLook(GObject owner)
             : base(owner)
@@ -39,11 +39,13 @@ namespace FairyGUI
             _storage = new Dictionary<string, GearLookValue>();
         }
 
-        override protected void AddStatus(string pageId, ByteBuffer buffer)
+        protected override void AddStatus(string pageId, ByteBuffer buffer)
         {
             GearLookValue gv;
             if (pageId == null)
+            {
                 gv = _default;
+            }
             else
             {
                 gv = new GearLookValue(0, 0, false, false);
@@ -56,7 +58,7 @@ namespace FairyGUI
             gv.touchable = buffer.ReadBool();
         }
 
-        override public void Apply()
+        public override void Apply()
         {
             GearLookValue gv;
             if (!_storage.TryGetValue(_controller.selectedPageId, out gv))
@@ -77,17 +79,20 @@ namespace FairyGUI
                         _tweenConfig._tweener = null;
                     }
                     else
+                    {
                         return;
+                    }
                 }
 
-                bool a = gv.alpha != _owner.alpha;
-                bool b = gv.rotation != _owner.rotation;
+                var a = gv.alpha != _owner.alpha;
+                var b = gv.rotation != _owner.rotation;
                 if (a || b)
                 {
                     if (_owner.CheckGearController(0, _controller))
                         _tweenConfig._displayLockToken = _owner.AddDisplayLock();
 
-                    _tweenConfig._tweener = GTween.To(new Vector2(_owner.alpha, _owner.rotation), new Vector2(gv.alpha, gv.rotation), _tweenConfig.duration)
+                    _tweenConfig._tweener = GTween.To(new Vector2(_owner.alpha, _owner.rotation),
+                            new Vector2(gv.alpha, gv.rotation), _tweenConfig.duration)
                         .SetDelay(_tweenConfig.delay)
                         .SetEase(_tweenConfig.easeType, _tweenConfig.customEase)
                         .SetUserData((a ? 1 : 0) + (b ? 2 : 0))
@@ -112,7 +117,7 @@ namespace FairyGUI
 
         public void OnTweenUpdate(GTweener tweener)
         {
-            int flag = (int)tweener.userData;
+            var flag = (int) tweener.userData;
             _owner._gearLocked = true;
             if ((flag & 1) != 0)
                 _owner.alpha = tweener.value.x;
@@ -121,6 +126,7 @@ namespace FairyGUI
                 _owner.rotation = tweener.value.y;
                 _owner.InvalidateBatchingState();
             }
+
             _owner._gearLocked = false;
         }
 
@@ -132,14 +138,18 @@ namespace FairyGUI
                 _owner.ReleaseDisplayLock(_tweenConfig._displayLockToken);
                 _tweenConfig._displayLockToken = 0;
             }
+
             _owner.DispatchEvent("onGearStop", this);
         }
 
-        override public void UpdateState()
+        public override void UpdateState()
         {
             GearLookValue gv;
             if (!_storage.TryGetValue(_controller.selectedPageId, out gv))
-                _storage[_controller.selectedPageId] = new GearLookValue(_owner.alpha, _owner.rotation, _owner.grayed, _owner.touchable);
+            {
+                _storage[_controller.selectedPageId] =
+                    new GearLookValue(_owner.alpha, _owner.rotation, _owner.grayed, _owner.touchable);
+            }
             else
             {
                 gv.alpha = _owner.alpha;

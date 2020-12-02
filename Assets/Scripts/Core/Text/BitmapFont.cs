@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class BitmapFont : BaseFont
     {
-
         public class BMGlyph
         {
             public float x;
@@ -16,12 +14,10 @@ namespace FairyGUI
             public int advance;
             public int lineHeight;
             public Vector2[] uv = new Vector2[4];
-            public int channel;//0-n/a, 1-r,2-g,3-b,4-alpha
+            public int channel; //0-n/a, 1-r,2-g,3-b,4-alpha
         }
 
-
         public int size;
-
 
         public bool resizable;
 
@@ -32,14 +28,14 @@ namespace FairyGUI
 
         protected Dictionary<int, BMGlyph> _dict;
         protected BMGlyph _glyph;
-        float _scale;
+        private float _scale;
 
         public BitmapFont()
         {
-            this.canTint = true;
-            this.hasChannel = false;
-            this.customOutline = true;
-            this.shader = ShaderConfig.bmFontShader;
+            canTint = true;
+            hasChannel = false;
+            customOutline = true;
+            shader = ShaderConfig.bmFontShader;
 
             _dict = new Dictionary<int, BMGlyph>();
             _scale = 1;
@@ -50,10 +46,10 @@ namespace FairyGUI
             _dict[ch] = glyph;
         }
 
-        override public void SetFormat(TextFormat format, float fontSizeScale)
+        public override void SetFormat(TextFormat format, float fontSizeScale)
         {
             if (resizable)
-                _scale = (float)format.size / size * fontSizeScale;
+                _scale = (float) format.size / size * fontSizeScale;
             else
                 _scale = fontSizeScale;
 
@@ -61,7 +57,7 @@ namespace FairyGUI
                 format.FillVertexColors(vertexColors);
         }
 
-        override public bool GetGlyph(char ch, out float width, out float height, out float baseline)
+        public override bool GetGlyph(char ch, out float width, out float height, out float baseline)
         {
             if (ch == ' ')
             {
@@ -71,7 +67,7 @@ namespace FairyGUI
                 _glyph = null;
                 return true;
             }
-            else if (_dict.TryGetValue((int)ch, out _glyph))
+            else if (_dict.TryGetValue((int) ch, out _glyph))
             {
                 width = Mathf.RoundToInt(_glyph.advance * _scale);
                 height = Mathf.RoundToInt(_glyph.lineHeight * _scale);
@@ -87,14 +83,14 @@ namespace FairyGUI
             }
         }
 
-        static Vector3 bottomLeft;
-        static Vector3 topLeft;
-        static Vector3 topRight;
-        static Vector3 bottomRight;
+        private static Vector3 bottomLeft;
+        private static Vector3 topLeft;
+        private static Vector3 topRight;
+        private static Vector3 bottomRight;
 
-        static Color32[] vertexColors = new Color32[4];
+        private static Color32[] vertexColors = new Color32[4];
 
-        override public int DrawGlyph(float x, float y,
+        public override int DrawGlyph(float x, float y,
             List<Vector3> vertList, List<Vector2> uvList, List<Vector2> uv2List, List<Color32> colList)
         {
             if (_glyph == null) //space
@@ -119,7 +115,7 @@ namespace FairyGUI
 
             if (hasChannel)
             {
-                Vector2 channel = new Vector2(_glyph.channel, 0);
+                var channel = new Vector2(_glyph.channel, 0);
                 uv2List.Add(channel);
                 uv2List.Add(channel);
                 uv2List.Add(channel);
@@ -144,24 +140,22 @@ namespace FairyGUI
             return 4;
         }
 
-        override public bool HasCharacter(char ch)
+        public override bool HasCharacter(char ch)
         {
-            return ch == ' ' || _dict.ContainsKey((int)ch);
+            return ch == ' ' || _dict.ContainsKey((int) ch);
         }
 
-        override public int GetLineHeight(int size)
+        public override int GetLineHeight(int size)
         {
             if (_dict.Count > 0)
-            {
                 using (var et = _dict.GetEnumerator())
                 {
                     et.MoveNext();
                     if (resizable)
-                        return Mathf.RoundToInt((float)et.Current.Value.lineHeight * size / this.size);
+                        return Mathf.RoundToInt((float) et.Current.Value.lineHeight * size / this.size);
                     else
                         return et.Current.Value.lineHeight;
                 }
-            }
             else
                 return 0;
         }

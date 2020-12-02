@@ -3,20 +3,20 @@ using FairyGUI;
 
 public class TreeViewMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GTree _tree1;
-    GTree _tree2;
-    string _fileURL;
+    private GComponent _mainView;
+    private GTree _tree1;
+    private GTree _tree2;
+    private string _fileURL;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _fileURL = "ui://TreeView/file";
 
@@ -26,67 +26,64 @@ public class TreeViewMain : MonoBehaviour
         _tree2.onClickItem.Add(__clickNode);
         _tree2.treeNodeRender = RenderTreeNode;
 
-        GTreeNode topNode = new GTreeNode(true);
+        var topNode = new GTreeNode(true);
         topNode.data = "I'm a top node";
         _tree2.rootNode.AddChild(topNode);
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
-            GTreeNode node = new GTreeNode(false);
+            var node = new GTreeNode(false);
             node.data = "Hello " + i;
             topNode.AddChild(node);
         }
 
-        GTreeNode aFolderNode = new GTreeNode(true);
+        var aFolderNode = new GTreeNode(true);
         aFolderNode.data = "A folder node";
         topNode.AddChild(aFolderNode);
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
-            GTreeNode node = new GTreeNode(false);
+            var node = new GTreeNode(false);
             node.data = "Good " + i;
             aFolderNode.AddChild(node);
         }
 
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
-            GTreeNode node = new GTreeNode(false);
+            var node = new GTreeNode(false);
             node.data = "World " + i;
             topNode.AddChild(node);
         }
 
-        GTreeNode anotherTopNode = new GTreeNode(false);
-        anotherTopNode.data = new string[] { "I'm a top node too", "ui://TreeView/heart" };
+        var anotherTopNode = new GTreeNode(false);
+        anotherTopNode.data = new string[] {"I'm a top node too", "ui://TreeView/heart"};
         _tree2.rootNode.AddChild(anotherTopNode);
     }
 
-    void RenderTreeNode(GTreeNode node, GComponent obj)
+    private void RenderTreeNode(GTreeNode node, GComponent obj)
     {
         if (node.isFolder)
         {
-            obj.text = (string)node.data;
+            obj.text = (string) node.data;
         }
         else if (node.data is string[])
         {
-            obj.icon = ((string[])node.data)[1];
-            obj.text = ((string[])node.data)[0];
+            obj.icon = ((string[]) node.data)[1];
+            obj.text = ((string[]) node.data)[0];
         }
         else
         {
             obj.icon = _fileURL;
-            obj.text = (string)node.data;
+            obj.text = (string) node.data;
         }
     }
 
-    void __clickNode(EventContext context)
+    private void __clickNode(EventContext context)
     {
-        GTreeNode node = ((GObject)context.data).treeNode;
+        var node = ((GObject) context.data).treeNode;
         Debug.Log(node.text);
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

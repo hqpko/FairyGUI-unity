@@ -3,31 +3,24 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-
     public class GTreeNode
     {
-
         public object data;
-
 
         public GTreeNode parent { get; private set; }
 
-
         public GTree tree { get; private set; }
 
-        List<GTreeNode> _children;
-        bool _expanded;
-        int _level;
+        private List<GTreeNode> _children;
+        private bool _expanded;
+        private int _level;
         internal GComponent _cell;
         internal string _resURL;
-
 
         /// <param name="hasChild"></param>
         public GTreeNode(bool hasChild) : this(hasChild, null)
         {
-
         }
-
 
         /// <param name="hasChild"></param>
         /// <param name="resURL"></param>
@@ -38,25 +31,13 @@ namespace FairyGUI
             _resURL = resURL;
         }
 
+        public GComponent cell => _cell;
 
-        public GComponent cell
-        {
-            get { return _cell; }
-        }
-
-
-        public int level
-        {
-            get { return _level; }
-        }
-
+        public int level => _level;
 
         public bool expanded
         {
-            get
-            {
-                return _expanded;
-            }
+            get => _expanded;
 
             set
             {
@@ -77,10 +58,9 @@ namespace FairyGUI
             }
         }
 
-
         public void ExpandToRoot()
         {
-            GTreeNode p = this;
+            var p = this;
             while (p != null)
             {
                 p.expanded = true;
@@ -88,12 +68,7 @@ namespace FairyGUI
             }
         }
 
-
-        public bool isFolder
-        {
-            get { return _children != null; }
-        }
-
+        public bool isFolder => _children != null;
 
         public string text
         {
@@ -112,7 +87,6 @@ namespace FairyGUI
             }
         }
 
-
         public string icon
         {
             get
@@ -130,7 +104,6 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="child"></param>
         /// <returns></returns>
         public GTreeNode AddChild(GTreeNode child)
@@ -138,7 +111,6 @@ namespace FairyGUI
             AddChildAt(child, _children.Count);
             return child;
         }
-
 
         /// <param name="child"></param>
         /// <param name="index"></param>
@@ -148,7 +120,7 @@ namespace FairyGUI
             if (child == null)
                 throw new Exception("child is null");
 
-            int numChildren = _children.Count;
+            var numChildren = _children.Count;
 
             if (index >= 0 && index <= numChildren)
             {
@@ -161,7 +133,7 @@ namespace FairyGUI
                     if (child.parent != null)
                         child.parent.RemoveChild(child);
 
-                    int cnt = _children.Count;
+                    var cnt = _children.Count;
                     if (index == cnt)
                         _children.Add(child);
                     else
@@ -169,7 +141,7 @@ namespace FairyGUI
 
                     child.parent = this;
                     child._level = _level + 1;
-                    child._SetTree(this.tree);
+                    child._SetTree(tree);
                     if (tree != null && this == tree.rootNode || _cell != null && _cell.parent != null && _expanded)
                         tree._AfterInserted(child);
                 }
@@ -182,19 +154,14 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="child"></param>
         /// <returns></returns>
         public GTreeNode RemoveChild(GTreeNode child)
         {
-            int childIndex = _children.IndexOf(child);
-            if (childIndex != -1)
-            {
-                RemoveChildAt(childIndex);
-            }
+            var childIndex = _children.IndexOf(child);
+            if (childIndex != -1) RemoveChildAt(childIndex);
             return child;
         }
-
 
         /// <param name="index"></param>
         /// <returns></returns>
@@ -202,7 +169,7 @@ namespace FairyGUI
         {
             if (index >= 0 && index < numChildren)
             {
-                GTreeNode child = _children[index];
+                var child = _children[index];
                 _children.RemoveAt(index);
 
                 child.parent = null;
@@ -220,7 +187,6 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="beginIndex"></param>
         /// <param name="endIndex"></param>
         public void RemoveChildren(int beginIndex = 0, int endIndex = -1)
@@ -228,10 +194,9 @@ namespace FairyGUI
             if (endIndex < 0 || endIndex >= numChildren)
                 endIndex = numChildren - 1;
 
-            for (int i = beginIndex; i <= endIndex; ++i)
+            for (var i = beginIndex; i <= endIndex; ++i)
                 RemoveChildAt(beginIndex);
         }
-
 
         /// <param name="index"></param>
         /// <returns></returns>
@@ -243,7 +208,6 @@ namespace FairyGUI
                 throw new Exception("Invalid child index");
         }
 
-
         /// <param name="child"></param>
         /// <returns></returns>
         public int GetChildIndex(GTreeNode child)
@@ -251,20 +215,18 @@ namespace FairyGUI
             return _children.IndexOf(child);
         }
 
-
         /// <returns></returns>
         public GTreeNode GetPrevSibling()
         {
             if (parent == null)
                 return null;
 
-            int i = parent._children.IndexOf(this);
+            var i = parent._children.IndexOf(this);
             if (i <= 0)
                 return null;
 
             return parent._children[i - 1];
         }
-
 
         /// <returns></returns>
         public GTreeNode GetNextSibling()
@@ -272,23 +234,22 @@ namespace FairyGUI
             if (parent == null)
                 return null;
 
-            int i = parent._children.IndexOf(this);
+            var i = parent._children.IndexOf(this);
             if (i < 0 || i >= parent._children.Count - 1)
                 return null;
 
             return parent._children[i + 1];
         }
 
-
         /// <param name="child"></param>
         /// <param name="index"></param>
         public void SetChildIndex(GTreeNode child, int index)
         {
-            int oldIndex = _children.IndexOf(child);
+            var oldIndex = _children.IndexOf(child);
             if (oldIndex == -1)
                 throw new Exception("Not a child of this container");
 
-            int cnt = _children.Count;
+            var cnt = _children.Count;
             if (index < 0)
                 index = 0;
             else if (index > cnt)
@@ -303,35 +264,29 @@ namespace FairyGUI
                 tree._AfterMoved(child);
         }
 
-
         /// <param name="child1"></param>
         /// <param name="child2"></param>
         public void SwapChildren(GTreeNode child1, GTreeNode child2)
         {
-            int index1 = _children.IndexOf(child1);
-            int index2 = _children.IndexOf(child2);
+            var index1 = _children.IndexOf(child1);
+            var index2 = _children.IndexOf(child2);
             if (index1 == -1 || index2 == -1)
                 throw new Exception("Not a child of this container");
             SwapChildrenAt(index1, index2);
         }
 
-
         /// <param name="index1"></param>
         /// <param name="index2"></param>
         public void SwapChildrenAt(int index1, int index2)
         {
-            GTreeNode child1 = _children[index1];
-            GTreeNode child2 = _children[index2];
+            var child1 = _children[index1];
+            var child2 = _children[index2];
 
             SetChildIndex(child1, index2);
             SetChildIndex(child2, index1);
         }
 
-
-        public int numChildren
-        {
-            get { return (null == _children) ? 0 : _children.Count; }
-        }
+        public int numChildren => null == _children ? 0 : _children.Count;
 
         internal void _SetTree(GTree value)
         {
@@ -341,10 +296,10 @@ namespace FairyGUI
 
             if (_children != null)
             {
-                int cnt = _children.Count;
-                for (int i = 0; i < cnt; i++)
+                var cnt = _children.Count;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GTreeNode node = _children[i];
+                    var node = _children[i];
                     node._level = _level + 1;
                     node._SetTree(value);
                 }

@@ -25,13 +25,13 @@ namespace FairyGUI
 
         public bool firstMaterialInFrame;
 
-        NTexture _texture;
-        Shader _shader;
-        List<string> _addKeywords;
-        Dictionary<int, List<MaterialRef>> _materials;
-        bool _combineTexture;
+        private NTexture _texture;
+        private Shader _shader;
+        private List<string> _addKeywords;
+        private Dictionary<int, List<MaterialRef>> _materials;
+        private bool _combineTexture;
 
-        class MaterialRef
+        private class MaterialRef
         {
             public Material material;
             public int frame;
@@ -39,9 +39,10 @@ namespace FairyGUI
             public uint group;
         }
 
-        const int internalKeywordsCount = 6;
-        static string[] internalKeywords = new[] { "CLIPPED", "SOFT_CLIPPED", null, "ALPHA_MASK", "GRAYED", "COLOR_FILTER" };
+        private const int internalKeywordsCount = 6;
 
+        private static string[] internalKeywords = new[]
+            {"CLIPPED", "SOFT_CLIPPED", null, "ALPHA_MASK", "GRAYED", "COLOR_FILTER"};
 
         /// <param name="texture"></param>
         /// <param name="shader"></param>
@@ -53,7 +54,6 @@ namespace FairyGUI
             _combineTexture = texture.alphaTexture != null;
         }
 
-
         /// <param name="keywords"></param>
         /// <returns></returns>
         public int GetFlagsByKeywords(IList<string> keywords)
@@ -61,24 +61,24 @@ namespace FairyGUI
             if (_addKeywords == null)
                 _addKeywords = new List<string>();
 
-            int flags = 0;
-            for (int i = 0; i < keywords.Count; i++)
+            var flags = 0;
+            for (var i = 0; i < keywords.Count; i++)
             {
-                string s = keywords[i];
+                var s = keywords[i];
                 if (string.IsNullOrEmpty(s))
                     continue;
-                int j = _addKeywords.IndexOf(s);
+                var j = _addKeywords.IndexOf(s);
                 if (j == -1)
                 {
                     j = _addKeywords.Count;
                     _addKeywords.Add(s);
                 }
-                flags += (1 << (j + internalKeywordsCount));
+
+                flags += 1 << (j + internalKeywordsCount);
             }
 
             return flags;
         }
-
 
         /// <param name="flags"></param>
         /// <param name="blendMode"></param>
@@ -86,8 +86,8 @@ namespace FairyGUI
         /// <returns></returns>
         public Material GetMaterial(int flags, BlendMode blendMode, uint group)
         {
-            if (blendMode != BlendMode.Normal && BlendModeUtils.Factors[(int)blendMode].pma)
-                flags |= (int)MaterialFlags.ColorFilter;
+            if (blendMode != BlendMode.Normal && BlendModeUtils.Factors[(int) blendMode].pma)
+                flags |= (int) MaterialFlags.ColorFilter;
 
             List<MaterialRef> items;
             if (!_materials.TryGetValue(flags, out items))
@@ -96,12 +96,12 @@ namespace FairyGUI
                 _materials[flags] = items;
             }
 
-            int frameId = Time.frameCount;
-            int cnt = items.Count;
+            var frameId = Time.frameCount;
+            var cnt = items.Count;
             MaterialRef result = null;
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                MaterialRef item = items[i];
+                var item = items[i];
 
                 if (item.group == group && item.blendMode == blendMode)
                 {
@@ -111,24 +111,31 @@ namespace FairyGUI
                         item.frame = frameId;
                     }
                     else
+                    {
                         firstMaterialInFrame = false;
+                    }
 
                     if (_combineTexture)
                         item.material.SetTexture(ShaderConfig.ID_AlphaTex, _texture.alphaTexture);
 
                     return item.material;
                 }
-                else if (result == null && (item.frame > frameId || item.frame < frameId - 1)) //collect materials if it is unused in last frame
+                else if (result == null && (item.frame > frameId || item.frame < frameId - 1)
+                ) //collect materials if it is unused in last frame
+                {
                     result = item;
+                }
             }
 
             if (result == null)
             {
-                result = new MaterialRef() { material = CreateMaterial(flags) };
+                result = new MaterialRef() {material = CreateMaterial(flags)};
                 items.Add(result);
             }
             else if (_combineTexture)
+            {
                 result.material.SetTexture(ShaderConfig.ID_AlphaTex, _texture.alphaTexture);
+            }
 
             if (result.blendMode != blendMode)
             {
@@ -142,11 +149,10 @@ namespace FairyGUI
             return result.material;
         }
 
-
         /// <returns></returns>
-        Material CreateMaterial(int flags)
+        private Material CreateMaterial(int flags)
         {
-            Material mat = new Material(_shader);
+            var mat = new Material(_shader);
 
             mat.mainTexture = _texture.nativeTexture;
             if (_texture.alphaTexture != null)
@@ -155,23 +161,20 @@ namespace FairyGUI
                 mat.SetTexture(ShaderConfig.ID_AlphaTex, _texture.alphaTexture);
             }
 
-            for (int i = 0; i < internalKeywordsCount; i++)
-            {
+            for (var i = 0; i < internalKeywordsCount; i++)
                 if ((flags & (1 << i)) != 0)
                 {
-                    string s = internalKeywords[i];
+                    var s = internalKeywords[i];
                     if (s != null)
                         mat.EnableKeyword(s);
                 }
-            }
+
             if (_addKeywords != null)
             {
-                int keywordCnt = _addKeywords.Count;
-                for (int i = 0; i < keywordCnt; i++)
-                {
+                var keywordCnt = _addKeywords.Count;
+                for (var i = 0; i < keywordCnt; i++)
                     if ((flags & (1 << (i + internalKeywordsCount))) != 0)
                         mat.EnableKeyword(_addKeywords[i]);
-                }
             }
 
             mat.hideFlags = DisplayObject.hideFlags;
@@ -181,30 +184,30 @@ namespace FairyGUI
             return mat;
         }
 
-
         public void DestroyMaterials()
         {
             var iter = _materials.GetEnumerator();
             while (iter.MoveNext())
             {
-                List<MaterialRef> items = iter.Current.Value;
+                var items = iter.Current.Value;
                 if (Application.isPlaying)
                 {
-                    int cnt = items.Count;
-                    for (int j = 0; j < cnt; j++)
+                    var cnt = items.Count;
+                    for (var j = 0; j < cnt; j++)
                         Object.Destroy(items[j].material);
                 }
                 else
                 {
-                    int cnt = items.Count;
-                    for (int j = 0; j < cnt; j++)
+                    var cnt = items.Count;
+                    for (var j = 0; j < cnt; j++)
                         Object.DestroyImmediate(items[j].material);
                 }
+
                 items.Clear();
             }
+
             iter.Dispose();
         }
-
 
         public void RefreshMaterials()
         {
@@ -212,11 +215,11 @@ namespace FairyGUI
             var iter = _materials.GetEnumerator();
             while (iter.MoveNext())
             {
-                List<MaterialRef> items = iter.Current.Value;
-                int cnt = items.Count;
-                for (int j = 0; j < cnt; j++)
+                var items = iter.Current.Value;
+                var cnt = items.Count;
+                for (var j = 0; j < cnt; j++)
                 {
-                    Material mat = items[j].material;
+                    var mat = items[j].material;
                     mat.mainTexture = _texture.nativeTexture;
                     if (_combineTexture)
                     {
@@ -225,6 +228,7 @@ namespace FairyGUI
                     }
                 }
             }
+
             iter.Dispose();
         }
     }

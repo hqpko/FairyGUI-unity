@@ -23,22 +23,22 @@ namespace FairyGUI
         /// </summary>
         public bool ignoreEngineTimeScale;
 
-        Frame[] _frames;
-        int _frameCount;
-        int _frame;
-        bool _playing;
-        int _start;
-        int _end;
-        int _times;
-        int _endAt;
-        int _status; //0-none, 1-next loop, 2-ending, 3-ended
+        private Frame[] _frames;
+        private int _frameCount;
+        private int _frame;
+        private bool _playing;
+        private int _start;
+        private int _end;
+        private int _times;
+        private int _endAt;
+        private int _status; //0-none, 1-next loop, 2-ending, 3-ended
 
-        float _frameElapsed; //当前帧延迟
-        bool _reversed;
-        int _repeatedCount;
-        TimerCallback _timerDelegate;
+        private float _frameElapsed; //当前帧延迟
+        private bool _reversed;
+        private int _repeatedCount;
+        private TimerCallback _timerDelegate;
 
-        EventListener _onPlayEnd;
+        private EventListener _onPlayEnd;
 
         public MovieClip()
         {
@@ -57,14 +57,11 @@ namespace FairyGUI
             SetPlaySettings();
         }
 
-        public EventListener onPlayEnd
-        {
-            get { return _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd")); }
-        }
+        public EventListener onPlayEnd => _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd"));
 
         public Frame[] frames
         {
-            get { return _frames; }
+            get => _frames;
             set
             {
                 _frames = value;
@@ -102,7 +99,7 @@ namespace FairyGUI
 
         public bool playing
         {
-            get { return _playing; }
+            get => _playing;
             set
             {
                 if (_playing != value)
@@ -115,7 +112,7 @@ namespace FairyGUI
 
         public int frame
         {
-            get { return _frame; }
+            get => _frame;
             set
             {
                 if (_frame != value)
@@ -152,12 +149,12 @@ namespace FairyGUI
         /// <param name="time"></param>
         public void Advance(float time)
         {
-            int beginFrame = _frame;
-            bool beginReversed = _reversed;
-            float backupTime = time;
+            var beginFrame = _frame;
+            var beginReversed = _reversed;
+            var backupTime = time;
             while (true)
             {
-                float tt = interval + _frames[_frame].addDelay;
+                var tt = interval + _frames[_frame].addDelay;
                 if (_frame == 0 && _repeatedCount > 0)
                     tt += repeatDelay;
                 if (time < tt)
@@ -203,7 +200,7 @@ namespace FairyGUI
 
                 if (_frame == beginFrame && _reversed == beginReversed) //走了一轮了
                 {
-                    float roundTime = backupTime - time; //这就是一轮需要的时间
+                    var roundTime = backupTime - time; //这就是一轮需要的时间
                     time -= Mathf.FloorToInt(time / roundTime) * roundTime; //跳过
                 }
             }
@@ -234,32 +231,32 @@ namespace FairyGUI
             if (_endAt == -1)
                 _endAt = _end;
             _status = 0;
-            this.frame = start;
+            frame = start;
         }
 
-        void OnAddedToStage()
+        private void OnAddedToStage()
         {
             if (_playing && _frameCount > 0)
                 Timers.inst.AddUpdate(_timerDelegate);
         }
 
-        void OnRemoveFromStage()
+        private void OnRemoveFromStage()
         {
             Timers.inst.Remove(_timerDelegate);
         }
 
-        void CheckTimer()
+        private void CheckTimer()
         {
             if (!Application.isPlaying)
                 return;
 
-            if (_playing && _frameCount > 0 && this.stage != null)
+            if (_playing && _frameCount > 0 && stage != null)
                 Timers.inst.AddUpdate(_timerDelegate);
             else
                 Timers.inst.Remove(_timerDelegate);
         }
 
-        void OnTimer(object param)
+        private void OnTimer(object param)
         {
             if (!_playing || _frameCount == 0 || _status == 3)
                 return;
@@ -272,13 +269,15 @@ namespace FairyGUI
                     dt = 0.1f;
             }
             else
+            {
                 dt = Time.deltaTime;
+            }
 
             if (timeScale != 1)
                 dt *= timeScale;
 
             _frameElapsed += dt;
-            float tt = interval + _frames[_frame].addDelay;
+            var tt = interval + _frames[_frame].addDelay;
             if (_frame == 0 && _repeatedCount > 0)
                 tt += repeatDelay;
             if (_frameElapsed < tt)
@@ -351,16 +350,18 @@ namespace FairyGUI
                             _status = 1; //new loop
                     }
                     else if (_start != 0)
+                    {
                         _status = 1; //new loop
+                    }
                 }
             }
         }
 
-        void DrawFrame()
+        private void DrawFrame()
         {
             if (_frameCount > 0)
             {
-                Frame frame = _frames[_frame];
+                var frame = _frames[_frame];
                 graphics.texture = frame.texture;
             }
         }

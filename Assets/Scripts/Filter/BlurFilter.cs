@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-
     public class BlurFilter : IFilter
     {
         //ref http://blog.csdn.net/u011047171/article/details/47947397
 
-
         public float blurSize;
 
-        DisplayObject _target;
-        Material _blitMaterial;
+        private DisplayObject _target;
+        private Material _blitMaterial;
 
         public BlurFilter()
         {
@@ -22,7 +21,7 @@ namespace FairyGUI
 
         public DisplayObject target
         {
-            get { return _target; }
+            get => _target;
             set
             {
                 _target = value;
@@ -41,18 +40,18 @@ namespace FairyGUI
             _target = null;
 
             if (Application.isPlaying)
-                Material.Destroy(_blitMaterial);
+                Object.Destroy(_blitMaterial);
             else
-                Material.DestroyImmediate(_blitMaterial);
+                Object.DestroyImmediate(_blitMaterial);
         }
 
         public void Update()
         {
         }
 
-        void FourTapCone(RenderTexture source, RenderTexture dest, int iteration)
+        private void FourTapCone(RenderTexture source, RenderTexture dest, int iteration)
         {
-            float off = blurSize * iteration + 0.5f;
+            var off = blurSize * iteration + 0.5f;
             Graphics.BlitMultiTap(source, dest, _blitMaterial,
                 new Vector2(-off, -off),
                 new Vector2(-off, off),
@@ -61,9 +60,9 @@ namespace FairyGUI
             );
         }
 
-        void DownSample4x(RenderTexture source, RenderTexture dest)
+        private void DownSample4x(RenderTexture source, RenderTexture dest)
         {
-            float off = 1.0f;
+            var off = 1.0f;
             Graphics.BlitMultiTap(source, dest, _blitMaterial,
                 new Vector2(off, off),
                 new Vector2(-off, off),
@@ -72,25 +71,26 @@ namespace FairyGUI
             );
         }
 
-        void OnRenderImage()
+        private void OnRenderImage()
         {
             if (blurSize < 0.01)
                 return;
 
-            RenderTexture sourceTexture = (RenderTexture)_target.paintingGraphics.texture.nativeTexture;
-            int rtW = sourceTexture.width / 8;
-            int rtH = sourceTexture.height / 8;
-            RenderTexture buffer = RenderTexture.GetTemporary(rtW, rtH, 0);
+            var sourceTexture = (RenderTexture) _target.paintingGraphics.texture.nativeTexture;
+            var rtW = sourceTexture.width / 8;
+            var rtH = sourceTexture.height / 8;
+            var buffer = RenderTexture.GetTemporary(rtW, rtH, 0);
 
             DownSample4x(sourceTexture, buffer);
 
-            for (int i = 0; i < 2; i++)
+            for (var i = 0; i < 2; i++)
             {
-                RenderTexture buffer2 = RenderTexture.GetTemporary(rtW, rtH, 0);
+                var buffer2 = RenderTexture.GetTemporary(rtW, rtH, 0);
                 FourTapCone(buffer, buffer2, i);
                 RenderTexture.ReleaseTemporary(buffer);
                 buffer = buffer2;
             }
+
             Graphics.Blit(buffer, sourceTexture);
 
             RenderTexture.ReleaseTemporary(buffer);

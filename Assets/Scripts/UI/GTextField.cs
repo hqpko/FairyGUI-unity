@@ -5,7 +5,6 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class GTextField : GObject, ITextColorGear
     {
         protected TextField _textField;
@@ -17,7 +16,7 @@ namespace FairyGUI
         public GTextField()
             : base()
         {
-            TextFormat tf = _textField.textFormat;
+            var tf = _textField.textFormat;
             tf.font = UIConfig.defaultFont;
             tf.size = 12;
             tf.color = Color.black;
@@ -30,20 +29,19 @@ namespace FairyGUI
             _textField.wordWrap = false;
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             _textField = new TextField();
             _textField.gOwner = this;
             displayObject = _textField;
         }
 
-
-        override public string text
+        public override string text
         {
             get
             {
                 if (this is GTextInput)
-                    _text = ((GTextInput)this).inputTextField.text;
+                    _text = ((GTextInput) this).inputTextField.text;
                 return _text;
             }
             set
@@ -57,9 +55,9 @@ namespace FairyGUI
             }
         }
 
-        virtual protected void SetTextFieldText()
+        protected virtual void SetTextFieldText()
         {
-            string str = _text;
+            var str = _text;
             if (_templateVars != null)
                 str = ParseTemplate(str);
 
@@ -70,10 +68,9 @@ namespace FairyGUI
                 _textField.text = str;
         }
 
-
         public Dictionary<string, string> templateVars
         {
-            get { return _templateVars; }
+            get => _templateVars;
             set
             {
                 if (_templateVars == null && value == null)
@@ -84,7 +81,6 @@ namespace FairyGUI
                 FlushVars();
             }
         }
-
 
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -98,13 +94,11 @@ namespace FairyGUI
             return this;
         }
 
-
         public void FlushVars()
         {
             SetTextFieldText();
             UpdateSize();
         }
-
 
         public bool HasCharacter(char ch)
         {
@@ -117,7 +111,7 @@ namespace FairyGUI
             int pos3;
             string tag;
             string value;
-            StringBuilder buffer = new StringBuilder();
+            var buffer = new StringBuilder();
 
             while ((pos2 = template.IndexOf('{', pos1)) != -1)
             {
@@ -154,22 +148,20 @@ namespace FairyGUI
                     if (!_templateVars.TryGetValue(tag, out value))
                         value = "";
                 }
+
                 buffer.Append(value);
                 pos1 = pos2 + 1;
             }
+
             if (pos1 < template.Length)
                 buffer.Append(template, pos1, template.Length - pos1);
 
             return buffer.ToString();
         }
 
-
         public TextFormat textFormat
         {
-            get
-            {
-                return _textField.textFormat;
-            }
+            get => _textField.textFormat;
             set
             {
                 _textField.textFormat = value;
@@ -178,18 +170,14 @@ namespace FairyGUI
             }
         }
 
-
         public Color color
         {
-            get
-            {
-                return _textField.textFormat.color;
-            }
+            get => _textField.textFormat.color;
             set
             {
                 if (_textField.textFormat.color != value)
                 {
-                    TextFormat tf = _textField.textFormat;
+                    var tf = _textField.textFormat;
                     tf.color = value;
                     _textField.textFormat = tf;
                     UpdateGear(4);
@@ -197,38 +185,33 @@ namespace FairyGUI
             }
         }
 
-
         public AlignType align
         {
-            get { return _textField.align; }
-            set { _textField.align = value; }
+            get => _textField.align;
+            set => _textField.align = value;
         }
-
 
         public VertAlignType verticalAlign
         {
-            get { return _textField.verticalAlign; }
-            set { _textField.verticalAlign = value; }
+            get => _textField.verticalAlign;
+            set => _textField.verticalAlign = value;
         }
-
 
         public bool singleLine
         {
-            get { return _textField.singleLine; }
-            set { _textField.singleLine = value; }
+            get => _textField.singleLine;
+            set => _textField.singleLine = value;
         }
-
 
         public float stroke
         {
-            get { return _textField.stroke; }
-            set { _textField.stroke = value; }
+            get => _textField.stroke;
+            set => _textField.stroke = value;
         }
-
 
         public Color strokeColor
         {
-            get { return _textField.strokeColor; }
+            get => _textField.strokeColor;
             set
             {
                 _textField.strokeColor = value;
@@ -236,24 +219,21 @@ namespace FairyGUI
             }
         }
 
-
         public Vector2 shadowOffset
         {
-            get { return _textField.shadowOffset; }
-            set { _textField.shadowOffset = value; }
+            get => _textField.shadowOffset;
+            set => _textField.shadowOffset = value;
         }
-
 
         public bool UBBEnabled
         {
-            get { return _ubbEnabled; }
-            set { _ubbEnabled = value; }
+            get => _ubbEnabled;
+            set => _ubbEnabled = value;
         }
-
 
         public AutoSizeType autoSize
         {
-            get { return _textField.autoSize; }
+            get => _textField.autoSize;
             set
             {
                 _textField.autoSize = value;
@@ -262,7 +242,7 @@ namespace FairyGUI
                     _textField.wordWrap = false;
 
                     if (!underConstruct)
-                        this.SetSize(_textField.textWidth, _textField.textHeight);
+                        SetSize(_textField.textWidth, _textField.textHeight);
                 }
                 else
                 {
@@ -272,27 +252,21 @@ namespace FairyGUI
                     {
                         if (!underConstruct)
                         {
-                            displayObject.width = this.width;
-                            this.height = _textField.textHeight;
+                            displayObject.width = width;
+                            height = _textField.textHeight;
                         }
                     }
                     else
-                        displayObject.SetSize(this.width, this.height);
+                    {
+                        displayObject.SetSize(width, height);
+                    }
                 }
             }
         }
 
+        public float textWidth => _textField.textWidth;
 
-        public float textWidth
-        {
-            get { return _textField.textWidth; }
-        }
-
-
-        public float textHeight
-        {
-            get { return _textField.textHeight; }
-        }
+        public float textHeight => _textField.textHeight;
 
         protected void UpdateSize()
         {
@@ -303,59 +277,63 @@ namespace FairyGUI
 
             if (_textField.autoSize == AutoSizeType.Both)
             {
-                this.size = displayObject.size;
+                size = displayObject.size;
                 InvalidateBatchingState();
             }
             else if (_textField.autoSize == AutoSizeType.Height)
             {
-                this.height = displayObject.height;
+                height = displayObject.height;
                 InvalidateBatchingState();
             }
 
             _updatingSize = false;
         }
 
-        override protected void HandleSizeChanged()
+        protected override void HandleSizeChanged()
         {
             if (_updatingSize)
                 return;
 
             if (underConstruct)
-                displayObject.SetSize(this.width, this.height);
+            {
+                displayObject.SetSize(width, height);
+            }
             else if (_textField.autoSize != AutoSizeType.Both)
             {
                 if (_textField.autoSize == AutoSizeType.Height)
                 {
-                    displayObject.width = this.width;//先调整宽度，让文本重排
+                    displayObject.width = width; //先调整宽度，让文本重排
                     if (_text != string.Empty) //文本为空时，1是本来就不需要调整， 2是为了防止改掉文本为空时的默认高度，造成关联错误
-                        SetSizeDirectly(this.width, displayObject.height);
+                        SetSizeDirectly(width, displayObject.height);
                 }
                 else
-                    displayObject.SetSize(this.width, this.height);
+                {
+                    displayObject.SetSize(width, height);
+                }
             }
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
             buffer.Seek(beginPos, 5);
 
-            TextFormat tf = _textField.textFormat;
+            var tf = _textField.textFormat;
 
             tf.font = buffer.ReadS();
             tf.size = buffer.ReadShort();
             tf.color = buffer.ReadColor();
-            this.align = (AlignType)buffer.ReadByte();
-            this.verticalAlign = (VertAlignType)buffer.ReadByte();
+            align = (AlignType) buffer.ReadByte();
+            verticalAlign = (VertAlignType) buffer.ReadByte();
             tf.lineSpacing = buffer.ReadShort();
             tf.letterSpacing = buffer.ReadShort();
             _ubbEnabled = buffer.ReadBool();
-            this.autoSize = (AutoSizeType)buffer.ReadByte();
+            autoSize = (AutoSizeType) buffer.ReadByte();
             tf.underline = buffer.ReadBool();
             tf.italic = buffer.ReadBool();
             tf.bold = buffer.ReadBool();
-            this.singleLine = buffer.ReadBool();
+            singleLine = buffer.ReadBool();
             if (buffer.ReadBool())
             {
                 tf.outlineColor = buffer.ReadColor();
@@ -365,8 +343,8 @@ namespace FairyGUI
             if (buffer.ReadBool())
             {
                 tf.shadowColor = buffer.ReadColor();
-                float f1 = buffer.ReadFloat();
-                float f2 = buffer.ReadFloat();
+                var f1 = buffer.ReadFloat();
+                var f2 = buffer.ReadFloat();
                 tf.shadowOffset = new Vector2(f1, f2);
             }
 
@@ -388,15 +366,15 @@ namespace FairyGUI
             _textField.textFormat = tf;
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
             buffer.Seek(beginPos, 6);
 
-            string str = buffer.ReadS();
+            var str = buffer.ReadS();
             if (str != null)
-                this.text = str;
+                text = str;
         }
     }
 }

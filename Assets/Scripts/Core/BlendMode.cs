@@ -42,7 +42,8 @@ namespace FairyGUI
 
         //Source指的是被计算的颜色，Destination是已经在屏幕上的颜色。
         //混合结果=Source * factor1 + Destination * factor2
-        public static BlendFactor[] Factors = new BlendFactor[] {
+        public static BlendFactor[] Factors = new BlendFactor[]
+        {
             //Normal
             new BlendFactor(NativeBlendMode.SrcAlpha, NativeBlendMode.OneMinusSrcAlpha),
             //None
@@ -75,9 +76,9 @@ namespace FairyGUI
         /// <param name="blendMode"></param>
         public static void Apply(Material mat, BlendMode blendMode)
         {
-            BlendFactor bf = Factors[(int)blendMode];
-            mat.SetFloat(ShaderConfig.ID_BlendSrcFactor, (float)bf.srcFactor);
-            mat.SetFloat(ShaderConfig.ID_BlendDstFactor, (float)bf.dstFactor);
+            var bf = Factors[(int) blendMode];
+            mat.SetFloat(ShaderConfig.ID_BlendSrcFactor, (float) bf.srcFactor);
+            mat.SetFloat(ShaderConfig.ID_BlendDstFactor, (float) bf.dstFactor);
 
             if (bf.pma)
                 mat.SetFloat(ShaderConfig.ID_ColorOption, 1);
@@ -90,7 +91,7 @@ namespace FairyGUI
         /// <param name="dstFactor"></param>
         public static void Override(BlendMode blendMode, NativeBlendMode srcFactor, NativeBlendMode dstFactor)
         {
-            BlendFactor bf = Factors[(int)blendMode];
+            var bf = Factors[(int) blendMode];
             bf.srcFactor = srcFactor;
             bf.dstFactor = dstFactor;
         }

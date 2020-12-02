@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlParser
     {
         public static HtmlParser inst = new HtmlParser();
@@ -21,8 +20,8 @@ namespace FairyGUI.Utils
         protected List<HtmlElement> _elements;
         protected HtmlParseOptions _defaultOptions;
 
-        static List<string> sHelperList1 = new List<string>();
-        static List<string> sHelperList2 = new List<string>();
+        private static List<string> sHelperList1 = new List<string>();
+        private static List<string> sHelperList2 = new List<string>();
 
         public HtmlParser()
         {
@@ -31,7 +30,8 @@ namespace FairyGUI.Utils
             _defaultOptions = new HtmlParseOptions();
         }
 
-        virtual public void Parse(string aSource, TextFormat defaultFormat, List<HtmlElement> elements, HtmlParseOptions parseOptions)
+        public virtual void Parse(string aSource, TextFormat defaultFormat, List<HtmlElement> elements,
+            HtmlParseOptions parseOptions)
         {
             if (parseOptions == null)
                 parseOptions = _defaultOptions;
@@ -40,9 +40,9 @@ namespace FairyGUI.Utils
             _textFormatStackTop = 0;
             _format.CopyFrom(defaultFormat);
             _format.colorChanged = false;
-            int skipText = 0;
-            bool ignoreWhiteSpace = parseOptions.ignoreWhiteSpace;
-            bool skipNextCR = false;
+            var skipText = 0;
+            var ignoreWhiteSpace = parseOptions.ignoreWhiteSpace;
+            var skipNextCR = false;
             string text;
 
             XMLIterator.Begin(aSource, true);
@@ -69,7 +69,10 @@ namespace FairyGUI.Utils
                             _format.bold = true;
                         }
                         else
+                        {
                             PopTextFormat();
+                        }
+
                         break;
 
                     case "i":
@@ -79,7 +82,10 @@ namespace FairyGUI.Utils
                             _format.italic = true;
                         }
                         else
+                        {
                             PopTextFormat();
+                        }
+
                         break;
 
                     case "u":
@@ -89,7 +95,10 @@ namespace FairyGUI.Utils
                             _format.underline = true;
                         }
                         else
+                        {
                             PopTextFormat();
+                        }
+
                         break;
 
                     case "strike":
@@ -99,31 +108,38 @@ namespace FairyGUI.Utils
                             _format.strikethrough = true;
                         }
                         else
+                        {
                             PopTextFormat();
+                        }
+
                         break;
 
                     case "sub":
+                    {
+                        if (XMLIterator.tagType == XMLTagType.Start)
                         {
-                            if (XMLIterator.tagType == XMLTagType.Start)
-                            {
-                                PushTextFormat();
-                                _format.specialStyle = TextFormat.SpecialStyle.Subscript;
-                            }
-                            else
-                                PopTextFormat();
+                            PushTextFormat();
+                            _format.specialStyle = TextFormat.SpecialStyle.Subscript;
                         }
+                        else
+                        {
+                            PopTextFormat();
+                        }
+                    }
                         break;
 
                     case "sup":
+                    {
+                        if (XMLIterator.tagType == XMLTagType.Start)
                         {
-                            if (XMLIterator.tagType == XMLTagType.Start)
-                            {
-                                PushTextFormat();
-                                _format.specialStyle = TextFormat.SpecialStyle.Superscript;
-                            }
-                            else
-                                PopTextFormat();
+                            PushTextFormat();
+                            _format.specialStyle = TextFormat.SpecialStyle.Superscript;
                         }
+                        else
+                        {
+                            PopTextFormat();
+                        }
+                    }
                         break;
 
                     case "font":
@@ -132,10 +148,10 @@ namespace FairyGUI.Utils
                             PushTextFormat();
 
                             _format.size = XMLIterator.GetAttributeInt("size", _format.size);
-                            string color = XMLIterator.GetAttribute("color");
+                            var color = XMLIterator.GetAttribute("color");
                             if (color != null)
                             {
-                                string[] parts = color.Split(',');
+                                var parts = color.Split(',');
                                 if (parts.Length == 1)
                                 {
                                     _format.color = ToolSet.ConvertFromHtmlColor(color);
@@ -165,7 +181,10 @@ namespace FairyGUI.Utils
                             }
                         }
                         else if (XMLIterator.tagType == XMLTagType.End)
+                        {
                             PopTextFormat();
+                        }
+
                         break;
 
                     case "br":
@@ -175,12 +194,13 @@ namespace FairyGUI.Utils
                     case "img":
                         if (XMLIterator.tagType == XMLTagType.Start || XMLIterator.tagType == XMLTagType.Void)
                         {
-                            HtmlElement element = HtmlElement.GetElement(HtmlElementType.Image);
+                            var element = HtmlElement.GetElement(HtmlElementType.Image);
                             element.FetchAttributes();
                             element.name = element.GetString("name");
                             element.format.align = _format.align;
                             _elements.Add(element);
                         }
+
                         break;
 
                     case "a":
@@ -192,7 +212,7 @@ namespace FairyGUI.Utils
                             if (!_format.colorChanged && parseOptions.linkColor.a != 0)
                                 _format.color = parseOptions.linkColor;
 
-                            HtmlElement element = HtmlElement.GetElement(HtmlElementType.Link);
+                            var element = HtmlElement.GetElement(HtmlElementType.Link);
                             element.FetchAttributes();
                             element.name = element.GetString("name");
                             element.format.align = _format.align;
@@ -202,59 +222,63 @@ namespace FairyGUI.Utils
                         {
                             PopTextFormat();
 
-                            HtmlElement element = HtmlElement.GetElement(HtmlElementType.LinkEnd);
+                            var element = HtmlElement.GetElement(HtmlElementType.LinkEnd);
                             _elements.Add(element);
                         }
+
                         break;
 
                     case "input":
+                    {
+                        var element = HtmlElement.GetElement(HtmlElementType.Input);
+                        element.FetchAttributes();
+                        element.name = element.GetString("name");
+                        element.format.CopyFrom(_format);
+                        _elements.Add(element);
+                    }
+                        break;
+
+                    case "select":
+                    {
+                        if (XMLIterator.tagType == XMLTagType.Start || XMLIterator.tagType == XMLTagType.Void)
                         {
-                            HtmlElement element = HtmlElement.GetElement(HtmlElementType.Input);
+                            var element = HtmlElement.GetElement(HtmlElementType.Select);
                             element.FetchAttributes();
+                            if (XMLIterator.tagType == XMLTagType.Start)
+                            {
+                                sHelperList1.Clear();
+                                sHelperList2.Clear();
+                                while (XMLIterator.NextTag())
+                                {
+                                    if (XMLIterator.tagName == "select")
+                                        break;
+
+                                    if (XMLIterator.tagName == "option")
+                                    {
+                                        if (XMLIterator.tagType == XMLTagType.Start ||
+                                            XMLIterator.tagType == XMLTagType.Void)
+                                            sHelperList2.Add(XMLIterator.GetAttribute("value", string.Empty));
+                                        else
+                                            sHelperList1.Add(XMLIterator.GetText());
+                                    }
+                                }
+
+                                element.Set("items", sHelperList1.ToArray());
+                                element.Set("values", sHelperList2.ToArray());
+                            }
+
                             element.name = element.GetString("name");
                             element.format.CopyFrom(_format);
                             _elements.Add(element);
                         }
-                        break;
-
-                    case "select":
-                        {
-                            if (XMLIterator.tagType == XMLTagType.Start || XMLIterator.tagType == XMLTagType.Void)
-                            {
-                                HtmlElement element = HtmlElement.GetElement(HtmlElementType.Select);
-                                element.FetchAttributes();
-                                if (XMLIterator.tagType == XMLTagType.Start)
-                                {
-                                    sHelperList1.Clear();
-                                    sHelperList2.Clear();
-                                    while (XMLIterator.NextTag())
-                                    {
-                                        if (XMLIterator.tagName == "select")
-                                            break;
-
-                                        if (XMLIterator.tagName == "option")
-                                        {
-                                            if (XMLIterator.tagType == XMLTagType.Start || XMLIterator.tagType == XMLTagType.Void)
-                                                sHelperList2.Add(XMLIterator.GetAttribute("value", string.Empty));
-                                            else
-                                                sHelperList1.Add(XMLIterator.GetText());
-                                        }
-                                    }
-                                    element.Set("items", sHelperList1.ToArray());
-                                    element.Set("values", sHelperList2.ToArray());
-                                }
-                                element.name = element.GetString("name");
-                                element.format.CopyFrom(_format);
-                                _elements.Add(element);
-                            }
-                        }
+                    }
                         break;
 
                     case "p":
                         if (XMLIterator.tagType == XMLTagType.Start)
                         {
                             PushTextFormat();
-                            string align = XMLIterator.GetAttribute("align");
+                            var align = XMLIterator.GetAttribute("align");
                             switch (align)
                             {
                                 case "center":
@@ -264,6 +288,7 @@ namespace FairyGUI.Utils
                                     _format.align = AlignType.Right;
                                     break;
                             }
+
                             if (!IsNewLine())
                                 AppendText("\n");
                         }
@@ -274,6 +299,7 @@ namespace FairyGUI.Utils
 
                             PopTextFormat();
                         }
+
                         break;
 
                     case "ui":
@@ -289,6 +315,7 @@ namespace FairyGUI.Utils
                             AppendText("\n");
                             skipNextCR = true;
                         }
+
                         break;
 
                     case "html":
@@ -332,7 +359,10 @@ namespace FairyGUI.Utils
                 _textFormatStack.Add(tf);
             }
             else
+            {
                 tf = _textFormatStack[_textFormatStackTop];
+            }
+
             tf.CopyFrom(_format);
             tf.colorChanged = _format.colorChanged;
             _textFormatStackTop++;
@@ -342,7 +372,7 @@ namespace FairyGUI.Utils
         {
             if (_textFormatStackTop > 0)
             {
-                TextFormat2 tf = _textFormatStack[_textFormatStackTop - 1];
+                var tf = _textFormatStack[_textFormatStackTop - 1];
                 _format.CopyFrom(tf);
                 _format.colorChanged = tf.colorChanged;
                 _textFormatStackTop--;
@@ -353,7 +383,7 @@ namespace FairyGUI.Utils
         {
             if (_elements.Count > 0)
             {
-                HtmlElement element = _elements[_elements.Count - 1];
+                var element = _elements[_elements.Count - 1];
                 if (element != null && element.type == HtmlElementType.Text)
                     return element.text.EndsWith("\n");
                 else

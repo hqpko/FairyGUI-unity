@@ -12,7 +12,7 @@ public class BasicsMain : MonoBehaviour
 
     public Gradient lineGradient;
 
-    void Awake()
+    private void Awake()
     {
 #if (UNITY_5 || UNITY_5_3_OR_NEWER)
         //Use the font names directly
@@ -26,15 +26,15 @@ public class BasicsMain : MonoBehaviour
         UIConfig.verticalScrollBar = "ui://Basics/ScrollBar_VT";
         UIConfig.horizontalScrollBar = "ui://Basics/ScrollBar_HZ";
         UIConfig.popupMenu = "ui://Basics/PopupMenu";
-        UIConfig.buttonSound = (NAudioClip)UIPackage.GetItemAsset("Basics", "click");
+        UIConfig.buttonSound = (NAudioClip) UIPackage.GetItemAsset("Basics", "click");
     }
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
 
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _backBtn = _mainView.GetChild("btn_Back");
         _backBtn.visible = false;
@@ -45,10 +45,10 @@ public class BasicsMain : MonoBehaviour
 
         _demoObjects = new Dictionary<string, GComponent>();
 
-        int cnt = _mainView.numChildren;
-        for (int i = 0; i < cnt; i++)
+        var cnt = _mainView.numChildren;
+        for (var i = 0; i < cnt; i++)
         {
-            GObject obj = _mainView.GetChildAt(i);
+            var obj = _mainView.GetChildAt(i);
             if (obj.group != null && obj.group.name == "btns")
                 obj.onClick.Add(runDemo);
         }
@@ -56,7 +56,7 @@ public class BasicsMain : MonoBehaviour
 
     private void runDemo(EventContext context)
     {
-        string type = ((GObject)(context.sender)).name.Substring(4);
+        var type = ((GObject) context.sender).name.Substring(4);
         GComponent obj;
         if (!_demoObjects.TryGetValue(type, out obj))
         {
@@ -119,29 +119,26 @@ public class BasicsMain : MonoBehaviour
         _backBtn.visible = false;
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 
     //-----------------------------
     private void PlayGraph()
     {
-        GComponent obj = _demoObjects["Graph"];
+        var obj = _demoObjects["Graph"];
 
         Shape shape;
 
         shape = obj.GetChild("pie").asGraph.shape;
-        EllipseMesh ellipse = shape.graphics.GetMeshFactory<EllipseMesh>();
+        var ellipse = shape.graphics.GetMeshFactory<EllipseMesh>();
         ellipse.startDegree = 30;
         ellipse.endDegreee = 300;
         shape.graphics.SetMeshDirty();
 
         shape = obj.GetChild("trapezoid").asGraph.shape;
-        PolygonMesh trapezoid = shape.graphics.GetMeshFactory<PolygonMesh>();
+        var trapezoid = shape.graphics.GetMeshFactory<PolygonMesh>();
         trapezoid.usePercentPositions = true;
         trapezoid.points.Clear();
         trapezoid.points.Add(new Vector2(0f, 1f));
@@ -151,14 +148,15 @@ public class BasicsMain : MonoBehaviour
         trapezoid.texcoords.Clear();
         trapezoid.texcoords.AddRange(VertexBuffer.NormalizedUV);
         shape.graphics.SetMeshDirty();
-        shape.graphics.texture = (NTexture)UIPackage.GetItemAsset("Basics", "change");
+        shape.graphics.texture = (NTexture) UIPackage.GetItemAsset("Basics", "change");
 
         shape = obj.GetChild("line").asGraph.shape;
-        LineMesh line = shape.graphics.GetMeshFactory<LineMesh>();
+        var line = shape.graphics.GetMeshFactory<LineMesh>();
         line.lineWidthCurve = AnimationCurve.Linear(0, 25, 1, 10);
         line.roundEdge = true;
         line.gradient = lineGradient;
-        line.path.Create(new GPathPoint[] {
+        line.path.Create(new GPathPoint[]
+        {
             new GPathPoint(new Vector3(0, 120, 0)),
             new GPathPoint(new Vector3(20, 120, 0)),
             new GPathPoint(new Vector3(100, 100, 0)),
@@ -167,20 +165,21 @@ public class BasicsMain : MonoBehaviour
             new GPathPoint(new Vector3(20, 30, 0)),
             new GPathPoint(new Vector3(100, 100, 0)),
             new GPathPoint(new Vector3(180, 120, 0)),
-            new GPathPoint(new Vector3(200, 120, 0)),
+            new GPathPoint(new Vector3(200, 120, 0))
         });
         shape.graphics.SetMeshDirty();
         GTween.To(0, 1, 5).SetEase(EaseType.Linear).SetTarget(shape.graphics).OnUpdate((GTweener t) =>
         {
-            ((NGraphics)t.target).GetMeshFactory<LineMesh>().fillEnd = t.value.x;
-            ((NGraphics)t.target).SetMeshDirty();
+            ((NGraphics) t.target).GetMeshFactory<LineMesh>().fillEnd = t.value.x;
+            ((NGraphics) t.target).SetMeshDirty();
         });
 
         shape = obj.GetChild("line2").asGraph.shape;
-        LineMesh line2 = shape.graphics.GetMeshFactory<LineMesh>();
+        var line2 = shape.graphics.GetMeshFactory<LineMesh>();
         line2.lineWidth = 3;
         line2.roundEdge = true;
-        line2.path.Create(new GPathPoint[] {
+        line2.path.Create(new GPathPoint[]
+        {
             new GPathPoint(new Vector3(0, 120, 0), GPathPoint.CurveType.Straight),
             new GPathPoint(new Vector3(60, 30, 0), GPathPoint.CurveType.Straight),
             new GPathPoint(new Vector3(80, 90, 0), GPathPoint.CurveType.Straight),
@@ -190,11 +189,12 @@ public class BasicsMain : MonoBehaviour
         });
         shape.graphics.SetMeshDirty();
 
-        GObject image = obj.GetChild("line3");
-        LineMesh line3 = image.displayObject.graphics.GetMeshFactory<LineMesh>();
+        var image = obj.GetChild("line3");
+        var line3 = image.displayObject.graphics.GetMeshFactory<LineMesh>();
         line3.lineWidth = 30;
         line3.roundEdge = false;
-        line3.path.Create(new GPathPoint[] {
+        line3.path.Create(new GPathPoint[]
+        {
             new GPathPoint(new Vector3(0, 30, 0), new Vector3(50, -30), new Vector3(150, -50)),
             new GPathPoint(new Vector3(200, 30, 0), new Vector3(300, 130)),
             new GPathPoint(new Vector3(400, 30, 0))
@@ -205,59 +205,56 @@ public class BasicsMain : MonoBehaviour
     //-----------------------------
     private void PlayButton()
     {
-        GComponent obj = _demoObjects["Button"];
-        obj.GetChild("n34").onClick.Add(() => { UnityEngine.Debug.Log("click button"); });
+        var obj = _demoObjects["Button"];
+        obj.GetChild("n34").onClick.Add(() => { Debug.Log("click button"); });
     }
 
     //------------------------------
     private void PlayText()
     {
-        GComponent obj = _demoObjects["Text"];
+        var obj = _demoObjects["Text"];
         obj.GetChild("n12").asRichTextField.onClickLink.Add((EventContext context) =>
         {
-            GRichTextField t = context.sender as GRichTextField;
+            var t = context.sender as GRichTextField;
             t.text = "[img]ui://Basics/pet[/img][color=#FF0000]You click the link[/color]：" + context.data;
         });
-        obj.GetChild("n25").onClick.Add(() =>
-        {
-            obj.GetChild("n24").text = obj.GetChild("n22").text;
-        });
+        obj.GetChild("n25").onClick.Add(() => { obj.GetChild("n24").text = obj.GetChild("n22").text; });
     }
 
     //------------------------------
     private void PlayGrid()
     {
-        GComponent obj = _demoObjects["Grid"];
-        GList list1 = obj.GetChild("list1").asList;
+        var obj = _demoObjects["Grid"];
+        var list1 = obj.GetChild("list1").asList;
         list1.RemoveChildrenToPool();
-        string[] testNames = System.Enum.GetNames(typeof(RuntimePlatform));
-        Color[] testColor = new Color[] { Color.yellow, Color.red, Color.white, Color.cyan };
-        int cnt = testNames.Length;
-        for (int i = 0; i < cnt; i++)
+        var testNames = System.Enum.GetNames(typeof(RuntimePlatform));
+        var testColor = new Color[] {Color.yellow, Color.red, Color.white, Color.cyan};
+        var cnt = testNames.Length;
+        for (var i = 0; i < cnt; i++)
         {
-            GButton item = list1.AddItemFromPool().asButton;
+            var item = list1.AddItemFromPool().asButton;
             item.GetChild("t0").text = "" + (i + 1);
             item.GetChild("t1").text = testNames[i];
-            item.GetChild("t2").asTextField.color = testColor[UnityEngine.Random.Range(0, 4)];
-            item.GetChild("star").asProgress.value = (int)((float)UnityEngine.Random.Range(1, 4) / 3f * 100);
+            item.GetChild("t2").asTextField.color = testColor[Random.Range(0, 4)];
+            item.GetChild("star").asProgress.value = (int) ((float) Random.Range(1, 4) / 3f * 100);
         }
 
-        GList list2 = obj.GetChild("list2").asList;
+        var list2 = obj.GetChild("list2").asList;
         list2.RemoveChildrenToPool();
-        for (int i = 0; i < cnt; i++)
+        for (var i = 0; i < cnt; i++)
         {
-            GButton item = list2.AddItemFromPool().asButton;
+            var item = list2.AddItemFromPool().asButton;
             item.GetChild("cb").asButton.selected = false;
             item.GetChild("t1").text = testNames[i];
             item.GetChild("mc").asMovieClip.playing = i % 2 == 0;
-            item.GetChild("t3").text = "" + UnityEngine.Random.Range(0, 10000);
+            item.GetChild("t3").text = "" + Random.Range(0, 10000);
         }
     }
 
     //------------------------------
     private void PlayTransition()
     {
-        GComponent obj = _demoObjects["Transition"];
+        var obj = _demoObjects["Transition"];
         obj.GetChild("n2").asCom.GetTransition("t0").Play(int.MaxValue, 0, null);
         obj.GetChild("n3").asCom.GetTransition("peng").Play(int.MaxValue, 0, null);
 
@@ -271,9 +268,10 @@ public class BasicsMain : MonoBehaviour
     //------------------------------
     private Window _winA;
     private Window _winB;
+
     private void PlayWindow()
     {
-        GComponent obj = _demoObjects["Window"];
+        var obj = _demoObjects["Window"];
         obj.GetChild("n0").onClick.Add(() =>
         {
             if (_winA == null)
@@ -292,6 +290,7 @@ public class BasicsMain : MonoBehaviour
     //------------------------------
     private PopupMenu _pm;
     private GComponent _popupCom;
+
     private void PlayPopup()
     {
         if (_pm == null)
@@ -308,58 +307,56 @@ public class BasicsMain : MonoBehaviour
             _popupCom = UIPackage.CreateObject("Basics", "Component12").asCom;
             _popupCom.Center();
         }
-        GComponent obj = _demoObjects["Popup"];
+
+        var obj = _demoObjects["Popup"];
         obj.GetChild("n0").onClick.Add((EventContext context) =>
         {
-            _pm.Show((GObject)context.sender, PopupDirection.Down);
+            _pm.Show((GObject) context.sender, PopupDirection.Down);
         });
 
-        obj.GetChild("n1").onClick.Add(() =>
-        {
-            GRoot.inst.ShowPopup(_popupCom);
-        });
+        obj.GetChild("n1").onClick.Add(() => { GRoot.inst.ShowPopup(_popupCom); });
 
-
-        obj.onRightClick.Add(() =>
-        {
-            _pm.Show();
-        });
+        obj.onRightClick.Add(() => { _pm.Show(); });
     }
 
     private void __clickMenu(EventContext context)
     {
-        GObject itemObject = (GObject)context.data;
-        UnityEngine.Debug.Log("click " + itemObject.text);
+        var itemObject = (GObject) context.data;
+        Debug.Log("click " + itemObject.text);
     }
 
     //------------------------------
-    Vector2 startPos;
+    private Vector2 startPos;
+
     private void PlayDepth()
     {
-        GComponent obj = _demoObjects["Depth"];
-        GComponent testContainer = obj.GetChild("n22").asCom;
-        GObject fixedObj = testContainer.GetChild("n0");
+        var obj = _demoObjects["Depth"];
+        var testContainer = obj.GetChild("n22").asCom;
+        var fixedObj = testContainer.GetChild("n0");
         fixedObj.sortingOrder = 100;
         fixedObj.draggable = true;
 
-        int numChildren = testContainer.numChildren;
-        int i = 0;
+        var numChildren = testContainer.numChildren;
+        var i = 0;
         while (i < numChildren)
         {
-            GObject child = testContainer.GetChildAt(i);
+            var child = testContainer.GetChildAt(i);
             if (child != fixedObj)
             {
                 testContainer.RemoveChildAt(i);
                 numChildren--;
             }
             else
+            {
                 i++;
+            }
         }
+
         startPos = new Vector2(fixedObj.x, fixedObj.y);
 
         obj.GetChild("btn0").onClick.Add(() =>
         {
-            GGraph graph = new GGraph();
+            var graph = new GGraph();
             startPos.x += 10;
             startPos.y += 10;
             graph.xy = startPos;
@@ -369,7 +366,7 @@ public class BasicsMain : MonoBehaviour
 
         obj.GetChild("btn1").onClick.Add(() =>
         {
-            GGraph graph = new GGraph();
+            var graph = new GGraph();
             startPos.x += 10;
             startPos.y += 10;
             graph.xy = startPos;
@@ -382,34 +379,31 @@ public class BasicsMain : MonoBehaviour
     //------------------------------
     private void PlayDragDrop()
     {
-        GComponent obj = _demoObjects["Drag&Drop"];
+        var obj = _demoObjects["Drag&Drop"];
         obj.GetChild("a").draggable = true;
 
-        GButton b = obj.GetChild("b").asButton;
+        var b = obj.GetChild("b").asButton;
         b.draggable = true;
         b.onDragStart.Add((EventContext context) =>
         {
             //Cancel the original dragging, and start a new one with a agent.
             context.PreventDefault();
 
-            DragDropManager.inst.StartDrag(b, b.icon, b.icon, (int)context.data);
+            DragDropManager.inst.StartDrag(b, b.icon, b.icon, (int) context.data);
         });
 
-        GButton c = obj.GetChild("c").asButton;
+        var c = obj.GetChild("c").asButton;
         c.icon = null;
-        c.onDrop.Add((EventContext context) =>
-        {
-            c.icon = (string)context.data;
-        });
+        c.onDrop.Add((EventContext context) => { c.icon = (string) context.data; });
 
-        GObject bounds = obj.GetChild("n7");
-        Rect rect = bounds.TransformRect(new Rect(0, 0, bounds.width, bounds.height), GRoot.inst);
+        var bounds = obj.GetChild("n7");
+        var rect = bounds.TransformRect(new Rect(0, 0, bounds.width, bounds.height), GRoot.inst);
 
         //---!!Because at this time the container is on the right side of the stage and beginning to move to left(transition), so we need to caculate the final position
         rect.x -= obj.parent.x;
         //----
 
-        GButton d = obj.GetChild("d").asButton;
+        var d = obj.GetChild("d").asButton;
         d.draggable = true;
         d.dragBounds = rect;
     }
@@ -417,21 +411,20 @@ public class BasicsMain : MonoBehaviour
     //------------------------------
     private void PlayProgressBar()
     {
-        GComponent obj = _demoObjects["ProgressBar"];
+        var obj = _demoObjects["ProgressBar"];
         Timers.inst.Add(0.001f, 0, __playProgress);
         obj.onRemovedFromStage.Add(() => { Timers.inst.Remove(__playProgress); });
     }
 
-    void __playProgress(object param)
+    private void __playProgress(object param)
     {
-        GComponent obj = _demoObjects["ProgressBar"];
-        int cnt = obj.numChildren;
-        for (int i = 0; i < cnt; i++)
+        var obj = _demoObjects["ProgressBar"];
+        var cnt = obj.numChildren;
+        for (var i = 0; i < cnt; i++)
         {
-            GProgressBar child = obj.GetChildAt(i) as GProgressBar;
+            var child = obj.GetChildAt(i) as GProgressBar;
             if (child != null)
             {
-
                 child.value += 1;
                 if (child.value > child.max)
                     child.value = 0;

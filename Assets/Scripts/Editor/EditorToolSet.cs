@@ -5,28 +5,27 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-
     public class EditorToolSet
     {
         public static GUIContent[] packagesPopupContents;
 
-        static bool _loaded;
+        private static bool _loaded;
 
         [InitializeOnLoadMethod]
-        static void Startup()
+        private static void Startup()
         {
             EditorApplication.update += EditorApplication_Update;
         }
 
         [MenuItem("GameObject/FairyGUI/UI Panel", false, 0)]
-        static void CreatePanel()
+        private static void CreatePanel()
         {
             EditorApplication.update -= EditorApplication_Update;
             EditorApplication.update += EditorApplication_Update;
 
             StageCamera.CheckMainCamera();
 
-            GameObject panelObject = new GameObject("UIPanel");
+            var panelObject = new GameObject("UIPanel");
             if (Selection.activeGameObject != null)
             {
                 panelObject.transform.parent = Selection.activeGameObject.transform;
@@ -34,27 +33,28 @@ namespace FairyGUIEditor
             }
             else
             {
-                int layer = LayerMask.NameToLayer(StageCamera.LayerName);
+                var layer = LayerMask.NameToLayer(StageCamera.LayerName);
                 panelObject.layer = layer;
             }
-            panelObject.AddComponent<FairyGUI.UIPanel>();
-            Selection.objects = new Object[] { panelObject };
+
+            panelObject.AddComponent<UIPanel>();
+            Selection.objects = new Object[] {panelObject};
         }
 
         [MenuItem("GameObject/FairyGUI/UI Camera", false, 0)]
-        static void CreateCamera()
+        private static void CreateCamera()
         {
             StageCamera.CheckMainCamera();
-            Selection.objects = new Object[] { StageCamera.main.gameObject };
+            Selection.objects = new Object[] {StageCamera.main.gameObject};
         }
 
         [MenuItem("Window/FairyGUI - Refresh Packages And Panels")]
-        static void RefreshPanels()
+        private static void RefreshPanels()
         {
             ReloadPackages();
         }
 
-        static void EditorApplication_Update()
+        private static void EditorApplication_Update()
         {
             if (Application.isPlaying)
                 return;
@@ -74,7 +74,9 @@ namespace FairyGUIEditor
                 Debug.Log("FairyGUI - Refresh Packages And Panels complete.");
             }
             else
+            {
                 EditorUtility.DisplayDialog("FairyGUI", "Cannot run in play mode.", "OK");
+            }
         }
 
         public static void LoadPackages()
@@ -92,12 +94,12 @@ namespace FairyGUIEditor
             NTexture.DisposeEmpty();
             UIObjectFactory.Clear();
 
-            string[] ids = AssetDatabase.FindAssets("_fui t:textAsset");
-            int cnt = ids.Length;
-            for (int i = 0; i < cnt; i++)
+            var ids = AssetDatabase.FindAssets("_fui t:textAsset");
+            var cnt = ids.Length;
+            for (var i = 0; i < cnt; i++)
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath(ids[i]);
-                int pos = assetPath.LastIndexOf("_fui");
+                var assetPath = AssetDatabase.GUIDToAssetPath(ids[i]);
+                var pos = assetPath.LastIndexOf("_fui");
                 if (pos == -1)
                     continue;
 
@@ -112,22 +114,21 @@ namespace FairyGUIEditor
                     );
             }
 
-            List<UIPackage> pkgs = UIPackage.GetPackages();
+            var pkgs = UIPackage.GetPackages();
             pkgs.Sort(CompareUIPackage);
 
             cnt = pkgs.Count;
             packagesPopupContents = new GUIContent[cnt + 1];
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
                 packagesPopupContents[i] = new GUIContent(pkgs[i].name);
             packagesPopupContents[cnt] = new GUIContent("Please Select");
 
             EMRenderSupport.Reload();
         }
 
-        static int CompareUIPackage(UIPackage u1, UIPackage u2)
+        private static int CompareUIPackage(UIPackage u1, UIPackage u2)
         {
             return u1.name.CompareTo(u2.name);
         }
     }
-
 }

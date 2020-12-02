@@ -22,7 +22,7 @@ namespace FairyGUI
             public bool reversed;
         }
 
-        Stack<ClipInfo> _clipStack;
+        private Stack<ClipInfo> _clipStack;
 
         public bool clipped;
         public ClipInfo clipInfo;
@@ -42,7 +42,7 @@ namespace FairyGUI
         public static event Action OnBegin;
         public static event Action OnEnd;
 
-        static Action _tmpBegin;
+        private static Action _tmpBegin;
 
         public UpdateContext()
         {
@@ -151,7 +151,9 @@ namespace FairyGUI
                     stencilCompareValue = stencilReferenceValue - 1;
             }
             else
+            {
                 stencilCompareValue = (stencilReferenceValue << 1) - 1;
+            }
 
             clipInfo.clipId = clipId;
             clipInfo.referenceValue = stencilReferenceValue;
@@ -245,7 +247,7 @@ namespace FairyGUI
                 }
                 else
                 {
-                    if (stencilReferenceValue != 0 & _clipStack.Peek().reversed)
+                    if ((stencilReferenceValue != 0) & _clipStack.Peek().reversed)
                         mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.NotEqual);
                     else
                         mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
@@ -257,9 +259,9 @@ namespace FairyGUI
             }
             else
             {
-                if (stencilReferenceValue != 0 & _clipStack.Peek().reversed)
+                if ((stencilReferenceValue != 0) & _clipStack.Peek().reversed)
                 {
-                    int refValue = stencilReferenceValue | (stencilReferenceValue - 1);
+                    var refValue = stencilReferenceValue | (stencilReferenceValue - 1);
                     mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                     mat.SetInt(ShaderConfig.ID_Stencil, refValue);
                     mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Zero);
@@ -268,7 +270,7 @@ namespace FairyGUI
                 }
                 else
                 {
-                    int refValue = stencilReferenceValue - 1;
+                    var refValue = stencilReferenceValue - 1;
                     mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                     mat.SetInt(ShaderConfig.ID_Stencil, refValue);
                     mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Replace);

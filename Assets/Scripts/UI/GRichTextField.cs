@@ -9,7 +9,6 @@ namespace FairyGUI
     /// </summary>
     public class GRichTextField : GTextField
     {
-
         public RichTextField richTextField { get; private set; }
 
         public GRichTextField()
@@ -17,7 +16,7 @@ namespace FairyGUI
         {
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             richTextField = new RichTextField();
             richTextField.gOwner = this;
@@ -26,9 +25,9 @@ namespace FairyGUI
             _textField = richTextField.textField;
         }
 
-        override protected void SetTextFieldText()
+        protected override void SetTextFieldText()
         {
-            string str = _text;
+            var str = _text;
             if (_templateVars != null)
                 str = ParseTemplate(str);
 
@@ -39,11 +38,10 @@ namespace FairyGUI
                 richTextField.htmlText = str;
         }
 
-
         public Dictionary<uint, Emoji> emojies
         {
-            get { return richTextField.emojies; }
-            set { richTextField.emojies = value; }
+            get => richTextField.emojies;
+            set => richTextField.emojies = value;
         }
     }
 }

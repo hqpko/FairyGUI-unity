@@ -3,19 +3,19 @@ using FairyGUI;
 
 public class TypingEffectMain : MonoBehaviour
 {
-    GComponent _mainView;
-    TypingEffect _te1;
-    TypingEffect _te2;
+    private GComponent _mainView;
+    private TypingEffect _te1;
+    private TypingEffect _te2;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _te1 = new TypingEffect(_mainView.GetChild("n2").asTextField);
         _te1.Start();
@@ -26,19 +26,13 @@ public class TypingEffectMain : MonoBehaviour
         Timers.inst.Add(0.050f, 0, PrintText);
     }
 
-    void PrintText(object param)
+    private void PrintText(object param)
     {
-        if (!_te2.Print())
-        {
-            Timers.inst.Remove(PrintText);
-        }
+        if (!_te2.Print()) Timers.inst.Remove(PrintText);
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

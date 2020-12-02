@@ -57,7 +57,7 @@ namespace FairyGUI
         /// <returns></returns>
         public static Shader GetShader(string name)
         {
-            Shader shader = Get(name);
+            var shader = Get(name);
             if (shader == null)
             {
                 Debug.LogWarning("FairyGUI: shader not found: " + name);

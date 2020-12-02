@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-
     public interface EMRenderTarget
     {
         int EM_sortingOrder { get; }
@@ -19,21 +19,14 @@ namespace FairyGUI
     /// </summary>
     public class EMRenderSupport
     {
-
         public static bool orderChanged;
 
-        static UpdateContext _updateContext;
-        static List<EMRenderTarget> _targets = new List<EMRenderTarget>();
-
+        private static UpdateContext _updateContext;
+        private static List<EMRenderTarget> _targets = new List<EMRenderTarget>();
 
         public static bool packageListReady { get; private set; }
 
-
-        public static bool hasTarget
-        {
-            get { return _targets.Count > 0; }
-        }
-
+        public static bool hasTarget => _targets.Count > 0;
 
         /// <param name="value"></param>
         public static void Add(EMRenderTarget value)
@@ -42,7 +35,6 @@ namespace FairyGUI
                 _targets.Add(value);
             orderChanged = true;
         }
-
 
         /// <param name="value"></param>
         public static void Remove(EMRenderTarget value)
@@ -67,21 +59,22 @@ namespace FairyGUI
                 orderChanged = false;
             }
 
-            int cnt = _targets.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _targets.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                EMRenderTarget panel = _targets[i];
+                var panel = _targets[i];
                 panel.EM_BeforeUpdate();
             }
 
             if (packageListReady)
             {
                 _updateContext.Begin();
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    EMRenderTarget panel = _targets[i];
+                    var panel = _targets[i];
                     panel.EM_Update(_updateContext);
                 }
+
                 _updateContext.End();
             }
         }
@@ -95,21 +88,21 @@ namespace FairyGUI
                 return;
 
             UIConfig.ClearResourceRefs();
-            UIConfig[] configs = GameObject.FindObjectsOfType<UIConfig>();
-            foreach (UIConfig config in configs)
+            var configs = Object.FindObjectsOfType<UIConfig>();
+            foreach (var config in configs)
                 config.Load();
 
             packageListReady = true;
 
-            int cnt = _targets.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _targets.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                EMRenderTarget panel = _targets[i];
+                var panel = _targets[i];
                 panel.EM_Reload();
             }
         }
 
-        static int CompareDepth(EMRenderTarget c1, EMRenderTarget c2)
+        private static int CompareDepth(EMRenderTarget c1, EMRenderTarget c2)
         {
             return c1.EM_sortingOrder - c2.EM_sortingOrder;
         }

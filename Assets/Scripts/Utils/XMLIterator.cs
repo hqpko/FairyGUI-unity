@@ -15,28 +15,27 @@ namespace FairyGUI.Utils
         Instruction
     }
 
-
     public class XMLIterator
     {
         public static string tagName;
         public static XMLTagType tagType;
         public static string lastTagName;
 
-        static string source;
-        static int sourceLen;
-        static int parsePos;
-        static int tagPos;
-        static int tagLength;
-        static int lastTagEnd;
-        static bool attrParsed;
-        static bool lowerCaseName;
-        static StringBuilder buffer = new StringBuilder();
-        static Dictionary<string, string> attributes = new Dictionary<string, string>();
+        private static string source;
+        private static int sourceLen;
+        private static int parsePos;
+        private static int tagPos;
+        private static int tagLength;
+        private static int lastTagEnd;
+        private static bool attrParsed;
+        private static bool lowerCaseName;
+        private static StringBuilder buffer = new StringBuilder();
+        private static Dictionary<string, string> attributes = new Dictionary<string, string>();
 
-        const string CDATA_START = "<![CDATA[";
-        const string CDATA_END = "]]>";
-        const string COMMENT_START = "<!--";
-        const string COMMENT_END = "-->";
+        private const string CDATA_START = "<![CDATA[";
+        private const string CDATA_END = "]]>";
+        private const string COMMENT_START = "<!--";
+        private const string COMMENT_END = "-->";
 
         public static void Begin(string source, bool lowerCaseName = false)
         {
@@ -117,9 +116,10 @@ namespace FairyGUI.Utils
                 for (; pos < sourceLen; pos++)
                 {
                     c = source[pos];
-                    if (Char.IsWhiteSpace(c) || c == '>' || c == '/')
+                    if (char.IsWhiteSpace(c) || c == '>' || c == '/')
                         break;
                 }
+
                 if (pos == sourceLen)
                     break;
 
@@ -128,7 +128,7 @@ namespace FairyGUI.Utils
                     buffer.Remove(0, 1);
 
                 bool singleQuoted = false, doubleQuoted = false;
-                int possibleEnd = -1;
+                var possibleEnd = -1;
                 for (; pos < sourceLen; pos++)
                 {
                     c = source[pos];
@@ -154,8 +154,11 @@ namespace FairyGUI.Utils
                         possibleEnd = pos;
                     }
                     else if (c == '<')
+                    {
                         break;
+                    }
                 }
+
                 if (possibleEnd != -1)
                     pos = possibleEnd;
 
@@ -189,13 +192,15 @@ namespace FairyGUI.Utils
         public static string GetRawText(bool trim = false)
         {
             if (lastTagEnd == tagPos)
+            {
                 return string.Empty;
+            }
             else if (trim)
             {
-                int i = lastTagEnd;
+                var i = lastTagEnd;
                 for (; i < tagPos; i++)
                 {
-                    char c = source[i];
+                    var c = source[i];
                     if (!char.IsWhiteSpace(c))
                         break;
                 }
@@ -206,19 +211,23 @@ namespace FairyGUI.Utils
                     return source.Substring(i, tagPos - i).TrimEnd();
             }
             else
+            {
                 return source.Substring(lastTagEnd, tagPos - lastTagEnd);
+            }
         }
 
         public static string GetText(bool trim = false)
         {
             if (lastTagEnd == tagPos)
+            {
                 return string.Empty;
+            }
             else if (trim)
             {
-                int i = lastTagEnd;
+                var i = lastTagEnd;
                 for (; i < tagPos; i++)
                 {
-                    char c = source[i];
+                    var c = source[i];
                     if (!char.IsWhiteSpace(c))
                         break;
                 }
@@ -229,7 +238,9 @@ namespace FairyGUI.Utils
                     return XMLUtils.DecodeString(source.Substring(i, tagPos - i).TrimEnd());
             }
             else
+            {
                 return XMLUtils.DecodeString(source.Substring(lastTagEnd, tagPos - lastTagEnd));
+            }
         }
 
         public static bool HasAttribute(string attrName)
@@ -262,7 +273,7 @@ namespace FairyGUI.Utils
 
         public static string GetAttribute(string attrName, string defValue)
         {
-            string ret = GetAttribute(attrName);
+            var ret = GetAttribute(attrName);
             if (ret != null)
                 return ret;
             else
@@ -276,7 +287,7 @@ namespace FairyGUI.Utils
 
         public static int GetAttributeInt(string attrName, int defValue)
         {
-            string value = GetAttribute(attrName);
+            var value = GetAttribute(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -294,7 +305,7 @@ namespace FairyGUI.Utils
 
         public static float GetAttributeFloat(string attrName, float defValue)
         {
-            string value = GetAttribute(attrName);
+            var value = GetAttribute(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -312,7 +323,7 @@ namespace FairyGUI.Utils
 
         public static bool GetAttributeBool(string attrName, bool defValue)
         {
-            string value = GetAttribute(attrName);
+            var value = GetAttribute(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -329,10 +340,8 @@ namespace FairyGUI.Utils
                 result = new Dictionary<string, string>();
 
             if (attrParsed)
-            {
-                foreach (KeyValuePair<string, string> kv in attributes)
+                foreach (var kv in attributes)
                     result[kv.Key] = kv.Value;
-            }
             else //这里没有先ParseAttributes再赋值给result是为了节省复制的操作
                 ParseAttributes(result);
 
@@ -345,49 +354,45 @@ namespace FairyGUI.Utils
                 result = new Hashtable();
 
             if (attrParsed)
-            {
-                foreach (KeyValuePair<string, string> kv in attributes)
+                foreach (var kv in attributes)
                     result[kv.Key] = kv.Value;
-            }
             else //这里没有先ParseAttributes再赋值给result是为了节省复制的操作
                 ParseAttributes(result);
 
             return result;
         }
 
-        static void ParseAttributes(IDictionary attrs)
+        private static void ParseAttributes(IDictionary attrs)
         {
             string attrName;
             int valueStart;
             int valueEnd;
-            bool waitValue = false;
+            var waitValue = false;
             int quoted;
             buffer.Length = 0;
-            int i = tagPos;
-            int attrEnd = tagPos + tagLength;
+            var i = tagPos;
+            var attrEnd = tagPos + tagLength;
 
             if (i < attrEnd && source[i] == '<')
-            {
                 for (; i < attrEnd; i++)
                 {
-                    char c = source[i];
-                    if (Char.IsWhiteSpace(c) || c == '>' || c == '/')
+                    var c = source[i];
+                    if (char.IsWhiteSpace(c) || c == '>' || c == '/')
                         break;
                 }
-            }
 
             for (; i < attrEnd; i++)
             {
-                char c = source[i];
+                var c = source[i];
                 if (c == '=')
                 {
                     valueStart = -1;
                     valueEnd = -1;
                     quoted = 0;
-                    for (int j = i + 1; j < attrEnd; j++)
+                    for (var j = i + 1; j < attrEnd; j++)
                     {
-                        char c2 = source[j];
-                        if (Char.IsWhiteSpace(c2))
+                        var c2 = source[j];
+                        if (char.IsWhiteSpace(c2))
                         {
                             if (valueStart != -1 && quoted == 0)
                             {
@@ -447,13 +452,16 @@ namespace FairyGUI.Utils
                         if (lowerCaseName)
                             attrName = attrName.ToLower();
                         buffer.Length = 0;
-                        attrs[attrName] = XMLUtils.DecodeString(source.Substring(valueStart, valueEnd - valueStart + 1));
+                        attrs[attrName] =
+                            XMLUtils.DecodeString(source.Substring(valueStart, valueEnd - valueStart + 1));
                         i = valueEnd + 1;
                     }
                     else
+                    {
                         break;
+                    }
                 }
-                else if (!Char.IsWhiteSpace(c))
+                else if (!char.IsWhiteSpace(c))
                 {
                     if (waitValue || c == '/' || c == '>')
                     {

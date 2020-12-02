@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace FairyGUI
 {
     public delegate void EventCallback0();
+
     public delegate void EventCallback1(EventContext context);
 
     public class EventDispatcher : IEventDispatcher
@@ -69,7 +70,7 @@ namespace FairyGUI
         /// <returns></returns>
         public bool HasEventListeners(string strType)
         {
-            EventBridge bridge = TryGetEventBridge(strType);
+            var bridge = TryGetEventBridge(strType);
             if (bridge == null)
                 return false;
 
@@ -86,10 +87,7 @@ namespace FairyGUI
 
         private EventBridge TryGetEventBridge(string strType)
         {
-            if (_dic != null && _dic.TryGetValue(strType, out var bridge))
-            {
-                return bridge;
-            }
+            if (_dic != null && _dic.TryGetValue(strType, out var bridge)) return bridge;
 
             return null;
         }
@@ -136,14 +134,14 @@ namespace FairyGUI
                 bridge = TryGetEventBridge(strType);
 
             EventBridge gBridge = null;
-            if ((this is DisplayObject) && ((DisplayObject) this).gOwner != null)
+            if (this is DisplayObject && ((DisplayObject) this).gOwner != null)
                 gBridge = ((DisplayObject) this).gOwner.TryGetEventBridge(strType);
 
-            bool b1 = bridge != null && !bridge.isEmpty;
-            bool b2 = gBridge != null && !gBridge.isEmpty;
+            var b1 = bridge != null && !bridge.isEmpty;
+            var b2 = gBridge != null && !gBridge.isEmpty;
             if (b1 || b2)
             {
-                EventContext context = EventContext.Get();
+                var context = EventContext.Get();
                 context.initiator = initiator ?? this;
                 context.type = strType;
                 context.data = data;
@@ -171,20 +169,21 @@ namespace FairyGUI
                 return context._defaultPrevented;
             }
             else
+            {
                 return false;
+            }
         }
-
 
         /// <param name="context"></param>
         /// <returns></returns>
         public bool DispatchEvent(EventContext context)
         {
-            EventBridge bridge = TryGetEventBridge(context.type);
+            var bridge = TryGetEventBridge(context.type);
             EventBridge gBridge = null;
-            if ((this is DisplayObject) && ((DisplayObject) this).gOwner != null)
+            if (this is DisplayObject && ((DisplayObject) this).gOwner != null)
                 gBridge = ((DisplayObject) this).gOwner.TryGetEventBridge(context.type);
 
-            EventDispatcher savedSender = context.sender;
+            var savedSender = context.sender;
 
             if (bridge != null && !bridge.isEmpty)
             {
@@ -202,14 +201,13 @@ namespace FairyGUI
             return context._defaultPrevented;
         }
 
-
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <param name="addChain"></param>
         /// <returns></returns>
         internal bool BubbleEvent(string strType, object data, List<EventBridge> addChain)
         {
-            EventContext context = EventContext.Get();
+            var context = EventContext.Get();
             context.initiator = this;
 
             context.type = strType;
@@ -217,13 +215,13 @@ namespace FairyGUI
             if (data is InputEvent inputEvent)
                 _sCurrentInputEvent = inputEvent;
             context.inputEvent = _sCurrentInputEvent;
-            List<EventBridge> bubbleChain = context.callChain;
+            var bubbleChain = context.callChain;
             bubbleChain.Clear();
 
             GetChainBridges(strType, bubbleChain, true);
 
-            int length = bubbleChain.Count;
-            for (int i = length - 1; i >= 0; i--)
+            var length = bubbleChain.Count;
+            for (var i = length - 1; i >= 0; i--)
             {
                 bubbleChain[i].CallCaptureInternal(context);
                 if (context._touchCapture)
@@ -236,7 +234,7 @@ namespace FairyGUI
 
             if (!context._stopsPropagation)
             {
-                for (int i = 0; i < length; ++i)
+                for (var i = 0; i < length; ++i)
                 {
                     bubbleChain[i].CallInternal(context);
 
@@ -254,9 +252,9 @@ namespace FairyGUI
                 if (addChain != null)
                 {
                     length = addChain.Count;
-                    for (int i = 0; i < length; ++i)
+                    for (var i = 0; i < length; ++i)
                     {
-                        EventBridge bridge = addChain[i];
+                        var bridge = addChain[i];
                         if (bubbleChain.IndexOf(bridge) == -1)
                         {
                             bridge.CallCaptureInternal(context);
@@ -273,7 +271,6 @@ namespace FairyGUI
             return context._defaultPrevented;
         }
 
-
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -282,20 +279,19 @@ namespace FairyGUI
             return BubbleEvent(strType, data, null);
         }
 
-
         /// <param name="strType"></param>
         /// <param name="data"></param>
         /// <returns></returns>
         public bool BroadcastEvent(string strType, object data)
         {
-            EventContext context = EventContext.Get();
+            var context = EventContext.Get();
             context.initiator = this;
             context.type = strType;
             context.data = data;
             if (data is InputEvent inputEvent)
                 _sCurrentInputEvent = inputEvent;
             context.inputEvent = _sCurrentInputEvent;
-            List<EventBridge> bubbleChain = context.callChain;
+            var bubbleChain = context.callChain;
             bubbleChain.Clear();
 
             if (this is Container)
@@ -303,8 +299,8 @@ namespace FairyGUI
             else if (this is GComponent)
                 GetChildEventBridges(strType, (GComponent) this, bubbleChain);
 
-            int length = bubbleChain.Count;
-            for (int i = 0; i < length; ++i)
+            var length = bubbleChain.Count;
+            for (var i = 0; i < length; ++i)
                 bubbleChain[i].CallInternal(context);
 
             EventContext.Return(context);
@@ -331,9 +327,9 @@ namespace FairyGUI
             return bridge;
         }
 
-        static void GetChildEventBridges(string strType, Container container, List<EventBridge> bridges)
+        private static void GetChildEventBridges(string strType, Container container, List<EventBridge> bridges)
         {
-            EventBridge bridge = container.TryGetEventBridge(strType);
+            var bridge = container.TryGetEventBridge(strType);
             if (bridge != null)
                 bridges.Add(bridge);
             if (container.gOwner != null)
@@ -348,7 +344,9 @@ namespace FairyGUI
             {
                 var obj = container.GetChildAt(i);
                 if (obj is Container con)
+                {
                     GetChildEventBridges(strType, con, bridges);
+                }
                 else
                 {
                     bridge = obj.TryGetEventBridge(strType);
@@ -376,7 +374,9 @@ namespace FairyGUI
             {
                 var obj = container.GetChildAt(i);
                 if (obj is GComponent com)
+                {
                     GetChildEventBridges(strType, com, bridges);
+                }
                 else
                 {
                     bridge = obj.TryGetEventBridge(strType);
@@ -388,11 +388,11 @@ namespace FairyGUI
 
         internal void GetChainBridges(string strType, List<EventBridge> chain, bool bubble)
         {
-            EventBridge bridge = TryGetEventBridge(strType);
+            var bridge = TryGetEventBridge(strType);
             if (bridge != null && !bridge.isEmpty)
                 chain.Add(bridge);
 
-            if ((this is DisplayObject) && ((DisplayObject) this).gOwner != null)
+            if (this is DisplayObject && ((DisplayObject) this).gOwner != null)
             {
                 bridge = ((DisplayObject) this).gOwner.TryGetEventBridge(strType);
                 if (bridge != null && !bridge.isEmpty)
@@ -404,7 +404,7 @@ namespace FairyGUI
 
             if (this is DisplayObject)
             {
-                DisplayObject element = (DisplayObject) this;
+                var element = (DisplayObject) this;
                 while ((element = element.parent) != null)
                 {
                     bridge = element.TryGetEventBridge(strType);
@@ -421,7 +421,7 @@ namespace FairyGUI
             }
             else if (this is GObject)
             {
-                GObject element = (GObject) this;
+                var element = (GObject) this;
                 while ((element = element.parent) != null)
                 {
                     bridge = element.TryGetEventBridge(strType);

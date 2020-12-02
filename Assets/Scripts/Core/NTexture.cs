@@ -41,19 +41,19 @@ namespace FairyGUI
         /// </summary>
         public event Action<NTexture> onRelease;
 
-        Texture _nativeTexture;
-        Texture _alphaTexture;
+        private Texture _nativeTexture;
+        private Texture _alphaTexture;
 
-        Rect _region;
-        Vector2 _offset;
-        Vector2 _originalSize;
+        private Rect _region;
+        private Vector2 _offset;
+        private Vector2 _originalSize;
 
-        NTexture _root;
-        Dictionary<string, MaterialManager> _materialManagers;
+        private NTexture _root;
+        private Dictionary<string, MaterialManager> _materialManagers;
 
         internal static Texture2D CreateEmptyTexture()
         {
-            Texture2D emptyTexture = new Texture2D(1, 1, TextureFormat.RGB24, false);
+            var emptyTexture = new Texture2D(1, 1, TextureFormat.RGB24, false);
             emptyTexture.name = "White Texture";
             emptyTexture.hideFlags = DisplayObject.hideFlags;
             emptyTexture.SetPixel(0, 0, Color.white);
@@ -61,7 +61,7 @@ namespace FairyGUI
             return emptyTexture;
         }
 
-        static NTexture _empty;
+        private static NTexture _empty;
 
         public static NTexture Empty => _empty ?? (_empty = new NTexture(CreateEmptyTexture()));
 
@@ -126,7 +126,7 @@ namespace FairyGUI
                 region.width * root.uvRect.width / root.width, region.height * root.uvRect.height / root.height);
             if (rotated)
             {
-                float tmp = region.width;
+                var tmp = region.width;
                 region.width = region.height;
                 region.height = tmp;
 
@@ -154,7 +154,7 @@ namespace FairyGUI
         /// <param name="sprite"></param>
         public NTexture(Sprite sprite)
         {
-            Rect rect = sprite.textureRect;
+            var rect = sprite.textureRect;
             rect.y = sprite.texture.height - rect.yMax;
 
             _root = this;
@@ -165,26 +165,20 @@ namespace FairyGUI
                 _region.width / _nativeTexture.width, _region.height / _nativeTexture.height);
         }
 
-        public int width
-        {
-            get { return (int) _region.width; }
-        }
+        public int width => (int) _region.width;
 
-        public int height
-        {
-            get { return (int) _region.height; }
-        }
+        public int height => (int) _region.height;
 
         public Vector2 offset
         {
-            get { return _offset; }
-            set { _offset = value; }
+            get => _offset;
+            set => _offset = value;
         }
 
         public Vector2 originalSize
         {
-            get { return _originalSize; }
-            set { _originalSize = value; }
+            get => _originalSize;
+            set => _originalSize = value;
         }
 
         /// <param name="drawRect"></param>
@@ -194,8 +188,8 @@ namespace FairyGUI
             if (_originalSize.x == _region.width && _originalSize.y == _region.height)
                 return drawRect;
 
-            float sx = drawRect.width / _originalSize.x;
-            float sy = drawRect.height / _originalSize.y;
+            var sx = drawRect.width / _originalSize.x;
+            var sy = drawRect.height / _originalSize.y;
             return new Rect(_offset.x * sx, _offset.y * sy, _region.width * sx, _region.height * sy);
         }
 
@@ -208,14 +202,14 @@ namespace FairyGUI
             uv[3] = new Vector2(uvRect.xMax, uvRect.yMin);
             if (rotated)
             {
-                float xMin = uvRect.xMin;
-                float yMin = uvRect.yMin;
-                float yMax = uvRect.yMax;
+                var xMin = uvRect.xMin;
+                var yMin = uvRect.yMin;
+                var yMax = uvRect.yMax;
 
                 float tmp;
-                for (int i = 0; i < 4; i++)
+                for (var i = 0; i < 4; i++)
                 {
-                    Vector2 m = uv[i];
+                    var m = uv[i];
                     tmp = m.y;
                     m.y = yMin + m.x - xMin;
                     m.x = xMin + yMax - tmp;
@@ -224,25 +218,13 @@ namespace FairyGUI
             }
         }
 
-        public NTexture root
-        {
-            get { return _root; }
-        }
+        public NTexture root => _root;
 
-        public bool disposed
-        {
-            get { return _root == null; }
-        }
+        public bool disposed => _root == null;
 
-        public Texture nativeTexture
-        {
-            get { return _root != null ? _root._nativeTexture : null; }
-        }
+        public Texture nativeTexture => _root != null ? _root._nativeTexture : null;
 
-        public Texture alphaTexture
-        {
-            get { return _root != null ? _root._alphaTexture : null; }
-        }
+        public Texture alphaTexture => _root != null ? _root._alphaTexture : null;
 
         public MaterialManager GetMaterialManager(string shaderName)
         {
@@ -296,7 +278,7 @@ namespace FairyGUI
         public void Reload(Texture nativeTexture, Texture alphaTexture)
         {
             if (_root != this)
-                throw new System.Exception("Reload is not allow to call on none root NTexture.");
+                throw new Exception("Reload is not allow to call on none root NTexture.");
 
             if (_nativeTexture != null && _nativeTexture != nativeTexture)
                 DestroyTexture();
@@ -304,7 +286,7 @@ namespace FairyGUI
             _nativeTexture = nativeTexture;
             _alphaTexture = alphaTexture;
 
-            Vector2 lastSize = _originalSize;
+            var lastSize = _originalSize;
             if (_nativeTexture != null)
                 _originalSize = new Vector2(_nativeTexture.width, _nativeTexture.height);
             else
@@ -317,7 +299,7 @@ namespace FairyGUI
                 onSizeChanged(this);
         }
 
-        void DestroyTexture()
+        private void DestroyTexture()
         {
             switch (destroyMethod)
             {
@@ -338,7 +320,9 @@ namespace FairyGUI
                     break;
                 case DestroyMethod.Custom:
                     if (CustomDestroyMethod == null)
+                    {
                         Debug.LogWarning("NTexture.CustomDestroyMethod must be set to handle DestroyMethod.Custom");
+                    }
                     else
                     {
                         CustomDestroyMethod(_nativeTexture);
@@ -353,22 +337,22 @@ namespace FairyGUI
             _alphaTexture = null;
         }
 
-        void RefreshMaterials()
+        private void RefreshMaterials()
         {
             if (_materialManagers != null && _materialManagers.Count > 0)
             {
-                Dictionary<string, MaterialManager>.Enumerator iter = _materialManagers.GetEnumerator();
+                var iter = _materialManagers.GetEnumerator();
                 while (iter.MoveNext())
                     iter.Current.Value.RefreshMaterials();
                 iter.Dispose();
             }
         }
 
-        void DestroyMaterials()
+        private void DestroyMaterials()
         {
             if (_materialManagers != null && _materialManagers.Count > 0)
             {
-                Dictionary<string, MaterialManager>.Enumerator iter = _materialManagers.GetEnumerator();
+                var iter = _materialManagers.GetEnumerator();
                 while (iter.MoveNext())
                     iter.Current.Value.DestroyMaterials();
                 iter.Dispose();

@@ -3,16 +3,16 @@ using FairyGUI;
 
 public class HeadBarMain : MonoBehaviour
 {
-    GComponent _mainView;
+    private GComponent _mainView;
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
 
         Stage.inst.onKeyDown.Add(OnKeyDown);
-        
-        Transform npc = GameObject.Find("npc1").transform;
-        UIPanel panel = npc.Find("HeadBar").GetComponent<UIPanel>();
+
+        var npc = GameObject.Find("npc1").transform;
+        var panel = npc.Find("HeadBar").GetComponent<UIPanel>();
         panel.ui.GetChild("name").text = "Long [color=#FFFFFF]Long[/color][img]ui://HeadBar/cool[/img] Name";
         panel.ui.GetChild("blood").asProgress.value = 75;
         panel.ui.GetChild("sign").asLoader.url = "ui://HeadBar/task";
@@ -24,11 +24,8 @@ public class HeadBarMain : MonoBehaviour
         panel.ui.GetChild("sign").asLoader.url = "ui://HeadBar/fighting";
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

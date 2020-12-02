@@ -9,35 +9,26 @@ namespace FairyGUI
     /// </summary>
     public class LineMesh : IMeshFactory
     {
-
         public GPath path;
-
 
         public float lineWidth;
 
-
         public AnimationCurve lineWidthCurve;
-
 
         public Gradient gradient;
 
-
         public bool roundEdge;
-
 
         public float fillStart;
 
-
         public float fillEnd;
-
 
         public float pointDensity;
 
-
         public bool repeatFill;
 
-        static List<Vector3> points = new List<Vector3>();
-        static List<float> ts = new List<float>();
+        private static List<Vector3> points = new List<Vector3>();
+        private static List<float> ts = new List<float>();
 
         public LineMesh()
         {
@@ -50,19 +41,19 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            Vector2 uvMin = vb.uvRect.position;
-            Vector2 uvMax = new Vector2(vb.uvRect.xMax, vb.uvRect.yMax);
-            float uvRatio = path.length / vb.textureSize.x;
+            var uvMin = vb.uvRect.position;
+            var uvMax = new Vector2(vb.uvRect.xMax, vb.uvRect.yMax);
+            var uvRatio = path.length / vb.textureSize.x;
 
-            int segCount = path.segmentCount;
+            var segCount = path.segmentCount;
             float t = 0;
-            float lw = lineWidth;
+            var lw = lineWidth;
             float u;
-            for (int si = 0; si < segCount; si++)
+            for (var si = 0; si < segCount; si++)
             {
-                float ratio = path.GetSegmentLength(si) / path.length;
-                float t0 = Mathf.Clamp(fillStart - t, 0, ratio) / ratio;
-                float t1 = Mathf.Clamp(fillEnd - t, 0, ratio) / ratio;
+                var ratio = path.GetSegmentLength(si) / path.length;
+                var t0 = Mathf.Clamp(fillStart - t, 0, ratio) / ratio;
+                var t1 = Mathf.Clamp(fillEnd - t, 0, ratio) / ratio;
                 if (t0 >= t1)
                 {
                     t += ratio;
@@ -72,7 +63,7 @@ namespace FairyGUI
                 points.Clear();
                 ts.Clear();
                 path.GetPointsInSegment(si, t0, t1, points, ts, pointDensity);
-                int cnt = points.Count;
+                var cnt = points.Count;
 
                 Color c0 = vb.vertexColor;
                 Color c1 = vb.vertexColor;
@@ -84,16 +75,16 @@ namespace FairyGUI
                 if (roundEdge && si == 0 && t0 == 0)
                     DrawRoundEdge(vb, points[0], points[1], lw, c0, uvMin);
 
-                int vertCount = vb.currentVertCount;
-                for (int i = 1; i < cnt; i++)
+                var vertCount = vb.currentVertCount;
+                for (var i = 1; i < cnt; i++)
                 {
-                    Vector3 p0 = points[i - 1];
-                    Vector3 p1 = points[i];
-                    int k = vertCount + (i - 1) * 2;
-                    float tc = t + ratio * ts[i];
+                    var p0 = points[i - 1];
+                    var p1 = points[i];
+                    var k = vertCount + (i - 1) * 2;
+                    var tc = t + ratio * ts[i];
 
-                    Vector3 lineVector = p1 - p0;
-                    Vector3 widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
+                    var lineVector = p1 - p0;
+                    var widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
                     widthVector.Normalize();
 
                     if (i == 1)
@@ -111,6 +102,7 @@ namespace FairyGUI
                             vb.AddTriangle(k - 2, k + 1, k);
                         }
                     }
+
                     if (gradient != null)
                         c1 = gradient.Evaluate(tc);
 
@@ -135,25 +127,26 @@ namespace FairyGUI
             }
         }
 
-        void DrawRoundEdge(VertexBuffer vb, Vector2 p0, Vector2 p1, float lw, Color32 color, Vector2 uv)
+        private void DrawRoundEdge(VertexBuffer vb, Vector2 p0, Vector2 p1, float lw, Color32 color, Vector2 uv)
         {
             Vector2 widthVector = Vector3.Cross(p0 - p1, new Vector3(0, 0, 1));
             widthVector.Normalize();
             widthVector = widthVector * lw / 2f;
-            Vector2 lineVector = (p0 - p1).normalized * lw / 2f;
+            var lineVector = (p0 - p1).normalized * lw / 2f;
 
-            int sides = Mathf.CeilToInt(Mathf.PI * lw / 2);
+            var sides = Mathf.CeilToInt(Mathf.PI * lw / 2);
             if (sides < 6)
                 sides = 6;
-            int current = vb.currentVertCount;
-            float angleUnit = Mathf.PI / (sides - 1);
+            var current = vb.currentVertCount;
+            var angleUnit = Mathf.PI / (sides - 1);
 
             vb.AddVert(p0, color, uv);
             vb.AddVert(p0 + widthVector, color, uv);
 
-            for (int n = 0; n < sides; n++)
+            for (var n = 0; n < sides; n++)
             {
-                vb.AddVert(p0 + Mathf.Cos(angleUnit * n) * widthVector + Mathf.Sin(angleUnit * n) * lineVector, color, uv);
+                vb.AddVert(p0 + Mathf.Cos(angleUnit * n) * widthVector + Mathf.Sin(angleUnit * n) * lineVector, color,
+                    uv);
                 vb.AddTriangle(current, current + 1 + n, current + 2 + n);
             }
         }

@@ -21,15 +21,15 @@ namespace FairyGUI
         internal bool autoRadioGroupDepth;
         internal bool changing;
 
-        int _selectedIndex;
-        int _previousIndex;
-        List<string> _pageIds;
-        List<string> _pageNames;
-        List<ControllerAction> _actions;
+        private int _selectedIndex;
+        private int _previousIndex;
+        private List<string> _pageIds;
+        private List<string> _pageNames;
+        private List<ControllerAction> _actions;
 
-        EventListener _onChanged;
+        private EventListener _onChanged;
 
-        static uint _nextPageId;
+        private static uint _nextPageId;
 
         public Controller()
         {
@@ -44,15 +44,11 @@ namespace FairyGUI
             RemoveEventListeners();
         }
 
-
         /// <summary>
         /// When controller page changed.
         /// 当控制器活动页面改变时，此事件被触发。
         /// </summary>
-        public EventListener onChanged
-        {
-            get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
-        }
+        public EventListener onChanged => _onChanged ?? (_onChanged = new EventListener(this, "onChanged"));
 
         /// <summary>
         /// Current page index.
@@ -60,10 +56,7 @@ namespace FairyGUI
         /// </summary>
         public int selectedIndex
         {
-            get
-            {
-                return _selectedIndex;
-            }
+            get => _selectedIndex;
             set
             {
                 if (_selectedIndex != value)
@@ -111,10 +104,10 @@ namespace FairyGUI
         /// <param name="value">Page name</param>
         public void SetSelectedPage(string value)
         {
-            int i = _pageNames.IndexOf(value);
+            var i = _pageNames.IndexOf(value);
             if (i == -1)
                 i = 0;
-            this.SetSelectedIndex(i);
+            SetSelectedIndex(i);
         }
 
         /// <summary>
@@ -132,10 +125,10 @@ namespace FairyGUI
             }
             set
             {
-                int i = _pageNames.IndexOf(value);
+                var i = _pageNames.IndexOf(value);
                 if (i == -1)
                     i = 0;
-                this.selectedIndex = i;
+                selectedIndex = i;
             }
         }
 
@@ -143,10 +136,7 @@ namespace FairyGUI
         /// Previouse page index.
         /// 获得上次活动页面索引
         /// </summary>
-        public int previsousIndex
-        {
-            get { return _previousIndex; }
-        }
+        public int previsousIndex => _previousIndex;
 
         /// <summary>
         /// Previous page name.
@@ -167,10 +157,7 @@ namespace FairyGUI
         /// Page count of this controller.
         /// 获得页面数量。
         /// </summary>
-        public int pageCount
-        {
-            get { return _pageIds.Count; }
-        }
+        public int pageCount => _pageIds.Count;
 
         /// <summary>
         /// Get page name by an index.
@@ -201,7 +188,7 @@ namespace FairyGUI
         /// <returns></returns>
         public string GetPageIdByName(string aName)
         {
-            int i = _pageNames.IndexOf(aName);
+            var i = _pageNames.IndexOf(aName);
             if (i != -1)
                 return _pageIds[i];
             else
@@ -227,7 +214,7 @@ namespace FairyGUI
         /// <param name="index">Insert position</param>
         public void AddPageAt(string name, int index)
         {
-            string nid = "_" + (_nextPageId++);
+            var nid = "_" + _nextPageId++;
             if (index == _pageIds.Count)
             {
                 _pageIds.Add(nid);
@@ -246,13 +233,13 @@ namespace FairyGUI
         /// <param name="name">Page name</param>
         public void RemovePage(string name)
         {
-            int i = _pageNames.IndexOf(name);
+            var i = _pageNames.IndexOf(name);
             if (i != -1)
             {
                 _pageIds.RemoveAt(i);
                 _pageNames.RemoveAt(i);
                 if (_selectedIndex >= _pageIds.Count)
-                    this.selectedIndex = _selectedIndex - 1;
+                    selectedIndex = _selectedIndex - 1;
                 else
                     parent.ApplyController(this);
             }
@@ -267,7 +254,7 @@ namespace FairyGUI
             _pageIds.RemoveAt(index);
             _pageNames.RemoveAt(index);
             if (_selectedIndex >= _pageIds.Count)
-                this.selectedIndex = _selectedIndex - 1;
+                selectedIndex = _selectedIndex - 1;
             else
                 parent.ApplyController(this);
         }
@@ -280,7 +267,7 @@ namespace FairyGUI
             _pageIds.Clear();
             _pageNames.Clear();
             if (_selectedIndex != -1)
-                this.selectedIndex = -1;
+                selectedIndex = -1;
             else
                 parent.ApplyController(this);
         }
@@ -302,7 +289,7 @@ namespace FairyGUI
 
         internal string GetPageNameById(string aId)
         {
-            int i = _pageIds.IndexOf(aId);
+            var i = _pageIds.IndexOf(aId);
             if (i != -1)
                 return _pageNames[i];
             else
@@ -320,9 +307,9 @@ namespace FairyGUI
             }
             set
             {
-                int i = _pageIds.IndexOf(value);
+                var i = _pageIds.IndexOf(value);
                 if (i != -1)
-                    this.selectedIndex = i;
+                    selectedIndex = i;
             }
         }
 
@@ -330,11 +317,11 @@ namespace FairyGUI
         {
             set
             {
-                int i = _pageIds.IndexOf(value);
+                var i = _pageIds.IndexOf(value);
                 if (i > 0)
-                    this.selectedIndex = 0;
+                    selectedIndex = 0;
                 else if (_pageIds.Count > 1)
-                    this.selectedIndex = 1;
+                    selectedIndex = 1;
             }
         }
 
@@ -353,17 +340,14 @@ namespace FairyGUI
         {
             if (_actions != null)
             {
-                int cnt = _actions.Count;
-                for (int i = 0; i < cnt; i++)
-                {
-                    _actions[i].Run(this, previousPageId, selectedPageId);
-                }
+                var cnt = _actions.Count;
+                for (var i = 0; i < cnt; i++) _actions[i].Run(this, previousPageId, selectedPageId);
             }
         }
 
         public void Setup(ByteBuffer buffer)
         {
-            int beginPos = buffer.position;
+            var beginPos = buffer.position;
             buffer.Seek(beginPos, 0);
 
             name = buffer.ReadS();
@@ -374,13 +358,13 @@ namespace FairyGUI
             int cnt = buffer.ReadShort();
             _pageIds.Capacity = cnt;
             _pageNames.Capacity = cnt;
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 _pageIds.Add(buffer.ReadS());
                 _pageNames.Add(buffer.ReadS());
             }
 
-            int homePageIndex = 0;
+            var homePageIndex = 0;
             if (buffer.version >= 2)
             {
                 int homePageType = buffer.ReadByte();
@@ -412,12 +396,12 @@ namespace FairyGUI
                 if (_actions == null)
                     _actions = new List<ControllerAction>(cnt);
 
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
                     int nextPos = buffer.ReadShort();
                     nextPos += buffer.position;
 
-                    ControllerAction action = ControllerAction.CreateAction((ControllerAction.ActionType)buffer.ReadByte());
+                    var action = ControllerAction.CreateAction((ControllerAction.ActionType) buffer.ReadByte());
                     action.Setup(buffer);
                     _actions.Add(action);
 

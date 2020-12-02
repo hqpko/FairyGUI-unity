@@ -12,7 +12,7 @@ namespace FairyGUI
         {
         }
 
-        override protected void Enter(Controller controller)
+        protected override void Enter(Controller controller)
         {
             if (string.IsNullOrEmpty(controllerName))
                 return;
@@ -24,23 +24,27 @@ namespace FairyGUI
                 gcom = controller.parent;
             if (gcom != null)
             {
-                Controller cc = gcom.GetController(controllerName);
+                var cc = gcom.GetController(controllerName);
                 if (cc != null && cc != controller && !cc.changing)
                 {
-                    if (this.targetPage == "~1")
+                    if (targetPage == "~1")
                     {
                         if (controller.selectedIndex < cc.pageCount)
                             cc.selectedIndex = controller.selectedIndex;
                     }
-                    else if (this.targetPage == "~2")
+                    else if (targetPage == "~2")
+                    {
                         cc.selectedPage = controller.selectedPage;
+                    }
                     else
-                        cc.selectedPageId = this.targetPage;
+                    {
+                        cc.selectedPageId = targetPage;
+                    }
                 }
             }
         }
 
-        override public void Setup(ByteBuffer buffer)
+        public override void Setup(ByteBuffer buffer)
         {
             base.Setup(buffer);
 

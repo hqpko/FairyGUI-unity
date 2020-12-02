@@ -16,6 +16,7 @@ namespace FairyGUI
         private GObject _source;
 
         private static DragDropManager _inst;
+
         public static DragDropManager inst
         {
             get
@@ -28,10 +29,10 @@ namespace FairyGUI
 
         public DragDropManager()
         {
-            _agent = (GLoader)UIObjectFactory.NewObject(ObjectType.Loader);
+            _agent = (GLoader) UIObjectFactory.NewObject(ObjectType.Loader);
             _agent.gameObjectName = "DragDropAgent";
             _agent.SetHome(GRoot.inst);
-            _agent.touchable = false;//important
+            _agent.touchable = false; //important
             _agent.draggable = true;
             _agent.SetSize(100, 100);
             _agent.SetPivot(0.5f, 0.5f, true);
@@ -45,19 +46,13 @@ namespace FairyGUI
         /// Loader object for real dragging.
         /// 用于实际拖动的Loader对象。你可以根据实际情况设置loader的大小，对齐等。
         /// </summary>
-        public GLoader dragAgent
-        {
-            get { return _agent; }
-        }
+        public GLoader dragAgent => _agent;
 
         /// <summary>
         /// Is dragging?
         /// 返回当前是否正在拖动。
         /// </summary>
-        public bool dragging
-        {
-            get { return _agent.parent != null; }
-        }
+        public bool dragging => _agent.parent != null;
 
         /// <summary>
         /// Start dragging.
@@ -101,12 +96,12 @@ namespace FairyGUI
 
             GRoot.inst.RemoveChild(_agent);
 
-            object sourceData = _sourceData;
-            GObject source = _source;
+            var sourceData = _sourceData;
+            var source = _source;
             _sourceData = null;
             _source = null;
 
-            GObject obj = GRoot.inst.touchTarget;
+            var obj = GRoot.inst.touchTarget;
             while (obj != null)
             {
                 if (obj.HasEventListeners("onDrop"))
@@ -115,6 +110,7 @@ namespace FairyGUI
                     obj.DispatchEvent("onDrop", sourceData, source);
                     return;
                 }
+
                 obj = obj.parent;
             }
         }

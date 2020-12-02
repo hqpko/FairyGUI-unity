@@ -8,13 +8,13 @@ public class Window4 : Window
 
     protected override void OnInit()
     {
-        this.contentPane = UIPackage.CreateObject("ModalWaiting", "TestWin").asCom;
-        this.contentPane.GetChild("n1").onClick.Add(OnClick);
+        contentPane = UIPackage.CreateObject("ModalWaiting", "TestWin").asCom;
+        contentPane.GetChild("n1").onClick.Add(OnClick);
     }
 
-    void OnClick()
+    private void OnClick()
     {
-        this.ShowModalWait();
-        Timers.inst.Add(3, 1, (object param) => { this.CloseModalWait(); });
+        ShowModalWait();
+        Timers.inst.Add(3, 1, (object param) => { CloseModalWait(); });
     }
 }

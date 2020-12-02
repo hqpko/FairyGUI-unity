@@ -3,16 +3,16 @@ using FairyGUI;
 
 public class JoystickMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GTextField _text;
-    JoystickModule _joystick;
+    private GComponent _mainView;
+    private GTextField _text;
+    private JoystickModule _joystick;
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
 
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _text = _mainView.GetChild("n9").asTextField;
 
@@ -21,22 +21,19 @@ public class JoystickMain : MonoBehaviour
         _joystick.onEnd.Add(__joystickEnd);
     }
 
-    void __joystickMove(EventContext context)
+    private void __joystickMove(EventContext context)
     {
-        float degree = (float)context.data;
+        var degree = (float) context.data;
         _text.text = "" + degree;
     }
 
-    void __joystickEnd()
+    private void __joystickEnd()
     {
         _text.text = "";
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

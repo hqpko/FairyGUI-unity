@@ -9,22 +9,22 @@ namespace FairyGUI
     /// </summary>
     public class GProgressBar : GComponent
     {
-        double _min;
-        double _max;
-        double _value;
-        ProgressTitleType _titleType;
-        bool _reverse;
+        private double _min;
+        private double _max;
+        private double _value;
+        private ProgressTitleType _titleType;
+        private bool _reverse;
 
-        GObject _titleObject;
-        GMovieClip _aniObject;
-        GObject _barObjectH;
-        GObject _barObjectV;
-        float _barMaxWidth;
-        float _barMaxHeight;
-        float _barMaxWidthDelta;
-        float _barMaxHeightDelta;
-        float _barStartX;
-        float _barStartY;
+        private GObject _titleObject;
+        private GMovieClip _aniObject;
+        private GObject _barObjectH;
+        private GObject _barObjectV;
+        private float _barMaxWidth;
+        private float _barMaxHeight;
+        private float _barMaxWidthDelta;
+        private float _barMaxHeightDelta;
+        private float _barStartX;
+        private float _barStartY;
 
         public GProgressBar()
         {
@@ -32,14 +32,9 @@ namespace FairyGUI
             _max = 100;
         }
 
-
         public ProgressTitleType titleType
         {
-
-            get
-            {
-                return _titleType;
-            }
+            get => _titleType;
             set
             {
                 if (_titleType != value)
@@ -50,13 +45,9 @@ namespace FairyGUI
             }
         }
 
-
         public double min
         {
-            get
-            {
-                return _min;
-            }
+            get => _min;
             set
             {
                 if (_min != value)
@@ -67,13 +58,9 @@ namespace FairyGUI
             }
         }
 
-
         public double max
         {
-            get
-            {
-                return _max;
-            }
+            get => _max;
             set
             {
                 if (_max != value)
@@ -84,13 +71,9 @@ namespace FairyGUI
             }
         }
 
-
         public double value
         {
-            get
-            {
-                return _value;
-            }
+            get => _value;
             set
             {
                 if (_value != value)
@@ -105,8 +88,8 @@ namespace FairyGUI
 
         public bool reverse
         {
-            get { return _reverse; }
-            set { _reverse = value; }
+            get => _reverse;
+            set => _reverse = value;
         }
 
         /// <summary>
@@ -118,14 +101,16 @@ namespace FairyGUI
         {
             double oldValule;
 
-            GTweener twener = GTween.GetTween(this, TweenPropType.Progress);
+            var twener = GTween.GetTween(this, TweenPropType.Progress);
             if (twener != null)
             {
                 oldValule = twener.value.d;
                 twener.Kill(false);
             }
             else
+            {
                 oldValule = _value;
+            }
 
             _value = value;
             return GTween.ToDouble(oldValule, _value, duration)
@@ -133,13 +118,11 @@ namespace FairyGUI
                 .SetTarget(this, TweenPropType.Progress);
         }
 
-
         /// <param name="newValue"></param>
         public void Update(double newValue)
         {
-            float percent = Mathf.Clamp01((float)((newValue - _min) / (_max - _min)));
+            var percent = Mathf.Clamp01((float) ((newValue - _min) / (_max - _min)));
             if (_titleObject != null)
-            {
                 switch (_titleType)
                 {
                     case ProgressTitleType.Percent:
@@ -164,65 +147,58 @@ namespace FairyGUI
                         _titleObject.text = "" + Math.Round(_max);
                         break;
                 }
-            }
 
-            float fullWidth = this.width - _barMaxWidthDelta;
-            float fullHeight = this.height - _barMaxHeightDelta;
+            var fullWidth = width - _barMaxWidthDelta;
+            var fullHeight = height - _barMaxHeightDelta;
             if (!_reverse)
             {
                 if (_barObjectH != null)
-                {
                     if (!SetFillAmount(_barObjectH, percent))
                         _barObjectH.width = Mathf.RoundToInt(fullWidth * percent);
-                }
                 if (_barObjectV != null)
-                {
                     if (!SetFillAmount(_barObjectV, percent))
                         _barObjectV.height = Mathf.RoundToInt(fullHeight * percent);
-                }
             }
             else
             {
                 if (_barObjectH != null)
-                {
                     if (!SetFillAmount(_barObjectH, 1 - percent))
                     {
                         _barObjectH.width = Mathf.RoundToInt(fullWidth * percent);
                         _barObjectH.x = _barStartX + (fullWidth - _barObjectH.width);
                     }
-                }
+
                 if (_barObjectV != null)
-                {
                     if (!SetFillAmount(_barObjectV, 1 - percent))
                     {
                         _barObjectV.height = Mathf.RoundToInt(fullHeight * percent);
                         _barObjectV.y = _barStartY + (fullHeight - _barObjectV.height);
                     }
-                }
             }
+
             if (_aniObject != null)
                 _aniObject.frame = Mathf.RoundToInt(percent * 100);
 
             InvalidateBatchingState(true);
         }
 
-        bool SetFillAmount(GObject bar, float amount)
+        private bool SetFillAmount(GObject bar, float amount)
         {
-            if ((bar is GImage) && ((GImage)bar).fillMethod != FillMethod.None)
-                ((GImage)bar).fillAmount = amount;
-            else if ((bar is GLoader) && ((GLoader)bar).fillMethod != FillMethod.None)
-                ((GLoader)bar).fillAmount = amount;
+            if (bar is GImage && ((GImage) bar).fillMethod != FillMethod.None)
+                ((GImage) bar).fillAmount = amount;
+            else if (bar is GLoader && ((GLoader) bar).fillMethod != FillMethod.None)
+                ((GLoader) bar).fillAmount = amount;
             else
                 return false;
 
             return true;
         }
 
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             buffer.Seek(0, 6);
 
-            _titleType = (ProgressTitleType)buffer.ReadByte();
+            _titleType = (ProgressTitleType) buffer.ReadByte();
             _reverse = buffer.ReadBool();
 
             _titleObject = GetChild("title");
@@ -233,18 +209,19 @@ namespace FairyGUI
             if (_barObjectH != null)
             {
                 _barMaxWidth = _barObjectH.width;
-                _barMaxWidthDelta = this.width - _barMaxWidth;
+                _barMaxWidthDelta = width - _barMaxWidth;
                 _barStartX = _barObjectH.x;
             }
+
             if (_barObjectV != null)
             {
                 _barMaxHeight = _barObjectV.height;
-                _barMaxHeightDelta = this.height - _barMaxHeight;
+                _barMaxHeightDelta = height - _barMaxHeight;
                 _barStartY = _barObjectV.y;
             }
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
@@ -254,7 +231,7 @@ namespace FairyGUI
                 return;
             }
 
-            if ((ObjectType)buffer.ReadByte() != packageItem.objectType)
+            if ((ObjectType) buffer.ReadByte() != packageItem.objectType)
             {
                 Update(_value);
                 return;
@@ -267,34 +244,36 @@ namespace FairyGUI
 
             if (buffer.version >= 5)
             {
-                string sound = buffer.ReadS();
+                var sound = buffer.ReadS();
                 if (!string.IsNullOrEmpty(sound))
                 {
-                    float volumeScale = buffer.ReadFloat();
+                    var volumeScale = buffer.ReadFloat();
                     displayObject.onClick.Add(() =>
                     {
-                        NAudioClip audioClip = UIPackage.GetItemAssetByURL(sound) as NAudioClip;
+                        var audioClip = UIPackage.GetItemAssetByURL(sound) as NAudioClip;
                         if (audioClip != null && audioClip.nativeClip != null)
                             Stage.inst.PlayOneShotSound(audioClip.nativeClip, volumeScale);
                     });
                 }
                 else
+                {
                     buffer.Skip(4);
+                }
             }
 
             Update(_value);
         }
 
-        override protected void HandleSizeChanged()
+        protected override void HandleSizeChanged()
         {
             base.HandleSizeChanged();
 
             if (_barObjectH != null)
-                _barMaxWidth = this.width - _barMaxWidthDelta;
+                _barMaxWidth = width - _barMaxWidthDelta;
             if (_barObjectV != null)
-                _barMaxHeight = this.height - _barMaxHeightDelta;
+                _barMaxHeight = height - _barMaxHeightDelta;
 
-            if (!this.underConstruct)
+            if (!underConstruct)
                 Update(_value);
         }
     }

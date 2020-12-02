@@ -1,5 +1,4 @@
 #if FAIRYGUI_SPINE
-
 using UnityEngine;
 using Spine.Unity;
 
@@ -85,7 +84,8 @@ namespace FairyGUI
             var skeletonData = _spineAnimation.skeleton.Data;
 
             var state = _spineAnimation.AnimationState;
-            Spine.Animation animationToUse = !string.IsNullOrEmpty(_animationName) ? skeletonData.FindAnimation(_animationName) : null;
+            Spine.Animation animationToUse =
+ !string.IsNullOrEmpty(_animationName) ? skeletonData.FindAnimation(_animationName) : null;
             if (animationToUse != null)
             {
                 var trackEntry = state.GetCurrent(0);
@@ -99,7 +99,8 @@ namespace FairyGUI
                 else
                 {
                     trackEntry.TimeScale = 0;
-                    trackEntry.TrackTime = Mathf.Lerp(0, trackEntry.AnimationEnd - trackEntry.AnimationStart, _frame / 100f);
+                    trackEntry.TrackTime =
+ Mathf.Lerp(0, trackEntry.AnimationEnd - trackEntry.AnimationStart, _frame / 100f);
                 }
             }
             else

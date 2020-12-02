@@ -5,25 +5,26 @@ using FairyGUI;
 
 public class EmojiMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GList _list;
-    GTextInput _input1;
-    GTextInput _input2;
-    GComponent _emojiSelectUI1;
-    GComponent _emojiSelectUI2;
+    private GComponent _mainView;
+    private GList _list;
+    private GTextInput _input1;
+    private GTextInput _input2;
+    private GComponent _emojiSelectUI1;
+    private GComponent _emojiSelectUI2;
 
-    class Message
+    private class Message
     {
         public string sender;
         public string senderIcon;
         public string msg;
         public bool fromMe;
     }
-    List<Message> _messages;
 
-    Dictionary<uint, Emoji> _emojies;
+    private List<Message> _messages;
 
-    void Awake()
+    private Dictionary<uint, Emoji> _emojies;
+
+    private void Awake()
     {
         UIPackage.AddPackage("UI/Emoji");
 
@@ -31,14 +32,14 @@ public class EmojiMain : MonoBehaviour
         UIConfig.defaultScrollBarDisplay = ScrollBarDisplayType.Auto;
     }
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
 
         _messages = new List<Message>();
 
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _list = _mainView.GetChild("list").asList;
         _list.SetVirtual();
@@ -55,10 +56,11 @@ public class EmojiMain : MonoBehaviour
         _emojies = new Dictionary<uint, Emoji>();
         for (uint i = 0x1f600; i < 0x1f637; i++)
         {
-            string url = UIPackage.GetItemURL("Emoji", Convert.ToString(i, 16));
+            var url = UIPackage.GetItemURL("Emoji", Convert.ToString(i, 16));
             if (url != null)
                 _emojies.Add(i, new Emoji(url));
         }
+
         _input2.emojies = _emojies;
 
         _mainView.GetChild("btnSend1").onClick.Add(__clickSendBtn1);
@@ -76,11 +78,11 @@ public class EmojiMain : MonoBehaviour
         _emojiSelectUI2.GetChild("list").asList.onClickItem.Add(__clickEmoji2);
     }
 
-    void AddMsg(string sender, string senderIcon, string msg, bool fromMe)
+    private void AddMsg(string sender, string senderIcon, string msg, bool fromMe)
     {
-        bool isScrollBottom = _list.scrollPane.isBottomMost;
+        var isScrollBottom = _list.scrollPane.isBottomMost;
 
-        Message newMessage = new Message();
+        var newMessage = new Message();
         newMessage.sender = sender;
         newMessage.senderIcon = senderIcon;
         newMessage.msg = msg;
@@ -88,17 +90,15 @@ public class EmojiMain : MonoBehaviour
         _messages.Add(newMessage);
 
         if (newMessage.fromMe)
-        {
             if (_messages.Count == 1 || UnityEngine.Random.Range(0f, 1f) < 0.5f)
             {
-                Message replyMessage = new Message();
+                var replyMessage = new Message();
                 replyMessage.sender = "FairyGUI";
                 replyMessage.senderIcon = "r1";
                 replyMessage.msg = "Today is a good day. \U0001f600";
                 replyMessage.fromMe = false;
                 _messages.Add(replyMessage);
             }
-        }
 
         if (_messages.Count > 100)
             _messages.RemoveRange(0, _messages.Count - 100);
@@ -109,32 +109,32 @@ public class EmojiMain : MonoBehaviour
             _list.scrollPane.ScrollBottom();
     }
 
-    string GetListItemResource(int index)
+    private string GetListItemResource(int index)
     {
-        Message msg = _messages[index];
+        var msg = _messages[index];
         if (msg.fromMe)
             return "ui://Emoji/chatRight";
         else
             return "ui://Emoji/chatLeft";
     }
 
-    void RenderListItem(int index, GObject obj)
+    private void RenderListItem(int index, GObject obj)
     {
-        GButton item = (GButton)obj;
-        Message msg = _messages[index];
+        var item = (GButton) obj;
+        var msg = _messages[index];
         if (!msg.fromMe)
             item.GetChild("name").text = msg.sender;
         item.icon = UIPackage.GetItemURL("Emoji", msg.senderIcon);
 
         //Recaculate the text width
-        GRichTextField tf = item.GetChild("msg").asRichTextField;
+        var tf = item.GetChild("msg").asRichTextField;
         tf.emojies = _emojies;
         tf.text = EmojiParser.inst.Parse(msg.msg);
     }
 
-    void __clickSendBtn1(EventContext context)
+    private void __clickSendBtn1(EventContext context)
     {
-        string msg = _input1.text;
+        var msg = _input1.text;
         if (msg.Length == 0)
             return;
 
@@ -142,9 +142,9 @@ public class EmojiMain : MonoBehaviour
         _input1.text = "";
     }
 
-    void __clickSendBtn2(EventContext context)
+    private void __clickSendBtn2(EventContext context)
     {
-        string msg = _input2.text;
+        var msg = _input2.text;
         if (msg.Length == 0)
             return;
 
@@ -152,45 +152,42 @@ public class EmojiMain : MonoBehaviour
         _input2.text = "";
     }
 
-    void __clickEmojiBtn1(EventContext context)
+    private void __clickEmojiBtn1(EventContext context)
     {
-        GRoot.inst.ShowPopup(_emojiSelectUI1, (GObject)context.sender, PopupDirection.Up);
+        GRoot.inst.ShowPopup(_emojiSelectUI1, (GObject) context.sender, PopupDirection.Up);
     }
 
-    void __clickEmojiBtn2(EventContext context)
+    private void __clickEmojiBtn2(EventContext context)
     {
-        GRoot.inst.ShowPopup(_emojiSelectUI2, (GObject)context.sender, PopupDirection.Up);
+        GRoot.inst.ShowPopup(_emojiSelectUI2, (GObject) context.sender, PopupDirection.Up);
     }
 
-    void __clickEmoji1(EventContext context)
+    private void __clickEmoji1(EventContext context)
     {
-        GButton item = (GButton)context.data;
+        var item = (GButton) context.data;
         _input1.ReplaceSelection("[:" + item.text + "]");
     }
 
-    void __clickEmoji2(EventContext context)
+    private void __clickEmoji2(EventContext context)
     {
-        GButton item = (GButton)context.data;
-        _input2.ReplaceSelection(Char.ConvertFromUtf32(Convert.ToInt32(UIPackage.GetItemByURL(item.icon).name, 16)));
+        var item = (GButton) context.data;
+        _input2.ReplaceSelection(char.ConvertFromUtf32(Convert.ToInt32(UIPackage.GetItemByURL(item.icon).name, 16)));
     }
 
-    void __inputKeyDown1(EventContext context)
+    private void __inputKeyDown1(EventContext context)
     {
         if (context.inputEvent.keyCode == KeyCode.Return)
             _mainView.GetChild("btnSend1").onClick.Call();
     }
 
-    void __inputKeyDown2(EventContext context)
+    private void __inputKeyDown2(EventContext context)
     {
         if (context.inputEvent.keyCode == KeyCode.Return)
             _mainView.GetChild("btnSend2").onClick.Call();
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

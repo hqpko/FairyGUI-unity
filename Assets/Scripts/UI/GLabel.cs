@@ -18,7 +18,7 @@ namespace FairyGUI
         /// <summary>
         /// Icon of the label.
         /// </summary>
-        override public string icon
+        public override string icon
         {
             get
             {
@@ -59,10 +59,10 @@ namespace FairyGUI
         /// <summary>
         /// Same of the title.
         /// </summary>
-        override public string text
+        public override string text
         {
-            get { return this.title; }
-            set { this.title = value; }
+            get => title;
+            set => title = value;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace FairyGUI
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.color;
                 else
@@ -100,7 +100,7 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                 {
                     tf.color = value;
@@ -109,12 +109,11 @@ namespace FairyGUI
             }
         }
 
-
         public int titleFontSize
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.textFormat.size;
                 else
@@ -122,69 +121,67 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                 {
-                    TextFormat format = tf.textFormat;
+                    var format = tf.textFormat;
                     format.size = value;
                     tf.textFormat = format;
                 }
             }
         }
 
-
         public Color color
         {
-            get { return this.titleColor; }
-            set { this.titleColor = value; }
+            get => titleColor;
+            set => titleColor = value;
         }
-
 
         /// <returns></returns>
         public GTextField GetTextField()
         {
             if (_titleObject is GTextField)
-                return (GTextField)_titleObject;
+                return (GTextField) _titleObject;
             else if (_titleObject is GLabel)
-                return ((GLabel)_titleObject).GetTextField();
+                return ((GLabel) _titleObject).GetTextField();
             else if (_titleObject is GButton)
-                return ((GButton)_titleObject).GetTextField();
+                return ((GButton) _titleObject).GetTextField();
             else
                 return null;
         }
 
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             _titleObject = GetChild("title");
             _iconObject = GetChild("icon");
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
             if (!buffer.Seek(beginPos, 6))
                 return;
 
-            if ((ObjectType)buffer.ReadByte() != packageItem.objectType)
+            if ((ObjectType) buffer.ReadByte() != packageItem.objectType)
                 return;
 
             string str;
             str = buffer.ReadS();
             if (str != null)
-                this.title = str;
+                title = str;
             str = buffer.ReadS();
             if (str != null)
-                this.icon = str;
+                icon = str;
             if (buffer.ReadBool())
-                this.titleColor = buffer.ReadColor();
-            int iv = buffer.ReadInt();
+                titleColor = buffer.ReadColor();
+            var iv = buffer.ReadInt();
             if (iv != 0)
-                this.titleFontSize = iv;
+                titleFontSize = iv;
 
             if (buffer.ReadBool())
             {
-                GTextInput input = GetTextField() as GTextInput;
+                var input = GetTextField() as GTextInput;
                 if (input != null)
                 {
                     str = buffer.ReadS();
@@ -205,24 +202,28 @@ namespace FairyGUI
                         input.displayAsPassword = true;
                 }
                 else
+                {
                     buffer.Skip(13);
+                }
             }
 
             if (buffer.version >= 5)
             {
-                string sound = buffer.ReadS();
+                var sound = buffer.ReadS();
                 if (!string.IsNullOrEmpty(sound))
                 {
-                    float volumeScale = buffer.ReadFloat();
+                    var volumeScale = buffer.ReadFloat();
                     displayObject.onClick.Add(() =>
                     {
-                        NAudioClip audioClip = UIPackage.GetItemAssetByURL(sound) as NAudioClip;
+                        var audioClip = UIPackage.GetItemAssetByURL(sound) as NAudioClip;
                         if (audioClip != null && audioClip.nativeClip != null)
                             Stage.inst.PlayOneShotSound(audioClip.nativeClip, volumeScale);
                     });
                 }
                 else
+                {
                     buffer.Skip(4);
+                }
             }
         }
     }

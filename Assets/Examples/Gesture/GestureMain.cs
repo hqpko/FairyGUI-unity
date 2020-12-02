@@ -3,10 +3,10 @@ using FairyGUI;
 
 public class GestureMain : MonoBehaviour
 {
-    GComponent _mainView;
-    Transform _ball;
+    private GComponent _mainView;
+    private Transform _ball;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -14,32 +14,32 @@ public class GestureMain : MonoBehaviour
         UIPackage.AddPackage("UI/Gesture");
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
-        GObject holder = _mainView.GetChild("holder");
+        _mainView = GetComponent<UIPanel>().ui;
+        var holder = _mainView.GetChild("holder");
 
         _ball = GameObject.Find("Globe").transform;
 
-        SwipeGesture gesture1 = new SwipeGesture(holder);
+        var gesture1 = new SwipeGesture(holder);
         gesture1.onMove.Add(OnSwipeMove);
         gesture1.onEnd.Add(OnSwipeEnd);
 
-        LongPressGesture gesture2 = new LongPressGesture(holder);
+        var gesture2 = new LongPressGesture(holder);
         gesture2.once = false;
         gesture2.onAction.Add(OnHold);
 
-        PinchGesture gesture3 = new PinchGesture(holder);
+        var gesture3 = new PinchGesture(holder);
         gesture3.onAction.Add(OnPinch);
 
-        RotationGesture gesture4 = new RotationGesture(holder);
+        var gesture4 = new RotationGesture(holder);
         gesture4.onAction.Add(OnRotate);
     }
 
-    void OnSwipeMove(EventContext context)
+    private void OnSwipeMove(EventContext context)
     {
-        SwipeGesture gesture = (SwipeGesture)context.sender;
-        Vector3 v = new Vector3();
+        var gesture = (SwipeGesture) context.sender;
+        var v = new Vector3();
         if (Mathf.Abs(gesture.delta.x) > Mathf.Abs(gesture.delta.y))
         {
             v.y = -Mathf.Round(gesture.delta.x);
@@ -52,13 +52,14 @@ public class GestureMain : MonoBehaviour
             if (Mathf.Abs(v.x) < 2)
                 return;
         }
+
         _ball.Rotate(v, Space.World);
     }
 
-    void OnSwipeEnd(EventContext context)
+    private void OnSwipeEnd(EventContext context)
     {
-        SwipeGesture gesture = (SwipeGesture)context.sender;
-        Vector3 v = new Vector3();
+        var gesture = (SwipeGesture) context.sender;
+        var v = new Vector3();
         if (Mathf.Abs(gesture.velocity.x) > Mathf.Abs(gesture.velocity.y))
         {
             v.y = -Mathf.Round(Mathf.Sign(gesture.velocity.x) * Mathf.Sqrt(Mathf.Abs(gesture.velocity.x)));
@@ -73,43 +74,38 @@ public class GestureMain : MonoBehaviour
         }
 
         GTween.To(v, Vector3.zero, 0.3f).SetTarget(_ball).OnUpdate(
-            (GTweener tweener) =>
-            {
-                _ball.Rotate(tweener.deltaValue.vec3, Space.World);
-            });
+            (GTweener tweener) => { _ball.Rotate(tweener.deltaValue.vec3, Space.World); });
     }
 
-    void OnHold(EventContext context)
+    private void OnHold(EventContext context)
     {
         GTween.Shake(_ball.transform.localPosition, 0.05f, 0.5f).SetTarget(_ball).OnUpdate(
             (GTweener tweener) =>
             {
-                _ball.transform.localPosition = new Vector3(tweener.value.x, tweener.value.y, _ball.transform.localPosition.z);
+                _ball.transform.localPosition =
+                    new Vector3(tweener.value.x, tweener.value.y, _ball.transform.localPosition.z);
             });
     }
 
-    void OnPinch(EventContext context)
+    private void OnPinch(EventContext context)
     {
         GTween.Kill(_ball);
 
-        PinchGesture gesture = (PinchGesture)context.sender;
-        float newValue = Mathf.Clamp(_ball.localScale.x + gesture.delta, 0.3f, 2);
+        var gesture = (PinchGesture) context.sender;
+        var newValue = Mathf.Clamp(_ball.localScale.x + gesture.delta, 0.3f, 2);
         _ball.localScale = new Vector3(newValue, newValue, newValue);
     }
 
-    void OnRotate(EventContext context)
+    private void OnRotate(EventContext context)
     {
         GTween.Kill(_ball);
 
-        RotationGesture gesture = (RotationGesture)context.sender;
+        var gesture = (RotationGesture) context.sender;
         _ball.Rotate(Vector3.forward, -gesture.delta, Space.World);
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

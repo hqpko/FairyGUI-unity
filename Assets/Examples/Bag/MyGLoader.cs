@@ -9,7 +9,7 @@ public class MyGLoader : GLoader
 {
     protected override void LoadExternal()
     {
-        IconManager.inst.LoadIcon(this.url, OnLoadSuccess, OnLoadFail);
+        IconManager.inst.LoadIcon(url, OnLoadSuccess, OnLoadFail);
     }
 
     protected override void FreeExternal(NTexture texture)
@@ -17,17 +17,17 @@ public class MyGLoader : GLoader
         texture.refCount--;
     }
 
-    void OnLoadSuccess(NTexture texture)
+    private void OnLoadSuccess(NTexture texture)
     {
-        if (string.IsNullOrEmpty(this.url))
+        if (string.IsNullOrEmpty(url))
             return;
 
-        this.onExternalLoadSuccess(texture);
+        onExternalLoadSuccess(texture);
     }
 
-    void OnLoadFail(string error)
+    private void OnLoadFail(string error)
     {
-        Debug.Log("load " + this.url + " failed: " + error);
-        this.onExternalLoadFailed();
+        Debug.Log("load " + url + " failed: " + error);
+        onExternalLoadFailed();
     }
 }

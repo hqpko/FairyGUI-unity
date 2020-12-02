@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class GTextInput : GTextField
     {
-
         public InputTextField inputTextField { get; private set; }
 
-        EventListener _onChanged;
-        EventListener _onSubmit;
+        private EventListener _onChanged;
+        private EventListener _onSubmit;
 
         public GTextInput()
         {
@@ -19,65 +17,50 @@ namespace FairyGUI
             _textField.wordWrap = false;
         }
 
+        public EventListener onChanged => _onChanged ?? (_onChanged = new EventListener(this, "onChanged"));
 
-        public EventListener onChanged
-        {
-            get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
-        }
-
-
-        public EventListener onSubmit
-        {
-            get { return _onSubmit ?? (_onSubmit = new EventListener(this, "onSubmit")); }
-        }
-
+        public EventListener onSubmit => _onSubmit ?? (_onSubmit = new EventListener(this, "onSubmit"));
 
         public bool editable
         {
-            get { return inputTextField.editable; }
-            set { inputTextField.editable = value; }
+            get => inputTextField.editable;
+            set => inputTextField.editable = value;
         }
-
 
         public bool hideInput
         {
-            get { return inputTextField.hideInput; }
-            set { inputTextField.hideInput = value; }
+            get => inputTextField.hideInput;
+            set => inputTextField.hideInput = value;
         }
-
 
         public int maxLength
         {
-            get { return inputTextField.maxLength; }
-            set { inputTextField.maxLength = value; }
+            get => inputTextField.maxLength;
+            set => inputTextField.maxLength = value;
         }
-
 
         public string restrict
         {
-            get { return inputTextField.restrict; }
-            set { inputTextField.restrict = value; }
+            get => inputTextField.restrict;
+            set => inputTextField.restrict = value;
         }
-
 
         public bool displayAsPassword
         {
-            get { return inputTextField.displayAsPassword; }
-            set { inputTextField.displayAsPassword = value; }
+            get => inputTextField.displayAsPassword;
+            set => inputTextField.displayAsPassword = value;
         }
-
 
         public int caretPosition
         {
-            get { return inputTextField.caretPosition; }
-            set { inputTextField.caretPosition = value; }
+            get => inputTextField.caretPosition;
+            set => inputTextField.caretPosition = value;
         }
-
 
         public string promptText
         {
-            get { return inputTextField.promptText; }
-            set { inputTextField.promptText = value; }
+            get => inputTextField.promptText;
+            set => inputTextField.promptText = value;
         }
 
         /// <summary>
@@ -85,8 +68,8 @@ namespace FairyGUI
         /// </summary>
         public bool keyboardInput
         {
-            get { return inputTextField.keyboardInput; }
-            set { inputTextField.keyboardInput = value; }
+            get => inputTextField.keyboardInput;
+            set => inputTextField.keyboardInput = value;
         }
 
         /// <summary>
@@ -94,59 +77,51 @@ namespace FairyGUI
         /// </summary>
         public int keyboardType
         {
-            get { return inputTextField.keyboardType; }
-            set { inputTextField.keyboardType = value; }
+            get => inputTextField.keyboardType;
+            set => inputTextField.keyboardType = value;
         }
-
 
         public bool disableIME
         {
-            get { return inputTextField.disableIME; }
-            set { inputTextField.disableIME = value; }
+            get => inputTextField.disableIME;
+            set => inputTextField.disableIME = value;
         }
-
 
         public Dictionary<uint, Emoji> emojies
         {
-            get { return inputTextField.emojies; }
-            set { inputTextField.emojies = value; }
+            get => inputTextField.emojies;
+            set => inputTextField.emojies = value;
         }
-
 
         public int border
         {
-            get { return inputTextField.border; }
-            set { inputTextField.border = value; }
+            get => inputTextField.border;
+            set => inputTextField.border = value;
         }
-
 
         public int corner
         {
-            get { return inputTextField.corner; }
-            set { inputTextField.corner = value; }
+            get => inputTextField.corner;
+            set => inputTextField.corner = value;
         }
-
 
         public Color borderColor
         {
-            get { return inputTextField.borderColor; }
-            set { inputTextField.borderColor = value; }
+            get => inputTextField.borderColor;
+            set => inputTextField.borderColor = value;
         }
-
 
         public Color backgroundColor
         {
-            get { return inputTextField.backgroundColor; }
-            set { inputTextField.backgroundColor = value; }
+            get => inputTextField.backgroundColor;
+            set => inputTextField.backgroundColor = value;
         }
-
 
         public bool mouseWheelEnabled
         {
-            get { return inputTextField.mouseWheelEnabled; }
-            set { inputTextField.mouseWheelEnabled = value; }
+            get => inputTextField.mouseWheelEnabled;
+            set => inputTextField.mouseWheelEnabled = value;
         }
-
 
         /// <param name="start"></param>
         /// <param name="length"></param>
@@ -155,19 +130,18 @@ namespace FairyGUI
             inputTextField.SetSelection(start, length);
         }
 
-
         /// <param name="value"></param>
         public void ReplaceSelection(string value)
         {
             inputTextField.ReplaceSelection(value);
         }
 
-        override protected void SetTextFieldText()
+        protected override void SetTextFieldText()
         {
             inputTextField.text = _text;
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             inputTextField = new InputTextField();
             inputTextField.gOwner = this;
@@ -182,7 +156,7 @@ namespace FairyGUI
 
             buffer.Seek(beginPos, 4);
 
-            string str = buffer.ReadS();
+            var str = buffer.ReadS();
             if (str != null)
                 inputTextField.promptText = str;
 
@@ -190,7 +164,7 @@ namespace FairyGUI
             if (str != null)
                 inputTextField.restrict = str;
 
-            int iv = buffer.ReadInt();
+            var iv = buffer.ReadInt();
             if (iv != 0)
                 inputTextField.maxLength = iv;
             iv = buffer.ReadInt();

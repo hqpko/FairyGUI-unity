@@ -1,16 +1,14 @@
-﻿
-namespace FairyGUI.Utils
+﻿namespace FairyGUI.Utils
 {
-
     public class HtmlLink : IHtmlObject
     {
-        RichTextField _owner;
-        HtmlElement _element;
-        SelectionShape _shape;
+        private RichTextField _owner;
+        private HtmlElement _element;
+        private SelectionShape _shape;
 
-        EventCallback1 _clickHandler;
-        EventCallback1 _rolloverHandler;
-        EventCallback0 _rolloutHandler;
+        private EventCallback1 _clickHandler;
+        private EventCallback1 _rolloverHandler;
+        private EventCallback0 _rolloutHandler;
 
         public HtmlLink()
         {
@@ -34,25 +32,13 @@ namespace FairyGUI.Utils
             };
         }
 
-        public DisplayObject displayObject
-        {
-            get { return _shape; }
-        }
+        public DisplayObject displayObject => _shape;
 
-        public HtmlElement element
-        {
-            get { return _element; }
-        }
+        public HtmlElement element => _element;
 
-        public float width
-        {
-            get { return 0; }
-        }
+        public float width => 0;
 
-        public float height
-        {
-            get { return 0; }
-        }
+        public float height => 0;
 
         public void Create(RichTextField owner, HtmlElement element)
         {
@@ -68,10 +54,11 @@ namespace FairyGUI.Utils
         {
             if (startLine == endLine && startCharX > endCharX)
             {
-                float tmp = startCharX;
+                var tmp = startCharX;
                 startCharX = endCharX;
                 endCharX = tmp;
             }
+
             _shape.rects.Clear();
             _owner.textField.GetLinesShape(startLine, startCharX, endLine, endCharX, true, _shape.rects);
             _shape.Refresh();

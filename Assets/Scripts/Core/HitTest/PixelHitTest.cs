@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class PixelHitTestData
     {
         public int pixelWidth;
@@ -24,7 +23,6 @@ namespace FairyGUI
         }
     }
 
-
     public class PixelHitTest : IHitTest
     {
         public int offsetX;
@@ -32,8 +30,7 @@ namespace FairyGUI
         public float sourceWidth;
         public float sourceHeight;
 
-        PixelHitTestData _data;
-
+        private PixelHitTestData _data;
 
         /// <param name="data"></param>
         /// <param name="offsetX"></param>
@@ -47,7 +44,6 @@ namespace FairyGUI
             this.sourceHeight = sourceHeight;
         }
 
-
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>
@@ -56,14 +52,14 @@ namespace FairyGUI
             if (!contentRect.Contains(localPoint))
                 return false;
 
-            int x = Mathf.FloorToInt((localPoint.x * sourceWidth / contentRect.width - offsetX) * _data.scale);
-            int y = Mathf.FloorToInt((localPoint.y * sourceHeight / contentRect.height - offsetY) * _data.scale);
+            var x = Mathf.FloorToInt((localPoint.x * sourceWidth / contentRect.width - offsetX) * _data.scale);
+            var y = Mathf.FloorToInt((localPoint.y * sourceHeight / contentRect.height - offsetY) * _data.scale);
             if (x < 0 || y < 0 || x >= _data.pixelWidth)
                 return false;
 
-            int pos = y * _data.pixelWidth + x;
-            int pos2 = pos / 8;
-            int pos3 = pos % 8;
+            var pos = y * _data.pixelWidth + x;
+            var pos2 = pos / 8;
+            var pos3 = pos % 8;
 
             if (pos2 >= 0 && pos2 < _data.pixelsLength)
                 return ((_data.pixels[_data.pixelsOffset + pos2] >> pos3) & 0x1) > 0;

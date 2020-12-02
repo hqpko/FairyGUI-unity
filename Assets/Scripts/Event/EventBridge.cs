@@ -5,14 +5,13 @@ using LuaInterface;
 
 namespace FairyGUI
 {
-
-    class EventBridge
+    internal class EventBridge
     {
         public EventDispatcher owner;
 
-        EventCallback0 _callback0;
-        EventCallback1 _callback1;
-        EventCallback1 _captureCallback;
+        private EventCallback0 _callback0;
+        private EventCallback1 _callback1;
+        private EventCallback1 _captureCallback;
         internal bool _dispatching;
 
         public EventBridge(EventDispatcher owner)
@@ -108,10 +107,7 @@ namespace FairyGUI
         }
 #endif
 
-        public bool isEmpty
-        {
-            get { return _callback1 == null && _callback0 == null && _captureCallback == null; }
-        }
+        public bool isEmpty => _callback1 == null && _callback0 == null && _captureCallback == null;
 
         public void Clear()
         {

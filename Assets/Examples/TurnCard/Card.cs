@@ -2,8 +2,8 @@
 
 public class Card : GButton
 {
-    GObject _back;
-    GObject _front;
+    private GObject _back;
+    private GObject _front;
 
     public override void ConstructFromXML(FairyGUI.Utils.XML xml)
     {
@@ -16,10 +16,7 @@ public class Card : GButton
 
     public bool opened
     {
-        get
-        {
-            return _front.visible;
-        }
+        get => _front.visible;
 
         set
         {
@@ -41,14 +38,14 @@ public class Card : GButton
         if (GTween.IsTweening(this))
             return;
 
-        bool toOpen = !_front.visible;
+        var toOpen = !_front.visible;
         GTween.To(0, 180, 0.8f).SetTarget(this).SetEase(EaseType.QuadOut).OnUpdate(TurnInTween).SetUserData(toOpen);
     }
 
-    void TurnInTween(GTweener tweener)
+    private void TurnInTween(GTweener tweener)
     {
-        bool toOpen = (bool)tweener.userData;
-        float v = tweener.value.x;
+        var toOpen = (bool) tweener.userData;
+        var v = tweener.value.x;
         if (toOpen)
         {
             _back.rotationY = v;

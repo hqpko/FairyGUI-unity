@@ -1,24 +1,25 @@
 ﻿using UnityEngine;
 using FairyGUI;
+
 public class CooldownMain : MonoBehaviour
 {
-    GComponent _mainView;
+    private GComponent _mainView;
 
-    GButton _btn0;
-    GImage _mask0;
-    float _time1;
+    private GButton _btn0;
+    private GImage _mask0;
+    private float _time1;
 
-    GButton _btn1;
-    GImage _mask1;
-    float _time2;
+    private GButton _btn1;
+    private GImage _mask1;
+    private float _time2;
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
 
         Stage.inst.onKeyDown.Add(OnKeyDown);
 
-        _mainView = this.gameObject.GetComponent<UIPanel>().ui;
+        _mainView = gameObject.GetComponent<UIPanel>().ui;
 
         _btn0 = _mainView.GetChild("b0").asButton;
         _btn0.icon = "Cooldown/k0";
@@ -29,10 +30,9 @@ public class CooldownMain : MonoBehaviour
         _btn1.icon = "Cooldown/k1";
         _time2 = 10;
         _mask1 = _btn1.GetChild("mask").asImage;
-
     }
 
-    void Update()
+    private void Update()
     {
         _time1 -= Time.deltaTime;
         if (_time1 < 0)
@@ -46,12 +46,8 @@ public class CooldownMain : MonoBehaviour
         _mask1.fillAmount = 1 - (10 - _time2) / 10f;
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
-
 }

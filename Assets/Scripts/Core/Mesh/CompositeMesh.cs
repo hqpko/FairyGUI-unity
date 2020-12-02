@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class CompositeMesh : IMeshFactory, IHitTest
     {
-
         public readonly List<IMeshFactory> elements;
 
         /// <summary>
@@ -22,22 +20,22 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            int cnt = elements.Count;
+            var cnt = elements.Count;
             if (cnt == 1)
+            {
                 elements[0].OnPopulateMesh(vb);
+            }
             else
             {
-                VertexBuffer vb2 = VertexBuffer.Begin(vb);
+                var vb2 = VertexBuffer.Begin(vb);
 
-                for (int i = 0; i < cnt; i++)
-                {
+                for (var i = 0; i < cnt; i++)
                     if (activeIndex == -1 || i == activeIndex)
                     {
                         vb2.Clear();
                         elements[i].OnPopulateMesh(vb2);
                         vb.Append(vb2);
                     }
-                }
 
                 vb2.End();
             }
@@ -48,22 +46,22 @@ namespace FairyGUI
             if (!contentRect.Contains(point))
                 return false;
 
-            bool flag = false;
-            int cnt = elements.Count;
-            for (int i = 0; i < cnt; i++)
-            {
+            var flag = false;
+            var cnt = elements.Count;
+            for (var i = 0; i < cnt; i++)
                 if (activeIndex == -1 || i == activeIndex)
                 {
-                    IHitTest ht = elements[i] as IHitTest;
+                    var ht = elements[i] as IHitTest;
                     if (ht != null)
                     {
                         if (ht.HitTest(contentRect, point))
                             return true;
                     }
                     else
+                    {
                         flag = true;
+                    }
                 }
-            }
 
             return flag;
         }

@@ -3,14 +3,14 @@ using FairyGUI;
 
 public class FilterMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GSlider _s0;
-    GSlider _s1;
-    GSlider _s2;
-    GSlider _s3;
-    GSlider _s4;
+    private GComponent _mainView;
+    private GSlider _s0;
+    private GSlider _s1;
+    private GSlider _s2;
+    private GSlider _s3;
+    private GSlider _s4;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -18,11 +18,11 @@ public class FilterMain : MonoBehaviour
         UIPackage.AddPackage("UI/Filter");
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
-        BlurFilter blurFilter = new BlurFilter();
+        var blurFilter = new BlurFilter();
         blurFilter.blurSize = 2;
         _mainView.GetChild("n21").filter = blurFilter;
 
@@ -45,34 +45,31 @@ public class FilterMain : MonoBehaviour
         _s4.onChanged.Add(__sliderChanged);
     }
 
-    void __sliderChanged(EventContext context)
+    private void __sliderChanged(EventContext context)
     {
-        int cnt = _mainView.numChildren;
-        for (int i = 0; i < cnt; i++)
+        var cnt = _mainView.numChildren;
+        for (var i = 0; i < cnt; i++)
         {
-            GObject obj = _mainView.GetChildAt(i);
+            var obj = _mainView.GetChildAt(i);
             if (obj.filter is ColorFilter)
             {
-                ColorFilter filter = (ColorFilter)obj.filter;
+                var filter = (ColorFilter) obj.filter;
                 filter.Reset();
-                filter.AdjustBrightness((float)(_s0.value - 100) / 100f);
-                filter.AdjustContrast((float)(_s1.value - 100) / 100f);
-                filter.AdjustSaturation((float)(_s2.value - 100) / 100f);
-                filter.AdjustHue((float)(_s3.value - 100) / 100f);
+                filter.AdjustBrightness((float) (_s0.value - 100) / 100f);
+                filter.AdjustContrast((float) (_s1.value - 100) / 100f);
+                filter.AdjustSaturation((float) (_s2.value - 100) / 100f);
+                filter.AdjustHue((float) (_s3.value - 100) / 100f);
             }
             else if (obj.filter is BlurFilter)
             {
-                BlurFilter filter = (BlurFilter)obj.filter;
-                filter.blurSize = (float)_s4.value / 100;
+                var filter = (BlurFilter) obj.filter;
+                filter.blurSize = (float) _s4.value / 100;
             }
         }
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

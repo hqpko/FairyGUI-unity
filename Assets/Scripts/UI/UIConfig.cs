@@ -17,8 +17,7 @@ namespace FairyGUI
         /// </summary>
         public static string defaultFont = "";
 
-        [Obsolete("No use anymore")]
-        public static bool renderingTextBrighterOnDesktop = true;
+        [Obsolete("No use anymore")] public static bool renderingTextBrighterOnDesktop = true;
 
         /// <summary>
         /// Resource using in Window.ShowModalWait for locking the window.
@@ -135,12 +134,9 @@ namespace FairyGUI
         /// </summary>
         public static bool bringWindowToFrontOnClick = true;
 
-
         public static float inputCaretSize = 1;
 
-
         public static Color inputHighlightColor = new Color32(255, 223, 141, 128);
-
 
         public static float frameTimeForAsyncUIConstruction = 0.002f;
 
@@ -155,8 +151,7 @@ namespace FairyGUI
         /// </summary>
         public static bool enhancedTextOutlineEffect = false;
 
-        [Obsolete("No use anymore.")]
-        public static VertAlignType richTextRowVerticalAlign = VertAlignType.Bottom;
+        [Obsolete("No use anymore.")] public static VertAlignType richTextRowVerticalAlign = VertAlignType.Bottom;
 
         /// <summary>
         /// Suggest to enable it on low dpi (e.g. 96dpi) screens.
@@ -221,14 +216,11 @@ namespace FairyGUI
         public List<ConfigValue> Items = new List<ConfigValue>();
         public List<string> PreloadPackages = new List<string>();
 
-        void Awake()
+        private void Awake()
         {
             if (Application.isPlaying)
             {
-                foreach (string packagePath in PreloadPackages)
-                {
-                    UIPackage.AddPackage(packagePath);
-                }
+                foreach (var packagePath in PreloadPackages) UIPackage.AddPackage(packagePath);
 
                 Load();
             }
@@ -236,114 +228,114 @@ namespace FairyGUI
 
         public void Load()
         {
-            int cnt = Items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = Items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                ConfigValue value = Items[i];
+                var value = Items[i];
                 if (!value.valid)
                     continue;
 
-                switch ((UIConfig.ConfigKey)i)
+                switch ((ConfigKey) i)
                 {
                     case ConfigKey.ButtonSound:
                         if (Application.isPlaying)
-                            UIConfig.buttonSound = UIPackage.GetItemAssetByURL(value.s) as NAudioClip;
+                            buttonSound = UIPackage.GetItemAssetByURL(value.s) as NAudioClip;
                         break;
 
                     case ConfigKey.ButtonSoundVolumeScale:
-                        UIConfig.buttonSoundVolumeScale = value.f;
+                        buttonSoundVolumeScale = value.f;
                         break;
 
                     case ConfigKey.ClickDragSensitivity:
-                        UIConfig.clickDragSensitivity = value.i;
+                        clickDragSensitivity = value.i;
                         break;
 
                     case ConfigKey.DefaultComboBoxVisibleItemCount:
-                        UIConfig.defaultComboBoxVisibleItemCount = value.i;
+                        defaultComboBoxVisibleItemCount = value.i;
                         break;
 
                     case ConfigKey.DefaultFont:
-                        UIConfig.defaultFont = value.s;
+                        defaultFont = value.s;
                         break;
 
                     case ConfigKey.DefaultScrollBarDisplay:
-                        UIConfig.defaultScrollBarDisplay = (ScrollBarDisplayType)value.i;
+                        defaultScrollBarDisplay = (ScrollBarDisplayType) value.i;
                         break;
 
                     case ConfigKey.DefaultScrollBounceEffect:
-                        UIConfig.defaultScrollBounceEffect = value.b;
+                        defaultScrollBounceEffect = value.b;
                         break;
 
                     case ConfigKey.DefaultScrollStep:
-                        UIConfig.defaultScrollStep = value.i;
+                        defaultScrollStep = value.i;
                         break;
 
                     case ConfigKey.DefaultScrollTouchEffect:
-                        UIConfig.defaultScrollTouchEffect = value.b;
+                        defaultScrollTouchEffect = value.b;
                         break;
 
                     case ConfigKey.GlobalModalWaiting:
-                        UIConfig.globalModalWaiting = value.s;
+                        globalModalWaiting = value.s;
                         break;
 
                     case ConfigKey.HorizontalScrollBar:
-                        UIConfig.horizontalScrollBar = value.s;
+                        horizontalScrollBar = value.s;
                         break;
 
                     case ConfigKey.LoaderErrorSign:
-                        UIConfig.loaderErrorSign = value.s;
+                        loaderErrorSign = value.s;
                         break;
 
                     case ConfigKey.ModalLayerColor:
-                        UIConfig.modalLayerColor = value.c;
+                        modalLayerColor = value.c;
                         break;
 
                     case ConfigKey.PopupMenu:
-                        UIConfig.popupMenu = value.s;
+                        popupMenu = value.s;
                         break;
 
                     case ConfigKey.PopupMenu_seperator:
-                        UIConfig.popupMenu_seperator = value.s;
+                        popupMenu_seperator = value.s;
                         break;
 
                     case ConfigKey.TooltipsWin:
-                        UIConfig.tooltipsWin = value.s;
+                        tooltipsWin = value.s;
                         break;
 
                     case ConfigKey.TouchDragSensitivity:
-                        UIConfig.touchDragSensitivity = value.i;
+                        touchDragSensitivity = value.i;
                         break;
 
                     case ConfigKey.TouchScrollSensitivity:
-                        UIConfig.touchScrollSensitivity = value.i;
+                        touchScrollSensitivity = value.i;
                         break;
 
                     case ConfigKey.VerticalScrollBar:
-                        UIConfig.verticalScrollBar = value.s;
+                        verticalScrollBar = value.s;
                         break;
 
                     case ConfigKey.WindowModalWaiting:
-                        UIConfig.windowModalWaiting = value.s;
+                        windowModalWaiting = value.s;
                         break;
 
                     case ConfigKey.AllowSoftnessOnTopOrLeftSide:
-                        UIConfig.allowSoftnessOnTopOrLeftSide = value.b;
+                        allowSoftnessOnTopOrLeftSide = value.b;
                         break;
 
                     case ConfigKey.InputCaretSize:
-                        UIConfig.inputCaretSize = value.i;
+                        inputCaretSize = value.i;
                         break;
 
                     case ConfigKey.InputHighlightColor:
-                        UIConfig.inputHighlightColor = value.c;
+                        inputHighlightColor = value.c;
                         break;
 
                     case ConfigKey.DepthSupportForPaintingMode:
-                        UIConfig.depthSupportForPaintingMode = value.b;
+                        depthSupportForPaintingMode = value.b;
                         break;
 
                     case ConfigKey.EnhancedTextOutlineEffect:
-                        UIConfig.enhancedTextOutlineEffect = value.b;
+                        enhancedTextOutlineEffect = value.b;
                         break;
 
                     case ConfigKey.Branch:
@@ -370,7 +362,7 @@ namespace FairyGUI
                     break;
 
                 case ConfigKey.DefaultScrollBarDisplay:
-                    value.i = (int)ScrollBarDisplayType.Default;
+                    value.i = (int) ScrollBarDisplayType.Default;
                     break;
 
                 case ConfigKey.DefaultScrollBounceEffect:
@@ -418,16 +410,16 @@ namespace FairyGUI
 
         public static void ClearResourceRefs()
         {
-            UIConfig.defaultFont = "";
-            UIConfig.buttonSound = null;
-            UIConfig.globalModalWaiting = null;
-            UIConfig.horizontalScrollBar = null;
-            UIConfig.loaderErrorSign = null;
-            UIConfig.popupMenu = null;
-            UIConfig.popupMenu_seperator = null;
-            UIConfig.tooltipsWin = null;
-            UIConfig.verticalScrollBar = null;
-            UIConfig.windowModalWaiting = null;
+            defaultFont = "";
+            buttonSound = null;
+            globalModalWaiting = null;
+            horizontalScrollBar = null;
+            loaderErrorSign = null;
+            popupMenu = null;
+            popupMenu_seperator = null;
+            tooltipsWin = null;
+            verticalScrollBar = null;
+            windowModalWaiting = null;
             UIPackage.branch = null;
         }
 
@@ -437,7 +429,6 @@ namespace FairyGUI
         }
 
         public delegate NAudioClip SoundLoader(string url);
-
 
         public static SoundLoader soundLoader = null;
     }

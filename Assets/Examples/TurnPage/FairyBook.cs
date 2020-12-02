@@ -40,14 +40,14 @@ public class FairyBook : GComponent
         Back
     }
 
-    enum CoverStatus
+    private enum CoverStatus
     {
         Hidden,
         ShowingFront,
         ShowingBack
     }
 
-    enum CoverTurningOp
+    private enum CoverTurningOp
     {
         None,
         ShowFront,
@@ -56,7 +56,7 @@ public class FairyBook : GComponent
         HideBack
     }
 
-    enum Corner
+    private enum Corner
     {
         INVALID,
         TL,
@@ -65,38 +65,38 @@ public class FairyBook : GComponent
         BR
     }
 
-    GComponent _pagesContainer;
-    string _pageResource;
-    int _pageWidth;
-    int _pageHeight;
+    private GComponent _pagesContainer;
+    private string _pageResource;
+    private int _pageWidth;
+    private int _pageHeight;
 
-    int _pageCount;
-    int _currentPage;
-    Paper _paper;
+    private int _pageCount;
+    private int _currentPage;
+    private Paper _paper;
 
-    int _turningTarget;
-    float _turningAmount;
-    CoverTurningOp _coverTurningOp;
-    GPath _turningPath;
+    private int _turningTarget;
+    private float _turningAmount;
+    private CoverTurningOp _coverTurningOp;
+    private GPath _turningPath;
 
-    GComponent[] _objects;
-    GGraph _mask1;
-    GGraph _mask2;
-    GObject _softShadow;
-    int[] _objectIndice;
-    int[] _objectNewIndice;
+    private GComponent[] _objects;
+    private GGraph _mask1;
+    private GGraph _mask2;
+    private GObject _softShadow;
+    private int[] _objectIndice;
+    private int[] _objectNewIndice;
 
-    Corner _draggingCorner;
-    Vector2 _dragPoint;
-    float _touchDownTime;
+    private Corner _draggingCorner;
+    private Vector2 _dragPoint;
+    private float _touchDownTime;
 
-    GComponent _frontCover;
-    GComponent _backCover;
-    Vector2 _frontCoverPos;
-    Vector2 _backCoverPos;
-    CoverStatus _coverStatus;
+    private GComponent _frontCover;
+    private GComponent _backCover;
+    private Vector2 _frontCoverPos;
+    private Vector2 _backCoverPos;
+    private CoverStatus _coverStatus;
 
-    EventListener _onTurnComplete;
+    private EventListener _onTurnComplete;
 
     public override void ConstructFromXML(XML xml)
     {
@@ -109,8 +109,8 @@ public class FairyBook : GComponent
             return;
         }
 
-        GComponent obj1 = _pagesContainer.GetChild("left").asCom;
-        GComponent obj2 = _pagesContainer.GetChild("right").asCom;
+        var obj1 = _pagesContainer.GetChild("left").asCom;
+        var obj2 = _pagesContainer.GetChild("right").asCom;
         if (obj1 == null || obj2 == null || obj1.resourceURL != obj2.resourceURL
             || obj1.width != obj2.width || obj2.x != obj1.x + obj1.width)
         {
@@ -118,8 +118,8 @@ public class FairyBook : GComponent
             return;
         }
 
-        obj1.displayObject.home = this.displayObject.cachedTransform;
-        obj2.displayObject.home = this.displayObject.cachedTransform;
+        obj1.displayObject.home = displayObject.cachedTransform;
+        obj2.displayObject.home = displayObject.cachedTransform;
         _pagesContainer.RemoveChild(obj1);
         _pagesContainer.RemoveChild(obj2);
 
@@ -130,22 +130,22 @@ public class FairyBook : GComponent
         if (_backCover != null)
             _backCoverPos = _backCover.position;
 
-        _objects = new GComponent[4] { obj1, obj2, null, null };
-        _objectIndice = new int[4] { -1, -1, -1, -1 };
+        _objects = new GComponent[4] {obj1, obj2, null, null};
+        _objectIndice = new int[4] {-1, -1, -1, -1};
         _objectNewIndice = new int[4];
         _turningTarget = -1;
         _currentPage = -1;
 
-        _pageWidth = (int)obj1.width;
-        _pageHeight = (int)obj1.height;
+        _pageWidth = (int) obj1.width;
+        _pageHeight = (int) obj1.height;
         _pageResource = obj1.resourceURL;
 
         _mask1 = new GGraph();
-        _mask1.displayObject.home = this.displayObject.cachedTransform;
+        _mask1.displayObject.home = displayObject.cachedTransform;
         _mask1.SetSize(_pageWidth, _pageHeight);
 
         _mask2 = new GGraph();
-        _mask2.displayObject.home = this.displayObject.cachedTransform;
+        _mask2.displayObject.home = displayObject.cachedTransform;
         _mask2.SetSize(_pageWidth, _pageHeight);
 
         SetupHotspot(GetChild("hotspot_tl"), Corner.TL);
@@ -156,12 +156,9 @@ public class FairyBook : GComponent
 
     public override void Dispose()
     {
-        for (int i = 0; i < 4; i++)
-        {
+        for (var i = 0; i < 4; i++)
             if (_objects[i] != null)
                 _objects[i].Dispose();
-
-        }
         _mask1.Dispose();
         _mask2.Dispose();
         if (_softShadow != null)
@@ -173,10 +170,8 @@ public class FairyBook : GComponent
     /// <summary>
     /// 
     /// </summary>
-    public EventListener onTurnComplete
-    {
-        get { return _onTurnComplete ?? (_onTurnComplete = new EventListener(this, "onTurnComplete")); }
-    }
+    public EventListener onTurnComplete =>
+        _onTurnComplete ?? (_onTurnComplete = new EventListener(this, "onTurnComplete"));
 
     /// <summary>
     /// 
@@ -186,7 +181,7 @@ public class FairyBook : GComponent
     {
         _softShadow = UIPackage.CreateObjectFromURL(res);
         _softShadow.height = Mathf.Sqrt(Mathf.Pow(_pageWidth, 2) + Mathf.Pow(_pageHeight, 2)) + 60;
-        _softShadow.displayObject.home = this.displayObject.cachedTransform;
+        _softShadow.displayObject.home = displayObject.cachedTransform;
         _softShadow.sortingOrder = int.MaxValue;
     }
 
@@ -195,8 +190,8 @@ public class FairyBook : GComponent
     /// </summary>
     public Paper pageSoftness
     {
-        get { return _paper; }
-        set { _paper = value; }
+        get => _paper;
+        set => _paper = value;
     }
 
     /// <summary>
@@ -204,11 +199,11 @@ public class FairyBook : GComponent
     /// </summary>
     public int pageCount
     {
-        get { return _pageCount; }
+        get => _pageCount;
         set
         {
             if (_pageCount % 2 != 0)
-                throw new System.Exception("Page count must be even!");
+                throw new Exception("Page count must be even!");
 
             _pageCount = value;
         }
@@ -219,7 +214,7 @@ public class FairyBook : GComponent
     /// </summary>
     public int currentPage
     {
-        get { return _currentPage; }
+        get => _currentPage;
         set
         {
             if (value < 0 || value > _pageCount - 1)
@@ -259,10 +254,10 @@ public class FairyBook : GComponent
             _draggingCorner = Corner.BL;
         }
 
-        int tt1 = _currentPage;
+        var tt1 = _currentPage;
         if (_currentPage % 2 == 0)
             tt1--;
-        int tt2 = pageIndex;
+        var tt2 = pageIndex;
         if (pageIndex % 2 == 0)
             tt2--;
         if (tt1 == tt2)
@@ -366,6 +361,7 @@ public class FairyBook : GComponent
                 _currentPage = _pageCount - 1;
                 _coverStatus = CoverStatus.ShowingBack;
             }
+
             RenderPages();
         }
     }
@@ -377,14 +373,16 @@ public class FairyBook : GComponent
     /// <returns></returns>
     public bool isCoverShowing(CoverType cover)
     {
-        return cover == CoverType.Front ? (_coverStatus == CoverStatus.ShowingFront) : (_coverStatus == CoverStatus.ShowingBack);
+        return cover == CoverType.Front
+            ? _coverStatus == CoverStatus.ShowingFront
+            : _coverStatus == CoverStatus.ShowingBack;
     }
 
-    void StartTween()
+    private void StartTween()
     {
         _turningAmount = 0;
         RenderPages();
-        Vector2 source = GetCornerPosition(_draggingCorner, _coverTurningOp != CoverTurningOp.None);
+        var source = GetCornerPosition(_draggingCorner, _coverTurningOp != CoverTurningOp.None);
         Vector2 target;
         if (_draggingCorner == Corner.TL || _draggingCorner == Corner.BL)
             target = GetCornerPosition(_draggingCorner + 2, _coverTurningOp != CoverTurningOp.None);
@@ -393,25 +391,26 @@ public class FairyBook : GComponent
 
         if (_turningPath == null)
             _turningPath = new GPath();
-        Vector2 mid = new Vector2(source.x + (target.x - source.x) / 2, target.y - 50);
+        var mid = new Vector2(source.x + (target.x - source.x) / 2, target.y - 50);
         _turningPath.Create(new GPathPoint(source), new GPathPoint(mid), new GPathPoint(target));
         GTween.To(source, target, EffectDuration).SetUserData(true).SetTarget(this)
             .SetPath(_turningPath)
             .OnUpdate(OnTurnUpdate).OnComplete(OnTurnComplete);
     }
 
-    void OnTurnUpdate(GTweener tweener)
+    private void OnTurnUpdate(GTweener tweener)
     {
         _dragPoint = tweener.value.vec2;
-        _turningAmount = _dragPoint.x / (_coverTurningOp != CoverTurningOp.None ? _frontCover.width * 2 : _pageWidth * 2);
+        _turningAmount =
+            _dragPoint.x / (_coverTurningOp != CoverTurningOp.None ? _frontCover.width * 2 : _pageWidth * 2);
         if (_draggingCorner == Corner.TR || _draggingCorner == Corner.BR)
             _turningAmount = 1 - _turningAmount;
         PlayTurnEffect();
     }
 
-    void OnTurnComplete(GTweener tweener)
+    private void OnTurnComplete(GTweener tweener)
     {
-        bool suc = (bool)tweener.userData;
+        var suc = (bool) tweener.userData;
         _draggingCorner = Corner.INVALID;
         if (suc && _turningTarget != -1)
             _currentPage = _turningTarget;
@@ -424,6 +423,7 @@ public class FairyBook : GComponent
             else
                 _coverStatus = CoverStatus.Hidden;
         }
+
         _coverTurningOp = CoverTurningOp.None;
         _turningTarget = -1;
 
@@ -432,7 +432,7 @@ public class FairyBook : GComponent
         DispatchEvent("onTurnComplete");
     }
 
-    void PlayTurnEffect()
+    private void PlayTurnEffect()
     {
         if (_coverTurningOp != CoverTurningOp.None)
             PlayCoverEffect();
@@ -446,13 +446,15 @@ public class FairyBook : GComponent
         }
     }
 
-    void PlayCoverEffect()
+    private void PlayCoverEffect()
     {
-        float amount = Mathf.Clamp01(_turningAmount);
+        var amount = Mathf.Clamp01(_turningAmount);
         float ratio;
         bool isLeft;
-        GComponent turningObj = (_coverTurningOp == CoverTurningOp.ShowFront || _coverTurningOp == CoverTurningOp.HideFront) ? _frontCover : _backCover;
-        PolygonMesh mesh = GetHardMesh(turningObj);
+        var turningObj = _coverTurningOp == CoverTurningOp.ShowFront || _coverTurningOp == CoverTurningOp.HideFront
+            ? _frontCover
+            : _backCover;
+        var mesh = GetHardMesh(turningObj);
 
         if (amount < 0.5f)
         {
@@ -474,8 +476,8 @@ public class FairyBook : GComponent
         mesh.texcoords.Clear();
         if (isLeft)
         {
-            float topOffset = 1f / 8 * (1 - ratio);
-            float xOffset = 1 - ratio;
+            var topOffset = 1f / 8 * (1 - ratio);
+            var xOffset = 1 - ratio;
             mesh.Add(new Vector2(xOffset, 1 + topOffset));
             mesh.Add(new Vector2(xOffset, -topOffset));
             mesh.Add(new Vector2(1, 0));
@@ -483,7 +485,7 @@ public class FairyBook : GComponent
         }
         else
         {
-            float topOffset = 1f / 8 * (1 - ratio);
+            var topOffset = 1f / 8 * (1 - ratio);
             mesh.Add(new Vector2(0, 1));
             mesh.Add(new Vector2(0, 0));
             mesh.Add(new Vector2(ratio, -topOffset));
@@ -493,9 +495,9 @@ public class FairyBook : GComponent
         mesh.texcoords.AddRange(VertexBuffer.NormalizedUV);
     }
 
-    void PlayHardEffect()
+    private void PlayHardEffect()
     {
-        float amount = Mathf.Clamp01(_turningAmount);
+        var amount = Mathf.Clamp01(_turningAmount);
         float ratio;
         bool isLeft;
         GComponent turningObj;
@@ -525,8 +527,8 @@ public class FairyBook : GComponent
         {
             turningObj.x = 0;
 
-            float topOffset = 1f / 8 * (1 - ratio);
-            float xOffset = 1 - ratio;
+            var topOffset = 1f / 8 * (1 - ratio);
+            var xOffset = 1 - ratio;
             mesh.Add(new Vector2(xOffset, 1 + topOffset));
             mesh.Add(new Vector2(xOffset, -topOffset));
             mesh.Add(new Vector2(1, 0));
@@ -536,7 +538,7 @@ public class FairyBook : GComponent
         {
             turningObj.x = _pageWidth;
 
-            float topOffset = 1f / 8 * (1 - ratio);
+            var topOffset = 1f / 8 * (1 - ratio);
             mesh.Add(new Vector2(0, 1));
             mesh.Add(new Vector2(0, 0));
             mesh.Add(new Vector2(ratio, -topOffset));
@@ -546,7 +548,7 @@ public class FairyBook : GComponent
         mesh.texcoords.AddRange(VertexBuffer.NormalizedUV);
     }
 
-    void FlipPoint(ref Vector2 pt, float w, float h)
+    private void FlipPoint(ref Vector2 pt, float w, float h)
     {
         switch (_draggingCorner)
         {
@@ -563,12 +565,12 @@ public class FairyBook : GComponent
         }
     }
 
-    void PlaySoftEffect()
+    private void PlaySoftEffect()
     {
-        GComponent turningObj1 = _objects[2];
-        GComponent turningObj2 = _objects[3];
-        PolygonMesh mesh1 = GetSoftMesh(turningObj1);
-        PolygonMesh mesh2 = GetSoftMesh(turningObj2);
+        var turningObj1 = _objects[2];
+        var turningObj2 = _objects[3];
+        var mesh1 = GetSoftMesh(turningObj1);
+        var mesh2 = GetSoftMesh(turningObj2);
 
         /**
         *               a           
@@ -583,7 +585,7 @@ public class FairyBook : GComponent
         */
         Vector2 pa, pb, pc, pd, pe, pf, pg, ph;
         float k, angle;
-        bool threePoints = false;
+        var threePoints = false;
 
         pc = _dragPoint;
         pe = new Vector2(0, _pageHeight);
@@ -597,7 +599,7 @@ public class FairyBook : GComponent
             return;
 
         k = (ph.y - pc.y) / (ph.x - pc.x);
-        float k2 = 1 + Mathf.Pow(k, 2);
+        var k2 = 1 + Mathf.Pow(k, 2);
         float min;
         min = ph.x - _pageWidth * 2 / k2;
         if (pc.x < min)
@@ -639,186 +641,198 @@ public class FairyBook : GComponent
         switch (_draggingCorner)
         {
             case Corner.BR:
+            {
+                turningObj1.SetPivot(0, 0, true);
+                turningObj1.position = new Vector2(_pageWidth, 0);
+
+                turningObj2.SetPivot(0, 1, true);
+                turningObj2.position = new Vector2(_pageWidth + pc.x, pc.y);
+                turningObj2.rotation = 2 * angle;
+
+                if (_softShadow != null)
                 {
-                    turningObj1.SetPivot(0, 0, true);
-                    turningObj1.position = new Vector2(_pageWidth, 0);
-
-                    turningObj2.SetPivot(0, 1, true);
-                    turningObj2.position = new Vector2(_pageWidth + pc.x, pc.y);
-                    turningObj2.rotation = 2 * angle;
-
-                    if (_softShadow != null)
-                    {
-                        _softShadow.SetPivot(1, (_softShadow.height - 30) / _softShadow.height, true);
-                        _softShadow.position = new Vector2(Vector2.Distance(pc, pd), _pageHeight);
-                        _softShadow.rotation = -angle;
-                        if (_softShadow.x > _pageWidth - 20)
-                            _softShadow.alpha = (_pageWidth - _softShadow.x) / 20;
-                        else
-                            _softShadow.alpha = 1;
-                    }
-
-                    mesh1.points.Clear();
-                    mesh1.Add(pe);
-                    mesh1.Add(pf);
-                    mesh1.Add(pb);
-                    if (threePoints)
-                        mesh1.Add(pa);
-                    mesh1.Add(pd);
-
-                    mesh2.points.Clear();
-                    mesh2.Add(new Vector2(Vector2.Distance(pc, pd), _pageHeight));
-                    mesh2.Add(new Vector2(0, _pageHeight));
-                    if (threePoints)
-                        mesh2.Add(new Vector2(0, _pageHeight - Vector2.Distance(pc, pa)));
+                    _softShadow.SetPivot(1, (_softShadow.height - 30) / _softShadow.height, true);
+                    _softShadow.position = new Vector2(Vector2.Distance(pc, pd), _pageHeight);
+                    _softShadow.rotation = -angle;
+                    if (_softShadow.x > _pageWidth - 20)
+                        _softShadow.alpha = (_pageWidth - _softShadow.x) / 20;
                     else
-                    {
-                        mesh2.Add(new Vector2(0, 0));
-                        mesh2.Add(new Vector2(Vector2.Distance(pg, pb), 0));
-                    }
-                    break;
+                        _softShadow.alpha = 1;
                 }
-            case Corner.TR:
+
+                mesh1.points.Clear();
+                mesh1.Add(pe);
+                mesh1.Add(pf);
+                mesh1.Add(pb);
+                if (threePoints)
+                    mesh1.Add(pa);
+                mesh1.Add(pd);
+
+                mesh2.points.Clear();
+                mesh2.Add(new Vector2(Vector2.Distance(pc, pd), _pageHeight));
+                mesh2.Add(new Vector2(0, _pageHeight));
+                if (threePoints)
                 {
-                    turningObj1.SetPivot(0, 0, true);
-                    turningObj1.position = new Vector2(_pageWidth, 0);
-
-                    turningObj2.SetPivot(0, 0, true);
-                    turningObj2.position = new Vector2(_pageWidth + pc.x, pc.y);
-                    turningObj2.rotation = -2 * angle;
-
-                    if (_softShadow != null)
-                    {
-                        _softShadow.SetPivot(1, 30 / _softShadow.height, true);
-                        _softShadow.position = new Vector2(Vector2.Distance(pc, pd), 0);
-                        _softShadow.rotation = angle;
-                        if (_softShadow.x > _pageWidth - 20)
-                            _softShadow.alpha = (_pageWidth - _softShadow.x) / 20;
-                        else
-                            _softShadow.alpha = 1;
-                    }
-
-                    mesh1.points.Clear();
-                    mesh1.Add(pe);
-                    mesh1.Add(pf);
-                    mesh1.Add(pd);
-                    if (threePoints)
-                        mesh1.Add(pa);
-                    mesh1.Add(pb);
-
-                    mesh2.points.Clear();
-                    if (threePoints)
-                        mesh2.Add(new Vector2(0, Vector2.Distance(pc, pa)));
-                    else
-                    {
-                        mesh2.Add(new Vector2(Vector2.Distance(pb, ph), _pageHeight));
-                        mesh2.Add(new Vector2(0, _pageHeight));
-                    }
+                    mesh2.Add(new Vector2(0, _pageHeight - Vector2.Distance(pc, pa)));
+                }
+                else
+                {
                     mesh2.Add(new Vector2(0, 0));
-                    mesh2.Add(new Vector2(Vector2.Distance(pc, pd), 0));
-                    break;
+                    mesh2.Add(new Vector2(Vector2.Distance(pg, pb), 0));
                 }
+
+                break;
+            }
+            case Corner.TR:
+            {
+                turningObj1.SetPivot(0, 0, true);
+                turningObj1.position = new Vector2(_pageWidth, 0);
+
+                turningObj2.SetPivot(0, 0, true);
+                turningObj2.position = new Vector2(_pageWidth + pc.x, pc.y);
+                turningObj2.rotation = -2 * angle;
+
+                if (_softShadow != null)
+                {
+                    _softShadow.SetPivot(1, 30 / _softShadow.height, true);
+                    _softShadow.position = new Vector2(Vector2.Distance(pc, pd), 0);
+                    _softShadow.rotation = angle;
+                    if (_softShadow.x > _pageWidth - 20)
+                        _softShadow.alpha = (_pageWidth - _softShadow.x) / 20;
+                    else
+                        _softShadow.alpha = 1;
+                }
+
+                mesh1.points.Clear();
+                mesh1.Add(pe);
+                mesh1.Add(pf);
+                mesh1.Add(pd);
+                if (threePoints)
+                    mesh1.Add(pa);
+                mesh1.Add(pb);
+
+                mesh2.points.Clear();
+                if (threePoints)
+                {
+                    mesh2.Add(new Vector2(0, Vector2.Distance(pc, pa)));
+                }
+                else
+                {
+                    mesh2.Add(new Vector2(Vector2.Distance(pb, ph), _pageHeight));
+                    mesh2.Add(new Vector2(0, _pageHeight));
+                }
+
+                mesh2.Add(new Vector2(0, 0));
+                mesh2.Add(new Vector2(Vector2.Distance(pc, pd), 0));
+                break;
+            }
             case Corner.BL:
+            {
+                turningObj1.SetPivot(0, 0, true);
+                turningObj1.position = Vector2.zero;
+
+                turningObj2.SetPivot(1, 1, true);
+                turningObj2.position = pc;
+                turningObj2.rotation = 2 * angle;
+
+                if (_softShadow != null)
                 {
-                    turningObj1.SetPivot(0, 0, true);
-                    turningObj1.position = Vector2.zero;
-
-                    turningObj2.SetPivot(1, 1, true);
-                    turningObj2.position = pc;
-                    turningObj2.rotation = 2 * angle;
-
-                    if (_softShadow != null)
-                    {
-                        _softShadow.SetPivot(1, 30 / _softShadow.height, true);
-                        _softShadow.position = new Vector2(_pageWidth - Vector2.Distance(pc, pd), _pageHeight);
-                        _softShadow.rotation = 180 - angle;
-                        if (_softShadow.x < 20)
-                            _softShadow.alpha = (_softShadow.x - 20) / 20;
-                        else
-                            _softShadow.alpha = 1;
-                    }
-
-                    mesh1.points.Clear();
-                    mesh1.Add(pb);
-                    mesh1.Add(pg);
-                    mesh1.Add(ph);
-                    mesh1.Add(pd);
-                    if (threePoints)
-                        mesh1.Add(pa);
-
-                    mesh2.points.Clear();
-                    if (!threePoints)
-                    {
-                        mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pf, pb), 0));
-                        mesh2.Add(new Vector2(_pageWidth, 0));
-                    }
+                    _softShadow.SetPivot(1, 30 / _softShadow.height, true);
+                    _softShadow.position = new Vector2(_pageWidth - Vector2.Distance(pc, pd), _pageHeight);
+                    _softShadow.rotation = 180 - angle;
+                    if (_softShadow.x < 20)
+                        _softShadow.alpha = (_softShadow.x - 20) / 20;
                     else
-                        mesh2.Add(new Vector2(_pageWidth, _pageHeight - Vector2.Distance(pc, pa)));
-                    mesh2.Add(new Vector2(_pageWidth, _pageHeight));
-                    mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pc, pd), _pageHeight));
-                    break;
+                        _softShadow.alpha = 1;
                 }
-            case Corner.TL:
+
+                mesh1.points.Clear();
+                mesh1.Add(pb);
+                mesh1.Add(pg);
+                mesh1.Add(ph);
+                mesh1.Add(pd);
+                if (threePoints)
+                    mesh1.Add(pa);
+
+                mesh2.points.Clear();
+                if (!threePoints)
                 {
-                    turningObj1.SetPivot(0, 0, true);
-                    turningObj1.position = Vector2.zero;
-
-                    turningObj2.SetPivot(1, 0, true);
-                    turningObj2.position = pc;
-                    turningObj2.rotation = -2 * angle;
-
-                    if (_softShadow != null)
-                    {
-                        _softShadow.SetPivot(1, (_softShadow.height - 30) / _softShadow.height, true);
-                        _softShadow.position = new Vector2(_pageWidth - Vector2.Distance(pc, pd), 0);
-                        _softShadow.rotation = 180 + angle;
-                        if (_softShadow.x < 20)
-                            _softShadow.alpha = (_softShadow.x - 20) / 20;
-                        else
-                            _softShadow.alpha = 1;
-                    }
-
-                    mesh1.points.Clear();
-                    mesh1.Add(pd);
-                    mesh1.Add(pg);
-                    mesh1.Add(ph);
-                    mesh1.Add(pb);
-                    if (threePoints)
-                        mesh1.Add(pa);
-
-                    mesh2.points.Clear();
-                    mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pc, pd), 0));
+                    mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pf, pb), 0));
                     mesh2.Add(new Vector2(_pageWidth, 0));
-                    if (threePoints)
-                        mesh2.Add(new Vector2(_pageWidth, Vector2.Distance(pc, pa)));
-                    else
-                    {
-                        mesh2.Add(new Vector2(_pageWidth, _pageHeight));
-                        mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pe, pb), _pageHeight));
-                    }
-                    break;
                 }
+                else
+                {
+                    mesh2.Add(new Vector2(_pageWidth, _pageHeight - Vector2.Distance(pc, pa)));
+                }
+
+                mesh2.Add(new Vector2(_pageWidth, _pageHeight));
+                mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pc, pd), _pageHeight));
+                break;
+            }
+            case Corner.TL:
+            {
+                turningObj1.SetPivot(0, 0, true);
+                turningObj1.position = Vector2.zero;
+
+                turningObj2.SetPivot(1, 0, true);
+                turningObj2.position = pc;
+                turningObj2.rotation = -2 * angle;
+
+                if (_softShadow != null)
+                {
+                    _softShadow.SetPivot(1, (_softShadow.height - 30) / _softShadow.height, true);
+                    _softShadow.position = new Vector2(_pageWidth - Vector2.Distance(pc, pd), 0);
+                    _softShadow.rotation = 180 + angle;
+                    if (_softShadow.x < 20)
+                        _softShadow.alpha = (_softShadow.x - 20) / 20;
+                    else
+                        _softShadow.alpha = 1;
+                }
+
+                mesh1.points.Clear();
+                mesh1.Add(pd);
+                mesh1.Add(pg);
+                mesh1.Add(ph);
+                mesh1.Add(pb);
+                if (threePoints)
+                    mesh1.Add(pa);
+
+                mesh2.points.Clear();
+                mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pc, pd), 0));
+                mesh2.Add(new Vector2(_pageWidth, 0));
+                if (threePoints)
+                {
+                    mesh2.Add(new Vector2(_pageWidth, Vector2.Distance(pc, pa)));
+                }
+                else
+                {
+                    mesh2.Add(new Vector2(_pageWidth, _pageHeight));
+                    mesh2.Add(new Vector2(_pageWidth - Vector2.Distance(pe, pb), _pageHeight));
+                }
+
+                break;
+            }
         }
     }
 
-    void RenderPages()
+    private void RenderPages()
     {
         RenderCovers();
 
         if (_softShadow != null)
             _softShadow.RemoveFromParent();
 
-        int curPage = _currentPage;
+        var curPage = _currentPage;
         if (curPage % 2 == 0)
             curPage--;
 
         int leftPage, rightPage, turningPageBack, turningPageFront;
         leftPage = curPage;
-        rightPage = leftPage < _pageCount - 1 ? (leftPage + 1) : -1;
+        rightPage = leftPage < _pageCount - 1 ? leftPage + 1 : -1;
 
         if (_turningTarget != -1)
         {
-            int tt = _turningTarget;
+            var tt = _turningTarget;
             if (tt % 2 == 0)
                 tt = tt - 1;
 
@@ -831,11 +845,11 @@ public class FairyBook : GComponent
             {
                 turningPageFront = tt;
                 turningPageBack = rightPage;
-                rightPage = tt < _pageCount - 1 ? (tt + 1) : -1;
+                rightPage = tt < _pageCount - 1 ? tt + 1 : -1;
             }
             else
             {
-                turningPageFront = tt > 0 ? (tt + 1) : 0;
+                turningPageFront = tt > 0 ? tt + 1 : 0;
                 turningPageBack = leftPage;
                 leftPage = tt > 0 ? tt : -1;
             }
@@ -850,14 +864,13 @@ public class FairyBook : GComponent
         _objectNewIndice[2] = turningPageBack;
         _objectNewIndice[3] = turningPageFront;
 
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
-            int pageIndex = _objectNewIndice[i];
+            var pageIndex = _objectNewIndice[i];
             if (pageIndex != -1)
-            {
-                for (int j = 0; j < 4; j++)
+                for (var j = 0; j < 4; j++)
                 {
-                    int pageIndex2 = _objectIndice[j];
+                    var pageIndex2 = _objectIndice[j];
                     if (pageIndex2 == pageIndex)
                     {
                         if (j != i)
@@ -865,21 +878,21 @@ public class FairyBook : GComponent
                             _objectIndice[j] = _objectIndice[i];
                             _objectIndice[i] = pageIndex;
 
-                            GComponent tmp = _objects[j];
+                            var tmp = _objects[j];
                             _objects[j] = _objects[i];
                             _objects[i] = tmp;
                         }
+
                         break;
                     }
                 }
-            }
         }
 
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
-            GComponent obj = _objects[i];
-            int oldIndex = _objectIndice[i];
-            int index = _objectNewIndice[i];
+            var obj = _objects[i];
+            var oldIndex = _objectIndice[i];
+            var index = _objectNewIndice[i];
             _objectIndice[i] = index;
             if (index == -1)
             {
@@ -891,7 +904,7 @@ public class FairyBook : GComponent
                 if (obj == null)
                 {
                     obj = UIPackage.CreateObjectFromURL(_pageResource).asCom;
-                    obj.displayObject.home = this.displayObject.cachedTransform;
+                    obj.displayObject.home = displayObject.cachedTransform;
                     _objects[i] = obj;
                 }
 
@@ -906,12 +919,14 @@ public class FairyBook : GComponent
                     pageRenderer(index, obj);
                 }
                 else
+                {
                     _pagesContainer.AddChild(obj);
+                }
             }
 
             if (obj != null && obj.parent != null)
             {
-                Controller c1 = obj.GetController("side");
+                var c1 = obj.GetController("side");
                 if (c1 != null)
                 {
                     if (index == 0)
@@ -919,7 +934,7 @@ public class FairyBook : GComponent
                     else if (index == _pageCount - 1)
                         c1.selectedPage = "last";
                     else
-                        c1.selectedPage = (index % 2 == 0) ? "right" : "left";
+                        c1.selectedPage = index % 2 == 0 ? "right" : "left";
                 }
 
                 if (i == 0 || i == 1)
@@ -932,7 +947,7 @@ public class FairyBook : GComponent
         }
     }
 
-    void RenderCovers()
+    private void RenderCovers()
     {
         if (_frontCover != null)
         {
@@ -967,7 +982,7 @@ public class FairyBook : GComponent
         }
     }
 
-    void SetupHotspot(GObject obj, Corner corner)
+    private void SetupHotspot(GObject obj, Corner corner)
     {
         if (obj == null)
             return;
@@ -979,7 +994,7 @@ public class FairyBook : GComponent
         obj.onTouchEnd.Add(__touchEnd);
     }
 
-    void SetPageHard(GComponent obj, bool front)
+    private void SetPageHard(GComponent obj, bool front)
     {
         obj.touchable = false;
         obj.displayObject.cacheAsBitmap = true;
@@ -989,7 +1004,7 @@ public class FairyBook : GComponent
             obj.mask = null;
         }
 
-        PolygonMesh mesh = obj.displayObject.paintingGraphics.GetMeshFactory<PolygonMesh>();
+        var mesh = obj.displayObject.paintingGraphics.GetMeshFactory<PolygonMesh>();
         mesh.usePercentPositions = true;
         mesh.points.Clear();
         mesh.texcoords.Clear();
@@ -1002,14 +1017,14 @@ public class FairyBook : GComponent
         }
     }
 
-    void SetPageSoft(GComponent obj, bool front)
+    private void SetPageSoft(GComponent obj, bool front)
     {
         obj.touchable = false;
         obj.displayObject.cacheAsBitmap = false;
-        DisplayObject mask = front ? _mask1.displayObject : _mask2.displayObject;
+        var mask = front ? _mask1.displayObject : _mask2.displayObject;
         obj.mask = mask;
 
-        PolygonMesh mesh = mask.graphics.GetMeshFactory<PolygonMesh>();
+        var mesh = mask.graphics.GetMeshFactory<PolygonMesh>();
         mesh.usePercentPositions = false;
         mesh.points.Clear();
         mesh.texcoords.Clear();
@@ -1023,10 +1038,12 @@ public class FairyBook : GComponent
             mesh.Add(new Vector2(_pageWidth, _pageHeight));
         }
         else if (_softShadow != null)
+        {
             obj.AddChild(_softShadow);
+        }
     }
 
-    void SetPageNormal(GComponent obj, bool left)
+    private void SetPageNormal(GComponent obj, bool left)
     {
         obj.displayObject.cacheAsBitmap = false;
         obj.touchable = true;
@@ -1043,9 +1060,9 @@ public class FairyBook : GComponent
         }
     }
 
-    void SetCoverStatus(GComponent obj, CoverType coverType, bool show)
+    private void SetCoverStatus(GComponent obj, CoverType coverType, bool show)
     {
-        Controller c = obj.GetController("side");
+        var c = obj.GetController("side");
         if (show)
         {
             if (c.selectedIndex != 0)
@@ -1072,7 +1089,7 @@ public class FairyBook : GComponent
         }
     }
 
-    void SetCoverNormal(GComponent obj, CoverType coverType)
+    private void SetCoverNormal(GComponent obj, CoverType coverType)
     {
         obj.position = coverType == CoverType.Front ? _frontCoverPos : _backCoverPos;
         obj.displayObject.cacheAsBitmap = false;
@@ -1081,19 +1098,19 @@ public class FairyBook : GComponent
         obj.GetController("side").selectedIndex = 1; //back
     }
 
-    PolygonMesh GetHardMesh(GComponent obj)
+    private PolygonMesh GetHardMesh(GComponent obj)
     {
         obj.displayObject.paintingGraphics.SetMeshDirty();
         return obj.displayObject.paintingGraphics.GetMeshFactory<PolygonMesh>();
     }
 
-    PolygonMesh GetSoftMesh(GComponent obj)
+    private PolygonMesh GetSoftMesh(GComponent obj)
     {
         obj.mask.graphics.SetMeshDirty();
         return obj.mask.graphics.GetMeshFactory<PolygonMesh>();
     }
 
-    void UpdateDragPosition(Vector2 pos)
+    private void UpdateDragPosition(Vector2 pos)
     {
         if (_coverTurningOp != CoverTurningOp.None)
         {
@@ -1110,10 +1127,10 @@ public class FairyBook : GComponent
             _turningAmount = 1 - _turningAmount;
     }
 
-    Vector2 GetCornerPosition(Corner corner, bool isCover)
+    private Vector2 GetCornerPosition(Corner corner, bool isCover)
     {
-        float w = isCover ? _frontCover.width : _pageWidth;
-        float h = isCover ? _frontCover.height : _pageHeight;
+        var w = isCover ? _frontCover.width : _pageWidth;
+        var h = isCover ? _frontCover.height : _pageHeight;
         Vector2 pt;
         switch (corner)
         {
@@ -1137,11 +1154,11 @@ public class FairyBook : GComponent
         return pt;
     }
 
-    void __touchBegin(EventContext context)
+    private void __touchBegin(EventContext context)
     {
         GTween.Kill(this, true);
 
-        _draggingCorner = (Corner)((GObject)context.sender).data;
+        _draggingCorner = (Corner) ((GObject) context.sender).data;
         if (_draggingCorner == Corner.TL || _draggingCorner == Corner.BL)
         {
             if (_coverStatus == CoverStatus.ShowingBack)
@@ -1192,7 +1209,7 @@ public class FairyBook : GComponent
         }
     }
 
-    void __touchMove(EventContext context)
+    private void __touchMove(EventContext context)
     {
         if (_draggingCorner != Corner.INVALID)
         {
@@ -1201,11 +1218,11 @@ public class FairyBook : GComponent
         }
     }
 
-    void __touchEnd(EventContext context)
+    private void __touchEnd(EventContext context)
     {
         if (_draggingCorner != Corner.INVALID)
         {
-            bool suc = _turningAmount > 0.4f || (Time.unscaledTime - _touchDownTime < 0.35f);
+            var suc = _turningAmount > 0.4f || Time.unscaledTime - _touchDownTime < 0.35f;
             Vector2 target;
             if (suc)
             {
@@ -1215,9 +1232,12 @@ public class FairyBook : GComponent
                     target = GetCornerPosition(_draggingCorner - 2, _coverTurningOp != CoverTurningOp.None);
             }
             else
+            {
                 target = GetCornerPosition(_draggingCorner, _coverTurningOp != CoverTurningOp.None);
+            }
 
-            float duration = Mathf.Max(EffectDuration * 0.5f, Mathf.Abs(target.x - _dragPoint.x) / (_pageWidth * 2) * EffectDuration);
+            var duration = Mathf.Max(EffectDuration * 0.5f,
+                Mathf.Abs(target.x - _dragPoint.x) / (_pageWidth * 2) * EffectDuration);
             GTween.To(_dragPoint, target, duration).SetTarget(this).SetUserData(suc)
                 .OnUpdate(OnTurnUpdate).OnComplete(OnTurnComplete);
         }

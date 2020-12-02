@@ -25,7 +25,6 @@ namespace FairyGUI
 
         protected bool _started;
 
-
         /// <param name="textField"></param>
         public TypingEffect(TextField textField)
         {
@@ -33,14 +32,13 @@ namespace FairyGUI
             _textField.EnableCharPositionSupport();
         }
 
-
         /// <param name="textField"></param>
         public TypingEffect(GTextField textField)
         {
             if (textField is GRichTextField)
-                _textField = ((RichTextField)textField.displayObject).textField;
+                _textField = ((RichTextField) textField.displayObject).textField;
             else
-                _textField = (TextField)textField.displayObject;
+                _textField = (TextField) textField.displayObject;
             _textField.EnableCharPositionSupport();
         }
 
@@ -62,37 +60,37 @@ namespace FairyGUI
             _vertIndex = 0;
             _started = true;
 
-            int vertCount = _textField.graphics.mesh.vertexCount;
+            var vertCount = _textField.graphics.mesh.vertexCount;
             _backupVerts = _textField.graphics.mesh.vertices;
             if (_vertices == null || _vertices.Length != vertCount)
                 _vertices = new Vector3[vertCount];
-            Vector3 zero = Vector3.zero;
-            for (int i = 0; i < vertCount; i++)
+            var zero = Vector3.zero;
+            for (var i = 0; i < vertCount; i++)
                 _vertices[i] = zero;
             _textField.graphics.mesh.vertices = _vertices;
 
             //隐藏所有混排的对象
             if (_textField.richTextField != null)
             {
-                int ec = _textField.richTextField.htmlElementCount;
-                for (int i = 0; i < ec; i++)
+                var ec = _textField.richTextField.htmlElementCount;
+                for (var i = 0; i < ec; i++)
                     _textField.richTextField.ShowHtmlObject(i, false);
             }
 
-            int charCount = _textField.charPositions.Count;
-            for (int i = 0; i < charCount; i++)
+            var charCount = _textField.charPositions.Count;
+            for (var i = 0; i < charCount; i++)
             {
-                TextField.CharPosition cp = _textField.charPositions[i];
+                var cp = _textField.charPositions[i];
                 _mainLayerVertCount += cp.vertCount;
             }
 
             if (_mainLayerVertCount < vertCount) //说明有描边或者阴影
             {
-                int repeat = vertCount / _mainLayerVertCount;
+                var repeat = vertCount / _mainLayerVertCount;
                 _stroke = repeat > 2;
                 _shadow = repeat % 2 == 0;
                 _mainLayerStart = vertCount - vertCount / repeat;
-                _strokeLayerStart = _shadow ? (vertCount / repeat) : 0;
+                _strokeLayerStart = _shadow ? vertCount / repeat : 0;
                 _strokeDrawDirs = repeat > 8 ? 8 : 4;
             }
         }
@@ -107,8 +105,8 @@ namespace FairyGUI
                 return false;
 
             TextField.CharPosition cp;
-            List<TextField.CharPosition> charPositions = _textField.charPositions;
-            int listCnt = charPositions.Count;
+            var charPositions = _textField.charPositions;
+            var listCnt = charPositions.Count;
 
             while (_printIndex < listCnt - 1) //最后一个是占位的，无效的，所以-1
             {
@@ -121,7 +119,9 @@ namespace FairyGUI
                     return true;
                 }
                 else if (!char.IsWhiteSpace(_textField.parsedText[_printIndex - 1]))
+                {
                     return true;
+                }
             }
 
             Cancel();
@@ -134,20 +134,18 @@ namespace FairyGUI
 
             start = _mainLayerStart + _vertIndex;
             end = start + vertCount;
-            for (int i = start; i < end; i++)
+            for (var i = start; i < end; i++)
                 _vertices[i] = _backupVerts[i];
 
             if (_stroke)
             {
                 start = _strokeLayerStart + _vertIndex;
                 end = start + vertCount;
-                for (int i = start; i < end; i++)
+                for (var i = start; i < end; i++)
+                for (var j = 0; j < _strokeDrawDirs; j++)
                 {
-                    for (int j = 0; j < _strokeDrawDirs; j++)
-                    {
-                        int k = i + _mainLayerVertCount * j;
-                        _vertices[k] = _backupVerts[k];
-                    }
+                    var k = i + _mainLayerVertCount * j;
+                    _vertices[k] = _backupVerts[k];
                 }
             }
 
@@ -155,10 +153,7 @@ namespace FairyGUI
             {
                 start = _vertIndex;
                 end = start + vertCount;
-                for (int i = start; i < end; i++)
-                {
-                    _vertices[i] = _backupVerts[i];
-                }
+                for (var i = start; i < end; i++) _vertices[i] = _backupVerts[i];
             }
 
             _textField.graphics.mesh.vertices = _vertices;
@@ -200,7 +195,7 @@ namespace FairyGUI
         /// 当打字过程中，文本可能会由于字体纹理更改而发生字体重建，要处理这种情况。
         /// 图片对象不需要处理，因为HtmlElement.status里设定的隐藏标志不会因为Mesh更新而被冲掉。
         /// </summary>
-        void OnMeshModified()
+        private void OnMeshModified()
         {
             if (_textField.graphics.mesh.vertexCount != _backupVerts.Length) //可能文字都改了
             {
@@ -210,13 +205,11 @@ namespace FairyGUI
 
             _backupVerts = _textField.graphics.mesh.vertices;
 
-            int vertCount = _vertices.Length;
-            Vector3 zero = Vector3.zero;
-            for (int i = 0; i < vertCount; i++)
-            {
+            var vertCount = _vertices.Length;
+            var zero = Vector3.zero;
+            for (var i = 0; i < vertCount; i++)
                 if (_vertices[i] != zero)
                     _vertices[i] = _backupVerts[i];
-            }
 
             _textField.graphics.mesh.vertices = _vertices;
         }

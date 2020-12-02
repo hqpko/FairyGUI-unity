@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class JoystickModule : EventDispatcher
 {
-    float _InitX;
-    float _InitY;
-    float _startStageX;
-    float _startStageY;
-    float _lastStageX;
-    float _lastStageY;
-    GButton _button;
-    GObject _touchArea;
-    GObject _thumb;
-    GObject _center;
-    int touchId;
-    GTweener _tweener;
+    private float _InitX;
+    private float _InitY;
+    private float _startStageX;
+    private float _startStageY;
+    private float _lastStageX;
+    private float _lastStageY;
+    private GButton _button;
+    private GObject _touchArea;
+    private GObject _thumb;
+    private GObject _center;
+    private int touchId;
+    private GTweener _tweener;
 
     public EventListener onMove { get; private set; }
     public EventListener onEnd { get; private set; }
@@ -37,9 +37,9 @@ public class JoystickModule : EventDispatcher
         touchId = -1;
         radius = 150;
 
-        _touchArea.onTouchBegin.Add(this.OnTouchBegin);
-        _touchArea.onTouchMove.Add(this.OnTouchMove);
-        _touchArea.onTouchEnd.Add(this.OnTouchEnd);
+        _touchArea.onTouchBegin.Add(OnTouchBegin);
+        _touchArea.onTouchMove.Add(OnTouchMove);
+        _touchArea.onTouchEnd.Add(OnTouchEnd);
     }
 
     public void Trigger(EventContext context)
@@ -49,9 +49,9 @@ public class JoystickModule : EventDispatcher
 
     private void OnTouchBegin(EventContext context)
     {
-        if (touchId == -1)//First touch
+        if (touchId == -1) //First touch
         {
-            InputEvent evt = (InputEvent)context.data;
+            var evt = (InputEvent) context.data;
             touchId = evt.touchId;
 
             if (_tweener != null)
@@ -60,9 +60,9 @@ public class JoystickModule : EventDispatcher
                 _tweener = null;
             }
 
-            Vector2 pt = GRoot.inst.GlobalToLocal(new Vector2(evt.x, evt.y));
-            float bx = pt.x;
-            float by = pt.y;
+            var pt = GRoot.inst.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var bx = pt.x;
+            var by = pt.y;
             _button.selected = true;
 
             if (bx < 0)
@@ -84,9 +84,9 @@ public class JoystickModule : EventDispatcher
             _center.SetXY(bx - _center.width / 2, by - _center.height / 2);
             _button.SetXY(bx - _button.width / 2, by - _button.height / 2);
 
-            float deltaX = bx - _InitX;
-            float deltaY = by - _InitY;
-            float degrees = Mathf.Atan2(deltaY, deltaX) * 180 / Mathf.PI;
+            var deltaX = bx - _InitX;
+            var deltaY = by - _InitY;
+            var degrees = Mathf.Atan2(deltaY, deltaX) * 180 / Mathf.PI;
             _thumb.rotation = degrees + 90;
 
             context.CaptureTouch();
@@ -95,50 +95,51 @@ public class JoystickModule : EventDispatcher
 
     private void OnTouchEnd(EventContext context)
     {
-        InputEvent inputEvt = (InputEvent)context.data;
+        var inputEvt = (InputEvent) context.data;
         if (touchId != -1 && inputEvt.touchId == touchId)
         {
             touchId = -1;
             _thumb.rotation = _thumb.rotation + 180;
             _center.visible = false;
-            _tweener = _button.TweenMove(new Vector2(_InitX - _button.width / 2, _InitY - _button.height / 2), 0.3f).OnComplete(() =>
-            {
-                _tweener = null;
-                _button.selected = false;
-                _thumb.rotation = 0;
-                _center.visible = true;
-                _center.SetXY(_InitX - _center.width / 2, _InitY - _center.height / 2);
-            }
-            );
+            _tweener = _button.TweenMove(new Vector2(_InitX - _button.width / 2, _InitY - _button.height / 2), 0.3f)
+                .OnComplete(() =>
+                    {
+                        _tweener = null;
+                        _button.selected = false;
+                        _thumb.rotation = 0;
+                        _center.visible = true;
+                        _center.SetXY(_InitX - _center.width / 2, _InitY - _center.height / 2);
+                    }
+                );
 
-            this.onEnd.Call();
+            onEnd.Call();
         }
     }
 
     private void OnTouchMove(EventContext context)
     {
-        InputEvent evt = (InputEvent)context.data;
+        var evt = (InputEvent) context.data;
         if (touchId != -1 && evt.touchId == touchId)
         {
-            Vector2 pt = GRoot.inst.GlobalToLocal(new Vector2(evt.x, evt.y));
-            float bx = pt.x;
-            float by = pt.y;
-            float moveX = bx - _lastStageX;
-            float moveY = by - _lastStageY;
+            var pt = GRoot.inst.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var bx = pt.x;
+            var by = pt.y;
+            var moveX = bx - _lastStageX;
+            var moveY = by - _lastStageY;
             _lastStageX = bx;
             _lastStageY = by;
-            float buttonX = _button.x + moveX;
-            float buttonY = _button.y + moveY;
+            var buttonX = _button.x + moveX;
+            var buttonY = _button.y + moveY;
 
-            float offsetX = buttonX + _button.width / 2 - _startStageX;
-            float offsetY = buttonY + _button.height / 2 - _startStageY;
+            var offsetX = buttonX + _button.width / 2 - _startStageX;
+            var offsetY = buttonY + _button.height / 2 - _startStageY;
 
-            float rad = Mathf.Atan2(offsetY, offsetX);
-            float degree = rad * 180 / Mathf.PI;
+            var rad = Mathf.Atan2(offsetY, offsetX);
+            var degree = rad * 180 / Mathf.PI;
             _thumb.rotation = degree + 90;
 
-            float maxX = radius * Mathf.Cos(rad);
-            float maxY = radius * Mathf.Sin(rad);
+            var maxX = radius * Mathf.Cos(rad);
+            var maxY = radius * Mathf.Sin(rad);
             if (Mathf.Abs(offsetX) > Mathf.Abs(maxX))
                 offsetX = maxX;
             if (Mathf.Abs(offsetY) > Mathf.Abs(maxY))
@@ -153,7 +154,7 @@ public class JoystickModule : EventDispatcher
 
             _button.SetXY(buttonX - _button.width / 2, buttonY - _button.height / 2);
 
-            this.onMove.Call(degree);
+            onMove.Call(degree);
         }
     }
 }

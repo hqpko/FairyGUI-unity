@@ -17,20 +17,19 @@ namespace FairyGUI
     /// </summary>
     public class Window : GComponent
     {
-
         public bool bringToFontOnClick;
 
-        GComponent _frame;
-        GComponent _contentPane;
-        GObject _modalWaitPane;
-        GObject _closeButton;
-        GObject _dragArea;
-        GObject _contentArea;
-        bool _modal;
+        private GComponent _frame;
+        private GComponent _contentPane;
+        private GObject _modalWaitPane;
+        private GObject _closeButton;
+        private GObject _dragArea;
+        private GObject _contentArea;
+        private bool _modal;
 
-        List<IUISource> _uiSources;
-        bool _inited;
-        bool _loading;
+        private List<IUISource> _uiSources;
+        private bool _inited;
+        private bool _loading;
 
         protected int _requestingCmd;
 
@@ -46,14 +45,14 @@ namespace FairyGUI
             : base()
         {
             _uiSources = new List<IUISource>();
-            this.tabStopChildren = true;
+            tabStopChildren = true;
             bringToFontOnClick = UIConfig.bringWindowToFrontOnClick;
 
             displayObject.onAddedToStage.Add(__addedToStage);
             displayObject.onRemovedFromStage.Add(__removeFromStage);
             displayObject.onTouchBegin.AddCapture(__touchBegin);
 
-            this.gameObjectName = "Window";
+            gameObjectName = "Window";
             SetHome(GRoot.inst);
         }
 
@@ -69,7 +68,6 @@ namespace FairyGUI
             _uiSources.Add(source);
         }
 
-
         public GComponent contentPane
         {
             set
@@ -81,44 +79,36 @@ namespace FairyGUI
                     _contentPane = value;
                     if (_contentPane != null)
                     {
-                        this.gameObjectName = "Window - " + _contentPane.gameObjectName;
+                        gameObjectName = "Window - " + _contentPane.gameObjectName;
                         _contentPane.gameObjectName = "ContentPane";
 
                         AddChild(_contentPane);
-                        this.SetSize(_contentPane.width, _contentPane.height);
+                        SetSize(_contentPane.width, _contentPane.height);
                         _contentPane.AddRelation(this, RelationType.Size);
                         _contentPane.fairyBatching = true;
                         _frame = _contentPane.GetChild("frame") as GComponent;
                         if (_frame != null)
                         {
-                            this.closeButton = _frame.GetChild("closeButton");
-                            this.dragArea = _frame.GetChild("dragArea");
-                            this.contentArea = _frame.GetChild("contentArea");
+                            closeButton = _frame.GetChild("closeButton");
+                            dragArea = _frame.GetChild("dragArea");
+                            contentArea = _frame.GetChild("contentArea");
                         }
                     }
                     else
                     {
                         _frame = null;
-                        this.gameObjectName = "Window";
+                        gameObjectName = "Window";
                     }
                 }
             }
-            get
-            {
-                return _contentPane;
-            }
+            get => _contentPane;
         }
 
-
-        public GComponent frame
-        {
-            get { return _frame; }
-        }
-
+        public GComponent frame => _frame;
 
         public GObject closeButton
         {
-            get { return _closeButton; }
+            get => _closeButton;
             set
             {
                 if (_closeButton != null)
@@ -129,10 +119,9 @@ namespace FairyGUI
             }
         }
 
-
         public GObject dragArea
         {
-            get { return _dragArea; }
+            get => _dragArea;
             set
             {
                 if (_dragArea != value)
@@ -146,7 +135,7 @@ namespace FairyGUI
                     _dragArea = value;
                     if (_dragArea != null)
                     {
-                        GGraph graph = _dragArea as GGraph;
+                        var graph = _dragArea as GGraph;
                         if (graph != null && graph.shape.isEmpty)
                             graph.DrawRect(_dragArea.width, _dragArea.height, 0, Color.clear, Color.clear);
                         _dragArea.draggable = true;
@@ -156,25 +145,18 @@ namespace FairyGUI
             }
         }
 
-
         public GObject contentArea
         {
-            get { return _contentArea; }
-            set { _contentArea = value; }
+            get => _contentArea;
+            set => _contentArea = value;
         }
 
-
-        public GObject modalWaitingPane
-        {
-            get { return _modalWaitPane; }
-        }
-
+        public GObject modalWaitingPane => _modalWaitPane;
 
         public void Show()
         {
             GRoot.inst.ShowWindow(this);
         }
-
 
         /// <param name="r"></param>
         public void ShowOn(GRoot r)
@@ -182,10 +164,9 @@ namespace FairyGUI
             r.ShowWindow(this);
         }
 
-
         public void Hide()
         {
-            if (this.isShowing)
+            if (isShowing)
                 DoHideAnimation();
         }
 
@@ -194,7 +175,7 @@ namespace FairyGUI
         /// </summary>
         public void HideImmediately()
         {
-            this.root.HideWindowImmediately(this);
+            root.HideWindowImmediately(this);
         }
 
         /// <summary>
@@ -204,11 +185,11 @@ namespace FairyGUI
         /// <param name="restraint">Add relations to ensure keeping center on screen size changed.</param>
         public void CenterOn(GRoot r, bool restraint)
         {
-            this.SetXY((int)((r.width - this.width) / 2), (int)((r.height - this.height) / 2));
+            SetXY((int) ((r.width - width) / 2), (int) ((r.height - height) / 2));
             if (restraint)
             {
-                this.AddRelation(r, RelationType.Center_Center);
-                this.AddRelation(r, RelationType.Middle_Middle);
+                AddRelation(r, RelationType.Center_Center);
+                AddRelation(r, RelationType.Middle_Middle);
             }
         }
 
@@ -223,31 +204,20 @@ namespace FairyGUI
                 Show();
         }
 
+        public bool isShowing => parent != null;
 
-        public bool isShowing
-        {
-            get { return parent != null; }
-        }
-
-
-        public bool isTop
-        {
-            get { return parent != null && parent.GetChildIndex(this) == parent.numChildren - 1; }
-        }
-
+        public bool isTop => parent != null && parent.GetChildIndex(this) == parent.numChildren - 1;
 
         public bool modal
         {
-            get { return _modal; }
-            set { _modal = value; }
+            get => _modal;
+            set => _modal = value;
         }
-
 
         public void BringToFront()
         {
-            this.root.BringToFront(this);
+            root.BringToFront(this);
         }
-
 
         public void ShowModalWait()
         {
@@ -279,19 +249,20 @@ namespace FairyGUI
             }
         }
 
-        virtual protected void LayoutModalWaitPane()
+        protected virtual void LayoutModalWaitPane()
         {
             if (_contentArea != null)
             {
-                Vector2 pt = _frame.LocalToGlobal(Vector2.zero);
-                pt = this.GlobalToLocal(pt);
-                _modalWaitPane.SetXY((int)pt.x + _contentArea.x, (int)pt.y + _contentArea.y);
+                var pt = _frame.LocalToGlobal(Vector2.zero);
+                pt = GlobalToLocal(pt);
+                _modalWaitPane.SetXY((int) pt.x + _contentArea.x, (int) pt.y + _contentArea.y);
                 _modalWaitPane.SetSize(_contentArea.width, _contentArea.height);
             }
             else
-                _modalWaitPane.SetSize(this.width, this.height);
+            {
+                _modalWaitPane.SetSize(width, height);
+            }
         }
-
 
         /// <returns></returns>
         public bool CloseModalWait()
@@ -309,10 +280,8 @@ namespace FairyGUI
         public bool CloseModalWait(int requestingCmd)
         {
             if (requestingCmd != 0)
-            {
                 if (_requestingCmd != requestingCmd)
                     return false;
-            }
             _requestingCmd = 0;
 
             if (_modalWaitPane != null && _modalWaitPane.parent != null)
@@ -321,12 +290,7 @@ namespace FairyGUI
             return true;
         }
 
-
-        public bool modalWaiting
-        {
-            get { return (_modalWaitPane != null) && _modalWaitPane.inContainer; }
-        }
-
+        public bool modalWaiting => _modalWaitPane != null && _modalWaitPane.inContainer;
 
         public void Init()
         {
@@ -336,10 +300,10 @@ namespace FairyGUI
             if (_uiSources.Count > 0)
             {
                 _loading = false;
-                int cnt = _uiSources.Count;
-                for (int i = 0; i < cnt; i++)
+                var cnt = _uiSources.Count;
+                for (var i = 0; i < cnt; i++)
                 {
-                    IUISource lib = _uiSources[i];
+                    var lib = _uiSources[i];
                     if (!lib.loaded)
                     {
                         lib.Load(__uiLoadComplete);
@@ -351,11 +315,12 @@ namespace FairyGUI
                     _init();
             }
             else
+            {
                 _init();
+            }
         }
 
-
-        virtual protected void OnInit()
+        protected virtual void OnInit()
         {
 #if FAIRYGUI_TOLUA
             CallLua("OnInit");
@@ -366,8 +331,7 @@ namespace FairyGUI
 #endif
         }
 
-
-        virtual protected void OnShown()
+        protected virtual void OnShown()
         {
 #if FAIRYGUI_TOLUA
             CallLua("OnShown");
@@ -378,8 +342,7 @@ namespace FairyGUI
 #endif
         }
 
-
-        virtual protected void OnHide()
+        protected virtual void OnHide()
         {
 #if FAIRYGUI_TOLUA
             CallLua("OnHide");
@@ -390,8 +353,7 @@ namespace FairyGUI
 #endif
         }
 
-
-        virtual protected void DoShowAnimation()
+        protected virtual void DoShowAnimation()
         {
 #if FAIRYGUI_TOLUA
             if (!CallLua("DoShowAnimation"))
@@ -406,8 +368,7 @@ namespace FairyGUI
 #endif
         }
 
-
-        virtual protected void DoHideAnimation()
+        protected virtual void DoHideAnimation()
         {
 #if FAIRYGUI_TOLUA
             if (!CallLua("DoHideAnimation"))
@@ -422,12 +383,12 @@ namespace FairyGUI
 #endif
         }
 
-        void __uiLoadComplete()
+        private void __uiLoadComplete()
         {
-            int cnt = _uiSources.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _uiSources.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                IUISource lib = _uiSources[i];
+                var lib = _uiSources[i];
                 if (!lib.loaded)
                     return;
             }
@@ -436,16 +397,16 @@ namespace FairyGUI
             _init();
         }
 
-        void _init()
+        private void _init()
         {
             _inited = true;
             OnInit();
 
-            if (this.isShowing)
+            if (isShowing)
                 DoShowAnimation();
         }
 
-        override public void Dispose()
+        public override void Dispose()
         {
             if (_modalWaitPane != null && _modalWaitPane.parent == null)
                 _modalWaitPane.Dispose();
@@ -461,12 +422,12 @@ namespace FairyGUI
             base.Dispose();
         }
 
-        virtual protected void closeEventHandler(EventContext context)
+        protected virtual void closeEventHandler(EventContext context)
         {
             Hide();
         }
 
-        void __addedToStage()
+        private void __addedToStage()
         {
             if (!_inited)
                 Init();
@@ -474,7 +435,7 @@ namespace FairyGUI
                 DoShowAnimation();
         }
 
-        void __removeFromStage()
+        private void __removeFromStage()
         {
             CloseModalWait();
             OnHide();
@@ -482,17 +443,14 @@ namespace FairyGUI
 
         private void __touchBegin(EventContext context)
         {
-            if (this.isShowing && bringToFontOnClick)
-            {
-                BringToFront();
-            }
+            if (isShowing && bringToFontOnClick) BringToFront();
         }
 
         private void __dragStart(EventContext context)
         {
             context.PreventDefault();
 
-            this.StartDrag((int)context.data);
+            StartDrag((int) context.data);
         }
     }
 }

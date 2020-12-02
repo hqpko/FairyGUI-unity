@@ -8,38 +8,38 @@ namespace FairyGUI
 {
     public class TextField : DisplayObject, IMeshFactory
     {
-        VertAlignType _verticalAlign;
-        TextFormat _textFormat;
-        bool _input;
-        string _text;
-        AutoSizeType _autoSize;
-        bool _wordWrap;
-        bool _singleLine;
-        bool _html;
-        RTLSupport.DirectionType _textDirection;
-        int _maxWidth;
+        private VertAlignType _verticalAlign;
+        private TextFormat _textFormat;
+        private bool _input;
+        private string _text;
+        private AutoSizeType _autoSize;
+        private bool _wordWrap;
+        private bool _singleLine;
+        private bool _html;
+        private RTLSupport.DirectionType _textDirection;
+        private int _maxWidth;
 
-        List<HtmlElement> _elements;
-        List<LineInfo> _lines;
-        List<CharPosition> _charPositions;
+        private List<HtmlElement> _elements;
+        private List<LineInfo> _lines;
+        private List<CharPosition> _charPositions;
 
-        BaseFont _font;
-        float _textWidth;
-        float _textHeight;
-        bool _textChanged;
-        float _yOffset;
-        float _fontSizeScale;
-        float _renderScale;
-        int _fontVersion;
-        string _parsedText;
+        private BaseFont _font;
+        private float _textWidth;
+        private float _textHeight;
+        private bool _textChanged;
+        private float _yOffset;
+        private float _fontSizeScale;
+        private float _renderScale;
+        private int _fontVersion;
+        private string _parsedText;
 
-        RichTextField _richTextField;
+        private RichTextField _richTextField;
 
-        const int GUTTER_X = 2;
-        const int GUTTER_Y = 2;
-        const float IMAGE_BASELINE = 0.8f;
+        private const int GUTTER_X = 2;
+        private const int GUTTER_Y = 2;
+        private const float IMAGE_BASELINE = 0.8f;
 
-        static float[] STROKE_OFFSET = new float[]
+        private static float[] STROKE_OFFSET = new float[]
         {
             -1, 0, 1, 0,
             0, -1, 0, 1,
@@ -47,7 +47,7 @@ namespace FairyGUI
             -1, 1, 1, 1
         };
 
-        static List<LineCharInfo> sLineChars = new List<LineCharInfo>();
+        private static List<LineCharInfo> sLineChars = new List<LineCharInfo>();
 
         public TextField()
         {
@@ -90,7 +90,7 @@ namespace FairyGUI
 
         public TextFormat textFormat
         {
-            get { return _textFormat; }
+            get => _textFormat;
             set
             {
                 _textFormat = value;
@@ -100,10 +100,10 @@ namespace FairyGUI
 
         public void ApplyFormat()
         {
-            string fontName = _textFormat.font;
+            var fontName = _textFormat.font;
             if (string.IsNullOrEmpty(fontName))
                 fontName = UIConfig.defaultFont;
-            BaseFont newFont = FontManager.GetFont(fontName);
+            var newFont = FontManager.GetFont(fontName);
             if (_font != newFont)
             {
                 _font = newFont;
@@ -117,7 +117,7 @@ namespace FairyGUI
 
         public AlignType align
         {
-            get { return _textFormat.align; }
+            get => _textFormat.align;
             set
             {
                 if (_textFormat.align != value)
@@ -131,7 +131,7 @@ namespace FairyGUI
 
         public VertAlignType verticalAlign
         {
-            get { return _verticalAlign; }
+            get => _verticalAlign;
             set
             {
                 if (_verticalAlign != value)
@@ -145,7 +145,7 @@ namespace FairyGUI
 
         public string text
         {
-            get { return _text; }
+            get => _text;
             set
             {
                 if (_text == value && !_html)
@@ -159,7 +159,7 @@ namespace FairyGUI
 
         public string htmlText
         {
-            get { return _text; }
+            get => _text;
             set
             {
                 if (_text == value && _html)
@@ -171,14 +171,11 @@ namespace FairyGUI
             }
         }
 
-        public string parsedText
-        {
-            get { return _parsedText; }
-        }
+        public string parsedText => _parsedText;
 
         public AutoSizeType autoSize
         {
-            get { return _autoSize; }
+            get => _autoSize;
             set
             {
                 if (_autoSize != value)
@@ -191,7 +188,7 @@ namespace FairyGUI
 
         public bool wordWrap
         {
-            get { return _wordWrap; }
+            get => _wordWrap;
             set
             {
                 if (_wordWrap != value)
@@ -204,7 +201,7 @@ namespace FairyGUI
 
         public bool singleLine
         {
-            get { return _singleLine; }
+            get => _singleLine;
             set
             {
                 if (_singleLine != value)
@@ -217,7 +214,7 @@ namespace FairyGUI
 
         public float stroke
         {
-            get { return _textFormat.outline; }
+            get => _textFormat.outline;
             set
             {
                 if (_textFormat.outline != value)
@@ -230,7 +227,7 @@ namespace FairyGUI
 
         public Color strokeColor
         {
-            get { return _textFormat.outlineColor; }
+            get => _textFormat.outlineColor;
             set
             {
                 if (_textFormat.outlineColor != value)
@@ -243,7 +240,7 @@ namespace FairyGUI
 
         public Vector2 shadowOffset
         {
-            get { return _textFormat.shadowOffset; }
+            get => _textFormat.shadowOffset;
             set
             {
                 _textFormat.shadowOffset = value;
@@ -275,7 +272,7 @@ namespace FairyGUI
 
         public int maxWidth
         {
-            get { return _maxWidth; }
+            get => _maxWidth;
             set
             {
                 if (_maxWidth != value)
@@ -321,10 +318,7 @@ namespace FairyGUI
             }
         }
 
-        public RichTextField richTextField
-        {
-            get { return _richTextField; }
-        }
+        public RichTextField richTextField => _richTextField;
 
         public bool Redraw()
         {
@@ -372,12 +366,12 @@ namespace FairyGUI
             bool clipped,
             List<Rect> resultRects)
         {
-            LineInfo line1 = _lines[startLine];
-            LineInfo line2 = _lines[endLine];
-            bool leftAlign = _textFormat.align == AlignType.Left;
+            var line1 = _lines[startLine];
+            var line2 = _lines[endLine];
+            var leftAlign = _textFormat.align == AlignType.Left;
             if (startLine == endLine)
             {
-                Rect r = Rect.MinMaxRect(startCharX, line1.y, endCharX, line1.y + line1.height);
+                var r = Rect.MinMaxRect(startCharX, line1.y, endCharX, line1.y + line1.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
                 else
@@ -385,7 +379,7 @@ namespace FairyGUI
             }
             else if (startLine == endLine - 1)
             {
-                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax,
+                var r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? GUTTER_X + line1.width : _contentRect.xMax,
                     line1.y + line1.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
@@ -399,16 +393,16 @@ namespace FairyGUI
             }
             else
             {
-                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax,
+                var r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? GUTTER_X + line1.width : _contentRect.xMax,
                     line1.y + line1.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
                 else
                     resultRects.Add(r);
-                for (int i = startLine + 1; i < endLine; i++)
+                for (var i = startLine + 1; i < endLine; i++)
                 {
-                    LineInfo line = _lines[i];
-                    r = Rect.MinMaxRect(GUTTER_X, r.yMax, leftAlign ? (GUTTER_X + line.width) : _contentRect.xMax,
+                    var line = _lines[i];
+                    r = Rect.MinMaxRect(GUTTER_X, r.yMax, leftAlign ? GUTTER_X + line.width : _contentRect.xMax,
                         line.y + line.height);
                     if (clipped)
                         resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
@@ -424,7 +418,7 @@ namespace FairyGUI
             }
         }
 
-        override protected void OnSizeChanged()
+        protected override void OnSizeChanged()
         {
             if ((_flags & Flags.UpdatingSize) == 0)
             {
@@ -457,7 +451,7 @@ namespace FairyGUI
         /// <summary>
         /// 准备字体纹理
         /// </summary>
-        void RequestText()
+        private void RequestText()
         {
             if (!_html)
             {
@@ -466,10 +460,10 @@ namespace FairyGUI
             }
             else
             {
-                int count = _elements.Count;
-                for (int i = 0; i < count; i++)
+                var count = _elements.Count;
+                for (var i = 0; i < count; i++)
                 {
-                    HtmlElement element = _elements[i];
+                    var element = _elements[i];
                     if (element.type == HtmlElementType.Text)
                     {
                         _font.SetFormat(element.format, _fontSizeScale);
@@ -479,7 +473,7 @@ namespace FairyGUI
             }
         }
 
-        void BuildLines()
+        private void BuildLines()
         {
             if (_font == null)
             {
@@ -497,7 +491,7 @@ namespace FairyGUI
 
             if (_text.Length == 0)
             {
-                LineInfo emptyLine = LineInfo.Borrow();
+                var emptyLine = LineInfo.Borrow();
                 emptyLine.width = 0;
                 emptyLine.height = _font.GetLineHeight(_textFormat.size);
                 emptyLine.charIndex = emptyLine.charCount = 0;
@@ -522,15 +516,19 @@ namespace FairyGUI
                 {
                     if (_input)
                     {
-                        float w = Mathf.Max(_textFormat.size, _textWidth);
-                        float h = Mathf.Max(_font.GetLineHeight(_textFormat.size) + GUTTER_Y * 2, _textHeight);
+                        var w = Mathf.Max(_textFormat.size, _textWidth);
+                        var h = Mathf.Max(_font.GetLineHeight(_textFormat.size) + GUTTER_Y * 2, _textHeight);
                         _richTextField.SetSize(w, h);
                     }
                     else
+                    {
                         _richTextField.SetSize(_textWidth, _textHeight);
+                    }
                 }
                 else
+                {
                     SetSize(_textWidth, _textHeight);
+                }
 
                 InvalidateBatchingState();
                 _flags &= ~Flags.UpdatingSize;
@@ -547,7 +545,9 @@ namespace FairyGUI
                         _richTextField.height = _textHeight;
                 }
                 else
-                    this.height = _textHeight;
+                {
+                    height = _textHeight;
+                }
 
                 InvalidateBatchingState();
                 _flags &= ~Flags.UpdatingSize;
@@ -557,7 +557,7 @@ namespace FairyGUI
             ApplyVertAlign();
         }
 
-        void ParseText()
+        private void ParseText()
         {
 #if RTL_TEXT_SUPPORT
             _textDirection = RTLSupport.DetectTextDirection(_text);
@@ -570,22 +570,24 @@ namespace FairyGUI
                 _parsedText = string.Empty;
             }
             else
+            {
                 _parsedText = _text;
+            }
 
-            int elementCount = _elements.Count;
+            var elementCount = _elements.Count;
             if (elementCount == 0)
             {
                 if (_textDirection != RTLSupport.DirectionType.UNKNOW)
                     _parsedText = RTLSupport.DoMapping(_parsedText);
 
-                bool flag = _input || _richTextField != null && _richTextField.emojies != null;
+                var flag = _input || _richTextField != null && _richTextField.emojies != null;
                 if (!flag)
                 {
                     //检查文本中是否有需要转换的字符，如果没有，节省一个new StringBuilder的操作。
-                    int cnt = _parsedText.Length;
-                    for (int i = 0; i < cnt; i++)
+                    var cnt = _parsedText.Length;
+                    for (var i = 0; i < cnt; i++)
                     {
-                        char ch = _parsedText[i];
+                        var ch = _parsedText[i];
                         if (ch == '\r' || char.IsHighSurrogate(ch))
                         {
                             flag = true;
@@ -596,7 +598,7 @@ namespace FairyGUI
 
                 if (flag)
                 {
-                    StringBuilder buffer = new StringBuilder();
+                    var buffer = new StringBuilder();
                     ParseText(buffer, _parsedText, -1);
                     elementCount = _elements.Count;
                     _parsedText = buffer.ToString();
@@ -604,11 +606,11 @@ namespace FairyGUI
             }
             else
             {
-                StringBuilder buffer = new StringBuilder();
-                int i = 0;
+                var buffer = new StringBuilder();
+                var i = 0;
                 while (i < elementCount)
                 {
-                    HtmlElement element = _elements[i];
+                    var element = _elements[i];
                     element.charIndex = buffer.Length;
                     if (element.type == HtmlElementType.Text)
                     {
@@ -619,7 +621,9 @@ namespace FairyGUI
                         elementCount = _elements.Count;
                     }
                     else if (element.isEntity)
+                    {
                         buffer.Append(' ');
+                    }
 
                     i++;
                 }
@@ -633,19 +637,19 @@ namespace FairyGUI
             }
         }
 
-        void BuildLines2()
+        private void BuildLines2()
         {
-            float letterSpacing = _textFormat.letterSpacing * _fontSizeScale;
-            float lineSpacing = (_textFormat.lineSpacing - 1) * _fontSizeScale;
-            float rectWidth = _contentRect.width - GUTTER_X * 2;
+            var letterSpacing = _textFormat.letterSpacing * _fontSizeScale;
+            var lineSpacing = (_textFormat.lineSpacing - 1) * _fontSizeScale;
+            var rectWidth = _contentRect.width - GUTTER_X * 2;
             float glyphWidth = 0, glyphHeight = 0, baseline = 0;
             short wordLen = 0;
-            bool wordPossible = false;
+            var wordPossible = false;
             float posx = 0;
 
-            TextFormat format = _textFormat;
+            var format = _textFormat;
             _font.SetFormat(format, _fontSizeScale);
-            bool wrap = _wordWrap && !_singleLine;
+            var wrap = _wordWrap && !_singleLine;
             if (_maxWidth > 0)
             {
                 wrap = true;
@@ -656,21 +660,21 @@ namespace FairyGUI
 
             RequestText();
 
-            int elementCount = _elements.Count;
-            int elementIndex = 0;
+            var elementCount = _elements.Count;
+            var elementIndex = 0;
             HtmlElement element = null;
             if (elementCount > 0)
                 element = _elements[elementIndex];
-            int textLength = _parsedText.Length;
+            var textLength = _parsedText.Length;
 
-            LineInfo line = LineInfo.Borrow();
+            var line = LineInfo.Borrow();
             _lines.Add(line);
             line.y = line.y2 = GUTTER_Y;
             sLineChars.Clear();
 
-            for (int charIndex = 0; charIndex < textLength; charIndex++)
+            for (var charIndex = 0; charIndex < textLength; charIndex++)
             {
-                char ch = _parsedText[charIndex];
+                var ch = _parsedText[charIndex];
 
                 glyphWidth = glyphHeight = baseline = 0;
 
@@ -683,7 +687,7 @@ namespace FairyGUI
                     }
                     else
                     {
-                        IHtmlObject htmlObject = element.htmlObject;
+                        var htmlObject = element.htmlObject;
                         if (_richTextField != null && htmlObject == null)
                         {
                             element.space = (int) (rectWidth - line.width - 4);
@@ -721,9 +725,7 @@ namespace FairyGUI
                     if (wordPossible)
                     {
                         if (char.IsWhiteSpace(ch))
-                        {
                             wordLen = 0;
-                        }
                         else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z'
                                                         || ch >= '0' && ch <= '9'
                                                         || ch == '.' || ch == '"' || ch == '\''
@@ -731,9 +733,7 @@ namespace FairyGUI
                                                         || format.specialStyle == TextFormat.SpecialStyle.Superscript
                                                         || _textDirection != RTLSupport.DirectionType.UNKNOW &&
                                                         RTLSupport.IsArabicLetter(ch))
-                        {
                             wordLen++;
-                        }
                         else
                             wordPossible = false;
                     }
@@ -752,10 +752,14 @@ namespace FairyGUI
                         }
                     }
                     else
+                    {
                         wordPossible = false;
+                    }
                 }
                 else
+                {
                     wordPossible = false;
+                }
 
                 sLineChars.Add(new LineCharInfo() {width = glyphWidth, height = glyphHeight, baseline = baseline});
                 if (glyphWidth != 0)
@@ -769,7 +773,7 @@ namespace FairyGUI
                 {
                     UpdateLineInfo(line, letterSpacing, sLineChars.Count);
 
-                    LineInfo newLine = LineInfo.Borrow();
+                    var newLine = LineInfo.Borrow();
                     _lines.Add(newLine);
                     newLine.y = line.y + (line.height + lineSpacing);
                     if (newLine.y < GUTTER_Y) //lineSpacing maybe negative
@@ -784,7 +788,7 @@ namespace FairyGUI
                 }
                 else if (wrap && posx > rectWidth)
                 {
-                    int lineCharCount = sLineChars.Count;
+                    var lineCharCount = sLineChars.Count;
                     int toMoveChars;
 
                     if (wordPossible && wordLen < 20 && lineCharCount > 2) //if word had broken, move word to new line
@@ -800,7 +804,7 @@ namespace FairyGUI
                         UpdateLineInfo(line, letterSpacing, lineCharCount - toMoveChars);
                     }
 
-                    LineInfo newLine = LineInfo.Borrow();
+                    var newLine = LineInfo.Borrow();
                     _lines.Add(newLine);
                     newLine.y = line.y + (line.height + lineSpacing);
                     if (newLine.y < GUTTER_Y)
@@ -813,7 +817,7 @@ namespace FairyGUI
                     {
                         for (int i = line.charCount; i < lineCharCount; i++)
                         {
-                            LineCharInfo ci = sLineChars[i];
+                            var ci = sLineChars[i];
                             if (posx != 0)
                                 posx += letterSpacing;
                             posx += ci.width;
@@ -822,7 +826,9 @@ namespace FairyGUI
                         sLineChars.RemoveRange(0, line.charCount);
                     }
                     else
+                    {
                         sLineChars.Clear();
+                    }
 
                     wordPossible = false;
                     line = newLine;
@@ -839,19 +845,19 @@ namespace FairyGUI
             _textHeight = Mathf.RoundToInt(_textHeight);
         }
 
-        void UpdateLineInfo(LineInfo line, float letterSpacing, int cnt)
+        private void UpdateLineInfo(LineInfo line, float letterSpacing, int cnt)
         {
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                LineCharInfo ci = sLineChars[i];
+                var ci = sLineChars[i];
                 if (ci.baseline > line.baseline)
                 {
-                    line.height += (ci.baseline - line.baseline);
+                    line.height += ci.baseline - line.baseline;
                     line.baseline = ci.baseline;
                 }
 
                 if (ci.height - ci.baseline > line.height - line.baseline)
-                    line.height += (ci.height - ci.baseline - (line.height - line.baseline));
+                    line.height += ci.height - ci.baseline - (line.height - line.baseline);
 
                 if (ci.width > 0)
                 {
@@ -875,17 +881,17 @@ namespace FairyGUI
             line.charCount = (short) cnt;
         }
 
-        void DoShrink()
+        private void DoShrink()
         {
             if (_lines.Count > 1 && _textHeight > _contentRect.height)
             {
                 //多行的情况，涉及到自动换行，得用二分法查找最合适的比例，会消耗多一点计算资源
-                int low = 0;
-                int high = _textFormat.size;
+                var low = 0;
+                var high = _textFormat.size;
 
                 //先尝试猜测一个比例
                 _fontSizeScale = Mathf.Sqrt(_contentRect.height / _textHeight);
-                int cur = Mathf.FloorToInt(_fontSizeScale * _textFormat.size);
+                var cur = Mathf.FloorToInt(_fontSizeScale * _textFormat.size);
 
                 while (true)
                 {
@@ -902,7 +908,9 @@ namespace FairyGUI
                         _fontSizeScale = (float) cur / _textFormat.size;
                     }
                     else
+                    {
                         break;
+                    }
                 }
             }
             else if (_textWidth > _contentRect.width)
@@ -914,7 +922,7 @@ namespace FairyGUI
 
                 if (_textWidth > _contentRect.width) //如果还超出，缩小一点再来一次
                 {
-                    int size = Mathf.FloorToInt(_textFormat.size * _fontSizeScale);
+                    var size = Mathf.FloorToInt(_textFormat.size * _fontSizeScale);
                     size--;
                     _fontSizeScale = (float) size / _textFormat.size;
 
@@ -924,15 +932,15 @@ namespace FairyGUI
             }
         }
 
-        int ParseText(StringBuilder buffer, string source, int elementIndex)
+        private int ParseText(StringBuilder buffer, string source, int elementIndex)
         {
-            int textLength = source.Length;
-            int j = 0;
-            int appendPos = 0;
-            bool hasEmojies = _richTextField != null && _richTextField.emojies != null;
+            var textLength = source.Length;
+            var j = 0;
+            var appendPos = 0;
+            var hasEmojies = _richTextField != null && _richTextField.emojies != null;
             while (j < textLength)
             {
-                char ch = source[j];
+                var ch = source[j];
                 if (ch == '\r')
                 {
                     buffer.Append(source, appendPos, j - appendPos);
@@ -943,7 +951,7 @@ namespace FairyGUI
                 }
                 else
                 {
-                    bool highSurrogate = char.IsHighSurrogate(ch);
+                    var highSurrogate = char.IsHighSurrogate(ch);
                     if (hasEmojies)
                     {
                         uint emojiKey = 0;
@@ -954,7 +962,7 @@ namespace FairyGUI
                             emojiKey = ch;
                         if (_richTextField.emojies.TryGetValue(emojiKey, out emoji))
                         {
-                            HtmlElement imageElement = HtmlElement.GetElement(HtmlElementType.Image);
+                            var imageElement = HtmlElement.GetElement(HtmlElementType.Image);
                             imageElement.Set("src", emoji.url);
                             if (emoji.width != 0)
                                 imageElement.Set("width", emoji.width);
@@ -1007,31 +1015,31 @@ namespace FairyGUI
                 return;
             }
 
-            float letterSpacing = _textFormat.letterSpacing * _fontSizeScale;
-            TextFormat format = _textFormat;
+            var letterSpacing = _textFormat.letterSpacing * _fontSizeScale;
+            var format = _textFormat;
             _font.SetFormat(format, _fontSizeScale);
             _font.UpdateGraphics(graphics);
 
-            float rectWidth = _contentRect.width > 0 ? (_contentRect.width - GUTTER_X * 2) : 0;
-            float rectHeight = _contentRect.height > 0
+            var rectWidth = _contentRect.width > 0 ? _contentRect.width - GUTTER_X * 2 : 0;
+            var rectHeight = _contentRect.height > 0
                 ? Mathf.Max(_contentRect.height, _font.GetLineHeight(format.size))
                 : 0;
 
             if (_charPositions != null)
                 _charPositions.Clear();
 
-            List<Vector3> vertList = vb.vertices;
-            List<Vector2> uvList = vb.uvs;
-            List<Vector2> uv2List = vb.uvs2;
-            List<Color32> colList = vb.colors;
+            var vertList = vb.vertices;
+            var uvList = vb.uvs;
+            var uv2List = vb.uvs2;
+            var colList = vb.colors;
 
             HtmlLink currentLink = null;
             float linkStartX = 0;
-            int linkStartLine = 0;
+            var linkStartLine = 0;
 
             float posx = 0;
             float indent_x;
-            bool clipping = !_input && _autoSize == AutoSizeType.None;
+            var clipping = !_input && _autoSize == AutoSizeType.None;
             bool lineClipped;
             AlignType lineAlign;
             float glyphWidth, glyphHeight, baseline;
@@ -1042,16 +1050,16 @@ namespace FairyGUI
             int maxFontSize;
             string rtlLine = null;
 
-            int elementIndex = 0;
-            int elementCount = _elements.Count;
+            var elementIndex = 0;
+            var elementCount = _elements.Count;
             HtmlElement element = null;
             if (elementCount > 0)
                 element = _elements[elementIndex];
 
-            int lineCount = _lines.Count;
-            for (int i = 0; i < lineCount; ++i)
+            var lineCount = _lines.Count;
+            for (var i = 0; i < lineCount; ++i)
             {
-                LineInfo line = _lines[i];
+                var line = _lines[i];
                 if (line.charCount == 0)
                     continue;
 
@@ -1106,10 +1114,10 @@ namespace FairyGUI
                     lineCharCount = rtlLine.Length;
                 }
 
-                for (int j = 0; j < lineCharCount; j++)
+                for (var j = 0; j < lineCharCount; j++)
                 {
-                    int charIndex = line.charIndex + j;
-                    char ch = rtlLine != null ? rtlLine[j] : _parsedText[charIndex];
+                    var charIndex = line.charIndex + j;
+                    var ch = rtlLine != null ? rtlLine[j] : _parsedText[charIndex];
 
                     while (element != null && charIndex == element.charIndex)
                     {
@@ -1141,7 +1149,9 @@ namespace FairyGUI
                                     maxFontSize = 0;
                                 }
                                 else
+                                {
                                     underlineStart = posx;
+                                }
                             }
 
                             if (format.strikethrough != element.format.strikethrough)
@@ -1169,12 +1179,14 @@ namespace FairyGUI
                                     minFontSize = int.MaxValue;
                                 }
                                 else
+                                {
                                     strikethroughStart = posx;
+                                }
                             }
 
                             if (vertCount > 0 && _charPositions != null)
                             {
-                                CharPosition cp = _charPositions[_charPositions.Count - 1];
+                                var cp = _charPositions[_charPositions.Count - 1];
                                 cp.vertCount += vertCount;
                                 _charPositions[_charPositions.Count - 1] = cp;
                             }
@@ -1205,7 +1217,7 @@ namespace FairyGUI
                         }
                         else
                         {
-                            IHtmlObject htmlObj = element.htmlObject;
+                            var htmlObj = element.htmlObject;
                             if (htmlObj != null)
                             {
                                 if (_textDirection == RTLSupport.DirectionType.RTL)
@@ -1213,7 +1225,7 @@ namespace FairyGUI
 
                                 if (_charPositions != null)
                                 {
-                                    CharPosition cp = new CharPosition();
+                                    var cp = new CharPosition();
                                     cp.lineIndex = (short) i;
                                     cp.charIndex = _charPositions.Count;
                                     cp.imgIndex = (short) (elementIndex + 1);
@@ -1260,10 +1272,10 @@ namespace FairyGUI
 
                         if (_textDirection == RTLSupport.DirectionType.RTL)
                         {
-                            if (lineClipped || clipping && (rectWidth < 7 || posx != (indent_x - GUTTER_X)) &&
+                            if (lineClipped || clipping && (rectWidth < 7 || posx != indent_x - GUTTER_X) &&
                                 posx < GUTTER_X - 0.5f) //超出区域，剪裁
                             {
-                                posx -= (letterSpacing + glyphWidth);
+                                posx -= letterSpacing + glyphWidth;
                                 continue;
                             }
 
@@ -1271,7 +1283,7 @@ namespace FairyGUI
                         }
                         else
                         {
-                            if (lineClipped || clipping && (rectWidth < 7 || posx != (GUTTER_X + indent_x)) &&
+                            if (lineClipped || clipping && (rectWidth < 7 || posx != GUTTER_X + indent_x) &&
                                 posx + glyphWidth > _contentRect.width - GUTTER_X + 0.5f) //超出区域，剪裁
                             {
                                 posx += letterSpacing + glyphWidth;
@@ -1284,7 +1296,7 @@ namespace FairyGUI
 
                         if (_charPositions != null)
                         {
-                            CharPosition cp = new CharPosition();
+                            var cp = new CharPosition();
                             cp.lineIndex = (short) i;
                             cp.charIndex = _charPositions.Count;
                             cp.vertCount = vertCount;
@@ -1302,7 +1314,7 @@ namespace FairyGUI
                     {
                         if (_charPositions != null)
                         {
-                            CharPosition cp = new CharPosition();
+                            var cp = new CharPosition();
                             cp.lineIndex = (short) i;
                             cp.charIndex = _charPositions.Count;
                             cp.offsetX = posx;
@@ -1351,7 +1363,7 @@ namespace FairyGUI
 
                     if (vertCount > 0 && _charPositions != null)
                     {
-                        CharPosition cp = _charPositions[_charPositions.Count - 1];
+                        var cp = _charPositions[_charPositions.Count - 1];
                         cp.vertCount += vertCount;
                         _charPositions[_charPositions.Count - 1] = cp;
                     }
@@ -1363,14 +1375,14 @@ namespace FairyGUI
 
             if (_charPositions != null)
             {
-                CharPosition cp = new CharPosition();
+                var cp = new CharPosition();
                 cp.lineIndex = (short) (lineCount - 1);
                 cp.charIndex = _charPositions.Count;
                 cp.offsetX = posx;
                 _charPositions.Add(cp);
             }
 
-            int count = vertList.Count;
+            var count = vertList.Count;
             if (count > 65000)
             {
                 Debug.LogWarning("Text is too large. A mesh may not have more than 65000 vertices.");
@@ -1384,9 +1396,9 @@ namespace FairyGUI
 
             if (_font.customOutline)
             {
-                bool hasShadow = _textFormat.shadowOffset.x != 0 || _textFormat.shadowOffset.y != 0;
-                int allocCount = count;
-                int drawDirs = 0;
+                var hasShadow = _textFormat.shadowOffset.x != 0 || _textFormat.shadowOffset.y != 0;
+                var allocCount = count;
+                var drawDirs = 0;
                 if (_textFormat.outline != 0)
                 {
                     drawDirs = UIConfig.enhancedTextOutlineEffect ? 8 : 4;
@@ -1403,19 +1415,18 @@ namespace FairyGUI
 
                 if (allocCount != count)
                 {
-                    VertexBuffer vb2 = VertexBuffer.Begin();
-                    List<Vector3> vertList2 = vb2.vertices;
-                    List<Color32> colList2 = vb2.colors;
+                    var vb2 = VertexBuffer.Begin();
+                    var vertList2 = vb2.vertices;
+                    var colList2 = vb2.colors;
 
                     Color32 col = _textFormat.outlineColor;
-                    float outline = _textFormat.outline;
+                    var outline = _textFormat.outline;
                     if (outline != 0)
-                    {
-                        for (int j = 0; j < drawDirs; j++)
+                        for (var j = 0; j < drawDirs; j++)
                         {
-                            for (int i = 0; i < count; i++)
+                            for (var i = 0; i < count; i++)
                             {
-                                Vector3 vert = vertList[i];
+                                var vert = vertList[i];
                                 vertList2.Add(new Vector3(vert.x + STROKE_OFFSET[j * 2] * outline,
                                     vert.y + STROKE_OFFSET[j * 2 + 1] * outline, 0));
                                 colList2.Add(col);
@@ -1425,15 +1436,14 @@ namespace FairyGUI
                             if (uv2List.Count > 0)
                                 vb2.uvs2.AddRange(uv2List);
                         }
-                    }
 
                     if (hasShadow)
                     {
                         col = _textFormat.shadowColor;
-                        Vector2 offset = _textFormat.shadowOffset;
-                        for (int i = 0; i < count; i++)
+                        var offset = _textFormat.shadowOffset;
+                        for (var i = 0; i < count; i++)
                         {
-                            Vector3 vert = vertList[i];
+                            var vert = vertList[i];
                             vertList2.Add(new Vector3(vert.x + offset.x, vert.y - offset.y, 0));
                             colList2.Add(col);
                         }
@@ -1454,7 +1464,7 @@ namespace FairyGUI
                 _richTextField.RefreshObjects();
         }
 
-        void Cleanup()
+        private void Cleanup()
         {
             if (_richTextField != null)
                 _richTextField.CleanupObjects();
@@ -1470,12 +1480,14 @@ namespace FairyGUI
                 _charPositions.Clear();
         }
 
-        void ApplyVertAlign()
+        private void ApplyVertAlign()
         {
-            float oldOffset = _yOffset;
+            var oldOffset = _yOffset;
             if (_autoSize == AutoSizeType.Both || _autoSize == AutoSizeType.Height
                                                || _verticalAlign == VertAlignType.Top)
+            {
                 _yOffset = 0;
+            }
             else
             {
                 float dh;
@@ -1493,8 +1505,8 @@ namespace FairyGUI
 
             if (oldOffset != _yOffset)
             {
-                int cnt = _lines.Count;
-                for (int i = 0; i < cnt; i++)
+                var cnt = _lines.Count;
+                for (var i = 0; i < cnt; i++)
                     _lines[i].y = _lines[i].y2 + _yOffset;
 
                 graphics.SetMeshDirty();
@@ -1538,21 +1550,23 @@ namespace FairyGUI
             /// </summary>
             internal float y2;
 
-            static Stack<LineInfo> pool = new Stack<LineInfo>();
+            private static Stack<LineInfo> pool = new Stack<LineInfo>();
 
             /// <returns></returns>
             public static LineInfo Borrow()
             {
                 if (pool.Count > 0)
                 {
-                    LineInfo ret = pool.Pop();
+                    var ret = pool.Pop();
                     ret.width = ret.height = ret.baseline = 0;
                     ret.y = ret.y2 = 0;
                     ret.charIndex = ret.charCount = 0;
                     return ret;
                 }
                 else
+                {
                     return new LineInfo();
+                }
             }
 
             /// <param name="value"></param>
@@ -1564,8 +1578,8 @@ namespace FairyGUI
             /// <param name="values"></param>
             public static void Return(List<LineInfo> values)
             {
-                int cnt = values.Count;
-                for (int i = 0; i < cnt; i++)
+                var cnt = values.Count;
+                for (var i = 0; i < cnt; i++)
                     pool.Push(values[i]);
 
                 values.Clear();

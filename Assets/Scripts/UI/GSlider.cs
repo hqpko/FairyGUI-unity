@@ -4,31 +4,30 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class GSlider : GComponent
     {
-        double _min;
-        double _max;
-        double _value;
-        ProgressTitleType _titleType;
-        bool _reverse;
-        bool _wholeNumbers;
+        private double _min;
+        private double _max;
+        private double _value;
+        private ProgressTitleType _titleType;
+        private bool _reverse;
+        private bool _wholeNumbers;
 
-        GObject _titleObject;
-        GObject _barObjectH;
-        GObject _barObjectV;
-        float _barMaxWidth;
-        float _barMaxHeight;
-        float _barMaxWidthDelta;
-        float _barMaxHeightDelta;
-        GObject _gripObject;
-        Vector2 _clickPos;
-        float _clickPercent;
-        float _barStartX;
-        float _barStartY;
+        private GObject _titleObject;
+        private GObject _barObjectH;
+        private GObject _barObjectV;
+        private float _barMaxWidth;
+        private float _barMaxHeight;
+        private float _barMaxWidthDelta;
+        private float _barMaxHeightDelta;
+        private GObject _gripObject;
+        private Vector2 _clickPos;
+        private float _clickPercent;
+        private float _barStartX;
+        private float _barStartY;
 
-        EventListener _onChanged;
-        EventListener _onGripTouchEnd;
+        private EventListener _onChanged;
+        private EventListener _onGripTouchEnd;
 
         public bool changeOnClick;
         public bool canDrag;
@@ -41,25 +40,14 @@ namespace FairyGUI
             canDrag = true;
         }
 
+        public EventListener onChanged => _onChanged ?? (_onChanged = new EventListener(this, "onChanged"));
 
-        public EventListener onChanged
-        {
-            get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
-        }
-
-
-        public EventListener onGripTouchEnd
-        {
-            get { return _onGripTouchEnd ?? (_onGripTouchEnd = new EventListener(this, "onGripTouchEnd")); }
-        }
-
+        public EventListener onGripTouchEnd =>
+            _onGripTouchEnd ?? (_onGripTouchEnd = new EventListener(this, "onGripTouchEnd"));
 
         public ProgressTitleType titleType
         {
-            get
-            {
-                return _titleType;
-            }
+            get => _titleType;
             set
             {
                 if (_titleType != value)
@@ -70,13 +58,9 @@ namespace FairyGUI
             }
         }
 
-
         public double min
         {
-            get
-            {
-                return _min;
-            }
+            get => _min;
             set
             {
                 if (_min != value)
@@ -87,13 +71,9 @@ namespace FairyGUI
             }
         }
 
-
         public double max
         {
-            get
-            {
-                return _max;
-            }
+            get => _max;
             set
             {
                 if (_max != value)
@@ -104,13 +84,9 @@ namespace FairyGUI
             }
         }
 
-
         public double value
         {
-            get
-            {
-                return _value;
-            }
+            get => _value;
             set
             {
                 if (_value != value)
@@ -121,13 +97,9 @@ namespace FairyGUI
             }
         }
 
-
         public bool wholeNumbers
         {
-            get
-            {
-                return _wholeNumbers;
-            }
+            get => _wholeNumbers;
             set
             {
                 if (_wholeNumbers != value)
@@ -140,7 +112,7 @@ namespace FairyGUI
 
         private void Update()
         {
-            UpdateWithPercent((float)((_value - _min) / (_max - _min)), false);
+            UpdateWithPercent((float) ((_value - _min) / (_max - _min)), false);
         }
 
         private void UpdateWithPercent(float percent, bool manual)
@@ -148,7 +120,7 @@ namespace FairyGUI
             percent = Mathf.Clamp01(percent);
             if (manual)
             {
-                double newValue = _min + (_max - _min) * percent;
+                var newValue = _min + (_max - _min) * percent;
                 if (newValue < _min)
                     newValue = _min;
                 if (newValue > _max)
@@ -156,7 +128,7 @@ namespace FairyGUI
                 if (_wholeNumbers)
                 {
                     newValue = Math.Round(newValue);
-                    percent = Mathf.Clamp01((float)((newValue - _min) / (_max - _min)));
+                    percent = Mathf.Clamp01((float) ((newValue - _min) / (_max - _min)));
                 }
 
                 if (newValue != _value)
@@ -168,7 +140,6 @@ namespace FairyGUI
             }
 
             if (_titleObject != null)
-            {
                 switch (_titleType)
                 {
                     case ProgressTitleType.Percent:
@@ -187,68 +158,60 @@ namespace FairyGUI
                         _titleObject.text = "" + Math.Round(_max);
                         break;
                 }
-            }
 
-            float fullWidth = this.width - _barMaxWidthDelta;
-            float fullHeight = this.height - _barMaxHeightDelta;
+            var fullWidth = width - _barMaxWidthDelta;
+            var fullHeight = height - _barMaxHeightDelta;
             if (!_reverse)
             {
                 if (_barObjectH != null)
-                {
                     if (!SetFillAmount(_barObjectH, percent))
                         _barObjectH.width = Mathf.RoundToInt(fullWidth * percent);
-                }
                 if (_barObjectV != null)
-                {
                     if (!SetFillAmount(_barObjectV, percent))
                         _barObjectV.height = Mathf.RoundToInt(fullHeight * percent);
-                }
             }
             else
             {
                 if (_barObjectH != null)
-                {
                     if (!SetFillAmount(_barObjectH, 1 - percent))
                     {
                         _barObjectH.width = Mathf.RoundToInt(fullWidth * percent);
                         _barObjectH.x = _barStartX + (fullWidth - _barObjectH.width);
                     }
-                }
+
                 if (_barObjectV != null)
-                {
                     if (!SetFillAmount(_barObjectV, 1 - percent))
                     {
                         _barObjectV.height = Mathf.RoundToInt(fullHeight * percent);
                         _barObjectV.y = _barStartY + (fullHeight - _barObjectV.height);
                     }
-                }
             }
 
             InvalidateBatchingState(true);
         }
 
-        bool SetFillAmount(GObject bar, float amount)
+        private bool SetFillAmount(GObject bar, float amount)
         {
-            if ((bar is GImage) && ((GImage)bar).fillMethod != FillMethod.None)
-                ((GImage)bar).fillAmount = amount;
-            else if ((bar is GLoader) && ((GLoader)bar).fillMethod != FillMethod.None)
-                ((GLoader)bar).fillAmount = amount;
+            if (bar is GImage && ((GImage) bar).fillMethod != FillMethod.None)
+                ((GImage) bar).fillAmount = amount;
+            else if (bar is GLoader && ((GLoader) bar).fillMethod != FillMethod.None)
+                ((GLoader) bar).fillAmount = amount;
             else
                 return false;
 
             return true;
         }
 
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             buffer.Seek(0, 6);
 
-            _titleType = (ProgressTitleType)buffer.ReadByte();
+            _titleType = (ProgressTitleType) buffer.ReadByte();
             _reverse = buffer.ReadBool();
             if (buffer.version >= 2)
             {
                 _wholeNumbers = buffer.ReadBool();
-                this.changeOnClick = buffer.ReadBool();
+                changeOnClick = buffer.ReadBool();
             }
 
             _titleObject = GetChild("title");
@@ -259,13 +222,14 @@ namespace FairyGUI
             if (_barObjectH != null)
             {
                 _barMaxWidth = _barObjectH.width;
-                _barMaxWidthDelta = this.width - _barMaxWidth;
+                _barMaxWidthDelta = width - _barMaxWidth;
                 _barStartX = _barObjectH.x;
             }
+
             if (_barObjectV != null)
             {
                 _barMaxHeight = _barObjectV.height;
-                _barMaxHeightDelta = this.height - _barMaxHeight;
+                _barMaxHeightDelta = height - _barMaxHeight;
                 _barStartY = _barObjectV.y;
             }
 
@@ -279,7 +243,7 @@ namespace FairyGUI
             onTouchBegin.Add(__barTouchBegin);
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
@@ -289,7 +253,7 @@ namespace FairyGUI
                 return;
             }
 
-            if ((ObjectType)buffer.ReadByte() != packageItem.objectType)
+            if ((ObjectType) buffer.ReadByte() != packageItem.objectType)
             {
                 Update();
                 return;
@@ -300,51 +264,50 @@ namespace FairyGUI
             if (buffer.version >= 2)
                 _min = buffer.ReadInt();
 
-
             Update();
         }
 
-        override protected void HandleSizeChanged()
+        protected override void HandleSizeChanged()
         {
             base.HandleSizeChanged();
 
             if (_barObjectH != null)
-                _barMaxWidth = this.width - _barMaxWidthDelta;
+                _barMaxWidth = width - _barMaxWidthDelta;
             if (_barObjectV != null)
-                _barMaxHeight = this.height - _barMaxHeightDelta;
+                _barMaxHeight = height - _barMaxHeightDelta;
 
-            if (!this.underConstruct)
+            if (!underConstruct)
                 Update();
         }
 
         private void __gripTouchBegin(EventContext context)
         {
-            this.canDrag = true;
+            canDrag = true;
 
             context.StopPropagation();
 
-            InputEvent evt = context.inputEvent;
+            var evt = context.inputEvent;
             if (evt.button != 0)
                 return;
 
             context.CaptureTouch();
 
-            _clickPos = this.GlobalToLocal(new Vector2(evt.x, evt.y));
-            _clickPercent = Mathf.Clamp01((float)((_value - _min) / (_max - _min)));
+            _clickPos = GlobalToLocal(new Vector2(evt.x, evt.y));
+            _clickPercent = Mathf.Clamp01((float) ((_value - _min) / (_max - _min)));
         }
 
         private void __gripTouchMove(EventContext context)
         {
-            if (!this.canDrag)
+            if (!canDrag)
                 return;
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = this.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var evt = context.inputEvent;
+            var pt = GlobalToLocal(new Vector2(evt.x, evt.y));
             if (float.IsNaN(pt.x))
                 return;
 
-            float deltaX = pt.x - _clickPos.x;
-            float deltaY = pt.y - _clickPos.y;
+            var deltaX = pt.x - _clickPos.x;
+            var deltaY = pt.y - _clickPos.y;
             if (_reverse)
             {
                 deltaX = -deltaX;
@@ -370,9 +333,9 @@ namespace FairyGUI
             if (!changeOnClick)
                 return;
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = _gripObject.GlobalToLocal(new Vector2(evt.x, evt.y));
-            float percent = Mathf.Clamp01((float)((_value - _min) / (_max - _min)));
+            var evt = context.inputEvent;
+            var pt = _gripObject.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var percent = Mathf.Clamp01((float) ((_value - _min) / (_max - _min)));
             float delta = 0;
             if (_barObjectH != null)
                 delta = (pt.x - _gripObject.width / 2) / _barMaxWidth;

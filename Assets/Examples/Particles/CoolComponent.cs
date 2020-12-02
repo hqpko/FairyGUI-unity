@@ -7,10 +7,10 @@ public class CoolComponent : GComponent
     {
         base.ConstructFromXML(cxml);
 
-        GGraph graph = this.GetChild("effect").asGraph;
+        var graph = GetChild("effect").asGraph;
 
-        Object prefab = Resources.Load("Flame");
-        GameObject go = (GameObject)Object.Instantiate(prefab);
+        var prefab = Resources.Load("Flame");
+        var go = (GameObject) Object.Instantiate(prefab);
         graph.SetNativeObject(new GoWrapper(go));
     }
 }

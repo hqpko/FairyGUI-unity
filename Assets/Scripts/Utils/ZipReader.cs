@@ -5,7 +5,6 @@
     /// </summary>
     public class ZipReader
     {
-
         public class ZipEntry
         {
             public string name;
@@ -17,11 +16,10 @@
             public bool isDirectory;
         }
 
-        ByteBuffer _stream;
-        int _entryCount;
-        int _pos;
-        int _index;
-
+        private ByteBuffer _stream;
+        private int _entryCount;
+        private int _pos;
+        private int _index;
 
         /// <param name="stream"></param>
         public ZipReader(byte[] data)
@@ -29,19 +27,14 @@
             _stream = new ByteBuffer(data);
             _stream.littleEndian = true;
 
-            int pos = _stream.length - 22;
+            var pos = _stream.length - 22;
             _stream.position = pos + 10;
             _entryCount = _stream.ReadShort();
             _stream.position = pos + 16;
             _pos = _stream.ReadInt();
         }
 
-
-        public int entryCount
-        {
-            get { return _entryCount; }
-        }
-
+        public int entryCount => _entryCount;
 
         /// <returns></returns>
         public bool GetNextEntry(ZipEntry entry)
@@ -51,10 +44,10 @@
 
             _stream.position = _pos + 28;
             int len = _stream.ReadUshort();
-            int len2 = _stream.ReadUshort() + _stream.ReadUshort();
+            var len2 = _stream.ReadUshort() + _stream.ReadUshort();
 
             _stream.position = _pos + 46;
-            string name = _stream.ReadString(len);
+            var name = _stream.ReadString(len);
             name = name.Replace("\\", "/");
 
             entry.name = name;
@@ -85,13 +78,11 @@
             return true;
         }
 
-
-
         /// <param name="name"></param>
         /// <returns></returns>
         public byte[] GetEntryData(ZipEntry entry)
         {
-            byte[] data = new byte[entry.size];
+            var data = new byte[entry.size];
             if (entry.size > 0)
             {
                 _stream.position = entry.offset;

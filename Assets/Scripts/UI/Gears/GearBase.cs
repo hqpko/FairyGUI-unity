@@ -5,7 +5,7 @@ namespace FairyGUI
     /// <summary>
     /// Gear is a connection between object and controller.
     /// </summary>
-    abstract public class GearBase
+    public abstract class GearBase
     {
         public static bool disableAllTweenEffect = false;
 
@@ -32,10 +32,7 @@ namespace FairyGUI
         /// </summary>
         public Controller controller
         {
-            get
-            {
-                return _controller;
-            }
+            get => _controller;
 
             set
             {
@@ -66,17 +63,17 @@ namespace FairyGUI
             int cnt = buffer.ReadShort();
             if (this is GearDisplay)
             {
-                ((GearDisplay)this).pages = buffer.ReadSArray(cnt);
+                ((GearDisplay) this).pages = buffer.ReadSArray(cnt);
             }
             else if (this is GearDisplay2)
             {
-                ((GearDisplay2)this).pages = buffer.ReadSArray(cnt);
+                ((GearDisplay2) this).pages = buffer.ReadSArray(cnt);
             }
             else
             {
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    string page = buffer.ReadS();
+                    var page = buffer.ReadS();
                     if (page == null)
                         continue;
 
@@ -90,7 +87,7 @@ namespace FairyGUI
             if (buffer.ReadBool())
             {
                 _tweenConfig = new GearTweenConfig();
-                _tweenConfig.easeType = (EaseType)buffer.ReadByte();
+                _tweenConfig.easeType = (EaseType) buffer.ReadByte();
                 _tweenConfig.duration = buffer.ReadFloat();
                 _tweenConfig.delay = buffer.ReadFloat();
             }
@@ -101,22 +98,24 @@ namespace FairyGUI
                 {
                     if (buffer.ReadBool())
                     {
-                        ((GearXY)this).positionsInPercent = true;
-                        for (int i = 0; i < cnt; i++)
+                        ((GearXY) this).positionsInPercent = true;
+                        for (var i = 0; i < cnt; i++)
                         {
-                            string page = buffer.ReadS();
+                            var page = buffer.ReadS();
                             if (page == null)
                                 continue;
 
-                            ((GearXY)this).AddExtStatus(page, buffer);
+                            ((GearXY) this).AddExtStatus(page, buffer);
                         }
 
                         if (buffer.ReadBool())
-                            ((GearXY)this).AddExtStatus(null, buffer);
+                            ((GearXY) this).AddExtStatus(null, buffer);
                     }
                 }
                 else if (this is GearDisplay2)
-                    ((GearDisplay2)this).condition = buffer.ReadByte();
+                {
+                    ((GearDisplay2) this).condition = buffer.ReadByte();
+                }
             }
 
             if (buffer.version >= 4 && _tweenConfig != null && _tweenConfig.easeType == EaseType.Custom)
@@ -126,22 +125,22 @@ namespace FairyGUI
             }
         }
 
-        virtual public void UpdateFromRelations(float dx, float dy)
+        public virtual void UpdateFromRelations(float dx, float dy)
         {
         }
 
-        abstract protected void AddStatus(string pageId, ByteBuffer buffer);
-        abstract protected void Init();
+        protected abstract void AddStatus(string pageId, ByteBuffer buffer);
+        protected abstract void Init();
 
         /// <summary>
         /// Call when controller active page changed.
         /// </summary>
-        abstract public void Apply();
+        public abstract void Apply();
 
         /// <summary>
         /// Call when object's properties changed.
         /// </summary>
-        abstract public void UpdateState();
+        public abstract void UpdateState();
     }
 
     public class GearTweenConfig
@@ -155,7 +154,6 @@ namespace FairyGUI
         /// Ease type.
         /// </summary>
         public EaseType easeType;
-
 
         public CustomEase customEase;
 

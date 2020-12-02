@@ -8,14 +8,14 @@ namespace FairyGUI
     /// </summary>
     public class GMovieClip : GObject, IAnimationGear, IColorGear
     {
-        MovieClip _content;
-        EventListener _onPlayEnd;
+        private MovieClip _content;
+        private EventListener _onPlayEnd;
 
         public GMovieClip()
         {
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             _content = new MovieClip();
             _content.gOwner = this;
@@ -23,16 +23,11 @@ namespace FairyGUI
             displayObject = _content;
         }
 
-
-        public EventListener onPlayEnd
-        {
-            get { return _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd")); }
-        }
-
+        public EventListener onPlayEnd => _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd"));
 
         public bool playing
         {
-            get { return _content.playing; }
+            get => _content.playing;
             set
             {
                 _content.playing = value;
@@ -40,10 +35,9 @@ namespace FairyGUI
             }
         }
 
-
         public int frame
         {
-            get { return _content.frame; }
+            get => _content.frame;
             set
             {
                 _content.frame = value;
@@ -51,10 +45,9 @@ namespace FairyGUI
             }
         }
 
-
         public Color color
         {
-            get { return _content.color; }
+            get => _content.color;
             set
             {
                 _content.color = value;
@@ -62,54 +55,46 @@ namespace FairyGUI
             }
         }
 
-
         public FlipType flip
         {
-            get { return _content.graphics.flip; }
-            set { _content.graphics.flip = value; }
+            get => _content.graphics.flip;
+            set => _content.graphics.flip = value;
         }
-
 
         public Material material
         {
-            get { return _content.material; }
-            set { _content.material = value; }
+            get => _content.material;
+            set => _content.material = value;
         }
-
 
         public string shader
         {
-            get { return _content.shader; }
-            set { _content.shader = value; }
+            get => _content.shader;
+            set => _content.shader = value;
         }
-
 
         public float timeScale
         {
-            get { return _content.timeScale; }
-            set { _content.timeScale = value; }
+            get => _content.timeScale;
+            set => _content.timeScale = value;
         }
-
 
         public bool ignoreEngineTimeScale
         {
-            get { return _content.ignoreEngineTimeScale; }
-            set { _content.ignoreEngineTimeScale = value; }
+            get => _content.ignoreEngineTimeScale;
+            set => _content.ignoreEngineTimeScale = value;
         }
-
 
         public void Rewind()
         {
             _content.Rewind();
         }
 
-
         /// <param name="anotherMc"></param>
         public void SyncStatus(GMovieClip anotherMc)
         {
             _content.SyncStatus(anotherMc._content);
         }
-
 
         /// <param name="time"></param>
         public void Advance(float time)
@@ -127,14 +112,14 @@ namespace FairyGUI
         /// <param name="endAt">Stop frame. -1 indicates to equal to the end parameter.</param>
         public void SetPlaySettings(int start, int end, int times, int endAt)
         {
-            ((MovieClip)displayObject).SetPlaySettings(start, end, times, endAt);
+            ((MovieClip) displayObject).SetPlaySettings(start, end, times, endAt);
         }
 
-        override public void ConstructFromResource()
+        public override void ConstructFromResource()
         {
-            this.gameObjectName = packageItem.name;
-            
-            PackageItem contentItem = packageItem.getBranch();
+            gameObjectName = packageItem.name;
+
+            var contentItem = packageItem.getBranch();
             sourceWidth = contentItem.width;
             sourceHeight = contentItem.height;
             initWidth = sourceWidth;
@@ -150,7 +135,7 @@ namespace FairyGUI
             SetSize(sourceWidth, sourceHeight);
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
@@ -158,7 +143,7 @@ namespace FairyGUI
 
             if (buffer.ReadBool())
                 _content.color = buffer.ReadColor();
-            _content.graphics.flip = (FlipType)buffer.ReadByte();
+            _content.graphics.flip = (FlipType) buffer.ReadByte();
             _content.frame = buffer.ReadInt();
             _content.playing = buffer.ReadBool();
         }

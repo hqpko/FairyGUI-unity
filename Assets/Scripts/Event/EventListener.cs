@@ -4,11 +4,10 @@ using LuaInterface;
 
 namespace FairyGUI
 {
-
     public class EventListener
     {
-        EventBridge _bridge;
-        string _type;
+        private EventBridge _bridge;
+        private string _type;
 
         public EventListener(EventDispatcher owner, string type)
         {
@@ -16,12 +15,7 @@ namespace FairyGUI
             _type = type;
         }
 
-
-        public string type
-        {
-            get { return _type; }
-        }
-
+        public string type => _type;
 
         /// <param name="callback"></param>
         public void AddCapture(EventCallback1 callback)
@@ -29,13 +23,11 @@ namespace FairyGUI
             _bridge.AddCapture(callback);
         }
 
-
         /// <param name="callback"></param>
         public void RemoveCapture(EventCallback1 callback)
         {
             _bridge.RemoveCapture(callback);
         }
-
 
         /// <param name="callback"></param>
         public void Add(EventCallback1 callback)
@@ -43,13 +35,11 @@ namespace FairyGUI
             _bridge.Add(callback);
         }
 
-
         /// <param name="callback"></param>
         public void Remove(EventCallback1 callback)
         {
             _bridge.Remove(callback);
         }
-
 
         /// <param name="callback"></param>
 #if FAIRYGUI_TOLUA
@@ -60,7 +50,6 @@ namespace FairyGUI
             _bridge.Add(callback);
         }
 
-
         /// <param name="callback"></param>
 #if FAIRYGUI_TOLUA
         [NoToLua]
@@ -70,7 +59,6 @@ namespace FairyGUI
             _bridge.Remove(callback);
         }
 
-
         /// <param name="callback"></param>
         public void Set(EventCallback1 callback)
         {
@@ -78,7 +66,6 @@ namespace FairyGUI
             if (callback != null)
                 _bridge.Add(callback);
         }
-
 
         /// <param name="callback"></param>
 #if FAIRYGUI_TOLUA
@@ -92,7 +79,6 @@ namespace FairyGUI
         }
 
 #if FAIRYGUI_TOLUA
-
         /// <param name="func"></param>
         /// <param name="self"></param>
         public void Add(LuaFunction func, LuaTable self)
@@ -145,37 +131,20 @@ namespace FairyGUI
         }
 #endif
 
+        public bool isEmpty => !_bridge.owner.HasEventListeners(_type);
 
-        public bool isEmpty
-        {
-            get
-            {
-                return !_bridge.owner.HasEventListeners(_type);
-            }
-        }
-
-
-        public bool isDispatching
-        {
-            get
-            {
-                return _bridge.owner.IsDispatching(_type);
-            }
-        }
-
+        public bool isDispatching => _bridge.owner.IsDispatching(_type);
 
         public void Clear()
         {
             _bridge.Clear();
         }
 
-
         /// <returns></returns>
         public bool Call()
         {
             return _bridge.owner.InternalDispatchEvent(_type, _bridge, null, null);
         }
-
 
         /// <param name="data"></param>
         /// <returns></returns>
@@ -184,7 +153,6 @@ namespace FairyGUI
             return _bridge.owner.InternalDispatchEvent(_type, _bridge, data, null);
         }
 
-
         /// <param name="data"></param>
         /// <returns></returns>
         public bool BubbleCall(object data)
@@ -192,13 +160,11 @@ namespace FairyGUI
             return _bridge.owner.BubbleEvent(_type, data);
         }
 
-
         /// <returns></returns>
         public bool BubbleCall()
         {
             return _bridge.owner.BubbleEvent(_type, null);
         }
-
 
         /// <param name="data"></param>
         /// <returns></returns>
@@ -206,7 +172,6 @@ namespace FairyGUI
         {
             return _bridge.owner.BroadcastEvent(_type, data);
         }
-
 
         /// <returns></returns>
         public bool BroadcastCall()

@@ -8,13 +8,13 @@ namespace FairyGUI
     /// </summary>
     public class GImage : GObject, IColorGear
     {
-        Image _content;
+        private Image _content;
 
         public GImage()
         {
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             _content = new Image();
             _content.gOwner = this;
@@ -26,7 +26,7 @@ namespace FairyGUI
         /// </summary>
         public Color color
         {
-            get { return _content.color; }
+            get => _content.color;
             set
             {
                 _content.color = value;
@@ -40,8 +40,8 @@ namespace FairyGUI
         /// <seealso cref="FlipType"/>
         public FlipType flip
         {
-            get { return _content.graphics.flip; }
-            set { _content.graphics.flip = value; }
+            get => _content.graphics.flip;
+            set => _content.graphics.flip = value;
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace FairyGUI
         /// <seealso cref="FillMethod"/>
         public FillMethod fillMethod
         {
-            get { return _content.fillMethod; }
-            set { _content.fillMethod = value; }
+            get => _content.fillMethod;
+            set => _content.fillMethod = value;
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace FairyGUI
         /// <seealso cref="Origin360"/>
         public int fillOrigin
         {
-            get { return _content.fillOrigin; }
-            set { _content.fillOrigin = value; }
+            get => _content.fillOrigin;
+            set => _content.fillOrigin = value;
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace FairyGUI
         /// </summary>
         public bool fillClockwise
         {
-            get { return _content.fillClockwise; }
-            set { _content.fillClockwise = value; }
+            get => _content.fillClockwise;
+            set => _content.fillClockwise = value;
         }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace FairyGUI
         /// </summary>
         public float fillAmount
         {
-            get { return _content.fillAmount; }
-            set { _content.fillAmount = value; }
+            get => _content.fillAmount;
+            set => _content.fillAmount = value;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace FairyGUI
         /// </summary>
         public NTexture texture
         {
-            get { return _content.texture; }
+            get => _content.texture;
             set
             {
                 if (value != null)
@@ -104,6 +104,7 @@ namespace FairyGUI
                     sourceWidth = 0;
                     sourceHeight = 0;
                 }
+
                 initWidth = sourceWidth;
                 initHeight = sourceHeight;
                 _content.texture = value;
@@ -115,8 +116,8 @@ namespace FairyGUI
         /// </summary>
         public Material material
         {
-            get { return _content.material; }
-            set { _content.material = value; }
+            get => _content.material;
+            set => _content.material = value;
         }
 
         /// <summary>
@@ -124,15 +125,15 @@ namespace FairyGUI
         /// </summary>
         public string shader
         {
-            get { return _content.shader; }
-            set { _content.shader = value; }
+            get => _content.shader;
+            set => _content.shader = value;
         }
 
-        override public void ConstructFromResource()
+        public override void ConstructFromResource()
         {
-            this.gameObjectName = packageItem.name;
-            
-            PackageItem contentItem = packageItem.getBranch();
+            gameObjectName = packageItem.name;
+
+            var contentItem = packageItem.getBranch();
             sourceWidth = contentItem.width;
             sourceHeight = contentItem.height;
             initWidth = sourceWidth;
@@ -144,12 +145,13 @@ namespace FairyGUI
             _content.scaleByTile = contentItem.scaleByTile;
             _content.tileGridIndice = contentItem.tileGridIndice;
             _content.texture = contentItem.texture;
-            _content.textureScale = new Vector2(contentItem.width / (float)sourceWidth, contentItem.height / (float)sourceHeight);
+            _content.textureScale = new Vector2(contentItem.width / (float) sourceWidth,
+                contentItem.height / (float) sourceHeight);
 
             SetSize(sourceWidth, sourceHeight);
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
@@ -157,8 +159,8 @@ namespace FairyGUI
 
             if (buffer.ReadBool())
                 _content.color = buffer.ReadColor();
-            _content.graphics.flip = (FlipType)buffer.ReadByte();
-            _content.fillMethod = (FillMethod)buffer.ReadByte();
+            _content.graphics.flip = (FlipType) buffer.ReadByte();
+            _content.fillMethod = (FillMethod) buffer.ReadByte();
             if (_content.fillMethod != FillMethod.None)
             {
                 _content.fillOrigin = buffer.ReadByte();

@@ -1,5 +1,4 @@
 #if FAIRYGUI_TMPRO
-
 namespace FairyGUI
 {
     /// <summary>

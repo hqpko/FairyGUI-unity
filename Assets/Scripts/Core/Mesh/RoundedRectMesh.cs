@@ -4,27 +4,19 @@ namespace FairyGUI
 {
     public class RoundedRectMesh : IMeshFactory, IHitTest
     {
-
         public Rect? drawRect;
-
 
         public float lineWidth;
 
-
         public Color32 lineColor;
-
 
         public Color32? fillColor;
 
-
         public float topLeftRadius;
-
 
         public float topRightRadius;
 
-
         public float bottomLeftRadius;
-
 
         public float bottomRightRadius;
 
@@ -35,19 +27,19 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            Rect rect = drawRect != null ? (Rect)drawRect : vb.contentRect;
-            Color32 color = fillColor != null ? (Color32)fillColor : vb.vertexColor;
+            var rect = drawRect != null ? (Rect) drawRect : vb.contentRect;
+            var color = fillColor != null ? (Color32) fillColor : vb.vertexColor;
 
-            float radiusX = rect.width / 2;
-            float radiusY = rect.height / 2;
-            float cornerMaxRadius = Mathf.Min(radiusX, radiusY);
-            float centerX = radiusX + rect.x;
-            float centerY = radiusY + rect.y;
+            var radiusX = rect.width / 2;
+            var radiusY = rect.height / 2;
+            var cornerMaxRadius = Mathf.Min(radiusX, radiusY);
+            var centerX = radiusX + rect.x;
+            var centerY = radiusY + rect.y;
 
             vb.AddVert(new Vector3(centerX, centerY, 0), color);
 
-            int cnt = vb.currentVertCount;
-            for (int i = 0; i < 4; i++)
+            var cnt = vb.currentVertCount;
+            for (var i = 0; i < 4; i++)
             {
                 float radius = 0;
                 switch (i)
@@ -68,10 +60,11 @@ namespace FairyGUI
                         radius = topRightRadius;
                         break;
                 }
+
                 radius = Mathf.Min(cornerMaxRadius, radius);
 
-                float offsetX = rect.x;
-                float offsetY = rect.y;
+                var offsetX = rect.x;
+                var offsetY = rect.y;
 
                 if (i == 0 || i == 3)
                     offsetX = rect.xMax - radius * 2;
@@ -80,16 +73,16 @@ namespace FairyGUI
 
                 if (radius != 0)
                 {
-                    int partNumSides = Mathf.Max(1, Mathf.CeilToInt(Mathf.PI * radius / 8)) + 1;
-                    float angleDelta = Mathf.PI / 2 / partNumSides;
-                    float angle = Mathf.PI / 2 * i;
-                    float startAngle = angle;
+                    var partNumSides = Mathf.Max(1, Mathf.CeilToInt(Mathf.PI * radius / 8)) + 1;
+                    var angleDelta = Mathf.PI / 2 / partNumSides;
+                    var angle = Mathf.PI / 2 * i;
+                    var startAngle = angle;
 
-                    for (int j = 1; j <= partNumSides; j++)
+                    for (var j = 1; j <= partNumSides; j++)
                     {
                         if (j == partNumSides) //消除精度误差带来的不对齐
                             angle = startAngle + Mathf.PI / 2;
-                        Vector3 v1 = new Vector3(offsetX + Mathf.Cos(angle) * (radius - lineWidth) + radius,
+                        var v1 = new Vector3(offsetX + Mathf.Cos(angle) * (radius - lineWidth) + radius,
                             offsetY + Mathf.Sin(angle) * (radius - lineWidth) + radius, 0);
                         vb.AddVert(v1, color);
                         if (lineWidth != 0)
@@ -98,12 +91,13 @@ namespace FairyGUI
                             vb.AddVert(new Vector3(offsetX + Mathf.Cos(angle) * radius + radius,
                                 offsetY + Mathf.Sin(angle) * radius + radius, 0), lineColor);
                         }
+
                         angle += angleDelta;
                     }
                 }
                 else
                 {
-                    Vector3 v1 = new Vector3(offsetX, offsetY, 0);
+                    var v1 = new Vector3(offsetX, offsetY, 0);
                     if (lineWidth != 0)
                     {
                         if (i == 0 || i == 3)
@@ -114,21 +108,22 @@ namespace FairyGUI
                             offsetY -= lineWidth;
                         else
                             offsetY += lineWidth;
-                        Vector3 v2 = new Vector3(offsetX, offsetY, 0);
+                        var v2 = new Vector3(offsetX, offsetY, 0);
                         vb.AddVert(v2, color);
                         vb.AddVert(v2, lineColor);
                         vb.AddVert(v1, lineColor);
                     }
                     else
+                    {
                         vb.AddVert(v1, color);
+                    }
                 }
             }
+
             cnt = vb.currentVertCount - cnt;
 
             if (lineWidth > 0)
-            {
-                for (int i = 0; i < cnt; i += 3)
-                {
+                for (var i = 0; i < cnt; i += 3)
                     if (i != cnt - 3)
                     {
                         vb.AddTriangle(0, i + 1, i + 4);
@@ -141,19 +136,15 @@ namespace FairyGUI
                         vb.AddTriangle(2, i + 2, i + 3);
                         vb.AddTriangle(i + 3, 3, 2);
                     }
-                }
-            }
             else
-            {
-                for (int i = 0; i < cnt; i++)
-                    vb.AddTriangle(0, i + 1, (i == cnt - 1) ? 1 : i + 2);
-            }
+                for (var i = 0; i < cnt; i++)
+                    vb.AddTriangle(0, i + 1, i == cnt - 1 ? 1 : i + 2);
         }
 
         public bool HitTest(Rect contentRect, Vector2 point)
         {
             if (drawRect != null)
-                return ((Rect)drawRect).Contains(point);
+                return ((Rect) drawRect).Contains(point);
             else
                 return contentRect.Contains(point);
         }

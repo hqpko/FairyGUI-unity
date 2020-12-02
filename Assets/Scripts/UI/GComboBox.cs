@@ -15,7 +15,6 @@ namespace FairyGUI
         /// </summary>
         public int visibleItemCount;
 
-
         public GComponent dropdown;
 
         /// <summary>
@@ -38,14 +37,14 @@ namespace FairyGUI
         protected PopupDirection _popupDirection;
         protected Controller _selectionController;
 
-        bool _itemsUpdated;
-        int _selectedIndex;
-        Controller _buttonController;
+        private bool _itemsUpdated;
+        private int _selectedIndex;
+        private Controller _buttonController;
 
-        bool _down;
-        bool _over;
+        private bool _down;
+        private bool _over;
 
-        EventListener _onChanged;
+        private EventListener _onChanged;
 
         public GComboBox()
         {
@@ -61,15 +60,12 @@ namespace FairyGUI
         /// <summary>
         /// Dispatched when selection was changed.
         /// </summary>
-        public EventListener onChanged
-        {
-            get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
-        }
+        public EventListener onChanged => _onChanged ?? (_onChanged = new EventListener(this, "onChanged"));
 
         /// <summary>
         /// Icon of the combobox.
         /// </summary>
-        override public string icon
+        public override string icon
         {
             get
             {
@@ -110,10 +106,10 @@ namespace FairyGUI
         /// <summary>
         /// Same of the title.
         /// </summary>
-        override public string text
+        public override string text
         {
-            get { return this.title; }
-            set { this.title = value; }
+            get => title;
+            set => title = value;
         }
 
         /// <summary>
@@ -123,7 +119,7 @@ namespace FairyGUI
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.color;
                 else
@@ -131,18 +127,17 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     tf.color = value;
             }
         }
 
-
         public int titleFontSize
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.textFormat.size;
                 else
@@ -150,10 +145,10 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                 {
-                    TextFormat format = tf.textFormat;
+                    var format = tf.textFormat;
                     format.size = value;
                     tf.textFormat = format;
                 }
@@ -165,10 +160,7 @@ namespace FairyGUI
         /// </summary>
         public string[] items
         {
-            get
-            {
-                return _items.ToArray();
-            }
+            get => _items.ToArray();
             set
             {
                 _items.Clear();
@@ -178,13 +170,12 @@ namespace FairyGUI
             }
         }
 
-
         public string[] icons
         {
-            get { return _icons != null ? _icons.ToArray() : null; }
+            get => _icons != null ? _icons.ToArray() : null;
             set
             {
-                this.iconList.Clear();
+                iconList.Clear();
                 if (value != null)
                     _icons.AddRange(value);
                 ApplyListChange();
@@ -196,7 +187,7 @@ namespace FairyGUI
         /// </summary>
         public string[] values
         {
-            get { return _values.ToArray(); }
+            get => _values.ToArray();
             set
             {
                 _values.Clear();
@@ -205,23 +196,11 @@ namespace FairyGUI
             }
         }
 
+        public List<string> itemList => _items;
 
-        public List<string> itemList
-        {
-            get { return _items; }
-        }
+        public List<string> valueList => _values;
 
-
-        public List<string> valueList
-        {
-            get { return _values; }
-        }
-
-
-        public List<string> iconList
-        {
-            get { return _icons ?? (_icons = new List<string>()); }
-        }
+        public List<string> iconList => _icons ?? (_icons = new List<string>());
 
         /// <summary>
         /// Call this method after you made changes on itemList or iconList
@@ -235,15 +214,15 @@ namespace FairyGUI
                 else if (_selectedIndex == -1)
                     _selectedIndex = 0;
 
-                this.text = _items[_selectedIndex];
+                text = _items[_selectedIndex];
                 if (_icons != null && _selectedIndex < _icons.Count)
-                    this.icon = _icons[_selectedIndex];
+                    icon = _icons[_selectedIndex];
             }
             else
             {
-                this.text = string.Empty;
+                text = string.Empty;
                 if (_icons != null)
-                    this.icon = null;
+                    icon = null;
                 _selectedIndex = -1;
             }
 
@@ -255,10 +234,7 @@ namespace FairyGUI
         /// </summary>
         public int selectedIndex
         {
-            get
-            {
-                return _selectedIndex;
-            }
+            get => _selectedIndex;
             set
             {
                 if (_selectedIndex == value)
@@ -267,26 +243,25 @@ namespace FairyGUI
                 _selectedIndex = value;
                 if (_selectedIndex >= 0 && _selectedIndex < _items.Count)
                 {
-                    this.text = (string)_items[_selectedIndex];
+                    text = (string) _items[_selectedIndex];
                     if (_icons != null && _selectedIndex < _icons.Count)
-                        this.icon = _icons[_selectedIndex];
+                        icon = _icons[_selectedIndex];
                 }
                 else
                 {
-                    this.text = string.Empty;
+                    text = string.Empty;
                     if (_icons != null)
-                        this.icon = null;
+                        icon = null;
                 }
 
                 UpdateSelectionController();
             }
         }
 
-
         public Controller selectionController
         {
-            get { return _selectionController; }
-            set { _selectionController = value; }
+            get => _selectionController;
+            set => _selectionController = value;
         }
 
         /// <summary>
@@ -303,32 +278,30 @@ namespace FairyGUI
             }
             set
             {
-                int index = _values.IndexOf(value);
+                var index = _values.IndexOf(value);
                 if (index == -1 && value == null)
                     index = _values.IndexOf(string.Empty);
                 if (index == -1)
                     index = 0;
-                this.selectedIndex = index;
+                selectedIndex = index;
             }
         }
 
-
         public PopupDirection popupDirection
         {
-            get { return _popupDirection; }
-            set { _popupDirection = value; }
+            get => _popupDirection;
+            set => _popupDirection = value;
         }
-
 
         /// <returns></returns>
         public GTextField GetTextField()
         {
             if (_titleObject is GTextField)
-                return (GTextField)_titleObject;
+                return (GTextField) _titleObject;
             else if (_titleObject is GLabel)
-                return ((GLabel)_titleObject).GetTextField();
+                return ((GLabel) _titleObject).GetTextField();
             else if (_titleObject is GButton)
-                return ((GButton)_titleObject).GetTextField();
+                return ((GButton) _titleObject).GetTextField();
             else
                 return null;
         }
@@ -341,7 +314,7 @@ namespace FairyGUI
 
         protected void SetCurrentState()
         {
-            if (this.grayed && _buttonController != null && _buttonController.HasPage(GButton.DISABLED))
+            if (grayed && _buttonController != null && _buttonController.HasPage(GButton.DISABLED))
                 SetState(GButton.DISABLED);
             else if (dropdown != null && dropdown.parent != null)
                 SetState(GButton.DOWN);
@@ -349,33 +322,35 @@ namespace FairyGUI
                 SetState(_over ? GButton.OVER : GButton.UP);
         }
 
-        override protected void HandleGrayedChanged()
+        protected override void HandleGrayedChanged()
         {
             if (_buttonController != null && _buttonController.HasPage(GButton.DISABLED))
             {
-                if (this.grayed)
+                if (grayed)
                     SetState(GButton.DISABLED);
                 else
                     SetState(GButton.UP);
             }
             else
+            {
                 base.HandleGrayedChanged();
+            }
         }
 
-        override public void HandleControllerChanged(Controller c)
+        public override void HandleControllerChanged(Controller c)
         {
             base.HandleControllerChanged(c);
 
             if (_selectionController == c)
-                this.selectedIndex = c.selectedIndex;
+                selectedIndex = c.selectedIndex;
         }
 
-        void UpdateSelectionController()
+        private void UpdateSelectionController()
         {
             if (_selectionController != null && !_selectionController.changing
-                && _selectedIndex < _selectionController.pageCount)
+                                             && _selectedIndex < _selectionController.pageCount)
             {
-                Controller c = _selectionController;
+                var c = _selectionController;
                 _selectionController = null;
                 c.selectedIndex = _selectedIndex;
                 _selectionController = c;
@@ -389,12 +364,13 @@ namespace FairyGUI
                 dropdown.Dispose();
                 dropdown = null;
             }
+
             _selectionController = null;
 
             base.Dispose();
         }
 
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             buffer.Seek(0, 6);
 
@@ -402,22 +378,23 @@ namespace FairyGUI
             _titleObject = GetChild("title");
             _iconObject = GetChild("icon");
 
-            string str = buffer.ReadS();
+            var str = buffer.ReadS();
             if (str != null)
             {
                 dropdown = UIPackage.CreateObjectFromURL(str) as GComponent;
                 if (dropdown == null)
                 {
-                    Debug.LogWarning("FairyGUI: " + this.resourceURL + " should be a component.");
+                    Debug.LogWarning("FairyGUI: " + resourceURL + " should be a component.");
                     return;
                 }
 
                 _list = dropdown.GetChild("list") as GList;
                 if (_list == null)
                 {
-                    Debug.LogWarning("FairyGUI: " + this.resourceURL + ": should container a list component named list.");
+                    Debug.LogWarning("FairyGUI: " + resourceURL + ": should container a list component named list.");
                     return;
                 }
+
                 _list.onClickItem.Add(__clickItem);
 
                 _list.AddRelation(dropdown, RelationType.Width);
@@ -436,19 +413,19 @@ namespace FairyGUI
             displayObject.onClick.Add(__click);
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
             if (!buffer.Seek(beginPos, 6))
                 return;
 
-            if ((ObjectType)buffer.ReadByte() != packageItem.objectType)
+            if ((ObjectType) buffer.ReadByte() != packageItem.objectType)
                 return;
 
             string str;
             int itemCount = buffer.ReadShort();
-            for (int i = 0; i < itemCount; i++)
+            for (var i = 0; i < itemCount; i++)
             {
                 int nextPos = buffer.ReadShort();
                 nextPos += buffer.position;
@@ -469,27 +446,29 @@ namespace FairyGUI
             str = buffer.ReadS();
             if (str != null)
             {
-                this.text = str;
+                text = str;
                 _selectedIndex = _items.IndexOf(str);
             }
             else if (_items.Count > 0)
             {
                 _selectedIndex = 0;
-                this.text = _items[0];
+                text = _items[0];
             }
             else
+            {
                 _selectedIndex = -1;
+            }
 
             str = buffer.ReadS();
             if (str != null)
-                this.icon = str;
+                icon = str;
 
             if (buffer.ReadBool())
-                this.titleColor = buffer.ReadColor();
-            int iv = buffer.ReadInt();
+                titleColor = buffer.ReadColor();
+            var iv = buffer.ReadInt();
             if (iv > 0)
                 visibleItemCount = iv;
-            _popupDirection = (PopupDirection)buffer.ReadByte();
+            _popupDirection = (PopupDirection) buffer.ReadByte();
 
             iv = buffer.ReadShort();
             if (iv >= 0)
@@ -519,10 +498,10 @@ namespace FairyGUI
             UpdateDropdownList();
             if (_list.selectionMode == ListSelectionMode.Single)
                 _list.selectedIndex = -1;
-            dropdown.width = this.width;
+            dropdown.width = width;
             _list.EnsureBoundsCorrect(); //avoid flicker
 
-            this.root.TogglePopup(dropdown, this, _popupDirection);
+            root.TogglePopup(dropdown, this, _popupDirection);
             if (dropdown.parent != null)
             {
                 dropdown.displayObject.onRemovedFromStage.Add(__popupWinClosed);
@@ -530,15 +509,15 @@ namespace FairyGUI
             }
         }
 
-        virtual protected void RenderDropdownList()
+        protected virtual void RenderDropdownList()
         {
             _list.RemoveChildrenToPool();
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                GObject item = _list.AddItemFromPool();
+                var item = _list.AddItemFromPool();
                 item.text = _items[i];
-                item.icon = (_icons != null && i < _icons.Count) ? _icons[i] : null;
+                item.icon = _icons != null && i < _icons.Count ? _icons[i] : null;
                 item.name = i < _values.Count ? _values[i] : string.Empty;
             }
         }
@@ -554,9 +533,9 @@ namespace FairyGUI
         private void __clickItem(EventContext context)
         {
             if (dropdown.parent is GRoot)
-                ((GRoot)dropdown.parent).HidePopup(dropdown);
+                ((GRoot) dropdown.parent).HidePopup(dropdown);
             _selectedIndex = int.MinValue;
-            this.selectedIndex = _list.GetChildIndex((GObject)context.data);
+            selectedIndex = _list.GetChildIndex((GObject) context.data);
 
             DispatchEvent("onChanged", null);
         }

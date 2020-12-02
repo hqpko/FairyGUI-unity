@@ -1,6 +1,5 @@
 ﻿namespace FairyGUI
 {
-
     public enum TweenPropType
     {
         None,
@@ -26,7 +25,7 @@
     {
         internal static void SetProps(object target, TweenPropType propType, TweenValue value)
         {
-            GObject g = target as GObject;
+            var g = target as GObject;
             if (g == null)
                 return;
 

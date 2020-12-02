@@ -4,7 +4,6 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class SelectionShape : DisplayObject, IMeshFactory
     {
         public readonly List<Rect> rects;
@@ -19,13 +18,9 @@ namespace FairyGUI
             rects = new List<Rect>();
         }
 
-
         public Color color
         {
-            get
-            {
-                return graphics.color;
-            }
+            get => graphics.color;
             set
             {
                 graphics.color = value;
@@ -35,21 +30,25 @@ namespace FairyGUI
 
         public void Refresh()
         {
-            int count = rects.Count;
+            var count = rects.Count;
             if (count > 0)
             {
-                Rect rect = new Rect();
+                var rect = new Rect();
                 rect = rects[0];
                 Rect tmp;
-                for (int i = 1; i < count; i++)
+                for (var i = 1; i < count; i++)
                 {
                     tmp = rects[i];
                     rect = ToolSet.Union(ref rect, ref tmp);
                 }
+
                 SetSize(rect.xMax, rect.yMax);
             }
             else
+            {
                 SetSize(0, 0);
+            }
+
             graphics.SetMeshDirty();
         }
 
@@ -61,11 +60,11 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            int count = rects.Count;
-            if (count == 0 || this.color == Color.clear)
+            var count = rects.Count;
+            if (count == 0 || color == Color.clear)
                 return;
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
                 vb.AddQuad(rects[i]);
             vb.AddTriangles();
         }
@@ -76,12 +75,10 @@ namespace FairyGUI
 
             if (_contentRect.Contains(localPoint))
             {
-                int count = rects.Count;
-                for (int i = 0; i < count; i++)
-                {
+                var count = rects.Count;
+                for (var i = 0; i < count; i++)
                     if (rects[i].Contains(localPoint))
                         return this;
-                }
             }
 
             return null;

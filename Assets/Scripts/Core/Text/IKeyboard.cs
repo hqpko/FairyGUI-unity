@@ -32,7 +32,8 @@
         /// <param name="textPlaceholder"></param>
         /// <param name="keyboardType"></param>
         /// <param name="hideInput"></param>
-        void Open(string text, bool autocorrection, bool multiline, bool secure, bool alert, string textPlaceholder, int keyboardType, bool hideInput);
+        void Open(string text, bool autocorrection, bool multiline, bool secure, bool alert, string textPlaceholder,
+            int keyboardType, bool hideInput);
 
         /// <summary>
         /// 关闭键盘

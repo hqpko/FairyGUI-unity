@@ -1,5 +1,4 @@
 #if FAIRYGUI_TMPRO
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -179,7 +178,8 @@ namespace FairyGUI
                 if (_material.HasProperty(ShaderUtilities.ID_GradientScale))
                 {
                     float gradientScale = _material.GetFloat(ShaderUtilities.ID_GradientScale);
-                    _stylePadding = _fontAsset.boldStyle / 4.0f * gradientScale * _material.GetFloat(ShaderUtilities.ID_ScaleRatio_A);
+                    _stylePadding =
+ _fontAsset.boldStyle / 4.0f * gradientScale * _material.GetFloat(ShaderUtilities.ID_ScaleRatio_A);
 
                     // Clamp overall padding to Gradient Scale size.
                     if (_stylePadding + _padding > gradientScale)
@@ -193,7 +193,8 @@ namespace FairyGUI
                 if (_material.HasProperty(ShaderUtilities.ID_GradientScale))
                 {
                     float gradientScale = _material.GetFloat(ShaderUtilities.ID_GradientScale);
-                    _stylePadding = _fontAsset.normalStyle / 4.0f * gradientScale * _material.GetFloat(ShaderUtilities.ID_ScaleRatio_A);
+                    _stylePadding =
+ _fontAsset.normalStyle / 4.0f * gradientScale * _material.GetFloat(ShaderUtilities.ID_ScaleRatio_A);
 
                     // Clamp overall padding to Gradient Scale size.
                     if (_stylePadding + _padding > gradientScale)
@@ -321,8 +322,10 @@ namespace FairyGUI
             {
                 // Shift Top vertices forward by half (Shear Value * height of character) and Bottom vertices back by same amount. 
                 float shear_value = _fontAsset.italicStyle * 0.01f;
-                Vector3 topShear = new Vector3(shear_value * ((metrics.horizontalBearingY + _padding + _stylePadding) * _scale), 0, 0);
-                Vector3 bottomShear = new Vector3(shear_value * (((metrics.horizontalBearingY - metrics.height - _padding - _stylePadding)) * _scale), 0, 0);
+                Vector3 topShear =
+ new Vector3(shear_value * ((metrics.horizontalBearingY + _padding + _stylePadding) * _scale), 0, 0);
+                Vector3 bottomShear =
+ new Vector3(shear_value * (((metrics.horizontalBearingY - metrics.height - _padding - _stylePadding)) * _scale), 0, 0);
 
                 topLeft += topShear;
                 bottomLeft += bottomShear;
@@ -452,13 +455,18 @@ namespace FairyGUI
             #region HANDLE UV0
 
             // Calculate UV required to setup the 3 Quads for the Underline.
-            Vector2 uv0 = new Vector2((_lineChar.glyph.glyphRect.x - _padding) / _fontAsset.atlasWidth, (_lineChar.glyph.glyphRect.y - _padding) / _fontAsset.atlasHeight);  // bottom left
-            Vector2 uv1 = new Vector2(uv0.x, (_lineChar.glyph.glyphRect.y + _lineChar.glyph.glyphRect.height + _padding) / _fontAsset.atlasHeight);  // top left
-            Vector2 uv2 = new Vector2((_lineChar.glyph.glyphRect.x - _padding + (float)_lineChar.glyph.glyphRect.width / 2) / _fontAsset.atlasWidth, uv1.y); // Mid Top Left
+            Vector2 uv0 =
+ new Vector2((_lineChar.glyph.glyphRect.x - _padding) / _fontAsset.atlasWidth, (_lineChar.glyph.glyphRect.y - _padding) / _fontAsset.atlasHeight);  // bottom left
+            Vector2 uv1 =
+ new Vector2(uv0.x, (_lineChar.glyph.glyphRect.y + _lineChar.glyph.glyphRect.height + _padding) / _fontAsset.atlasHeight);  // top left
+            Vector2 uv2 =
+ new Vector2((_lineChar.glyph.glyphRect.x - _padding + (float)_lineChar.glyph.glyphRect.width / 2) / _fontAsset.atlasWidth, uv1.y); // Mid Top Left
             Vector2 uv3 = new Vector2(uv2.x, uv0.y); // Mid Bottom Left
-            Vector2 uv4 = new Vector2((_lineChar.glyph.glyphRect.x + _padding + (float)_lineChar.glyph.glyphRect.width / 2) / _fontAsset.atlasWidth, uv1.y); // Mid Top Right
+            Vector2 uv4 =
+ new Vector2((_lineChar.glyph.glyphRect.x + _padding + (float)_lineChar.glyph.glyphRect.width / 2) / _fontAsset.atlasWidth, uv1.y); // Mid Top Right
             Vector2 uv5 = new Vector2(uv4.x, uv0.y); // Mid Bottom right
-            Vector2 uv6 = new Vector2((_lineChar.glyph.glyphRect.x + _padding + _lineChar.glyph.glyphRect.width) / _fontAsset.atlasWidth, uv1.y); // End Part - Bottom Right
+            Vector2 uv6 =
+ new Vector2((_lineChar.glyph.glyphRect.x + _padding + _lineChar.glyph.glyphRect.width) / _fontAsset.atlasWidth, uv1.y); // End Part - Bottom Right
             Vector2 uv7 = new Vector2(uv6.x, uv0.y); // End Part - Top Right
 
             uvList.Add(uv0);

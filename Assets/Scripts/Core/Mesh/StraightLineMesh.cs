@@ -2,21 +2,15 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class StraightLineMesh : IMeshFactory
     {
-
         public Color color;
-
 
         public Vector3 origin;
 
-
         public Vector3 end;
 
-
         public float lineWidth;
-
 
         public bool repeatFill;
 
@@ -25,7 +19,6 @@ namespace FairyGUI
             color = Color.black;
             lineWidth = 1;
         }
-
 
         /// <param name="lineWidth"></param>
         /// <param name="color"></param>
@@ -42,16 +35,16 @@ namespace FairyGUI
             if (origin == end)
                 return;
 
-            float length = Vector2.Distance(origin, end);
-            Vector3 lineVector = end - origin;
-            Vector3 widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
+            var length = Vector2.Distance(origin, end);
+            var lineVector = end - origin;
+            var widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
             widthVector.Normalize();
 
             Vector3 v0, v1, v2, v3;
 
             if (repeatFill)
             {
-                float ratio = length / vb.textureSize.x;
+                var ratio = length / vb.textureSize.x;
                 v0 = VertexBuffer.NormalizedUV[0];
                 v1 = VertexBuffer.NormalizedUV[1];
                 v2 = new Vector2(ratio, 1);

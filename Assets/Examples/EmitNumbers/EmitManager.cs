@@ -4,7 +4,8 @@ using FairyGUI;
 
 public class EmitManager
 {
-    static EmitManager _instance;
+    private static EmitManager _instance;
+
     public static EmitManager inst
     {
         get

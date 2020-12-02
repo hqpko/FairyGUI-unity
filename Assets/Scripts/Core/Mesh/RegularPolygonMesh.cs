@@ -2,30 +2,21 @@
 
 namespace FairyGUI
 {
-
     public class RegularPolygonMesh : IMeshFactory, IHitTest
     {
-
         public Rect? drawRect;
-
 
         public int sides;
 
-
         public float lineWidth;
-
 
         public Color32 lineColor;
 
-
         public Color32? centerColor;
-
 
         public Color32? fillColor;
 
-
         public float[] distances;
-
 
         public float rotation;
 
@@ -43,24 +34,24 @@ namespace FairyGUI
                 return;
             }
 
-            Rect rect = drawRect != null ? (Rect)drawRect : vb.contentRect;
-            Color32 color = fillColor != null ? (Color32)fillColor : vb.vertexColor;
+            var rect = drawRect != null ? (Rect) drawRect : vb.contentRect;
+            var color = fillColor != null ? (Color32) fillColor : vb.vertexColor;
 
-            float angleDelta = 2 * Mathf.PI / sides;
-            float angle = rotation * Mathf.Deg2Rad;
-            float radius = Mathf.Min(rect.width / 2, rect.height / 2);
+            var angleDelta = 2 * Mathf.PI / sides;
+            var angle = rotation * Mathf.Deg2Rad;
+            var radius = Mathf.Min(rect.width / 2, rect.height / 2);
 
-            float centerX = radius + rect.x;
-            float centerY = radius + rect.y;
-            vb.AddVert(new Vector3(centerX, centerY, 0), centerColor == null ? color : (Color32)centerColor);
-            for (int i = 0; i < sides; i++)
+            var centerX = radius + rect.x;
+            var centerY = radius + rect.y;
+            vb.AddVert(new Vector3(centerX, centerY, 0), centerColor == null ? color : (Color32) centerColor);
+            for (var i = 0; i < sides; i++)
             {
-                float r = radius;
+                var r = radius;
                 if (distances != null)
                     r *= distances[i];
-                float xv = Mathf.Cos(angle) * (r - lineWidth);
-                float yv = Mathf.Sin(angle) * (r - lineWidth);
-                Vector3 vec = new Vector3(xv + centerX, yv + centerY, 0);
+                var xv = Mathf.Cos(angle) * (r - lineWidth);
+                var yv = Mathf.Sin(angle) * (r - lineWidth);
+                var vec = new Vector3(xv + centerX, yv + centerY, 0);
                 vb.AddVert(vec, color);
                 if (lineWidth > 0)
                 {
@@ -70,14 +61,14 @@ namespace FairyGUI
                     yv = Mathf.Sin(angle) * r + centerY;
                     vb.AddVert(new Vector3(xv, yv, 0), lineColor);
                 }
+
                 angle += angleDelta;
             }
 
             if (lineWidth > 0)
             {
-                int tmp = sides * 3;
-                for (int i = 0; i < tmp; i += 3)
-                {
+                var tmp = sides * 3;
+                for (var i = 0; i < tmp; i += 3)
                     if (i != tmp - 3)
                     {
                         vb.AddTriangle(0, i + 1, i + 4);
@@ -90,19 +81,18 @@ namespace FairyGUI
                         vb.AddTriangle(2, i + 2, i + 3);
                         vb.AddTriangle(i + 3, 3, 2);
                     }
-                }
             }
             else
             {
-                for (int i = 0; i < sides; i++)
-                    vb.AddTriangle(0, i + 1, (i == sides - 1) ? 1 : i + 2);
+                for (var i = 0; i < sides; i++)
+                    vb.AddTriangle(0, i + 1, i == sides - 1 ? 1 : i + 2);
             }
         }
 
         public bool HitTest(Rect contentRect, Vector2 point)
         {
             if (drawRect != null)
-                return ((Rect)drawRect).Contains(point);
+                return ((Rect) drawRect).Contains(point);
             else
                 return contentRect.Contains(point);
         }

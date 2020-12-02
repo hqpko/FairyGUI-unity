@@ -3,7 +3,6 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class PackageItem
     {
         public UIPackage owner;
@@ -57,7 +56,7 @@ namespace FairyGUI
         {
             if (branches != null && owner._branchIndex != -1)
             {
-                string itemId = branches[owner._branchIndex];
+                var itemId = branches[owner._branchIndex];
                 if (itemId != null)
                     return owner.GetItem(itemId);
             }
@@ -69,10 +68,10 @@ namespace FairyGUI
         {
             if (highResolution != null && GRoot.contentScaleLevel > 0)
             {
-                int i = GRoot.contentScaleLevel - 1;
+                var i = GRoot.contentScaleLevel - 1;
                 if (i >= highResolution.Length)
                     i = highResolution.Length - 1;
-                string itemId = highResolution[i];
+                var itemId = highResolution[i];
                 if (itemId != null)
                     return owner.GetItem(itemId);
             }

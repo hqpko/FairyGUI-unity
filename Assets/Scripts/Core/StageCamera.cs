@@ -10,34 +10,21 @@ namespace FairyGUI
     [AddComponentMenu("FairyGUI/UI Camera")]
     public class StageCamera : MonoBehaviour
     {
-
         public bool constantSize = true;
 
+        [NonSerialized] public float unitsPerPixel = 0.02f;
 
-        [NonSerialized]
-        public float unitsPerPixel = 0.02f;
+        [NonSerialized] public Transform cachedTransform;
+        [NonSerialized] public Camera cachedCamera;
 
-        [NonSerialized]
-        public Transform cachedTransform;
-        [NonSerialized]
-        public Camera cachedCamera;
+        [NonSerialized] private int screenWidth;
+        [NonSerialized] private int screenHeight;
+        [NonSerialized] private bool isMain;
+        [NonSerialized] private Display _display;
 
-        [NonSerialized]
-        int screenWidth;
-        [NonSerialized]
-        int screenHeight;
-        [NonSerialized]
-        bool isMain;
-        [NonSerialized]
-        Display _display;
+        [NonSerialized] public static Camera main;
 
-
-        [NonSerialized]
-        public static Camera main;
-
-
-        [NonSerialized]
-        public static int screenSizeVer = 1;
+        [NonSerialized] public static int screenSizeVer = 1;
 
         public const string Name = "Stage Camera";
         public const string LayerName = "UI";
@@ -45,17 +32,18 @@ namespace FairyGUI
         public static float DefaultCameraSize = 5;
         public static float DefaultUnitsPerPixel = 0.02f;
 
-        void OnEnable()
+        private void OnEnable()
         {
-            cachedTransform = this.transform;
-            cachedCamera = this.GetComponent<Camera>();
-            if (this.gameObject.name == Name)
+            cachedTransform = transform;
+            cachedCamera = GetComponent<Camera>();
+            if (gameObject.name == Name)
             {
                 main = cachedCamera;
                 isMain = true;
             }
 
-            if (Display.displays.Length > 1 && cachedCamera.targetDisplay != 0 && cachedCamera.targetDisplay < Display.displays.Length)
+            if (Display.displays.Length > 1 && cachedCamera.targetDisplay != 0 &&
+                cachedCamera.targetDisplay < Display.displays.Length)
                 _display = Display.displays[cachedCamera.targetDisplay];
 
             if (_display == null)
@@ -64,7 +52,7 @@ namespace FairyGUI
                 OnScreenSizeChanged(_display.renderingWidth, _display.renderingHeight);
         }
 
-        void Update()
+        private void Update()
         {
             if (_display == null)
             {
@@ -78,7 +66,7 @@ namespace FairyGUI
             }
         }
 
-        void OnScreenSizeChanged(int newWidth, int newHeight)
+        private void OnScreenSizeChanged(int newWidth, int newHeight)
         {
             if (newWidth == 0 || newHeight == 0)
                 return;
@@ -96,16 +84,20 @@ namespace FairyGUI
                 unitsPerPixel = DefaultUnitsPerPixel;
                 cachedCamera.orthographicSize = screenHeight / 2 * unitsPerPixel;
             }
-            cachedTransform.localPosition = new Vector3(cachedCamera.orthographicSize * screenWidth / screenHeight, -cachedCamera.orthographicSize);
+
+            cachedTransform.localPosition = new Vector3(cachedCamera.orthographicSize * screenWidth / screenHeight,
+                -cachedCamera.orthographicSize);
 
             if (isMain)
             {
                 screenSizeVer++;
                 if (Application.isPlaying)
+                {
                     Stage.inst.HandleScreenSizeChanged(screenWidth, screenHeight, unitsPerPixel);
+                }
                 else
                 {
-                    UIContentScaler scaler = GameObject.FindObjectOfType<UIContentScaler>();
+                    var scaler = FindObjectOfType<UIContentScaler>();
                     if (scaler != null)
                         scaler.ApplyChange();
                     else
@@ -114,13 +106,10 @@ namespace FairyGUI
             }
         }
 
-        void OnRenderObject()
+        private void OnRenderObject()
         {
             //Update和OnGUI在EditMode的调用都不那么及时，OnRenderObject则比较频繁，可以保证界面及时刷新。所以使用OnRenderObject
-            if (isMain && !Application.isPlaying)
-            {
-                EMRenderSupport.Update();
-            }
+            if (isMain && !Application.isPlaying) EMRenderSupport.Update();
         }
 
         public void ApplyModifiedProperties()
@@ -135,31 +124,29 @@ namespace FairyGUI
         {
             if (GameObject.Find(Name) == null)
             {
-                int layer = LayerMask.NameToLayer(LayerName);
+                var layer = LayerMask.NameToLayer(LayerName);
                 CreateCamera(Name, 1 << layer);
             }
 
             HitTestContext.cachedMainCamera = Camera.main;
         }
 
-
         public static void CheckCaptureCamera()
         {
             if (GameObject.Find(Name) == null)
             {
-                int layer = LayerMask.NameToLayer(LayerName);
+                var layer = LayerMask.NameToLayer(LayerName);
                 CreateCamera(Name, 1 << layer);
             }
         }
-
 
         /// <param name="name"></param>
         /// <param name="cullingMask"></param>
         /// <returns></returns>
         public static Camera CreateCamera(string name, int cullingMask)
         {
-            GameObject cameraObject = new GameObject(name);
-            Camera camera = cameraObject.AddComponent<Camera>();
+            var cameraObject = new GameObject(name);
+            var camera = cameraObject.AddComponent<Camera>();
             camera.depth = 1;
             camera.cullingMask = cullingMask;
             camera.clearFlags = CameraClearFlags.Depth;

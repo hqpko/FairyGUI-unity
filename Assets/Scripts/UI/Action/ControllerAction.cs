@@ -24,6 +24,7 @@ namespace FairyGUI
                 case ActionType.ChangePage:
                     return new ChangePageAction();
             }
+
             return null;
         }
 
@@ -40,28 +41,26 @@ namespace FairyGUI
                 Leave(controller);
         }
 
-        virtual protected void Enter(Controller controller)
+        protected virtual void Enter(Controller controller)
         {
-
         }
 
-        virtual protected void Leave(Controller controller)
+        protected virtual void Leave(Controller controller)
         {
-
         }
 
-        virtual public void Setup(ByteBuffer buffer)
+        public virtual void Setup(ByteBuffer buffer)
         {
             int cnt;
 
             cnt = buffer.ReadShort();
             fromPage = new string[cnt];
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
                 fromPage[i] = buffer.ReadS();
 
             cnt = buffer.ReadShort();
             toPage = new string[cnt];
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
                 toPage[i] = buffer.ReadS();
         }
     }

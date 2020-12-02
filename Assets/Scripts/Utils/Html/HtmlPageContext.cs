@@ -3,18 +3,17 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlPageContext : IHtmlPageContext
     {
-        Stack<IHtmlObject> _imagePool;
-        Stack<IHtmlObject> _inputPool;
-        Stack<IHtmlObject> _buttonPool;
-        Stack<IHtmlObject> _selectPool;
-        Stack<IHtmlObject> _linkPool;
+        private Stack<IHtmlObject> _imagePool;
+        private Stack<IHtmlObject> _inputPool;
+        private Stack<IHtmlObject> _buttonPool;
+        private Stack<IHtmlObject> _selectPool;
+        private Stack<IHtmlObject> _linkPool;
 
         public static HtmlPageContext inst = new HtmlPageContext();
 
-        static Transform _poolManager;
+        private static Transform _poolManager;
 
         public HtmlPageContext()
         {
@@ -28,10 +27,10 @@ namespace FairyGUI.Utils
                 _poolManager = Stage.inst.CreatePoolManager("HtmlObjectPool");
         }
 
-        virtual public IHtmlObject CreateObject(RichTextField owner, HtmlElement element)
+        public virtual IHtmlObject CreateObject(RichTextField owner, HtmlElement element)
         {
             IHtmlObject ret = null;
-            bool fromPool = false;
+            var fromPool = false;
             if (element.type == HtmlElementType.Image)
             {
                 if (_imagePool.Count > 0 && _poolManager != null)
@@ -40,7 +39,9 @@ namespace FairyGUI.Utils
                     fromPool = true;
                 }
                 else
+                {
                     ret = new HtmlImage();
+                }
             }
             else if (element.type == HtmlElementType.Link)
             {
@@ -50,11 +51,13 @@ namespace FairyGUI.Utils
                     fromPool = true;
                 }
                 else
+                {
                     ret = new HtmlLink();
+                }
             }
             else if (element.type == HtmlElementType.Input)
             {
-                string type = element.GetString("type");
+                var type = element.GetString("type");
                 if (type != null)
                     type = type.ToLower();
                 if (type == "button" || type == "submit")
@@ -65,7 +68,9 @@ namespace FairyGUI.Utils
                         fromPool = true;
                     }
                     else
+                    {
                         ret = new HtmlButton();
+                    }
                 }
                 else
                 {
@@ -75,7 +80,9 @@ namespace FairyGUI.Utils
                         fromPool = true;
                     }
                     else
+                    {
                         ret = new HtmlInput();
+                    }
                 }
             }
             else if (element.type == HtmlElementType.Select)
@@ -86,7 +93,9 @@ namespace FairyGUI.Utils
                     fromPool = true;
                 }
                 else
+                {
                     ret = new HtmlSelect();
+                }
             }
 
             //Debug.Log("from=" + fromPool);
@@ -97,8 +106,8 @@ namespace FairyGUI.Utils
                 {
                     ret.Dispose();
                     return CreateObject(owner, element);
-
                 }
+
                 ret.Create(owner, element);
                 if (ret.displayObject != null)
                     ret.displayObject.home = owner.cachedTransform;
@@ -107,7 +116,7 @@ namespace FairyGUI.Utils
             return ret;
         }
 
-        virtual public void FreeObject(IHtmlObject obj)
+        public virtual void FreeObject(IHtmlObject obj)
         {
             if (_poolManager == null)
             {
@@ -136,12 +145,12 @@ namespace FairyGUI.Utils
                 obj.displayObject.cachedTransform.SetParent(_poolManager, false);
         }
 
-        virtual public NTexture GetImageTexture(HtmlImage image)
+        public virtual NTexture GetImageTexture(HtmlImage image)
         {
             return null;
         }
 
-        virtual public void FreeImageTexture(HtmlImage image, NTexture texture)
+        public virtual void FreeImageTexture(HtmlImage image, NTexture texture)
         {
         }
     }

@@ -3,72 +3,62 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class RichTextField : Container
     {
-
         public IHtmlPageContext htmlPageContext { get; set; }
-
 
         public HtmlParseOptions htmlParseOptions { get; private set; }
 
-
         public Dictionary<uint, Emoji> emojies { get; set; }
-
 
         public TextField textField { get; private set; }
 
         public RichTextField()
         {
             gameObject.name = "RichTextField";
-            this.opaque = true;
+            opaque = true;
 
             htmlPageContext = HtmlPageContext.inst;
             htmlParseOptions = new HtmlParseOptions();
 
-            this.textField = new TextField();
+            textField = new TextField();
             textField.EnableRichSupport(this);
             AddChild(textField);
         }
 
-
-        virtual public string text
+        public virtual string text
         {
-            get { return textField.text; }
-            set { textField.text = value; }
+            get => textField.text;
+            set => textField.text = value;
         }
 
-
-        virtual public string htmlText
+        public virtual string htmlText
         {
-            get { return textField.htmlText; }
-            set { textField.htmlText = value; }
+            get => textField.htmlText;
+            set => textField.htmlText = value;
         }
 
-
-        virtual public TextFormat textFormat
+        public virtual TextFormat textFormat
         {
-            get { return textField.textFormat; }
-            set { textField.textFormat = value; }
+            get => textField.textFormat;
+            set => textField.textFormat = value;
         }
-
 
         /// <param name="name"></param>
         /// <returns></returns>
         public HtmlElement GetHtmlElement(string name)
         {
-            List<HtmlElement> elements = textField.htmlElements;
-            int count = elements.Count;
-            for (int i = 0; i < count; i++)
+            var elements = textField.htmlElements;
+            var count = elements.Count;
+            for (var i = 0; i < count; i++)
             {
-                HtmlElement element = elements[i];
+                var element = elements[i];
                 if (name.Equals(element.name, System.StringComparison.OrdinalIgnoreCase))
                     return element;
             }
 
             return null;
         }
-
 
         /// <param name="index"></param>
         /// <returns></returns>
@@ -77,18 +67,13 @@ namespace FairyGUI
             return textField.htmlElements[index];
         }
 
-
-        public int htmlElementCount
-        {
-            get { return textField.htmlElements.Count; }
-        }
-
+        public int htmlElementCount => textField.htmlElements.Count;
 
         /// <param name="index"></param>
         /// <param name="show"></param>
         public void ShowHtmlObject(int index, bool show)
         {
-            HtmlElement element = textField.htmlElements[index];
+            var element = textField.htmlElements[index];
             if (element.htmlObject != null && element.type != HtmlElementType.Link)
             {
                 //set hidden flag
@@ -121,7 +106,7 @@ namespace FairyGUI
             textField.EnsureSizeCorrect();
         }
 
-        override protected void OnSizeChanged()
+        protected override void OnSizeChanged()
         {
             textField.size = _contentRect.size; //千万不可以调用this.size,后者会触发EnsureSizeCorrect
 
@@ -147,11 +132,11 @@ namespace FairyGUI
 
         internal void CleanupObjects()
         {
-            List<HtmlElement> elements = textField.htmlElements;
-            int count = elements.Count;
-            for (int i = 0; i < count; i++)
+            var elements = textField.htmlElements;
+            var count = elements.Count;
+            for (var i = 0; i < count; i++)
             {
-                HtmlElement element = elements[i];
+                var element = elements[i];
                 if (element.htmlObject != null)
                 {
                     element.htmlObject.Remove();
@@ -160,13 +145,13 @@ namespace FairyGUI
             }
         }
 
-        virtual internal void RefreshObjects()
+        internal virtual void RefreshObjects()
         {
-            List<HtmlElement> elements = textField.htmlElements;
-            int count = elements.Count;
-            for (int i = 0; i < count; i++)
+            var elements = textField.htmlElements;
+            var count = elements.Count;
+            for (var i = 0; i < count; i++)
             {
-                HtmlElement element = elements[i];
+                var element = elements[i];
                 if (element.htmlObject != null)
                 {
                     if ((element.status & 3) == 0) //not (hidden and clipped)

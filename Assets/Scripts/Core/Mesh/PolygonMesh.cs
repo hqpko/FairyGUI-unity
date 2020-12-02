@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class PolygonMesh : IMeshFactory, IHitTest
     {
         /// <summary>
@@ -16,22 +15,17 @@ namespace FairyGUI
         /// </summary>
         public readonly List<Vector2> texcoords;
 
-
         public float lineWidth;
-
 
         public Color32 lineColor;
 
-
         public Color32? fillColor;
-
 
         public Color32[] colors;
 
-
         public bool usePercentPositions;
 
-        static List<int> sRestIndices = new List<int>();
+        private static List<int> sRestIndices = new List<int>();
 
         public PolygonMesh()
         {
@@ -39,13 +33,11 @@ namespace FairyGUI
             texcoords = new List<Vector2>();
         }
 
-
         /// <param name="point"></param>
         public void Add(Vector2 point)
         {
             points.Add(point);
         }
-
 
         /// <param name="point"></param>
         /// <param name="texcoord"></param>
@@ -57,28 +49,29 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            int numVertices = points.Count;
+            var numVertices = points.Count;
             if (numVertices < 3)
                 return;
 
             int restIndexPos, numRestIndices;
-            Color32 color = fillColor != null ? (Color32)fillColor : vb.vertexColor;
+            var color = fillColor != null ? (Color32) fillColor : vb.vertexColor;
 
-            float w = vb.contentRect.width;
-            float h = vb.contentRect.height;
-            bool useTexcoords = texcoords.Count >= numVertices;
-            bool fullUV = true;
-            for (int i = 0; i < numVertices; i++)
+            var w = vb.contentRect.width;
+            var h = vb.contentRect.height;
+            var useTexcoords = texcoords.Count >= numVertices;
+            var fullUV = true;
+            for (var i = 0; i < numVertices; i++)
             {
-                Vector3 vec = new Vector3(points[i].x, points[i].y, 0);
+                var vec = new Vector3(points[i].x, points[i].y, 0);
                 if (usePercentPositions)
                 {
                     vec.x *= w;
                     vec.y *= h;
                 }
+
                 if (useTexcoords)
                 {
-                    Vector2 uv = texcoords[i];
+                    var uv = texcoords[i];
                     if (uv.x != 0 && uv.x != 1 || uv.y != 0 && uv.y != 1)
                         fullUV = false;
                     uv.x = Mathf.Lerp(vb.uvRect.x, vb.uvRect.xMax, uv.x);
@@ -86,7 +79,9 @@ namespace FairyGUI
                     vb.AddVert(vec, color, uv);
                 }
                 else
+                {
                     vb.AddVert(vec, color);
+                }
             }
 
             if (useTexcoords && fullUV && numVertices == 4)
@@ -100,7 +95,7 @@ namespace FairyGUI
             // -> Starling
 
             sRestIndices.Clear();
-            for (int i = 0; i < numVertices; ++i)
+            for (var i = 0; i < numVertices; ++i)
                 sRestIndices.Add(i);
 
             restIndexPos = 0;
@@ -125,7 +120,7 @@ namespace FairyGUI
                 if ((a.y - b.y) * (c.x - b.x) + (b.x - a.x) * (c.y - b.y) >= 0)
                 {
                     earFound = true;
-                    for (int i = 3; i < numRestIndices; ++i)
+                    for (var i = 3; i < numRestIndices; ++i)
                     {
                         otherIndex = sRestIndices[(restIndexPos + i) % numRestIndices];
                         p = points[otherIndex];
@@ -152,6 +147,7 @@ namespace FairyGUI
                     if (restIndexPos == numRestIndices) break; // no more ears
                 }
             }
+
             vb.AddTriangle(sRestIndices[0], sRestIndices[1], sRestIndices[2]);
 
             if (colors != null)
@@ -161,14 +157,14 @@ namespace FairyGUI
                 DrawOutline(vb);
         }
 
-        void DrawOutline(VertexBuffer vb)
+        private void DrawOutline(VertexBuffer vb)
         {
-            int numVertices = points.Count;
-            int start = vb.currentVertCount - numVertices;
-            int k = vb.currentVertCount;
-            for (int i = 0; i < numVertices; i++)
+            var numVertices = points.Count;
+            var start = vb.currentVertCount - numVertices;
+            var k = vb.currentVertCount;
+            for (var i = 0; i < numVertices; i++)
             {
-                Vector3 p0 = vb.vertices[start + i];
+                var p0 = vb.vertices[start + i];
                 p0.y = -p0.y;
                 Vector3 p1;
                 if (i < numVertices - 1)
@@ -177,8 +173,8 @@ namespace FairyGUI
                     p1 = vb.vertices[start];
                 p1.y = -p1.y;
 
-                Vector3 lineVector = p1 - p0;
-                Vector3 widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
+                var lineVector = p1 - p0;
+                var widthVector = Vector3.Cross(lineVector, new Vector3(0, 0, 1));
                 widthVector.Normalize();
 
                 vb.AddVert(p0 - widthVector * lineWidth * 0.5f, lineColor);
@@ -196,6 +192,7 @@ namespace FairyGUI
                     vb.AddTriangle(k - 6, k - 5, k - 3);
                     vb.AddTriangle(k - 6, k - 3, k - 4);
                 }
+
                 if (i == numVertices - 1)
                 {
                     start += numVertices;
@@ -205,30 +202,30 @@ namespace FairyGUI
             }
         }
 
-        bool IsPointInTriangle(ref Vector2 p, ref Vector2 a, ref Vector2 b, ref Vector2 c)
+        private bool IsPointInTriangle(ref Vector2 p, ref Vector2 a, ref Vector2 b, ref Vector2 c)
         {
             // From Starling
             // This algorithm is described well in this article:
             // http://www.blackpawn.com/texts/pointinpoly/default.html
 
-            float v0x = c.x - a.x;
-            float v0y = c.y - a.y;
-            float v1x = b.x - a.x;
-            float v1y = b.y - a.y;
-            float v2x = p.x - a.x;
-            float v2y = p.y - a.y;
+            var v0x = c.x - a.x;
+            var v0y = c.y - a.y;
+            var v1x = b.x - a.x;
+            var v1y = b.y - a.y;
+            var v2x = p.x - a.x;
+            var v2y = p.y - a.y;
 
-            float dot00 = v0x * v0x + v0y * v0y;
-            float dot01 = v0x * v1x + v0y * v1y;
-            float dot02 = v0x * v2x + v0y * v2y;
-            float dot11 = v1x * v1x + v1y * v1y;
-            float dot12 = v1x * v2x + v1y * v2y;
+            var dot00 = v0x * v0x + v0y * v0y;
+            var dot01 = v0x * v1x + v0y * v1y;
+            var dot02 = v0x * v2x + v0y * v2y;
+            var dot11 = v1x * v1x + v1y * v1y;
+            var dot12 = v1x * v2x + v1y * v2y;
 
-            float invDen = 1.0f / (dot00 * dot11 - dot01 * dot01);
-            float u = (dot11 * dot02 - dot01 * dot12) * invDen;
-            float v = (dot00 * dot12 - dot01 * dot02) * invDen;
+            var invDen = 1.0f / (dot00 * dot11 - dot01 * dot01);
+            var u = (dot11 * dot02 - dot01 * dot12) * invDen;
+            var v = (dot00 * dot12 - dot01 * dot02) * invDen;
 
-            return (u >= 0) && (v >= 0) && (u + v < 1);
+            return u >= 0 && v >= 0 && u + v < 1;
         }
 
         public bool HitTest(Rect contentRect, Vector2 point)
@@ -239,19 +236,19 @@ namespace FairyGUI
             // Algorithm & implementation thankfully taken from:
             // -> http://alienryderflex.com/polygon/
             // inspired by Starling
-            int len = points.Count;
+            var len = points.Count;
             int i;
-            int j = len - 1;
-            bool oddNodes = false;
-            float w = contentRect.width;
-            float h = contentRect.height;
+            var j = len - 1;
+            var oddNodes = false;
+            var w = contentRect.width;
+            var h = contentRect.height;
 
             for (i = 0; i < len; ++i)
             {
-                float ix = points[i].x;
-                float iy = points[i].y;
-                float jx = points[j].x;
-                float jy = points[j].y;
+                var ix = points[i].x;
+                var iy = points[i].y;
+                var jx = points[j].x;
+                var jy = points[j].y;
                 if (usePercentPositions)
                 {
                     ix *= w;
@@ -260,11 +257,10 @@ namespace FairyGUI
                     iy *= h;
                 }
 
-                if ((iy < point.y && jy >= point.y || jy < point.y && iy >= point.y) && (ix <= point.x || jx <= point.x))
-                {
+                if ((iy < point.y && jy >= point.y || jy < point.y && iy >= point.y) &&
+                    (ix <= point.x || jx <= point.x))
                     if (ix + (point.y - iy) / (jy - iy) * (jx - ix) < point.x)
                         oddNodes = !oddNodes;
-                }
 
                 j = i;
             }

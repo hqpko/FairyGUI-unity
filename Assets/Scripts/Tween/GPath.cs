@@ -3,25 +3,18 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     [System.Serializable]
     public struct GPathPoint
     {
-
         public Vector3 pos;
-
 
         public Vector3 control1;
 
-
         public Vector3 control2;
-
 
         public CurveType curveType;
 
-
         public bool smooth;
-
 
         public enum CurveType
         {
@@ -31,29 +24,26 @@ namespace FairyGUI
             Straight
         }
 
-
         /// <param name="pos"></param>
         public GPathPoint(Vector3 pos)
         {
             this.pos = pos;
-            this.control1 = Vector3.zero;
-            this.control2 = Vector3.zero;
-            this.curveType = CurveType.CRSpline;
-            this.smooth = true;
+            control1 = Vector3.zero;
+            control2 = Vector3.zero;
+            curveType = CurveType.CRSpline;
+            smooth = true;
         }
-
 
         /// <param name="pos"></param>
         /// <param name="control"></param>
         public GPathPoint(Vector3 pos, Vector3 control)
         {
             this.pos = pos;
-            this.control1 = control;
-            this.control2 = Vector3.zero;
-            this.curveType = CurveType.Bezier;
-            this.smooth = true;
+            control1 = control;
+            control2 = Vector3.zero;
+            curveType = CurveType.Bezier;
+            smooth = true;
         }
-
 
         /// <param name="pos"></param>
         /// <param name="control1"></param>
@@ -63,23 +53,21 @@ namespace FairyGUI
             this.pos = pos;
             this.control1 = control1;
             this.control2 = control2;
-            this.curveType = CurveType.CubicBezier;
-            this.smooth = true;
+            curveType = CurveType.CubicBezier;
+            smooth = true;
         }
-
 
         /// <param name="pos"></param>
         /// <param name="curveType"></param>
         public GPathPoint(Vector3 pos, CurveType curveType)
         {
             this.pos = pos;
-            this.control1 = Vector3.zero;
-            this.control2 = Vector3.zero;
+            control1 = Vector3.zero;
+            control2 = Vector3.zero;
             this.curveType = curveType;
-            this.smooth = true;
+            smooth = true;
         }
     }
-
 
     public class GPath
     {
@@ -95,8 +83,8 @@ namespace FairyGUI
         protected List<Vector3> _points;
         protected float _fullLength;
 
-        static List<GPathPoint> helperList = new List<GPathPoint>();
-        static List<Vector3> splinePoints = new List<Vector3>();
+        private static List<GPathPoint> helperList = new List<GPathPoint>();
+        private static List<Vector3> splinePoints = new List<Vector3>();
 
         public GPath()
         {
@@ -104,12 +92,7 @@ namespace FairyGUI
             _points = new List<Vector3>();
         }
 
-
-        public float length
-        {
-            get { return _fullLength; }
-        }
-
+        public float length => _fullLength;
 
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
@@ -120,7 +103,6 @@ namespace FairyGUI
             helperList.Add(pt2);
             Create(helperList);
         }
-
 
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
@@ -133,7 +115,6 @@ namespace FairyGUI
             helperList.Add(pt3);
             Create(helperList);
         }
-
 
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
@@ -149,7 +130,6 @@ namespace FairyGUI
             Create(helperList);
         }
 
-
         /// <param name="points"></param>
         public void Create(IEnumerable<GPathPoint> points)
         {
@@ -162,17 +142,17 @@ namespace FairyGUI
             if (!et.MoveNext())
                 return;
 
-            GPathPoint prev = et.Current;
+            var prev = et.Current;
             if (prev.curveType == GPathPoint.CurveType.CRSpline)
                 splinePoints.Add(prev.pos);
 
             while (et.MoveNext())
             {
-                GPathPoint current = et.Current;
+                var current = et.Current;
 
                 if (prev.curveType != GPathPoint.CurveType.CRSpline)
                 {
-                    Segment seg = new Segment();
+                    var seg = new Segment();
                     seg.type = prev.curveType;
                     seg.ptStart = _points.Count;
                     if (prev.curveType == GPathPoint.CurveType.Straight)
@@ -196,6 +176,7 @@ namespace FairyGUI
                         _points.Add(prev.control1);
                         _points.Add(prev.control2);
                     }
+
                     seg.length = Vector3.Distance(prev.pos, current.pos);
                     _fullLength += seg.length;
                     _segments.Add(seg);
@@ -210,7 +191,9 @@ namespace FairyGUI
                     }
                 }
                 else
+                {
                     splinePoints.Add(current.pos);
+                }
 
                 prev = current;
             }
@@ -219,28 +202,27 @@ namespace FairyGUI
                 CreateSplineSegment();
         }
 
-        void CreateSplineSegment()
+        private void CreateSplineSegment()
         {
-            int cnt = splinePoints.Count;
+            var cnt = splinePoints.Count;
             splinePoints.Insert(0, splinePoints[0]);
             splinePoints.Add(splinePoints[cnt]);
             splinePoints.Add(splinePoints[cnt]);
             cnt += 3;
 
-            Segment seg = new Segment();
+            var seg = new Segment();
             seg.type = GPathPoint.CurveType.CRSpline;
             seg.ptStart = _points.Count;
             seg.ptCount = cnt;
             _points.AddRange(splinePoints);
 
             seg.length = 0;
-            for (int i = 1; i < cnt; i++)
+            for (var i = 1; i < cnt; i++)
                 seg.length += Vector3.Distance(splinePoints[i - 1], splinePoints[i]);
             _fullLength += seg.length;
             _segments.Add(seg);
             splinePoints.Clear();
         }
-
 
         public void Clear()
         {
@@ -248,13 +230,12 @@ namespace FairyGUI
             _points.Clear();
         }
 
-
         /// <param name="t"></param>
         /// <returns></returns>
         public Vector3 GetPointAt(float t)
         {
             t = Mathf.Clamp01(t);
-            int cnt = _segments.Count;
+            var cnt = _segments.Count;
             if (cnt == 0)
                 return Vector3.zero;
 
@@ -271,9 +252,9 @@ namespace FairyGUI
                     return onCRSplineCurve(seg.ptStart, seg.ptCount, t);
             }
 
-            float len = t * _fullLength;
-            Vector3 pt = new Vector3();
-            for (int i = 0; i < cnt; i++)
+            var len = t * _fullLength;
+            var pt = new Vector3();
+            for (var i = 0; i < cnt; i++)
             {
                 seg = _segments[i];
 
@@ -296,12 +277,7 @@ namespace FairyGUI
             return pt;
         }
 
-
-        public int segmentCount
-        {
-            get { return _segments.Count; }
-        }
-
+        public int segmentCount => _segments.Count;
 
         /// <param name="segmentIndex"></param>
         /// <returns></returns>
@@ -310,20 +286,20 @@ namespace FairyGUI
             return _segments[segmentIndex].length;
         }
 
-
         /// <param name="segmentIndex"></param>
         /// <param name="t0"></param>
         /// <param name="t1"></param>
         /// <param name="points"></param>
         /// <param name="ts"></param>
-        public void GetPointsInSegment(int segmentIndex, float t0, float t1, List<Vector3> points, List<float> ts = null, float pointDensity = 0.1f)
+        public void GetPointsInSegment(int segmentIndex, float t0, float t1, List<Vector3> points,
+            List<float> ts = null, float pointDensity = 0.1f)
         {
             if (points == null)
                 points = new List<Vector3>();
 
             if (ts != null)
                 ts.Add(t0);
-            Segment seg = _segments[segmentIndex];
+            var seg = _segments[segmentIndex];
             if (seg.type == GPathPoint.CurveType.Straight)
             {
                 points.Add(Vector3.Lerp(_points[seg.ptStart], _points[seg.ptStart + 1], t0));
@@ -332,10 +308,10 @@ namespace FairyGUI
             else if (seg.type == GPathPoint.CurveType.Bezier || seg.type == GPathPoint.CurveType.CubicBezier)
             {
                 points.Add(onBezierCurve(seg.ptStart, seg.ptCount, t0));
-                int SmoothAmount = (int)Mathf.Min(seg.length * pointDensity, 50);
-                for (int j = 0; j <= SmoothAmount; j++)
+                var SmoothAmount = (int) Mathf.Min(seg.length * pointDensity, 50);
+                for (var j = 0; j <= SmoothAmount; j++)
                 {
-                    float t = (float)j / SmoothAmount;
+                    var t = (float) j / SmoothAmount;
                     if (t > t0 && t < t1)
                     {
                         points.Add(onBezierCurve(seg.ptStart, seg.ptCount, t));
@@ -343,15 +319,16 @@ namespace FairyGUI
                             ts.Add(t);
                     }
                 }
+
                 points.Add(onBezierCurve(seg.ptStart, seg.ptCount, t1));
             }
             else
             {
                 points.Add(onCRSplineCurve(seg.ptStart, seg.ptCount, t0));
-                int SmoothAmount = (int)Mathf.Min(seg.length * pointDensity, 50);
-                for (int j = 0; j <= SmoothAmount; j++)
+                var SmoothAmount = (int) Mathf.Min(seg.length * pointDensity, 50);
+                for (var j = 0; j <= SmoothAmount; j++)
                 {
-                    float t = (float)j / SmoothAmount;
+                    var t = (float) j / SmoothAmount;
                     if (t > t0 && t < t1)
                     {
                         points.Add(onCRSplineCurve(seg.ptStart, seg.ptCount, t));
@@ -359,6 +336,7 @@ namespace FairyGUI
                             ts.Add(t);
                     }
                 }
+
                 points.Add(onCRSplineCurve(seg.ptStart, seg.ptCount, t1));
             }
 
@@ -366,12 +344,11 @@ namespace FairyGUI
                 ts.Add(t1);
         }
 
-
         /// <param name="points"></param>
         public void GetAllPoints(List<Vector3> points, float pointDensity = 0.1f)
         {
-            int cnt = _segments.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _segments.Count;
+            for (var i = 0; i < cnt; i++)
                 GetPointsInSegment(i, 0, 1, points, null, pointDensity);
         }
 
@@ -385,23 +362,29 @@ namespace FairyGUI
         /// This takes a list of vector3 (or an array) and gives a function called .onCurve(t)
         /// returning a value on a Catmull-Rom spline for 0 <= t <= 1
         /// </summary>
-        Vector3 onCRSplineCurve(int ptStart, int ptCount, float t)
+        private Vector3 onCRSplineCurve(int ptStart, int ptCount, float t)
         {
-            int adjustedIndex = Mathf.FloorToInt(t * (ptCount - 4)) + ptStart; //Since the equation works with 4 points, we adjust the starting point depending on t to return a point on the specific segment
+            var adjustedIndex =
+                Mathf.FloorToInt(t * (ptCount - 4)) +
+                ptStart; //Since the equation works with 4 points, we adjust the starting point depending on t to return a point on the specific segment
 
-            Vector3 result = new Vector3();
+            var result = new Vector3();
 
-            Vector3 p0 = _points[adjustedIndex];
-            Vector3 p1 = _points[adjustedIndex + 1];
-            Vector3 p2 = _points[adjustedIndex + 2];
-            Vector3 p3 = _points[adjustedIndex + 3];
+            var p0 = _points[adjustedIndex];
+            var p1 = _points[adjustedIndex + 1];
+            var p2 = _points[adjustedIndex + 2];
+            var p3 = _points[adjustedIndex + 3];
 
-            float adjustedT = (t == 1f) ? 1f : Mathf.Repeat(t * (ptCount - 4), 1f); // Then we adjust t to be that value on that new piece of segment... for t == 1f don't use repeat (that would return 0f);
+            var adjustedT =
+                t == 1f
+                    ? 1f
+                    : Mathf.Repeat(t * (ptCount - 4),
+                        1f); // Then we adjust t to be that value on that new piece of segment... for t == 1f don't use repeat (that would return 0f);
 
-            float t0 = ((-adjustedT + 2f) * adjustedT - 1f) * adjustedT * 0.5f;
-            float t1 = (((3f * adjustedT - 5f) * adjustedT) * adjustedT + 2f) * 0.5f;
-            float t2 = ((-3f * adjustedT + 4f) * adjustedT + 1f) * adjustedT * 0.5f;
-            float t3 = ((adjustedT - 1f) * adjustedT * adjustedT) * 0.5f;
+            var t0 = ((-adjustedT + 2f) * adjustedT - 1f) * adjustedT * 0.5f;
+            var t1 = ((3f * adjustedT - 5f) * adjustedT * adjustedT + 2f) * 0.5f;
+            var t2 = ((-3f * adjustedT + 4f) * adjustedT + 1f) * adjustedT * 0.5f;
+            var t3 = (adjustedT - 1f) * adjustedT * adjustedT * 0.5f;
 
             result.x = p0.x * t0 + p1.x * t1 + p2.x * t2 + p3.x * t3;
             result.y = p0.y * t0 + p1.y * t1 + p2.y * t2 + p3.y * t3;
@@ -410,20 +393,22 @@ namespace FairyGUI
             return result;
         }
 
-        Vector3 onBezierCurve(int ptStart, int ptCount, float t)
+        private Vector3 onBezierCurve(int ptStart, int ptCount, float t)
         {
-            float t2 = 1f - t;
-            Vector3 p0 = _points[ptStart];
-            Vector3 p1 = _points[ptStart + 1];
-            Vector3 cp0 = _points[ptStart + 2];
+            var t2 = 1f - t;
+            var p0 = _points[ptStart];
+            var p1 = _points[ptStart + 1];
+            var cp0 = _points[ptStart + 2];
 
             if (ptCount == 4)
             {
-                Vector3 cp1 = _points[ptStart + 3];
+                var cp1 = _points[ptStart + 3];
                 return t2 * t2 * t2 * p0 + 3f * t2 * t2 * t * cp0 + 3f * t2 * t * t * cp1 + t * t * t * p1;
             }
             else
+            {
                 return t2 * t2 * p0 + 2f * t2 * t * cp0 + t * t * p1;
+            }
         }
     }
 }

@@ -3,18 +3,18 @@ using FairyGUI;
 
 public class ScrollPaneMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GList _list;
+    private GComponent _mainView;
+    private GList _list;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _list = _mainView.GetChild("list").asList;
         _list.itemRenderer = RenderListItem;
@@ -24,15 +24,15 @@ public class ScrollPaneMain : MonoBehaviour
 
         _mainView.GetChild("box").asCom.onDrop.Add(OnDrop);
 
-        LongPressGesture gesture = new LongPressGesture(_list);
+        var gesture = new LongPressGesture(_list);
         gesture.once = true;
         gesture.trigger = 1f;
         gesture.onAction.Add(OnLongPress);
     }
 
-    void RenderListItem(int index, GObject obj)
+    private void RenderListItem(int index, GObject obj)
     {
-        GButton item = obj.asButton;
+        var item = obj.asButton;
         item.title = "Item " + index;
         item.scrollPane.posX = 0; //reset scroll pos
 
@@ -42,14 +42,14 @@ public class ScrollPaneMain : MonoBehaviour
         item.GetChild("b1").onClick.Set(OnClickDelete);
     }
 
-    void OnClickList(EventContext context)
+    private void OnClickList(EventContext context)
     {
         //find out if there is an item in edit status
         //查找是否有项目处于编辑状态
-        int cnt = _list.numChildren;
-        for (int i = 0; i < cnt; i++)
+        var cnt = _list.numChildren;
+        for (var i = 0; i < cnt; i++)
         {
-            GButton item = _list.GetChildAt(i).asButton;
+            var item = _list.GetChildAt(i).asButton;
             if (item.scrollPane.posX != 0)
             {
                 //Check if clicked on the button
@@ -58,6 +58,7 @@ public class ScrollPaneMain : MonoBehaviour
                 {
                     return;
                 }
+
                 item.scrollPane.SetPosX(0, true);
                 //avoid scroll pane default behavior
                 //取消滚动面板可能发生的拉动。
@@ -68,11 +69,11 @@ public class ScrollPaneMain : MonoBehaviour
         }
     }
 
-    void OnLongPress(EventContext context)
+    private void OnLongPress(EventContext context)
     {
         //find out which item is under finger
         //逐层往上知道查到点击了那个item
-        GObject obj = GRoot.inst.touchTarget;
+        var obj = GRoot.inst.touchTarget;
         GObject p = obj.parent;
         while (p != null)
         {
@@ -88,22 +89,22 @@ public class ScrollPaneMain : MonoBehaviour
         DragDropManager.inst.StartDrag(obj, obj.icon, obj.text);
     }
 
-    void OnDrop(EventContext context)
+    private void OnDrop(EventContext context)
     {
-        _mainView.GetChild("txt").text = "Drop " + (string)context.data;
+        _mainView.GetChild("txt").text = "Drop " + (string) context.data;
     }
 
-    void OnClickStick(EventContext context)
+    private void OnClickStick(EventContext context)
     {
-        _mainView.GetChild("txt").text = "Stick " + (((GObject)context.sender).parent).text;
+        _mainView.GetChild("txt").text = "Stick " + ((GObject) context.sender).parent.text;
     }
 
-    void OnClickDelete(EventContext context)
+    private void OnClickDelete(EventContext context)
     {
-        _mainView.GetChild("txt").text = "Delete " + (((GObject)context.sender).parent).text;
+        _mainView.GetChild("txt").text = "Delete " + ((GObject) context.sender).parent.text;
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
         if (context.inputEvent.keyCode == KeyCode.Escape)
         {

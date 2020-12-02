@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+
 #if FAIRYGUI_TOLUA
 using LuaInterface;
 #endif
 
 namespace FairyGUI
 {
-
     public class UIObjectFactory
     {
         public delegate GComponent GComponentCreator();
+
         public delegate GLoader GLoaderCreator();
 
-        static Dictionary<string, GComponentCreator> packageItemExtensions = new Dictionary<string, GComponentCreator>();
-        static GLoaderCreator loaderCreator;
+        private static Dictionary<string, GComponentCreator> packageItemExtensions =
+            new Dictionary<string, GComponentCreator>();
 
+        private static GLoaderCreator loaderCreator;
 
         /// <param name="url"></param>
         /// <param name="type"></param>
-        public static void SetPackageItemExtension(string url, System.Type type)
+        public static void SetPackageItemExtension(string url, Type type)
         {
-            SetPackageItemExtension(url, () => { return (GComponent)Activator.CreateInstance(type); });
+            SetPackageItemExtension(url, () => { return (GComponent) Activator.CreateInstance(type); });
         }
-
 
         /// <param name="url"></param>
         /// <param name="creator"></param>
@@ -31,7 +32,7 @@ namespace FairyGUI
             if (url == null)
                 throw new Exception("Invaild url: " + url);
 
-            PackageItem pi = UIPackage.GetItemByURL(url);
+            var pi = UIPackage.GetItemByURL(url);
             if (pi != null)
                 pi.extensionCreator = creator;
 
@@ -56,13 +57,11 @@ namespace FairyGUI
         }
 #endif
 
-
         /// <param name="type"></param>
-        public static void SetLoaderExtension(System.Type type)
+        public static void SetLoaderExtension(Type type)
         {
-            loaderCreator = () => { return (GLoader)Activator.CreateInstance(type); };
+            loaderCreator = () => { return (GLoader) Activator.CreateInstance(type); };
         }
-
 
         /// <param name="creator"></param>
         public static void SetLoaderExtension(GLoaderCreator creator)
@@ -73,7 +72,8 @@ namespace FairyGUI
         internal static void ResolvePackageItemExtension(PackageItem pi)
         {
             if (!packageItemExtensions.TryGetValue(UIPackage.URL_PREFIX + pi.owner.id + pi.id, out pi.extensionCreator)
-                && !packageItemExtensions.TryGetValue(UIPackage.URL_PREFIX + pi.owner.name + "/" + pi.name, out pi.extensionCreator))
+                && !packageItemExtensions.TryGetValue(UIPackage.URL_PREFIX + pi.owner.name + "/" + pi.name,
+                    out pi.extensionCreator))
                 pi.extensionCreator = null;
         }
 
@@ -83,11 +83,10 @@ namespace FairyGUI
             loaderCreator = null;
         }
 
-
         /// <param name="pi"></param>
         /// <param name="userClass"></param>
         /// <returns></returns>
-        public static GObject NewObject(PackageItem pi, System.Type userClass = null)
+        public static GObject NewObject(PackageItem pi, Type userClass = null)
         {
             GObject obj;
             if (pi.type == PackageItemType.Component)
@@ -95,7 +94,7 @@ namespace FairyGUI
                 if (userClass != null)
                 {
                     Stats.LatestObjectCreation++;
-                    obj = (GComponent)Activator.CreateInstance(userClass);
+                    obj = (GComponent) Activator.CreateInstance(userClass);
                 }
                 else if (pi.extensionCreator != null)
                 {
@@ -103,17 +102,20 @@ namespace FairyGUI
                     obj = pi.extensionCreator();
                 }
                 else
+                {
                     obj = NewObject(pi.objectType);
+                }
             }
             else
+            {
                 obj = NewObject(pi.objectType);
+            }
 
             if (obj != null)
                 obj.packageItem = pi;
 
             return obj;
         }
-
 
         /// <param name="type"></param>
         /// <returns></returns>

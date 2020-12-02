@@ -2,21 +2,15 @@
 
 namespace FairyGUI
 {
-
     public class RectMesh : IMeshFactory, IHitTest
     {
-
         public Rect? drawRect;
-
 
         public float lineWidth;
 
-
         public Color32 lineColor;
 
-
         public Color32? fillColor;
-
 
         public Color32[] colors;
 
@@ -27,11 +21,11 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            Rect rect = drawRect != null ? (Rect)drawRect : vb.contentRect;
-            Color32 color = fillColor != null ? (Color32)fillColor : vb.vertexColor;
+            var rect = drawRect != null ? (Rect) drawRect : vb.contentRect;
+            var color = fillColor != null ? (Color32) fillColor : vb.vertexColor;
             if (lineWidth == 0)
             {
-                if (color.a != 0)//optimized
+                if (color.a != 0) //optimized
                     vb.AddQuad(rect, color);
             }
             else
@@ -51,9 +45,10 @@ namespace FairyGUI
                 vb.AddQuad(part, lineColor);
 
                 //middle
-                if (color.a != 0)//optimized
+                if (color.a != 0) //optimized
                 {
-                    part = Rect.MinMaxRect(rect.x + lineWidth, rect.y + lineWidth, rect.xMax - lineWidth, rect.yMax - lineWidth);
+                    part = Rect.MinMaxRect(rect.x + lineWidth, rect.y + lineWidth, rect.xMax - lineWidth,
+                        rect.yMax - lineWidth);
                     if (part.width > 0 && part.height > 0)
                         vb.AddQuad(part, color);
                 }

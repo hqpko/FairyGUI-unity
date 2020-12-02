@@ -17,9 +17,9 @@ namespace FairyGUI
             delay = 0;
         }
 
-        override protected void Enter(Controller controller)
+        protected override void Enter(Controller controller)
         {
-            Transition trans = controller.parent.GetTransition(transitionName);
+            var trans = controller.parent.GetTransition(transitionName);
             if (trans != null)
             {
                 if (_currentTransition != null && _currentTransition.playing)
@@ -30,7 +30,7 @@ namespace FairyGUI
             }
         }
 
-        override protected void Leave(Controller controller)
+        protected override void Leave(Controller controller)
         {
             if (stopOnExit && _currentTransition != null)
             {
@@ -39,7 +39,7 @@ namespace FairyGUI
             }
         }
 
-        override public void Setup(ByteBuffer buffer)
+        public override void Setup(ByteBuffer buffer)
         {
             base.Setup(buffer);
 

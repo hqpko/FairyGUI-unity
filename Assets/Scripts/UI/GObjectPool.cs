@@ -20,8 +20,8 @@ namespace FairyGUI
         /// </summary>
         public InitCallbackDelegate initCallback;
 
-        Dictionary<string, Queue<GObject>> _pool;
-        Transform _manager;
+        private Dictionary<string, Queue<GObject>> _pool;
+        private Transform _manager;
 
         /// <summary>
         /// 需要设置一个manager，加入池里的对象都成为这个manager的孩子
@@ -38,21 +38,17 @@ namespace FairyGUI
         /// </summary>
         public void Clear()
         {
-            foreach (KeyValuePair<string, Queue<GObject>> kv in _pool)
+            foreach (var kv in _pool)
             {
-                Queue<GObject> list = kv.Value;
-                foreach (GObject obj in list)
+                var list = kv.Value;
+                foreach (var obj in list)
                     obj.Dispose();
             }
+
             _pool.Clear();
         }
 
-
-        public int count
-        {
-            get { return _pool.Count; }
-        }
-
+        public int count => _pool.Count;
 
         /// <param name="url"></param>
         /// <returns></returns>
@@ -67,16 +63,13 @@ namespace FairyGUI
                 && arr.Count > 0)
                 return arr.Dequeue();
 
-            GObject obj = UIPackage.CreateObjectFromURL(url);
+            var obj = UIPackage.CreateObjectFromURL(url);
             if (obj != null)
-            {
                 if (initCallback != null)
                     initCallback(obj);
-            }
 
             return obj;
         }
-
 
         /// <param name="obj"></param>
         public void ReturnObject(GObject obj)
@@ -84,7 +77,7 @@ namespace FairyGUI
             if (obj.displayObject.isDisposed)
                 return;
 
-            string url = obj.resourceURL;
+            var url = obj.resourceURL;
             Queue<GObject> arr;
             if (!_pool.TryGetValue(url, out arr))
             {

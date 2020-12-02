@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Window3 : Window
 {
-    RenderImage _renderImage;
+    private RenderImage _renderImage;
 
     public Window3()
     {
@@ -13,8 +13,8 @@ public class Window3 : Window
 
     protected override void OnInit()
     {
-        this.contentPane = UIPackage.CreateObject("RenderTexture", "TestWin").asCom;
-        this.SetXY(200, 50);
+        contentPane = UIPackage.CreateObject("RenderTexture", "TestWin").asCom;
+        SetXY(200, 50);
 
         _renderImage = new RenderImage(contentPane.GetChild("holder").asGraph);
         //RenderImage是不透明的，可以设置最多两张图片作为背景图
@@ -24,7 +24,7 @@ public class Window3 : Window
         contentPane.GetChild("btnRight").onTouchBegin.Add(__clickRight);
     }
 
-    override protected void OnShown()
+    protected override void OnShown()
     {
         _renderImage.LoadModel("Role/npc");
         _renderImage.modelRoot.localPosition = new Vector3(0, -1.0f, 5f);
@@ -32,19 +32,19 @@ public class Window3 : Window
         _renderImage.modelRoot.localRotation = Quaternion.Euler(0, 120, 0);
     }
 
-    void __clickLeft()
+    private void __clickLeft()
     {
         _renderImage.StartRotate(-2);
         Stage.inst.onTouchEnd.Add(__touchEnd);
     }
 
-    void __clickRight()
+    private void __clickRight()
     {
         _renderImage.StartRotate(2);
         Stage.inst.onTouchEnd.Add(__touchEnd);
     }
 
-    void __touchEnd()
+    private void __touchEnd()
     {
         _renderImage.StopRotate();
         Stage.inst.onTouchEnd.Remove(__touchEnd);

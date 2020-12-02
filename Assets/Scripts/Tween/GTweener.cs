@@ -1,34 +1,28 @@
 ﻿using System;
 using UnityEngine;
+
 #if FAIRYGUI_TOLUA
 using LuaInterface;
 #endif
 
 namespace FairyGUI
 {
-
     public delegate void GTweenCallback();
-
 
     /// <param name="tweener"></param>
     public delegate void GTweenCallback1(GTweener tweener);
 
-
     public interface ITweenListener
     {
-
         /// <param name="tweener"></param>
         void OnTweenStart(GTweener tweener);
-
 
         /// <param name="tweener"></param>
         void OnTweenUpdate(GTweener tweener);
 
-
         /// <param name="tweener"></param>
         void OnTweenComplete(GTweener tweener);
     }
-
 
     public class GTweener
     {
@@ -37,40 +31,40 @@ namespace FairyGUI
         internal bool _killed;
         internal bool _paused;
 
-        float _delay;
-        float _duration;
-        float _breakpoint;
-        EaseType _easeType;
-        float _easeOvershootOrAmplitude;
-        float _easePeriod;
-        int _repeat;
-        bool _yoyo;
-        float _timeScale;
-        bool _ignoreEngineTimeScale;
-        bool _snapping;
-        object _userData;
-        GPath _path;
-        CustomEase _customEase;
+        private float _delay;
+        private float _duration;
+        private float _breakpoint;
+        private EaseType _easeType;
+        private float _easeOvershootOrAmplitude;
+        private float _easePeriod;
+        private int _repeat;
+        private bool _yoyo;
+        private float _timeScale;
+        private bool _ignoreEngineTimeScale;
+        private bool _snapping;
+        private object _userData;
+        private GPath _path;
+        private CustomEase _customEase;
 
-        GTweenCallback _onUpdate;
-        GTweenCallback _onStart;
-        GTweenCallback _onComplete;
-        GTweenCallback1 _onUpdate1;
-        GTweenCallback1 _onStart1;
-        GTweenCallback1 _onComplete1;
-        ITweenListener _listener;
+        private GTweenCallback _onUpdate;
+        private GTweenCallback _onStart;
+        private GTweenCallback _onComplete;
+        private GTweenCallback1 _onUpdate1;
+        private GTweenCallback1 _onStart1;
+        private GTweenCallback1 _onComplete1;
+        private ITweenListener _listener;
 
-        TweenValue _startValue;
-        TweenValue _endValue;
-        TweenValue _value;
-        TweenValue _deltaValue;
-        int _valueSize;
+        private TweenValue _startValue;
+        private TweenValue _endValue;
+        private TweenValue _value;
+        private TweenValue _deltaValue;
+        private int _valueSize;
 
-        bool _started;
-        int _ended;
-        float _elapsedTime;
-        float _normalizedTime;
-        int _smoothStart;
+        private bool _started;
+        private int _ended;
+        private float _elapsedTime;
+        private float _normalizedTime;
+        private int _smoothStart;
 
         public GTweener()
         {
@@ -80,7 +74,6 @@ namespace FairyGUI
             _deltaValue = new TweenValue();
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetDelay(float value)
@@ -89,12 +82,7 @@ namespace FairyGUI
             return this;
         }
 
-
-        public float delay
-        {
-            get { return _delay; }
-        }
-
+        public float delay => _delay;
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -104,12 +92,7 @@ namespace FairyGUI
             return this;
         }
 
-
-        public float duration
-        {
-            get { return _duration; }
-        }
-
+        public float duration => _duration;
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -119,7 +102,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEase(EaseType value)
@@ -127,7 +109,6 @@ namespace FairyGUI
             _easeType = value;
             return this;
         }
-
 
         /// <param name="value"></param>
         /// <param name="customEase"></param>
@@ -139,7 +120,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEasePeriod(float value)
@@ -148,7 +128,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetEaseOvershootOrAmplitude(float value)
@@ -156,7 +135,6 @@ namespace FairyGUI
             _easeOvershootOrAmplitude = value;
             return this;
         }
-
 
         /// <param name="times"></param>
         /// <param name="yoyo"></param>
@@ -168,12 +146,7 @@ namespace FairyGUI
             return this;
         }
 
-
-        public int repeat
-        {
-            get { return _repeat; }
-        }
-
+        public int repeat => _repeat;
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -183,7 +156,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetIgnoreEngineTimeScale(bool value)
@@ -191,7 +163,6 @@ namespace FairyGUI
             _ignoreEngineTimeScale = value;
             return this;
         }
-
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -201,7 +172,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="value"></param>
         /// <returns></returns>
         public GTweener SetPath(GPath value)
@@ -209,7 +179,6 @@ namespace FairyGUI
             _path = value;
             return this;
         }
-
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -219,7 +188,6 @@ namespace FairyGUI
             _propType = TweenPropType.None;
             return this;
         }
-
 
         /// <param name="value"></param>
         /// <param name="propType"></param>
@@ -231,12 +199,7 @@ namespace FairyGUI
             return this;
         }
 
-
-        public object target
-        {
-            get { return _target; }
-        }
-
+        public object target => _target;
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -246,12 +209,7 @@ namespace FairyGUI
             return this;
         }
 
-
-        public object userData
-        {
-            get { return _userData; }
-        }
-
+        public object userData => _userData;
 
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -264,7 +222,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="callback"></param>
         /// <returns></returns>
 #if FAIRYGUI_TOLUA
@@ -275,7 +232,6 @@ namespace FairyGUI
             _onStart = callback;
             return this;
         }
-
 
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -288,7 +244,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="callback"></param>
         /// <returns></returns>
         public GTweener OnUpdate(GTweenCallback1 callback)
@@ -296,7 +251,6 @@ namespace FairyGUI
             _onUpdate1 = callback;
             return this;
         }
-
 
         /// <param name="callback"></param>
         /// <returns></returns>
@@ -306,7 +260,6 @@ namespace FairyGUI
             return this;
         }
 
-
         /// <param name="callback"></param>
         /// <returns></returns>
         public GTweener OnComplete(GTweenCallback1 callback)
@@ -314,7 +267,6 @@ namespace FairyGUI
             _onComplete1 = callback;
             return this;
         }
-
 
         /// <param name="value"></param>
         /// <returns></returns>
@@ -324,48 +276,19 @@ namespace FairyGUI
             return this;
         }
 
+        public TweenValue startValue => _startValue;
 
-        public TweenValue startValue
-        {
-            get { return _startValue; }
-        }
+        public TweenValue endValue => _endValue;
 
+        public TweenValue value => _value;
 
-        public TweenValue endValue
-        {
-            get { return _endValue; }
-        }
+        public TweenValue deltaValue => _deltaValue;
 
+        public float normalizedTime => _normalizedTime;
 
-        public TweenValue value
-        {
-            get { return _value; }
-        }
+        public bool completed => _ended != 0;
 
-
-        public TweenValue deltaValue
-        {
-            get { return _deltaValue; }
-        }
-
-
-        public float normalizedTime
-        {
-            get { return _normalizedTime; }
-        }
-
-
-        public bool completed
-        {
-            get { return _ended != 0; }
-        }
-
-
-        public bool allCompleted
-        {
-            get { return _ended == 1; }
-        }
-
+        public bool allCompleted => _ended == 1;
 
         /// <param name="paused"></param>
         /// <returns></returns>
@@ -376,7 +299,6 @@ namespace FairyGUI
                 _smoothStart = 0;
             return this;
         }
-
 
         /// <param name="time"></param>
         public void Seek(float time)
@@ -395,7 +317,6 @@ namespace FairyGUI
 
             Update();
         }
-
 
         /// <param name="complete"></param>
         public void Kill(bool complete = false)
@@ -514,7 +435,7 @@ namespace FairyGUI
             _ended = 0;
             _path = null;
             _customEase = null;
-            _smoothStart = Time.frameCount == 1 ? 3 : 1;//刚启动时会有多帧的超时
+            _smoothStart = Time.frameCount == 1 ? 3 : 1; //刚启动时会有多帧的超时
         }
 
         internal void _Reset()
@@ -539,14 +460,20 @@ namespace FairyGUI
             if (_smoothStart > 0)
             {
                 _smoothStart--;
-                dt = Mathf.Clamp(Time.unscaledDeltaTime, 0, Application.targetFrameRate > 0 ? (1.0f / Application.targetFrameRate) : 0.016f);
+                dt = Mathf.Clamp(Time.unscaledDeltaTime, 0,
+                    Application.targetFrameRate > 0 ? 1.0f / Application.targetFrameRate : 0.016f);
                 if (!_ignoreEngineTimeScale)
                     dt *= Time.timeScale;
             }
             else if (_ignoreEngineTimeScale)
+            {
                 dt = Time.unscaledDeltaTime;
+            }
             else
+            {
                 dt = Time.deltaTime;
+            }
+
             if (_timeScale != 1)
                 dt *= _timeScale;
             if (dt == 0)
@@ -556,16 +483,14 @@ namespace FairyGUI
             Update();
 
             if (_ended != 0)
-            {
                 if (!_killed)
                 {
                     CallCompleteCallback();
                     _killed = true;
                 }
-            }
         }
 
-        void Update()
+        private void Update()
         {
             _ended = 0;
 
@@ -588,8 +513,8 @@ namespace FairyGUI
                     return;
             }
 
-            bool reversed = false;
-            float tt = _elapsedTime - _delay;
+            var reversed = false;
+            var tt = _elapsedTime - _delay;
             if (_breakpoint >= 0 && tt >= _breakpoint)
             {
                 tt = _breakpoint;
@@ -598,7 +523,7 @@ namespace FairyGUI
 
             if (_repeat != 0)
             {
-                int round = Mathf.FloorToInt(tt / _duration);
+                var round = Mathf.FloorToInt(tt / _duration);
                 tt -= _duration * round;
                 if (_yoyo)
                     reversed = round % 2 == 1;
@@ -617,7 +542,7 @@ namespace FairyGUI
                 _ended = 1;
             }
 
-            _normalizedTime = EaseManager.Evaluate(_easeType, reversed ? (_duration - tt) : tt, _duration,
+            _normalizedTime = EaseManager.Evaluate(_easeType, reversed ? _duration - tt : tt, _duration,
                 _easeOvershootOrAmplitude, _easePeriod, _customEase);
 
             _value.SetZero();
@@ -625,18 +550,18 @@ namespace FairyGUI
 
             if (_valueSize == 5)
             {
-                double d = _startValue.d + (_endValue.d - _startValue.d) * _normalizedTime;
+                var d = _startValue.d + (_endValue.d - _startValue.d) * _normalizedTime;
                 if (_snapping)
                     d = Math.Round(d);
                 _deltaValue.d = d - _value.d;
                 _value.d = d;
-                _value.x = (float)d;
+                _value.x = (float) d;
             }
             else if (_valueSize == 6)
             {
                 if (_ended == 0)
                 {
-                    Vector3 r = UnityEngine.Random.insideUnitSphere;
+                    var r = UnityEngine.Random.insideUnitSphere;
                     r.x = r.x > 0 ? 1 : -1;
                     r.y = r.y > 0 ? 1 : -1;
                     r.z = r.z > 0 ? 1 : -1;
@@ -646,32 +571,36 @@ namespace FairyGUI
                     _value.vec3 = _startValue.vec3 + r;
                 }
                 else
+                {
                     _value.vec3 = _startValue.vec3;
+                }
             }
             else if (_path != null)
             {
-                Vector3 vec3 = _path.GetPointAt(_normalizedTime);
+                var vec3 = _path.GetPointAt(_normalizedTime);
                 if (_snapping)
                 {
                     vec3.x = Mathf.Round(vec3.x);
                     vec3.y = Mathf.Round(vec3.y);
                     vec3.z = Mathf.Round(vec3.z);
                 }
+
                 _deltaValue.vec3 = vec3 - _value.vec3;
                 _value.vec3 = vec3;
             }
             else
             {
-                for (int i = 0; i < _valueSize; i++)
+                for (var i = 0; i < _valueSize; i++)
                 {
-                    float n1 = _startValue[i];
-                    float n2 = _endValue[i];
-                    float f = n1 + (n2 - n1) * _normalizedTime;
+                    var n1 = _startValue[i];
+                    var n2 = _endValue[i];
+                    var f = n1 + (n2 - n1) * _normalizedTime;
                     if (_snapping)
                         f = Mathf.Round(f);
                     _deltaValue[i] = f - _value[i];
                     _value[i] = f;
                 }
+
                 _value.d = _value.x;
             }
 
@@ -681,7 +610,7 @@ namespace FairyGUI
             CallUpdateCallback();
         }
 
-        void CallStartCallback()
+        private void CallStartCallback()
         {
             if (GTween.catchCallbackExceptions)
             {
@@ -710,7 +639,7 @@ namespace FairyGUI
             }
         }
 
-        void CallUpdateCallback()
+        private void CallUpdateCallback()
         {
             if (GTween.catchCallbackExceptions)
             {
@@ -739,7 +668,7 @@ namespace FairyGUI
             }
         }
 
-        void CallCompleteCallback()
+        private void CallCompleteCallback()
         {
             if (GTween.catchCallbackExceptions)
             {

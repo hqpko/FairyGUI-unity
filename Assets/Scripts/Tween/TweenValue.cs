@@ -2,21 +2,15 @@
 
 namespace FairyGUI
 {
-
     public class TweenValue
     {
-
         public float x;
-
 
         public float y;
 
-
         public float z;
 
-
         public float w;
-
 
         public double d;
 
@@ -24,10 +18,9 @@ namespace FairyGUI
         {
         }
 
-
         public Vector2 vec2
         {
-            get { return new Vector2(x, y); }
+            get => new Vector2(x, y);
             set
             {
                 x = value.x;
@@ -35,10 +28,9 @@ namespace FairyGUI
             }
         }
 
-
         public Vector3 vec3
         {
-            get { return new Vector3(x, y, z); }
+            get => new Vector3(x, y, z);
             set
             {
                 x = value.x;
@@ -47,10 +39,9 @@ namespace FairyGUI
             }
         }
 
-
         public Vector4 vec4
         {
-            get { return new Vector4(x, y, z, w); }
+            get => new Vector4(x, y, z, w);
             set
             {
                 x = value.x;
@@ -60,10 +51,9 @@ namespace FairyGUI
             }
         }
 
-
         public Color color
         {
-            get { return new Color(x, y, z, w); }
+            get => new Color(x, y, z, w);
             set
             {
                 x = value.r;
@@ -72,7 +62,6 @@ namespace FairyGUI
                 w = value.a;
             }
         }
-
 
         /// <param name="index"></param>
         /// <returns></returns>
@@ -116,7 +105,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public void SetZero()
         {

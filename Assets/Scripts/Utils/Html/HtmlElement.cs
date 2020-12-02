@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-
     public enum HtmlElementType
     {
         Text,
@@ -15,9 +14,8 @@ namespace FairyGUI.Utils
         Object,
 
         //internal
-        LinkEnd,
+        LinkEnd
     }
-
 
     public class HtmlElement
     {
@@ -32,7 +30,7 @@ namespace FairyGUI.Utils
         public int space;
         public Vector2 position;
 
-        Hashtable attributes;
+        private Hashtable attributes;
 
         public HtmlElement()
         {
@@ -65,7 +63,7 @@ namespace FairyGUI.Utils
             if (attributes == null)
                 return defValue;
 
-            object ret = attributes[attrName];
+            var ret = attributes[attrName];
             if (ret != null)
                 return ret.ToString();
             else
@@ -79,7 +77,7 @@ namespace FairyGUI.Utils
 
         public int GetInt(string attrName, int defValue)
         {
-            string value = GetString(attrName);
+            var value = GetString(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -108,7 +106,7 @@ namespace FairyGUI.Utils
 
         public float GetFloat(string attrName, float defValue)
         {
-            string value = GetString(attrName);
+            var value = GetString(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -126,7 +124,7 @@ namespace FairyGUI.Utils
 
         public bool GetBool(string attrName, bool defValue)
         {
-            string value = GetString(attrName);
+            var value = GetString(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -139,7 +137,7 @@ namespace FairyGUI.Utils
 
         public Color GetColor(string attrName, Color defValue)
         {
-            string value = GetString(attrName);
+            var value = GetString(attrName);
             if (value == null || value.Length == 0)
                 return defValue;
 
@@ -151,15 +149,12 @@ namespace FairyGUI.Utils
             attributes = XMLIterator.GetAttributes(attributes);
         }
 
-
-        public bool isEntity
-        {
-            get { return type == HtmlElementType.Image || type == HtmlElementType.Select || type == HtmlElementType.Input || type == HtmlElementType.Object; }
-        }
+        public bool isEntity => type == HtmlElementType.Image || type == HtmlElementType.Select ||
+                                type == HtmlElementType.Input || type == HtmlElementType.Object;
 
         #region Pool Support
 
-        static Stack<HtmlElement> elementPool = new Stack<HtmlElement>();
+        private static Stack<HtmlElement> elementPool = new Stack<HtmlElement>();
 
         public static HtmlElement GetElement(HtmlElementType type)
         {
@@ -189,12 +184,13 @@ namespace FairyGUI.Utils
 
         public static void ReturnElements(List<HtmlElement> elements)
         {
-            int count = elements.Count;
-            for (int i = 0; i < count; i++)
+            var count = elements.Count;
+            for (var i = 0; i < count; i++)
             {
-                HtmlElement element = elements[i];
+                var element = elements[i];
                 ReturnElement(element);
             }
+
             elements.Clear();
         }
 

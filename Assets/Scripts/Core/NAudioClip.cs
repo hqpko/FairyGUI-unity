@@ -23,9 +23,13 @@ namespace FairyGUI
                 return;
 
             if (destroyMethod == DestroyMethod.Unload)
+            {
                 Resources.UnloadAsset(nativeClip);
+            }
             else if (destroyMethod == DestroyMethod.Destroy)
+            {
                 UnityEngine.Object.DestroyImmediate(nativeClip, true);
+            }
             else if (destroyMethod == DestroyMethod.Custom)
             {
                 if (CustomDestroyMethod == null)

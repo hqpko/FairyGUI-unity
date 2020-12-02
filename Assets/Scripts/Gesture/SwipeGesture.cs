@@ -10,21 +10,23 @@ namespace FairyGUI
     /// </summary>
     public class SwipeGesture : EventDispatcher
     {
-
         public GObject host { get; private set; }
 
         /// <summary>
         /// 当手指开始扫动时派发该事件。
         /// </summary>
         public EventListener onBegin { get; private set; }
+
         /// <summary>
         /// 手指离开屏幕时派发该事件。
         /// </summary>
         public EventListener onEnd { get; private set; }
+
         /// <summary>
         /// 手指在滑动时派发该事件。
         /// </summary>
         public EventListener onMove { get; private set; }
+
         /// <summary>
         /// 当手指从按下到离开经过的距离大于actionDistance时派发该事件。
         /// </summary>
@@ -56,11 +58,11 @@ namespace FairyGUI
         /// </summary>
         public bool snapping;
 
-        Vector2 _startPoint;
-        Vector2 _lastPoint;
-        float _time;
-        bool _started;
-        bool _touchBegan;
+        private Vector2 _startPoint;
+        private Vector2 _lastPoint;
+        private float _time;
+        private bool _started;
+        private bool _touchBegan;
 
         public static int ACTION_DISTANCE = 200;
 
@@ -119,7 +121,7 @@ namespace FairyGUI
             }
         }
 
-        void __touchBegin(EventContext context)
+        private void __touchBegin(EventContext context)
         {
             if (Stage.inst.touchCount > 1)
             {
@@ -129,10 +131,11 @@ namespace FairyGUI
                     _started = false;
                     onEnd.Call(context.inputEvent);
                 }
+
                 return;
             }
 
-            InputEvent evt = context.inputEvent;
+            var evt = context.inputEvent;
             _startPoint = _lastPoint = host.GlobalToLocal(new Vector2(evt.x, evt.y));
             _lastPoint = _startPoint;
 
@@ -145,13 +148,13 @@ namespace FairyGUI
             context.CaptureTouch();
         }
 
-        void __touchMove(EventContext context)
+        private void __touchMove(EventContext context)
         {
             if (!_touchBegan || Stage.inst.touchCount > 1)
                 return;
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = host.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var evt = context.inputEvent;
+            var pt = host.GlobalToLocal(new Vector2(evt.x, evt.y));
             delta = pt - _lastPoint;
             if (snapping)
             {
@@ -161,8 +164,8 @@ namespace FairyGUI
                     return;
             }
 
-            float deltaTime = Time.unscaledDeltaTime;
-            float elapsed = (Time.unscaledTime - _time) * 60 - 1;
+            var deltaTime = Time.unscaledDeltaTime;
+            var elapsed = (Time.unscaledTime - _time) * 60 - 1;
             if (elapsed > 1) //速度衰减
                 velocity = velocity * Mathf.Pow(0.833f, elapsed);
             velocity = Vector3.Lerp(velocity, delta / deltaTime, deltaTime * 10);
@@ -171,7 +174,8 @@ namespace FairyGUI
             _lastPoint = pt;
 
             if (!_started)
-            { //灵敏度检查，为了和点击区分
+            {
+                //灵敏度检查，为了和点击区分
                 int sensitivity;
                 if (Stage.touchScreen)
                     sensitivity = UIConfig.touchDragSensitivity;
@@ -188,7 +192,7 @@ namespace FairyGUI
             onMove.Call(evt);
         }
 
-        void __touchEnd(EventContext context)
+        private void __touchEnd(EventContext context)
         {
             _touchBegan = false;
 
@@ -197,18 +201,19 @@ namespace FairyGUI
 
             _started = false;
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = host.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var evt = context.inputEvent;
+            var pt = host.GlobalToLocal(new Vector2(evt.x, evt.y));
             delta = pt - _lastPoint;
             if (snapping)
             {
                 delta.x = Mathf.Round(delta.x);
                 delta.y = Mathf.Round(delta.y);
             }
+
             position += delta;
 
             //更新速度
-            float elapsed = (Time.unscaledTime - _time) * 60 - 1;
+            var elapsed = (Time.unscaledTime - _time) * 60 - 1;
             if (elapsed > 1)
                 velocity = velocity * Mathf.Pow(0.833f, elapsed);
             if (snapping)
@@ -216,6 +221,7 @@ namespace FairyGUI
                 velocity.x = Mathf.Round(velocity.x);
                 velocity.y = Mathf.Round(velocity.y);
             }
+
             onEnd.Call(evt);
 
             pt -= _startPoint;

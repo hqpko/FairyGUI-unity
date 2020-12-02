@@ -8,24 +8,23 @@ namespace FairyGUI
     /// </summary>
     public class GScrollBar : GComponent
     {
-        GObject _grip;
-        GObject _arrowButton1;
-        GObject _arrowButton2;
-        GObject _bar;
-        ScrollPane _target;
+        private GObject _grip;
+        private GObject _arrowButton1;
+        private GObject _arrowButton2;
+        private GObject _bar;
+        private ScrollPane _target;
 
-        bool _vertical;
-        float _scrollPerc;
-        bool _fixedGripSize;
-        bool _gripDragging;
+        private bool _vertical;
+        private float _scrollPerc;
+        private bool _fixedGripSize;
+        private bool _gripDragging;
 
-        Vector2 _dragOffset;
+        private Vector2 _dragOffset;
 
         public GScrollBar()
         {
             _scrollPerc = 0;
         }
-
 
         /// <param name="target"></param>
         /// <param name="vertical"></param>
@@ -34,7 +33,6 @@ namespace FairyGUI
             _target = target;
             _vertical = vertical;
         }
-
 
         public void SetDisplayPerc(float value)
         {
@@ -54,7 +52,6 @@ namespace FairyGUI
             _grip.visible = value != 0 && value != 1;
         }
 
-
         public void setScrollPerc(float value)
         {
             _scrollPerc = value;
@@ -64,28 +61,22 @@ namespace FairyGUI
                 _grip.x = Mathf.RoundToInt(_bar.x + (_bar.width - _grip.width) * _scrollPerc);
         }
 
-
         public float minSize
         {
             get
             {
                 if (_vertical)
-                    return (_arrowButton1 != null ? _arrowButton1.height : 0) + (_arrowButton2 != null ? _arrowButton2.height : 0);
+                    return (_arrowButton1 != null ? _arrowButton1.height : 0) +
+                           (_arrowButton2 != null ? _arrowButton2.height : 0);
                 else
-                    return (_arrowButton1 != null ? _arrowButton1.width : 0) + (_arrowButton2 != null ? _arrowButton2.width : 0);
+                    return (_arrowButton1 != null ? _arrowButton1.width : 0) +
+                           (_arrowButton2 != null ? _arrowButton2.width : 0);
             }
         }
 
+        public bool gripDragging => _gripDragging;
 
-        public bool gripDragging
-        {
-            get
-            {
-                return _gripDragging;
-            }
-        }
-
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             buffer.Seek(0, 6);
 
@@ -94,14 +85,14 @@ namespace FairyGUI
             _grip = GetChild("grip");
             if (_grip == null)
             {
-                Debug.LogWarning("FairyGUI: " + this.resourceURL + " should define grip");
+                Debug.LogWarning("FairyGUI: " + resourceURL + " should define grip");
                 return;
             }
 
             _bar = GetChild("bar");
             if (_bar == null)
             {
-                Debug.LogWarning("FairyGUI: " + this.resourceURL + " should define bar");
+                Debug.LogWarning("FairyGUI: " + resourceURL + " should define bar");
                 return;
             }
 
@@ -112,21 +103,21 @@ namespace FairyGUI
             _grip.onTouchMove.Add(__gripTouchMove);
             _grip.onTouchEnd.Add(__gripTouchEnd);
 
-            this.onTouchBegin.Add(__touchBegin);
+            onTouchBegin.Add(__touchBegin);
             if (_arrowButton1 != null)
                 _arrowButton1.onTouchBegin.Add(__arrowButton1Click);
             if (_arrowButton2 != null)
                 _arrowButton2.onTouchBegin.Add(__arrowButton2Click);
         }
 
-        void __gripTouchBegin(EventContext context)
+        private void __gripTouchBegin(EventContext context)
         {
             if (_bar == null)
                 return;
 
             context.StopPropagation();
 
-            InputEvent evt = context.inputEvent;
+            var evt = context.inputEvent;
             if (evt.button != 0)
                 return;
 
@@ -135,20 +126,20 @@ namespace FairyGUI
             _gripDragging = true;
             _target.UpdateScrollBarVisible();
 
-            _dragOffset = this.GlobalToLocal(new Vector2(evt.x, evt.y)) - _grip.xy;
+            _dragOffset = GlobalToLocal(new Vector2(evt.x, evt.y)) - _grip.xy;
         }
 
-        void __gripTouchMove(EventContext context)
+        private void __gripTouchMove(EventContext context)
         {
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = this.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var evt = context.inputEvent;
+            var pt = GlobalToLocal(new Vector2(evt.x, evt.y));
             if (float.IsNaN(pt.x))
                 return;
 
             if (_vertical)
             {
-                float curY = pt.y - _dragOffset.y;
-                float diff = _bar.height - _grip.height;
+                var curY = pt.y - _dragOffset.y;
+                var diff = _bar.height - _grip.height;
                 if (diff == 0)
                     _target.percY = 0;
                 else
@@ -156,8 +147,8 @@ namespace FairyGUI
             }
             else
             {
-                float curX = pt.x - _dragOffset.x;
-                float diff = _bar.width - _grip.width;
+                var curX = pt.x - _dragOffset.x;
+                var diff = _bar.width - _grip.width;
                 if (diff == 0)
                     _target.percX = 0;
                 else
@@ -165,13 +156,13 @@ namespace FairyGUI
             }
         }
 
-        void __gripTouchEnd(EventContext context)
+        private void __gripTouchEnd(EventContext context)
         {
             _gripDragging = false;
             _target.UpdateScrollBarVisible();
         }
 
-        void __arrowButton1Click(EventContext context)
+        private void __arrowButton1Click(EventContext context)
         {
             context.StopPropagation();
 
@@ -181,7 +172,7 @@ namespace FairyGUI
                 _target.ScrollLeft();
         }
 
-        void __arrowButton2Click(EventContext context)
+        private void __arrowButton2Click(EventContext context)
         {
             context.StopPropagation();
 
@@ -191,12 +182,12 @@ namespace FairyGUI
                 _target.ScrollRight();
         }
 
-        void __touchBegin(EventContext context)
+        private void __touchBegin(EventContext context)
         {
             context.StopPropagation();
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt = _grip.GlobalToLocal(new Vector2(evt.x, evt.y));
+            var evt = context.inputEvent;
+            var pt = _grip.GlobalToLocal(new Vector2(evt.x, evt.y));
             if (_vertical)
             {
                 if (pt.y < 0)

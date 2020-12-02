@@ -2,12 +2,9 @@
 
 namespace FairyGUI
 {
-
     public class RectHitTest : IHitTest
     {
-
         public Rect rect;
-
 
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>

@@ -3,30 +3,28 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class PopupMenu : EventDispatcher
     {
         protected GComponent _contentPane;
         protected GList _list;
         protected GObject _expandingItem;
 
-        PopupMenu _parentMenu;
-        TimerCallback _showSubMenu;
-        TimerCallback _closeSubMenu;
-        EventListener _onPopup;
-        EventListener _onClose;
+        private PopupMenu _parentMenu;
+        private TimerCallback _showSubMenu;
+        private TimerCallback _closeSubMenu;
+        private EventListener _onPopup;
+        private EventListener _onClose;
 
         public int visibleItemCount;
         public bool hideOnClickItem;
         public bool autoSize;
 
-        const string EVENT_TYPE = "PopupMenuItemClick";
+        private const string EVENT_TYPE = "PopupMenuItemClick";
 
         public PopupMenu()
         {
             Create(null);
         }
-
 
         /// <param name="resourceURL"></param>
         public PopupMenu(string resourceURL)
@@ -34,17 +32,11 @@ namespace FairyGUI
             Create(resourceURL);
         }
 
-        public EventListener onPopup
-        {
-            get { return _onPopup ?? (_onPopup = new EventListener(this, "onPopup")); }
-        }
+        public EventListener onPopup => _onPopup ?? (_onPopup = new EventListener(this, "onPopup"));
 
-        public EventListener onClose
-        {
-            get { return _onClose ?? (_onClose = new EventListener(this, "onClose")); }
-        }
+        public EventListener onClose => _onClose ?? (_onClose = new EventListener(this, "onClose"));
 
-        void Create(string resourceURL)
+        private void Create(string resourceURL)
         {
             if (resourceURL == null)
             {
@@ -75,30 +67,27 @@ namespace FairyGUI
             _closeSubMenu = CloseSubMenu;
         }
 
-
         /// <param name="caption"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
         public GButton AddItem(string caption, EventCallback0 callback)
         {
-            GButton item = CreateItem(caption, callback);
+            var item = CreateItem(caption, callback);
             _list.AddChild(item);
 
             return item;
         }
-
 
         /// <param name="caption"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
         public GButton AddItem(string caption, EventCallback1 callback)
         {
-            GButton item = CreateItem(caption, callback);
+            var item = CreateItem(caption, callback);
             _list.AddChild(item);
 
             return item;
         }
-
 
         /// <param name="caption"></param>
         /// <param name="index"></param>
@@ -106,12 +95,11 @@ namespace FairyGUI
         /// <returns></returns>
         public GButton AddItemAt(string caption, int index, EventCallback1 callback)
         {
-            GButton item = CreateItem(caption, callback);
+            var item = CreateItem(caption, callback);
             _list.AddChildAt(item, index);
 
             return item;
         }
-
 
         /// <param name="caption"></param>
         /// <param name="index"></param>
@@ -119,25 +107,25 @@ namespace FairyGUI
         /// <returns></returns>
         public GButton AddItemAt(string caption, int index, EventCallback0 callback)
         {
-            GButton item = CreateItem(caption, callback);
+            var item = CreateItem(caption, callback);
             _list.AddChildAt(item, index);
 
             return item;
         }
 
-        GButton CreateItem(string caption, Delegate callback)
+        private GButton CreateItem(string caption, Delegate callback)
         {
-            GButton item = _list.GetFromPool(_list.defaultItem).asButton;
+            var item = _list.GetFromPool(_list.defaultItem).asButton;
             item.title = caption;
             item.grayed = false;
-            Controller c = item.GetController("checked");
+            var c = item.GetController("checked");
             if (c != null)
                 c.selectedIndex = 0;
             item.RemoveEventListeners(EVENT_TYPE);
             if (callback is EventCallback0)
-                item.AddEventListener(EVENT_TYPE, (EventCallback0)callback);
+                item.AddEventListener(EVENT_TYPE, (EventCallback0) callback);
             else
-                item.AddEventListener(EVENT_TYPE, (EventCallback1)callback);
+                item.AddEventListener(EVENT_TYPE, (EventCallback1) callback);
 
             item.onRollOver.Add(__rollOver);
             item.onRollOut.Add(__rollOut);
@@ -145,12 +133,10 @@ namespace FairyGUI
             return item;
         }
 
-
         public void AddSeperator()
         {
             AddSeperator(-1);
         }
-
 
         public void AddSeperator(int index)
         {
@@ -161,38 +147,37 @@ namespace FairyGUI
             }
 
             if (index == -1)
+            {
                 _list.AddItemFromPool(UIConfig.popupMenu_seperator);
+            }
             else
             {
-                GObject item = _list.GetFromPool(UIConfig.popupMenu_seperator);
+                var item = _list.GetFromPool(UIConfig.popupMenu_seperator);
                 _list.AddChildAt(item, index);
             }
         }
-
 
         /// <param name="index"></param>
         /// <returns></returns>
         public string GetItemName(int index)
         {
-            GButton item = _list.GetChildAt(index).asButton;
+            var item = _list.GetChildAt(index).asButton;
             return item.name;
         }
-
 
         /// <param name="name"></param>
         /// <param name="caption"></param>
         public void SetItemText(string name, string caption)
         {
-            GButton item = _list.GetChild(name).asButton;
+            var item = _list.GetChild(name).asButton;
             item.title = caption;
         }
-
 
         /// <param name="name"></param>
         /// <param name="visible"></param>
         public void SetItemVisible(string name, bool visible)
         {
-            GButton item = _list.GetChild(name).asButton;
+            var item = _list.GetChild(name).asButton;
             if (item.visible != visible)
             {
                 item.visible = visible;
@@ -200,22 +185,20 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="name"></param>
         /// <param name="grayed"></param>
         public void SetItemGrayed(string name, bool grayed)
         {
-            GButton item = _list.GetChild(name).asButton;
+            var item = _list.GetChild(name).asButton;
             item.grayed = grayed;
         }
-
 
         /// <param name="name"></param>
         /// <param name="checkable"></param>
         public void SetItemCheckable(string name, bool checkable)
         {
-            GButton item = _list.GetChild(name).asButton;
-            Controller c = item.GetController("checked");
+            var item = _list.GetChild(name).asButton;
+            var c = item.GetController("checked");
             if (c != null)
             {
                 if (checkable)
@@ -224,17 +207,18 @@ namespace FairyGUI
                         c.selectedIndex = 1;
                 }
                 else
+                {
                     c.selectedIndex = 0;
+                }
             }
         }
-
 
         /// <param name="name"></param>
         /// <param name="check"></param>
         public void SetItemChecked(string name, bool check)
         {
-            GButton item = _list.GetChild(name).asButton;
-            Controller c = item.GetController("checked");
+            var item = _list.GetChild(name).asButton;
+            var c = item.GetController("checked");
             if (c != null)
                 c.selectedIndex = check ? 2 : 1;
         }
@@ -245,79 +229,64 @@ namespace FairyGUI
             return IsItemChecked(name);
         }
 
-
         /// <param name="name"></param>
         /// <returns></returns>
         public bool IsItemChecked(string name)
         {
-            GButton item = _list.GetChild(name).asButton;
-            Controller c = item.GetController("checked");
+            var item = _list.GetChild(name).asButton;
+            var c = item.GetController("checked");
             if (c != null)
                 return c.selectedIndex == 2;
             else
                 return false;
         }
 
-
         /// <param name="name"></param>
         public void RemoveItem(string name)
         {
-            GComponent item = _list.GetChild(name).asCom;
+            var item = _list.GetChild(name).asCom;
             if (item != null)
             {
                 item.RemoveEventListeners(EVENT_TYPE);
                 if (item.data is PopupMenu)
                 {
-                    ((PopupMenu)item.data).Dispose();
+                    ((PopupMenu) item.data).Dispose();
                     item.data = null;
                 }
-                int index = _list.GetChildIndex(item);
+
+                var index = _list.GetChildIndex(item);
                 _list.RemoveChildToPoolAt(index);
             }
         }
-
 
         public void ClearItems()
         {
             _list.RemoveChildrenToPool();
         }
 
+        public int itemCount => _list.numChildren;
 
-        public int itemCount
-        {
-            get { return _list.numChildren; }
-        }
+        public GComponent contentPane => _contentPane;
 
-
-        public GComponent contentPane
-        {
-            get { return _contentPane; }
-        }
-
-
-        public GList list
-        {
-            get { return _list; }
-        }
+        public GList list => _list;
 
         public void Dispose()
         {
-            int cnt = _list.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _list.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                GObject obj = _list.GetChildAt(i);
+                var obj = _list.GetChildAt(i);
                 if (obj.data is PopupMenu)
-                    ((PopupMenu)obj.data).Dispose();
+                    ((PopupMenu) obj.data).Dispose();
             }
+
             _contentPane.Dispose();
         }
-
 
         public void Show()
         {
             Show(null, PopupDirection.Auto);
         }
-
 
         /// <param name="target"></param>
         public void Show(GObject target)
@@ -328,9 +297,10 @@ namespace FairyGUI
         [Obsolete]
         public void Show(GObject target, object downward)
         {
-            Show(target, downward == null ? PopupDirection.Auto : ((bool)downward == true ? PopupDirection.Down : PopupDirection.Up), null);
+            Show(target,
+                downward == null ? PopupDirection.Auto :
+                (bool) downward == true ? PopupDirection.Down : PopupDirection.Up, null);
         }
-
 
         /// <param name="target"></param>
         /// <param name="dir"></param>
@@ -339,37 +309,36 @@ namespace FairyGUI
             Show(target, PopupDirection.Auto, null);
         }
 
-
         /// <param name="target"></param>
         /// <param name="dir"></param>
         /// <param name="parentMenu"></param>
         public void Show(GObject target, PopupDirection dir, PopupMenu parentMenu)
         {
-            GRoot r = target != null ? target.root : GRoot.inst;
-            r.ShowPopup(this.contentPane, (target is GRoot) ? null : target, dir);
+            var r = target != null ? target.root : GRoot.inst;
+            r.ShowPopup(contentPane, target is GRoot ? null : target, dir);
             _parentMenu = parentMenu;
         }
 
         public void Hide()
         {
             if (contentPane.parent != null)
-                ((GRoot)contentPane.parent).HidePopup(contentPane);
+                ((GRoot) contentPane.parent).HidePopup(contentPane);
         }
 
-        void ShowSubMenu(GObject item)
+        private void ShowSubMenu(GObject item)
         {
             _expandingItem = item;
 
-            PopupMenu popup = item.data as PopupMenu;
+            var popup = item.data as PopupMenu;
             if (item is GButton)
-                ((GButton)item).selected = true;
+                ((GButton) item).selected = true;
             popup.Show(item, PopupDirection.Auto, this);
 
-            Vector2 pt = contentPane.LocalToRoot(new Vector2(item.x + item.width - 5, item.y - 5), item.root);
+            var pt = contentPane.LocalToRoot(new Vector2(item.x + item.width - 5, item.y - 5), item.root);
             popup.contentPane.position = pt;
         }
 
-        void CloseSubMenu(object param)
+        private void CloseSubMenu(object param)
         {
             if (contentPane.isDisposed)
                 return;
@@ -378,8 +347,8 @@ namespace FairyGUI
                 return;
 
             if (_expandingItem is GButton)
-                ((GButton)_expandingItem).selected = false;
-            PopupMenu popup = (PopupMenu)_expandingItem.data;
+                ((GButton) _expandingItem).selected = false;
+            var popup = (PopupMenu) _expandingItem.data;
             if (popup == null)
                 return;
 
@@ -389,7 +358,7 @@ namespace FairyGUI
 
         private void __clickItem(EventContext context)
         {
-            GButton item = ((GObject)context.data).asButton;
+            var item = ((GObject) context.data).asButton;
             if (item == null)
                 return;
 
@@ -399,7 +368,7 @@ namespace FairyGUI
                 return;
             }
 
-            Controller c = item.GetController("checked");
+            var c = item.GetController("checked");
             if (c != null && c.selectedIndex != 0)
             {
                 if (c.selectedIndex == 1)
@@ -418,24 +387,24 @@ namespace FairyGUI
             item.DispatchEvent(EVENT_TYPE, item); //event data is for backward compatibility 
         }
 
-        void __addedToStage()
+        private void __addedToStage()
         {
             DispatchEvent("onPopup", null);
 
             if (autoSize)
             {
                 _list.EnsureBoundsCorrect();
-                int cnt = _list.numChildren;
+                var cnt = _list.numChildren;
                 float maxDelta = -1000;
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    GButton obj = _list.GetChildAt(i).asButton;
+                    var obj = _list.GetChildAt(i).asButton;
                     if (obj == null)
                         continue;
-                    GTextField tf = obj.GetTextField();
+                    var tf = obj.GetTextField();
                     if (tf != null)
                     {
-                        float v = tf.textWidth - tf.width;
+                        var v = tf.textWidth - tf.width;
                         if (v > maxDelta)
                             maxDelta = v;
                     }
@@ -451,7 +420,7 @@ namespace FairyGUI
             _list.ResizeToFit(visibleItemCount > 0 ? visibleItemCount : int.MaxValue, 10);
         }
 
-        void __removeFromStage()
+        private void __removeFromStage()
         {
             _parentMenu = null;
 
@@ -461,22 +430,19 @@ namespace FairyGUI
             DispatchEvent("onClose", null);
         }
 
-        void __rollOver(EventContext context)
+        private void __rollOver(EventContext context)
         {
-            GObject item = (GObject)context.sender;
-            if ((item.data is PopupMenu) || _expandingItem != null)
-            {
-                Timers.inst.Add(0.1f, 1, _showSubMenu, item);
-            }
+            var item = (GObject) context.sender;
+            if (item.data is PopupMenu || _expandingItem != null) Timers.inst.Add(0.1f, 1, _showSubMenu, item);
         }
 
-        void __showSubMenu(object param)
+        private void __showSubMenu(object param)
         {
             if (contentPane.isDisposed)
                 return;
 
-            GObject item = (GObject)param;
-            GRoot r = contentPane.root;
+            var item = (GObject) param;
+            var r = contentPane.root;
             if (r == null)
                 return;
 
@@ -488,25 +454,25 @@ namespace FairyGUI
                 CloseSubMenu(null);
             }
 
-            PopupMenu popup = item.data as PopupMenu;
+            var popup = item.data as PopupMenu;
             if (popup == null)
                 return;
 
             ShowSubMenu(item);
         }
 
-        void __rollOut(EventContext context)
+        private void __rollOut(EventContext context)
         {
             if (_expandingItem == null)
                 return;
 
             Timers.inst.Remove(_showSubMenu);
 
-            GRoot r = contentPane.root;
+            var r = contentPane.root;
             if (r != null)
             {
-                PopupMenu popup = (PopupMenu)_expandingItem.data;
-                Vector2 pt = popup.contentPane.GlobalToLocal(context.inputEvent.position);
+                var popup = (PopupMenu) _expandingItem.data;
+                var pt = popup.contentPane.GlobalToLocal(context.inputEvent.position);
                 if (pt.x >= 0 && pt.y >= 0 && pt.x < popup.contentPane.width && pt.y < popup.contentPane.height)
                     return;
             }

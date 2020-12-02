@@ -8,8 +8,8 @@ namespace FairyGUI
     /// </summary>
     public class GearIcon : GearBase
     {
-        Dictionary<string, string> _storage;
-        string _default;
+        private Dictionary<string, string> _storage;
+        private string _default;
 
         public GearIcon(GObject owner)
             : base(owner)
@@ -22,7 +22,7 @@ namespace FairyGUI
             _storage = new Dictionary<string, string>();
         }
 
-        override protected void AddStatus(string pageId, ByteBuffer buffer)
+        protected override void AddStatus(string pageId, ByteBuffer buffer)
         {
             if (pageId == null)
                 _default = buffer.ReadS();
@@ -30,7 +30,7 @@ namespace FairyGUI
                 _storage[pageId] = buffer.ReadS();
         }
 
-        override public void Apply()
+        public override void Apply()
         {
             _owner._gearLocked = true;
 
@@ -43,7 +43,7 @@ namespace FairyGUI
             _owner._gearLocked = false;
         }
 
-        override public void UpdateState()
+        public override void UpdateState()
         {
             _storage[_controller.selectedPageId] = _owner.icon;
         }

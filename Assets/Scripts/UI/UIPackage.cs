@@ -45,7 +45,7 @@ namespace FairyGUI
         /// <param name="type">Resource type. e.g. 'Texture' 'AudioClip'</param>
         /// <param name="destroyMethod">How to destroy this resource.</param>
         /// <returns></returns>
-        public delegate object LoadResource(string name, string extension, System.Type type,
+        public delegate object LoadResource(string name, string extension, Type type,
             out DestroyMethod destroyMethod);
 
         /// <summary>
@@ -56,25 +56,25 @@ namespace FairyGUI
         /// <param name="type">Resource type. e.g. 'Texture' 'AudioClip'</param>
         /// <param name="item">Resource item object.</param>
         /// <returns></returns>
-        public delegate void LoadResourceAsync(string name, string extension, System.Type type, PackageItem item);
+        public delegate void LoadResourceAsync(string name, string extension, Type type, PackageItem item);
 
         /// <param name="result"></param>
         public delegate void CreateObjectCallback(GObject result);
 
-        List<PackageItem> _items;
-        Dictionary<string, PackageItem> _itemsById;
-        Dictionary<string, PackageItem> _itemsByName;
-        Dictionary<string, string>[] _dependencies;
-        string _assetPath;
-        string[] _branches;
+        private List<PackageItem> _items;
+        private Dictionary<string, PackageItem> _itemsById;
+        private Dictionary<string, PackageItem> _itemsByName;
+        private Dictionary<string, string>[] _dependencies;
+        private string _assetPath;
+        private string[] _branches;
         internal int _branchIndex;
-        AssetBundle _resBundle;
-        string _customId;
-        bool _fromBundle;
-        LoadResource _loadFunc;
-        LoadResourceAsync _loadAsyncFunc;
+        private AssetBundle _resBundle;
+        private string _customId;
+        private bool _fromBundle;
+        private LoadResource _loadFunc;
+        private LoadResourceAsync _loadAsyncFunc;
 
-        class AtlasSprite
+        private class AtlasSprite
         {
             public PackageItem atlas;
             public Rect rect = new Rect();
@@ -83,29 +83,29 @@ namespace FairyGUI
             public bool rotated;
         }
 
-        Dictionary<string, AtlasSprite> _sprites;
+        private Dictionary<string, AtlasSprite> _sprites;
 
-        static Dictionary<string, UIPackage> _packageInstById = new Dictionary<string, UIPackage>();
-        static Dictionary<string, UIPackage> _packageInstByName = new Dictionary<string, UIPackage>();
-        static List<UIPackage> _packageList = new List<UIPackage>();
-        static string _branch;
-        static Dictionary<string, string> _vars = new Dictionary<string, string>();
+        private static Dictionary<string, UIPackage> _packageInstById = new Dictionary<string, UIPackage>();
+        private static Dictionary<string, UIPackage> _packageInstByName = new Dictionary<string, UIPackage>();
+        private static List<UIPackage> _packageList = new List<UIPackage>();
+        private static string _branch;
+        private static Dictionary<string, string> _vars = new Dictionary<string, string>();
 
         internal static int _constructing;
 
         public const string URL_PREFIX = "ui://";
 
 #if UNITY_EDITOR
-        static LoadResource _loadFromAssetsPath =
-            (string name, string extension, System.Type type, out DestroyMethod destroyMethod) =>
+        private static LoadResource _loadFromAssetsPath =
+            (string name, string extension, Type type, out DestroyMethod destroyMethod) =>
             {
                 destroyMethod = DestroyMethod.Unload;
                 return AssetDatabase.LoadAssetAtPath(name + extension, type);
             };
 #endif
 
-        static LoadResource _loadFromResourcesPath =
-            (string name, string extension, System.Type type, out DestroyMethod destroyMethod) =>
+        private static LoadResource _loadFromResourcesPath =
+            (string name, string extension, Type type, out DestroyMethod destroyMethod) =>
             {
                 destroyMethod = DestroyMethod.Unload;
                 return Resources.Load(name, type);
@@ -123,15 +123,15 @@ namespace FairyGUI
 
         public static string branch
         {
-            get { return _branch; }
+            get => _branch;
             set
             {
                 _branch = value;
-                bool empty = string.IsNullOrEmpty(_branch);
+                var empty = string.IsNullOrEmpty(_branch);
                 var iter = _packageInstById.GetEnumerator();
                 while (iter.MoveNext())
                 {
-                    UIPackage pkg = iter.Current.Value;
+                    var pkg = iter.Current.Value;
                     if (empty)
                         pkg._branchIndex = -1;
                     else if (pkg._branches != null)
@@ -220,19 +220,18 @@ namespace FairyGUI
             byte[] source = null;
             if (!string.IsNullOrEmpty(mainAssetName))
             {
-                TextAsset ta = desc.LoadAsset<TextAsset>(mainAssetName);
+                var ta = desc.LoadAsset<TextAsset>(mainAssetName);
                 if (ta != null)
                     source = ta.bytes;
             }
             else
             {
-                string[] names = desc.GetAllAssetNames();
-                string searchPattern = "_fui";
-                foreach (string n in names)
-                {
+                var names = desc.GetAllAssetNames();
+                var searchPattern = "_fui";
+                foreach (var n in names)
                     if (n.IndexOf(searchPattern) != -1)
                     {
-                        TextAsset ta = desc.LoadAsset<TextAsset>(n);
+                        var ta = desc.LoadAsset<TextAsset>(n);
                         if (ta != null)
                         {
                             source = ta.bytes;
@@ -240,7 +239,6 @@ namespace FairyGUI
                             break;
                         }
                     }
-                }
             }
 
             if (source == null)
@@ -249,12 +247,12 @@ namespace FairyGUI
             if (desc != res)
                 desc.Unload(true);
 
-            ByteBuffer buffer = new ByteBuffer(source);
+            var buffer = new ByteBuffer(source);
 
-            UIPackage pkg = new UIPackage();
+            var pkg = new UIPackage();
             pkg._resBundle = res;
             pkg._fromBundle = true;
-            int pos = mainAssetName.IndexOf("_fui");
+            var pos = mainAssetName.IndexOf("_fui");
             if (pos != -1)
                 mainAssetName = mainAssetName.Substring(0, pos);
             if (!pkg.LoadPackage(buffer, mainAssetName))
@@ -284,7 +282,9 @@ namespace FairyGUI
 #endif
             }
             else
+            {
                 return AddPackage(descFilePath, _loadFromResourcesPath);
+            }
         }
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace FairyGUI
                 return _packageInstById[assetPath];
 
             DestroyMethod dm;
-            TextAsset asset = (TextAsset) loadFunc(assetPath + "_fui", ".bytes", typeof(TextAsset), out dm);
+            var asset = (TextAsset) loadFunc(assetPath + "_fui", ".bytes", typeof(TextAsset), out dm);
             if (asset == null)
             {
                 if (Application.isPlaying)
@@ -308,9 +308,9 @@ namespace FairyGUI
                     Debug.LogWarning("FairyGUI: Cannot load ui package in '" + assetPath + "'");
             }
 
-            ByteBuffer buffer = new ByteBuffer(asset.bytes);
+            var buffer = new ByteBuffer(asset.bytes);
 
-            UIPackage pkg = new UIPackage();
+            var pkg = new UIPackage();
             pkg._loadFunc = loadFunc;
             pkg._assetPath = assetPath;
             if (!pkg.LoadPackage(buffer, assetPath))
@@ -332,9 +332,9 @@ namespace FairyGUI
         /// <returns></returns>
         public static UIPackage AddPackage(byte[] descData, string assetNamePrefix, LoadResource loadFunc)
         {
-            ByteBuffer buffer = new ByteBuffer(descData);
+            var buffer = new ByteBuffer(descData);
 
-            UIPackage pkg = new UIPackage();
+            var pkg = new UIPackage();
             pkg._loadFunc = loadFunc;
             if (!pkg.LoadPackage(buffer, assetNamePrefix))
                 return null;
@@ -355,9 +355,9 @@ namespace FairyGUI
         /// <returns></returns>
         public static UIPackage AddPackage(byte[] descData, string assetNamePrefix, LoadResourceAsync loadFunc)
         {
-            ByteBuffer buffer = new ByteBuffer(descData);
+            var buffer = new ByteBuffer(descData);
 
-            UIPackage pkg = new UIPackage();
+            var pkg = new UIPackage();
             pkg._loadAsyncFunc = loadFunc;
             if (!pkg.LoadPackage(buffer, assetNamePrefix))
                 return null;
@@ -377,10 +377,8 @@ namespace FairyGUI
         {
             UIPackage pkg = null;
             if (!_packageInstById.TryGetValue(packageIdOrName, out pkg))
-            {
                 if (!_packageInstByName.TryGetValue(packageIdOrName, out pkg))
                     throw new Exception("FairyGUI: '" + packageIdOrName + "' is not a valid package id or name.");
-            }
 
             pkg.Dispose();
             _packageInstById.Remove(pkg.id);
@@ -396,12 +394,9 @@ namespace FairyGUI
         {
             if (_packageInstById.Count > 0)
             {
-                UIPackage[] pkgs = _packageList.ToArray();
+                var pkgs = _packageList.ToArray();
 
-                foreach (UIPackage pkg in pkgs)
-                {
-                    pkg.Dispose();
-                }
+                foreach (var pkg in pkgs) pkg.Dispose();
             }
 
             _packageList.Clear();
@@ -423,7 +418,7 @@ namespace FairyGUI
         /// <returns>A UI object.</returns>
         public static GObject CreateObject(string pkgName, string resName)
         {
-            UIPackage pkg = GetByName(pkgName);
+            var pkg = GetByName(pkgName);
             if (pkg != null)
                 return pkg.CreateObject(resName);
             else
@@ -437,9 +432,9 @@ namespace FairyGUI
         /// <param name="resName">Resource name.</param>
         /// <param name="userClass">Custom implementation of this object.</param>
         /// <returns>A UI object.</returns>
-        public static GObject CreateObject(string pkgName, string resName, System.Type userClass)
+        public static GObject CreateObject(string pkgName, string resName, Type userClass)
         {
-            UIPackage pkg = GetByName(pkgName);
+            var pkg = GetByName(pkgName);
             if (pkg != null)
                 return pkg.CreateObject(resName, userClass);
             else
@@ -453,7 +448,7 @@ namespace FairyGUI
         /// <returns>A UI object.</returns>
         public static GObject CreateObjectFromURL(string url)
         {
-            PackageItem pi = GetItemByURL(url);
+            var pi = GetItemByURL(url);
             if (pi != null)
                 return pi.owner.CreateObject(pi, null);
             else
@@ -466,9 +461,9 @@ namespace FairyGUI
         /// <param name="url">Resource url.</param>
         /// <param name="userClass">Custom implementation of this object.</param>
         /// <returns>A UI object.</returns>
-        public static GObject CreateObjectFromURL(string url, System.Type userClass)
+        public static GObject CreateObjectFromURL(string url, Type userClass)
         {
-            PackageItem pi = GetItemByURL(url);
+            var pi = GetItemByURL(url);
             if (pi != null)
                 return pi.owner.CreateObject(pi, userClass);
             else
@@ -477,7 +472,7 @@ namespace FairyGUI
 
         public static void CreateObjectAsync(string pkgName, string resName, CreateObjectCallback callback)
         {
-            UIPackage pkg = GetByName(pkgName);
+            var pkg = GetByName(pkgName);
             if (pkg != null)
                 pkg.CreateObjectAsync(resName, callback);
             else
@@ -486,7 +481,7 @@ namespace FairyGUI
 
         public static void CreateObjectFromURL(string url, CreateObjectCallback callback)
         {
-            PackageItem pi = GetItemByURL(url);
+            var pi = GetItemByURL(url);
             if (pi != null)
                 AsyncCreationHelper.CreateObject(pi, callback);
             else
@@ -501,7 +496,7 @@ namespace FairyGUI
         /// <returns>If resource is atlas, returns NTexture; If resource is sound, returns AudioClip.</returns>
         public static object GetItemAsset(string pkgName, string resName)
         {
-            UIPackage pkg = GetByName(pkgName);
+            var pkg = GetByName(pkgName);
             if (pkg != null)
                 return pkg.GetItemAsset(resName);
             else
@@ -515,7 +510,7 @@ namespace FairyGUI
         /// <returns>If resource is atlas, returns NTexture; If resource is sound, returns AudioClip.</returns>
         public static object GetItemAssetByURL(string url)
         {
-            PackageItem item = GetItemByURL(url);
+            var item = GetItemByURL(url);
             if (item == null)
                 return null;
 
@@ -530,7 +525,7 @@ namespace FairyGUI
         /// <returns>Url.</returns>
         public static string GetItemURL(string pkgName, string resName)
         {
-            UIPackage pkg = GetByName(pkgName);
+            var pkg = GetByName(pkgName);
             if (pkg == null)
                 return null;
 
@@ -546,31 +541,31 @@ namespace FairyGUI
             if (url == null)
                 return null;
 
-            int pos1 = url.IndexOf("//");
+            var pos1 = url.IndexOf("//");
             if (pos1 == -1)
                 return null;
 
-            int pos2 = url.IndexOf('/', pos1 + 2);
+            var pos2 = url.IndexOf('/', pos1 + 2);
             if (pos2 == -1)
             {
                 if (url.Length > 13)
                 {
-                    string pkgId = url.Substring(5, 8);
-                    UIPackage pkg = GetById(pkgId);
+                    var pkgId = url.Substring(5, 8);
+                    var pkg = GetById(pkgId);
                     if (pkg != null)
                     {
-                        string srcId = url.Substring(13);
+                        var srcId = url.Substring(13);
                         return pkg.GetItem(srcId);
                     }
                 }
             }
             else
             {
-                string pkgName = url.Substring(pos1 + 2, pos2 - pos1 - 2);
-                UIPackage pkg = GetByName(pkgName);
+                var pkgName = url.Substring(pos1 + 2, pos2 - pos1 - 2);
+                var pkg = GetByName(pkgName);
                 if (pkg != null)
                 {
-                    string srcName = url.Substring(pos2 + 1);
+                    var srcName = url.Substring(pos2 + 1);
                     return pkg.GetItemByName(srcName);
                 }
             }
@@ -589,17 +584,19 @@ namespace FairyGUI
             if (url == null)
                 return null;
 
-            int pos1 = url.IndexOf("//");
+            var pos1 = url.IndexOf("//");
             if (pos1 == -1)
                 return null;
 
-            int pos2 = url.IndexOf('/', pos1 + 2);
+            var pos2 = url.IndexOf('/', pos1 + 2);
             if (pos2 == -1)
+            {
                 return url;
+            }
             else
             {
-                string pkgName = url.Substring(pos1 + 2, pos2 - pos1 - 2);
-                string srcName = url.Substring(pos2 + 1);
+                var pkgName = url.Substring(pos1 + 2, pos2 - pos1 - 2);
+                var srcName = url.Substring(pos2 + 1);
                 return GetItemURL(pkgName, srcName);
             }
         }
@@ -613,17 +610,14 @@ namespace FairyGUI
             TranslationHelper.LoadFromXML(source);
         }
 
-        public string assetPath
-        {
-            get { return _assetPath; }
-        }
+        public string assetPath => _assetPath;
 
         /// <summary>
         /// Set a custom id for package, then you can use it in GetById.
         /// </summary>
         public string customId
         {
-            get { return _customId; }
+            get => _customId;
             set
             {
                 if (_customId != null)
@@ -634,25 +628,21 @@ namespace FairyGUI
             }
         }
 
-        public AssetBundle resBundle
-        {
-            get { return _resBundle; }
-        }
+        public AssetBundle resBundle => _resBundle;
 
         /// <summary>
         /// 获得本包依赖的包的id列表
         /// </summary>
-        public Dictionary<string, string>[] dependencies
-        {
-            get { return _dependencies; }
-        }
+        public Dictionary<string, string>[] dependencies => _dependencies;
 
-        bool LoadPackage(ByteBuffer buffer, string assetNamePrefix)
+        private bool LoadPackage(ByteBuffer buffer, string assetNamePrefix)
         {
             if (buffer.ReadUint() != 0x46475549)
             {
                 if (Application.isPlaying)
+                {
                     throw new Exception("FairyGUI: old package format found in '" + assetNamePrefix + "'");
+                }
                 else
                 {
                     Debug.LogWarning("FairyGUI: old package format found in '" + assetNamePrefix + "'");
@@ -661,7 +651,7 @@ namespace FairyGUI
             }
 
             buffer.version = buffer.ReadInt();
-            bool ver2 = buffer.version >= 2;
+            var ver2 = buffer.version >= 2;
             buffer.ReadBool(); //compressed
             id = buffer.ReadString();
             name = buffer.ReadString();
@@ -690,24 +680,24 @@ namespace FairyGUI
             }
 
             buffer.Skip(20);
-            int indexTablePos = buffer.position;
+            var indexTablePos = buffer.position;
             int cnt;
 
             buffer.Seek(indexTablePos, 4);
 
             cnt = buffer.ReadInt();
-            string[] stringTable = new string[cnt];
-            for (int i = 0; i < cnt; i++)
+            var stringTable = new string[cnt];
+            for (var i = 0; i < cnt; i++)
                 stringTable[i] = buffer.ReadString();
             buffer.stringTable = stringTable;
 
             if (buffer.Seek(indexTablePos, 5))
             {
                 cnt = buffer.ReadInt();
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
                     int index = buffer.ReadUshort();
-                    int len = buffer.ReadInt();
+                    var len = buffer.ReadInt();
                     stringTable[index] = buffer.ReadString(len);
                 }
             }
@@ -716,15 +706,15 @@ namespace FairyGUI
 
             cnt = buffer.ReadShort();
             _dependencies = new Dictionary<string, string>[cnt];
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                Dictionary<string, string> kv = new Dictionary<string, string>();
+                var kv = new Dictionary<string, string>();
                 kv.Add("id", buffer.ReadS());
                 kv.Add("name", buffer.ReadS());
                 _dependencies[i] = kv;
             }
 
-            bool branchIncluded = false;
+            var branchIncluded = false;
             if (ver2)
             {
                 cnt = buffer.ReadShort();
@@ -750,12 +740,14 @@ namespace FairyGUI
                 assetNamePrefix = assetNamePrefix + "_";
             }
             else
+            {
                 assetPath = string.Empty;
+            }
 
             cnt = buffer.ReadShort();
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                int nextPos = buffer.ReadInt();
+                var nextPos = buffer.ReadInt();
                 nextPos += buffer.position;
 
                 pi = new PackageItem();
@@ -777,7 +769,7 @@ namespace FairyGUI
                         int scaleOption = buffer.ReadByte();
                         if (scaleOption == 1)
                         {
-                            Rect rect = new Rect();
+                            var rect = new Rect();
                             rect.x = buffer.ReadInt();
                             rect.y = buffer.ReadInt();
                             rect.width = buffer.ReadInt();
@@ -787,7 +779,9 @@ namespace FairyGUI
                             pi.tileGridIndice = buffer.ReadInt();
                         }
                         else if (scaleOption == 2)
+                        {
                             pi.scaleByTile = true;
+                        }
 
                         buffer.ReadBool(); //smoothing
                         break;
@@ -840,7 +834,7 @@ namespace FairyGUI
 
                 if (ver2)
                 {
-                    string str = buffer.ReadS(); //branch
+                    var str = buffer.ReadS(); //branch
                     if (str != null)
                         pi.name = str + "/" + pi.name;
 
@@ -869,15 +863,15 @@ namespace FairyGUI
             buffer.Seek(indexTablePos, 2);
 
             cnt = buffer.ReadShort();
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 int nextPos = buffer.ReadShort();
                 nextPos += buffer.position;
 
-                string itemId = buffer.ReadS();
+                var itemId = buffer.ReadS();
                 pi = _itemsById[buffer.ReadS()];
 
-                AtlasSprite sprite = new AtlasSprite();
+                var sprite = new AtlasSprite();
                 sprite.atlas = pi;
                 sprite.rect.x = buffer.ReadInt();
                 sprite.rect.y = buffer.ReadInt();
@@ -910,19 +904,17 @@ namespace FairyGUI
             if (buffer.Seek(indexTablePos, 3))
             {
                 cnt = buffer.ReadShort();
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    int nextPos = buffer.ReadInt();
+                    var nextPos = buffer.ReadInt();
                     nextPos += buffer.position;
 
                     if (_itemsById.TryGetValue(buffer.ReadS(), out pi))
-                    {
                         if (pi.type == PackageItemType.Image)
                         {
                             pi.pixelHitTestData = new PixelHitTestData();
                             pi.pixelHitTestData.Load(buffer);
                         }
-                    }
 
                     buffer.position = nextPos;
                 }
@@ -934,7 +926,7 @@ namespace FairyGUI
             return true;
         }
 
-        static int ComparePackageItem(PackageItem p1, PackageItem p2)
+        private static int ComparePackageItem(PackageItem p1, PackageItem p2)
         {
             if (p1.name != null && p2.name != null)
                 return p1.name.CompareTo(p2.name);
@@ -944,17 +936,17 @@ namespace FairyGUI
 
         public void LoadAllAssets()
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
                 GetItemAsset(_items[i]);
         }
 
         public void UnloadAssets()
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                PackageItem pi = _items[i];
+                var pi = _items[i];
                 if (pi.type == PackageItemType.Atlas)
                 {
                     if (pi.texture != null)
@@ -988,10 +980,10 @@ namespace FairyGUI
             _resBundle = resBundle;
             _fromBundle = _resBundle != null;
 
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                PackageItem pi = _items[i];
+                var pi = _items[i];
                 if (pi.type == PackageItemType.Atlas)
                 {
                     if (pi.texture != null && pi.texture.nativeTexture == null)
@@ -1005,12 +997,12 @@ namespace FairyGUI
             }
         }
 
-        void Dispose()
+        private void Dispose()
         {
-            int cnt = _items.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _items.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                PackageItem pi = _items[i];
+                var pi = _items[i];
                 if (pi.type == PackageItemType.Atlas)
                 {
                     if (pi.texture != null)
@@ -1046,7 +1038,7 @@ namespace FairyGUI
             PackageItem pi;
             if (!_itemsByName.TryGetValue(resName, out pi))
             {
-                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + this.name);
+                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + name);
                 return null;
             }
 
@@ -1056,12 +1048,12 @@ namespace FairyGUI
         /// <param name="resName"></param>
         /// <param name="userClass"></param>
         /// <returns></returns>
-        public GObject CreateObject(string resName, System.Type userClass)
+        public GObject CreateObject(string resName, Type userClass)
         {
             PackageItem pi;
             if (!_itemsByName.TryGetValue(resName, out pi))
             {
-                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + this.name);
+                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + name);
                 return null;
             }
 
@@ -1073,21 +1065,21 @@ namespace FairyGUI
             PackageItem pi;
             if (!_itemsByName.TryGetValue(resName, out pi))
             {
-                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + this.name);
+                Debug.LogError("FairyGUI: resource not found - " + resName + " in " + name);
                 return;
             }
 
             AsyncCreationHelper.CreateObject(pi, callback);
         }
 
-        GObject CreateObject(PackageItem item, System.Type userClass)
+        private GObject CreateObject(PackageItem item, Type userClass)
         {
             Stats.LatestObjectCreation = 0;
             Stats.LatestGraphicsCreation = 0;
 
             GetItemAsset(item);
 
-            GObject g = UIObjectFactory.NewObject(item, userClass);
+            var g = UIObjectFactory.NewObject(item, userClass);
             if (g == null)
                 return null;
 
@@ -1105,7 +1097,7 @@ namespace FairyGUI
             PackageItem pi;
             if (!_itemsByName.TryGetValue(resName, out pi))
             {
-                Debug.LogError("FairyGUI: Resource not found - " + resName + " in " + this.name);
+                Debug.LogError("FairyGUI: Resource not found - " + resName + " in " + name);
                 return null;
             }
 
@@ -1222,10 +1214,10 @@ namespace FairyGUI
             }
         }
 
-        void LoadAtlas(PackageItem item)
+        private void LoadAtlas(PackageItem item)
         {
-            string ext = Path.GetExtension(item.file);
-            string fileName = item.file.Substring(0, item.file.Length - ext.Length);
+            var ext = Path.GetExtension(item.file);
+            var fileName = item.file.Substring(0, item.file.Length - ext.Length);
 
             if (_loadAsyncFunc != null)
             {
@@ -1250,10 +1242,14 @@ namespace FairyGUI
                     dm = DestroyMethod.None;
                 }
                 else
+                {
                     tex = (Texture) _loadFunc(fileName, ext, typeof(Texture), out dm);
+                }
 
                 if (tex == null)
-                    Debug.LogWarning("FairyGUI: texture '" + item.file + "' not found in " + this.name);
+                {
+                    Debug.LogWarning("FairyGUI: texture '" + item.file + "' not found in " + name);
+                }
 
                 else if (!(tex is Texture2D))
                 {
@@ -1277,7 +1273,9 @@ namespace FairyGUI
                             alphaTex = _resBundle.LoadAsset<Texture2D>(fileName);
                     }
                     else
+                    {
                         alphaTex = (Texture2D) _loadFunc(fileName, ext, typeof(Texture2D), out dm);
+                    }
                 }
 
                 if (tex == null)
@@ -1297,31 +1295,35 @@ namespace FairyGUI
                     };
                 }
                 else
+                {
                     item.texture.Reload(tex, alphaTex);
+                }
 
                 item.texture.destroyMethod = dm;
             }
         }
 
-        void LoadImage(PackageItem item)
+        private void LoadImage(PackageItem item)
         {
             AtlasSprite sprite;
             if (_sprites.TryGetValue(item.id, out sprite))
             {
-                NTexture atlas = (NTexture) GetItemAsset(sprite.atlas);
+                var atlas = (NTexture) GetItemAsset(sprite.atlas);
                 if (atlas.width == sprite.rect.width && atlas.height == sprite.rect.height)
                     item.texture = atlas;
                 else
                     item.texture = new NTexture(atlas, sprite.rect, sprite.rotated, sprite.originalSize, sprite.offset);
             }
             else
+            {
                 item.texture = NTexture.Empty;
+            }
         }
 
-        void LoadSound(PackageItem item)
+        private void LoadSound(PackageItem item)
         {
-            string ext = Path.GetExtension(item.file);
-            string fileName = item.file.Substring(0, item.file.Length - ext.Length);
+            var ext = Path.GetExtension(item.file);
+            var fileName = item.file.Substring(0, item.file.Length - ext.Length);
 
             if (_loadAsyncFunc != null)
             {
@@ -1354,10 +1356,10 @@ namespace FairyGUI
             }
         }
 
-        byte[] LoadBinary(PackageItem item)
+        private byte[] LoadBinary(PackageItem item)
         {
-            string ext = Path.GetExtension(item.file);
-            string fileName = item.file.Substring(0, item.file.Length - ext.Length);
+            var ext = Path.GetExtension(item.file);
+            var fileName = item.file.Substring(0, item.file.Length - ext.Length);
 
             TextAsset ta;
             if (_resBundle != null)
@@ -1371,7 +1373,7 @@ namespace FairyGUI
             else
             {
                 DestroyMethod dm;
-                object ret = _loadFunc(fileName, ext, typeof(TextAsset), out dm);
+                var ret = _loadFunc(fileName, ext, typeof(TextAsset), out dm);
                 if (ret == null)
                     return null;
                 if (ret is byte[])
@@ -1381,9 +1383,9 @@ namespace FairyGUI
             }
         }
 
-        void LoadMovieClip(PackageItem item)
+        private void LoadMovieClip(PackageItem item)
         {
-            ByteBuffer buffer = item.rawData;
+            var buffer = item.rawData;
 
             buffer.Seek(0, 0);
 
@@ -1399,9 +1401,9 @@ namespace FairyGUI
             string spriteId;
             MovieClip.Frame frame;
             AtlasSprite sprite;
-            Rect frameRect = new Rect();
+            var frameRect = new Rect();
 
-            for (int i = 0; i < frameCount; i++)
+            for (var i = 0; i < frameCount; i++)
             {
                 int nextPos = buffer.ReadShort();
                 nextPos += buffer.position;
@@ -1415,10 +1417,8 @@ namespace FairyGUI
                 spriteId = buffer.ReadS();
 
                 if (spriteId != null && _sprites.TryGetValue(spriteId, out sprite))
-                {
                     frame.texture = new NTexture((NTexture) GetItemAsset(sprite.atlas), sprite.rect, sprite.rotated,
                         new Vector2(item.width, item.height), frameRect.position);
-                }
 
                 item.frames[i] = frame;
 
@@ -1426,22 +1426,22 @@ namespace FairyGUI
             }
         }
 
-        void LoadFont(PackageItem item)
+        private void LoadFont(PackageItem item)
         {
-            BitmapFont font = new BitmapFont();
-            font.name = URL_PREFIX + this.id + item.id;
+            var font = new BitmapFont();
+            font.name = URL_PREFIX + id + item.id;
             item.bitmapFont = font;
-            ByteBuffer buffer = item.rawData;
+            var buffer = item.rawData;
 
             buffer.Seek(0, 0);
 
-            bool ttf = buffer.ReadBool();
+            var ttf = buffer.ReadBool();
             font.canTint = buffer.ReadBool();
             font.resizable = buffer.ReadBool();
             font.hasChannel = buffer.ReadBool();
-            int fontSize = buffer.ReadInt();
-            int xadvance = buffer.ReadInt();
-            int lineHeight = buffer.ReadInt();
+            var fontSize = buffer.ReadInt();
+            var xadvance = buffer.ReadInt();
+            var lineHeight = buffer.ReadInt();
 
             float texScaleX = 1;
             float texScaleY = 1;
@@ -1462,19 +1462,19 @@ namespace FairyGUI
             buffer.Seek(0, 1);
 
             BitmapFont.BMGlyph bg;
-            int cnt = buffer.ReadInt();
-            for (int i = 0; i < cnt; i++)
+            var cnt = buffer.ReadInt();
+            for (var i = 0; i < cnt; i++)
             {
                 int nextPos = buffer.ReadShort();
                 nextPos += buffer.position;
 
                 bg = new BitmapFont.BMGlyph();
-                char ch = buffer.ReadChar();
+                var ch = buffer.ReadChar();
                 font.AddChar(ch, bg);
 
-                string img = buffer.ReadS();
-                int bx = buffer.ReadInt();
-                int by = buffer.ReadInt();
+                var img = buffer.ReadS();
+                var bx = buffer.ReadInt();
+                var by = buffer.ReadInt();
                 bgX = buffer.ReadInt();
                 bgY = buffer.ReadInt();
                 bgWidth = buffer.ReadInt();
@@ -1551,7 +1551,7 @@ namespace FairyGUI
                             bg.advance = xadvance;
                     }
 
-                    bg.lineHeight = bgY < 0 ? bgHeight : (bgY + bgHeight);
+                    bg.lineHeight = bgY < 0 ? bgHeight : bgY + bgHeight;
                     if (bg.lineHeight < fontSize)
                         bg.lineHeight = fontSize;
                 }
@@ -1565,7 +1565,7 @@ namespace FairyGUI
                 font.shader = ShaderConfig.imageShader;
         }
 
-        void LoadSpine(PackageItem item)
+        private void LoadSpine(PackageItem item)
         {
 #if FAIRYGUI_SPINE
             string ext = Path.GetExtension(item.file);
@@ -1591,7 +1591,7 @@ namespace FairyGUI
 #endif
         }
 
-        void LoadDragonBones(PackageItem item)
+        private void LoadDragonBones(PackageItem item)
         {
 #if FAIRYGUI_DRAGONBONES
             string ext = Path.GetExtension(item.file);

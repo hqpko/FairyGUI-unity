@@ -49,7 +49,6 @@ namespace FairyGUI
         /// </summary>
         public bool keepCrisp;
 
-
         public int version;
 
         protected internal static bool textRebuildFlag;
@@ -57,19 +56,19 @@ namespace FairyGUI
         protected const float SupScale = 0.58f;
         protected const float SupOffset = 0.33f;
 
-        virtual public void UpdateGraphics(NGraphics graphics)
+        public virtual void UpdateGraphics(NGraphics graphics)
         {
         }
 
-        virtual public void SetFormat(TextFormat format, float fontSizeScale)
+        public virtual void SetFormat(TextFormat format, float fontSizeScale)
         {
         }
 
-        virtual public void PrepareCharacters(string text)
+        public virtual void PrepareCharacters(string text)
         {
         }
 
-        virtual public bool GetGlyph(char ch, out float width, out float height, out float baseline)
+        public virtual bool GetGlyph(char ch, out float width, out float height, out float baseline)
         {
             width = 0;
             height = 0;
@@ -77,29 +76,29 @@ namespace FairyGUI
             return false;
         }
 
-        virtual public int DrawGlyph(float x, float y,
+        public virtual int DrawGlyph(float x, float y,
             List<Vector3> vertList, List<Vector2> uvList, List<Vector2> uv2List, List<Color32> colList)
         {
             return 0;
         }
 
-        virtual public int DrawLine(float x, float y, float width, int fontSize, int type,
+        public virtual int DrawLine(float x, float y, float width, int fontSize, int type,
             List<Vector3> vertList, List<Vector2> uvList, List<Vector2> uv2List, List<Color32> colList)
         {
             return 0;
         }
 
-        virtual public bool HasCharacter(char ch)
+        public virtual bool HasCharacter(char ch)
         {
             return false;
         }
 
-        virtual public int GetLineHeight(int size)
+        public virtual int GetLineHeight(int size)
         {
             return 0;
         }
 
-        virtual public void Dispose()
+        public virtual void Dispose()
         {
         }
     }

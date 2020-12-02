@@ -2,31 +2,24 @@
 
 namespace FairyGUI
 {
-
     public class EllipseMesh : IMeshFactory, IHitTest
     {
-
         public Rect? drawRect;
-
 
         public float lineWidth;
 
-
         public Color32 lineColor;
-
 
         public Color32? centerColor;
 
-
         public Color32? fillColor;
-
 
         public float startDegree;
 
-
         public float endDegreee;
 
-        static int[] SECTOR_CENTER_TRIANGLES = new int[] {
+        private static int[] SECTOR_CENTER_TRIANGLES = new int[]
+        {
             0, 4, 1,
             0, 3, 4,
             0, 2, 3,
@@ -46,21 +39,21 @@ namespace FairyGUI
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            Rect rect = drawRect != null ? (Rect)drawRect : vb.contentRect;
-            Color32 color = fillColor != null ? (Color32)fillColor : vb.vertexColor;
+            var rect = drawRect != null ? (Rect) drawRect : vb.contentRect;
+            var color = fillColor != null ? (Color32) fillColor : vb.vertexColor;
 
-            float sectionStart = Mathf.Clamp(startDegree, 0, 360);
-            float sectionEnd = Mathf.Clamp(endDegreee, 0, 360);
-            bool clipped = sectionStart > 0 || sectionEnd < 360;
+            var sectionStart = Mathf.Clamp(startDegree, 0, 360);
+            var sectionEnd = Mathf.Clamp(endDegreee, 0, 360);
+            var clipped = sectionStart > 0 || sectionEnd < 360;
             sectionStart = sectionStart * Mathf.Deg2Rad;
             sectionEnd = sectionEnd * Mathf.Deg2Rad;
-            Color32 centerColor2 = centerColor == null ? color : (Color32)centerColor;
+            var centerColor2 = centerColor == null ? color : (Color32) centerColor;
 
-            float radiusX = rect.width / 2;
-            float radiusY = rect.height / 2;
-            int sides = Mathf.CeilToInt(Mathf.PI * (radiusX + radiusY) / 4);
+            var radiusX = rect.width / 2;
+            var radiusY = rect.height / 2;
+            var sides = Mathf.CeilToInt(Mathf.PI * (radiusX + radiusY) / 4);
             sides = Mathf.Clamp(sides, 40, 800);
-            float angleDelta = 2 * Mathf.PI / sides;
+            var angleDelta = 2 * Mathf.PI / sides;
             float angle = 0;
             float lineAngle = 0;
 
@@ -71,31 +64,34 @@ namespace FairyGUI
                 sectionEnd -= lineAngle;
             }
 
-            int vpos = vb.currentVertCount;
-            float centerX = rect.x + radiusX;
-            float centerY = rect.y + radiusY;
+            var vpos = vb.currentVertCount;
+            var centerX = rect.x + radiusX;
+            var centerY = rect.y + radiusY;
             vb.AddVert(new Vector3(centerX, centerY, 0), centerColor2);
-            for (int i = 0; i < sides; i++)
+            for (var i = 0; i < sides; i++)
             {
                 if (angle < sectionStart)
                     angle = sectionStart;
                 else if (angle > sectionEnd)
                     angle = sectionEnd;
-                Vector3 vec = new Vector3(Mathf.Cos(angle) * (radiusX - lineWidth) + centerX, Mathf.Sin(angle) * (radiusY - lineWidth) + centerY, 0);
+                var vec = new Vector3(Mathf.Cos(angle) * (radiusX - lineWidth) + centerX,
+                    Mathf.Sin(angle) * (radiusY - lineWidth) + centerY, 0);
                 vb.AddVert(vec, color);
                 if (lineWidth > 0)
                 {
                     vb.AddVert(vec, lineColor);
-                    vb.AddVert(new Vector3(Mathf.Cos(angle) * radiusX + centerX, Mathf.Sin(angle) * radiusY + centerY, 0), lineColor);
+                    vb.AddVert(
+                        new Vector3(Mathf.Cos(angle) * radiusX + centerX, Mathf.Sin(angle) * radiusY + centerY, 0),
+                        lineColor);
                 }
+
                 angle += angleDelta;
             }
 
             if (lineWidth > 0)
             {
-                int cnt = sides * 3;
-                for (int i = 0; i < cnt; i += 3)
-                {
+                var cnt = sides * 3;
+                for (var i = 0; i < cnt; i += 3)
                     if (i != cnt - 3)
                     {
                         vb.AddTriangle(0, i + 1, i + 4);
@@ -114,19 +110,16 @@ namespace FairyGUI
                         vb.AddTriangle(i + 2, i + 2, i + 3);
                         vb.AddTriangle(i + 3, i + 3, i + 2);
                     }
-                }
             }
             else
             {
-                for (int i = 0; i < sides; i++)
-                {
+                for (var i = 0; i < sides; i++)
                     if (i != sides - 1)
                         vb.AddTriangle(0, i + 1, i + 2);
                     else if (!clipped)
                         vb.AddTriangle(0, i + 1, 1);
                     else
                         vb.AddTriangle(0, i + 1, i + 1);
-                }
             }
 
             if (lineWidth > 0 && clipped)
@@ -134,23 +127,35 @@ namespace FairyGUI
                 //扇形内边缘的线条
 
                 vb.AddVert(new Vector3(radiusX, radiusY, 0), lineColor);
-                float centerRadius = lineWidth * 0.5f;
+                var centerRadius = lineWidth * 0.5f;
 
                 sectionStart -= lineAngle;
                 angle = sectionStart + lineAngle * 0.5f + Mathf.PI * 0.5f;
-                vb.AddVert(new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY, 0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY,
+                        0), lineColor);
                 angle -= Mathf.PI;
-                vb.AddVert(new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY, 0), lineColor);
-                vb.AddVert(new Vector3(Mathf.Cos(sectionStart) * radiusX + radiusX, Mathf.Sin(sectionStart) * radiusY + radiusY, 0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY,
+                        0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(sectionStart) * radiusX + radiusX,
+                        Mathf.Sin(sectionStart) * radiusY + radiusY, 0), lineColor);
                 vb.AddVert(vb.GetPosition(vpos + 3), lineColor);
 
                 sectionEnd += lineAngle;
                 angle = sectionEnd - lineAngle * 0.5f + Mathf.PI * 0.5f;
-                vb.AddVert(new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY, 0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY,
+                        0), lineColor);
                 angle -= Mathf.PI;
-                vb.AddVert(new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY, 0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(angle) * centerRadius + radiusX, Mathf.Sin(angle) * centerRadius + radiusY,
+                        0), lineColor);
                 vb.AddVert(vb.GetPosition(vpos + sides * 3), lineColor);
-                vb.AddVert(new Vector3(Mathf.Cos(sectionEnd) * radiusX + radiusX, Mathf.Sin(sectionEnd) * radiusY + radiusY, 0), lineColor);
+                vb.AddVert(
+                    new Vector3(Mathf.Cos(sectionEnd) * radiusX + radiusX, Mathf.Sin(sectionEnd) * radiusY + radiusY,
+                        0), lineColor);
 
                 vb.AddTriangles(SECTOR_CENTER_TRIANGLES, sides * 3 + 1);
             }
@@ -161,21 +166,23 @@ namespace FairyGUI
             if (!contentRect.Contains(point))
                 return false;
 
-            float radiusX = contentRect.width * 0.5f;
-            float raduisY = contentRect.height * 0.5f;
-            float xx = point.x - radiusX - contentRect.x;
-            float yy = point.y - raduisY - contentRect.y;
+            var radiusX = contentRect.width * 0.5f;
+            var raduisY = contentRect.height * 0.5f;
+            var xx = point.x - radiusX - contentRect.x;
+            var yy = point.y - raduisY - contentRect.y;
             if (Mathf.Pow(xx / radiusX, 2) + Mathf.Pow(yy / raduisY, 2) < 1)
             {
                 if (startDegree != 0 || endDegreee != 360)
                 {
-                    float deg = Mathf.Atan2(yy, xx) * Mathf.Rad2Deg;
+                    var deg = Mathf.Atan2(yy, xx) * Mathf.Rad2Deg;
                     if (deg < 0)
                         deg += 360;
                     return deg >= startDegree && deg <= endDegreee;
                 }
                 else
+                {
                     return true;
+                }
             }
 
             return false;

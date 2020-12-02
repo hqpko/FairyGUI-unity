@@ -3,22 +3,21 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-
     [CustomEditor(typeof(UIContentScaler))]
     public class UIContentScalerEditor : Editor
     {
-        SerializedProperty scaleMode;
-        SerializedProperty screenMatchMode;
-        SerializedProperty designResolutionX;
-        SerializedProperty designResolutionY;
-        SerializedProperty fallbackScreenDPI;
-        SerializedProperty defaultSpriteDPI;
-        SerializedProperty constantScaleFactor;
-        SerializedProperty ignoreOrientation;
+        private SerializedProperty scaleMode;
+        private SerializedProperty screenMatchMode;
+        private SerializedProperty designResolutionX;
+        private SerializedProperty designResolutionY;
+        private SerializedProperty fallbackScreenDPI;
+        private SerializedProperty defaultSpriteDPI;
+        private SerializedProperty constantScaleFactor;
+        private SerializedProperty ignoreOrientation;
 
-        string[] propertyToExclude;
+        private string[] propertyToExclude;
 
-        void OnEnable()
+        private void OnEnable()
         {
             scaleMode = serializedObject.FindProperty("scaleMode");
             screenMatchMode = serializedObject.FindProperty("screenMatchMode");
@@ -29,8 +28,11 @@ namespace FairyGUIEditor
             constantScaleFactor = serializedObject.FindProperty("constantScaleFactor");
             ignoreOrientation = serializedObject.FindProperty("ignoreOrientation");
 
-            propertyToExclude = new string[] { "m_Script", "scaleMode", "screenMatchMode", "designResolutionX", "designResolutionY",
-                    "fallbackScreenDPI", "defaultSpriteDPI", "constantScaleFactor", "ignoreOrientation"};
+            propertyToExclude = new string[]
+            {
+                "m_Script", "scaleMode", "screenMatchMode", "designResolutionX", "designResolutionY",
+                "fallbackScreenDPI", "defaultSpriteDPI", "constantScaleFactor", "ignoreOrientation"
+            };
         }
 
         public override void OnInspectorGUI()
@@ -40,20 +42,23 @@ namespace FairyGUIEditor
             DrawPropertiesExcluding(serializedObject, propertyToExclude);
 
             EditorGUILayout.PropertyField(scaleMode);
-            if ((UIContentScaler.ScaleMode)scaleMode.enumValueIndex == UIContentScaler.ScaleMode.ScaleWithScreenSize)
+            if ((UIContentScaler.ScaleMode) scaleMode.enumValueIndex == UIContentScaler.ScaleMode.ScaleWithScreenSize)
             {
                 EditorGUILayout.PropertyField(designResolutionX);
                 EditorGUILayout.PropertyField(designResolutionY);
                 EditorGUILayout.PropertyField(screenMatchMode);
                 EditorGUILayout.PropertyField(ignoreOrientation);
             }
-            else if ((UIContentScaler.ScaleMode)scaleMode.enumValueIndex == UIContentScaler.ScaleMode.ConstantPhysicalSize)
+            else if ((UIContentScaler.ScaleMode) scaleMode.enumValueIndex ==
+                     UIContentScaler.ScaleMode.ConstantPhysicalSize)
             {
                 EditorGUILayout.PropertyField(fallbackScreenDPI);
                 EditorGUILayout.PropertyField(defaultSpriteDPI);
             }
             else
+            {
                 EditorGUILayout.PropertyField(constantScaleFactor);
+            }
 
             if (serializedObject.ApplyModifiedProperties())
                 (target as UIContentScaler).ApplyModifiedProperties();

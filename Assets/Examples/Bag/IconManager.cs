@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using FairyGUI;
 #if UNITY_5_4_OR_NEWER
 using UnityEngine.Networking;
+
 #endif
 
 public delegate void LoadCompleteCallback(NTexture texture);
+
 public delegate void LoadErrorCallback(string error);
 
 /// <summary>
@@ -14,17 +16,19 @@ public delegate void LoadErrorCallback(string error);
 /// </summary>
 public class IconManager : MonoBehaviour
 {
-    static IconManager _instance;
+    private static IconManager _instance;
+
     public static IconManager inst
     {
         get
         {
             if (_instance == null)
             {
-                GameObject go = new GameObject("IconManager");
+                var go = new GameObject("IconManager");
                 DontDestroyOnLoad(go);
                 _instance = go.AddComponent<IconManager>();
             }
+
             return _instance;
         }
     }
@@ -32,12 +36,12 @@ public class IconManager : MonoBehaviour
     public const int POOL_CHECK_TIME = 30;
     public const int MAX_POOL_SIZE = 10;
 
-    List<LoadItem> _items;
-    bool _started;
-    Hashtable _pool;
-    string _basePath;
+    private List<LoadItem> _items;
+    private bool _started;
+    private Hashtable _pool;
+    private string _basePath;
 
-    void Awake()
+    private void Awake()
     {
         _items = new List<LoadItem>();
         _pool = new Hashtable();
@@ -49,10 +53,10 @@ public class IconManager : MonoBehaviour
     }
 
     public void LoadIcon(string url,
-                    LoadCompleteCallback onSuccess,
-                    LoadErrorCallback onFail)
+        LoadCompleteCallback onSuccess,
+        LoadErrorCallback onFail)
     {
-        LoadItem item = new LoadItem();
+        var item = new LoadItem();
         item.url = url;
         item.onSuccess = onSuccess;
         item.onFail = onFail;
@@ -61,7 +65,7 @@ public class IconManager : MonoBehaviour
             StartCoroutine(Run());
     }
 
-    IEnumerator Run()
+    private IEnumerator Run()
     {
         _started = true;
 
@@ -74,13 +78,15 @@ public class IconManager : MonoBehaviour
                 _items.RemoveAt(0);
             }
             else
+            {
                 break;
+            }
 
             if (_pool.ContainsKey(item.url))
             {
                 //Debug.Log("hit " + item.url);
 
-                NTexture texture = (NTexture)_pool[item.url];
+                var texture = (NTexture) _pool[item.url];
                 texture.refCount++;
 
                 if (item.onSuccess != null)
@@ -89,10 +95,10 @@ public class IconManager : MonoBehaviour
                 continue;
             }
 
-            string url = _basePath + item.url + ".ab";
+            var url = _basePath + item.url + ".ab";
 #if UNITY_2017_2_OR_NEWER
 #if UNITY_2018_1_OR_NEWER
-            UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);
+            var www = UnityWebRequestAssetBundle.GetAssetBundle(url);
 #else
             UnityWebRequest www = UnityWebRequest.GetAssetBundle(url);
 #endif
@@ -100,7 +106,7 @@ public class IconManager : MonoBehaviour
 
             if (!www.isNetworkError && !www.isHttpError)
             {
-                AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
+                var bundle = DownloadHandlerAssetBundle.GetContent(www);
 #else
             WWW www = new WWW(url);
             yield return www;
@@ -118,7 +124,7 @@ public class IconManager : MonoBehaviour
                     continue;
                 }
 #if (UNITY_5 || UNITY_5_3_OR_NEWER)
-                NTexture texture = new NTexture(bundle.LoadAllAssets<Texture2D>()[0]);
+                var texture = new NTexture(bundle.LoadAllAssets<Texture2D>()[0]);
 #else
                 NTexture texture = new NTexture((Texture2D)bundle.mainAsset);
 #endif
@@ -140,18 +146,18 @@ public class IconManager : MonoBehaviour
         _started = false;
     }
 
-    IEnumerator FreeIdleIcons()
+    private IEnumerator FreeIdleIcons()
     {
         yield return new WaitForSeconds(POOL_CHECK_TIME); //check the pool every 30 seconds
 
-        int cnt = _pool.Count;
+        var cnt = _pool.Count;
         if (cnt > MAX_POOL_SIZE)
         {
             ArrayList toRemove = null;
             foreach (DictionaryEntry de in _pool)
             {
-                string key = (string)de.Key;
-                NTexture texture = (NTexture)de.Value;
+                var key = (string) de.Key;
+                var texture = (NTexture) de.Value;
                 if (texture.refCount == 0)
                 {
                     if (toRemove == null)
@@ -166,17 +172,15 @@ public class IconManager : MonoBehaviour
                         break;
                 }
             }
+
             if (toRemove != null)
-            {
                 foreach (string key in toRemove)
                     _pool.Remove(key);
-            }
         }
     }
-
 }
 
-class LoadItem
+internal class LoadItem
 {
     public string url;
     public LoadCompleteCallback onSuccess;

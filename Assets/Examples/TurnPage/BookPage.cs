@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using FairyGUI;
 
-class BookPage : GComponent
+internal class BookPage : GComponent
 {
-    Controller _style;
-    GoWrapper _modelWrapper;
-    GObject _pageNumber;
+    private Controller _style;
+    private GoWrapper _modelWrapper;
+    private GObject _pageNumber;
 
     public override void ConstructFromXML(FairyGUI.Utils.XML xml)
     {
         base.ConstructFromXML(xml);
-        
+
         _style = GetController("style");
 
         _pageNumber = GetChild("pn");
@@ -24,13 +24,15 @@ class BookPage : GComponent
         _pageNumber.text = (pageIndex + 1).ToString();
 
         if (pageIndex == 0)
+        {
             _style.selectedIndex = 0; //pic page
+        }
         else if (pageIndex == 2)
         {
             if (_modelWrapper.wrapTarget == null)
             {
-                Object prefab = Resources.Load("Role/npc3");
-                GameObject go = (GameObject)Object.Instantiate(prefab);
+                var prefab = Resources.Load("Role/npc3");
+                var go = (GameObject) Object.Instantiate(prefab);
                 go.transform.localPosition = new Vector3(0, 0, 1000);
                 go.transform.localScale = new Vector3(120, 120, 120);
                 go.transform.localEulerAngles = new Vector3(0, 100, 0);
@@ -41,6 +43,8 @@ class BookPage : GComponent
             _style.selectedIndex = 2; //show a model
         }
         else
+        {
             _style.selectedIndex = 1; //empty page
+        }
     }
 }

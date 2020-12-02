@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-
     public interface IEventDispatcher
     {
         void AddEventListener(string strType, EventCallback0 callback);

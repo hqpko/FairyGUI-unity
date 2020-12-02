@@ -6,7 +6,6 @@ namespace FairyGUI
     [AddComponentMenu("FairyGUI/UI Content Scaler")]
     public class UIContentScaler : MonoBehaviour
     {
-
         public enum ScaleMode
         {
             ConstantPixelSize,
@@ -25,18 +24,13 @@ namespace FairyGUI
 
         public ScreenMatchMode screenMatchMode;
 
-
         public int designResolutionX;
-
 
         public int designResolutionY;
 
-
         public int fallbackScreenDPI = 96;
 
-
         public int defaultSpriteDPI = 96;
-
 
         public float constantScaleFactor = 1;
 
@@ -45,21 +39,18 @@ namespace FairyGUI
         /// </summary>
         public bool ignoreOrientation = false;
 
-        [System.NonSerialized]
-        public static float scaleFactor = 1;
+        [System.NonSerialized] public static float scaleFactor = 1;
 
-        [System.NonSerialized]
-        public static int scaleLevel = 0;
+        [System.NonSerialized] public static int scaleLevel = 0;
 
-        [System.NonSerialized]
-        bool _changed;
+        [System.NonSerialized] private bool _changed;
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (Application.isPlaying)
             {
                 //播放模式下都是通过Stage自带的UIContentScaler实现调整的，所以这里只是把参数传过去
-                UIContentScaler scaler = Stage.inst.gameObject.GetComponent<UIContentScaler>();
+                var scaler = Stage.inst.gameObject.GetComponent<UIContentScaler>();
                 if (scaler != this)
                 {
                     scaler.scaleMode = scaleMode;
@@ -79,15 +70,18 @@ namespace FairyGUI
                     {
                         scaler.constantScaleFactor = constantScaleFactor;
                     }
+
                     scaler.ApplyChange();
                     GRoot.inst.ApplyContentScaleFactor();
                 }
             }
             else //Screen width/height is not reliable in OnEnable in editmode
+            {
                 _changed = true;
+            }
         }
 
-        void Update()
+        private void Update()
         {
             if (_changed)
             {
@@ -96,7 +90,7 @@ namespace FairyGUI
             }
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (!Application.isPlaying)
             {
@@ -111,7 +105,6 @@ namespace FairyGUI
         {
             _changed = true;
         }
-
 
         public void ApplyChange()
         {
@@ -128,35 +121,41 @@ namespace FairyGUI
                 screenWidth = Screen.width;
                 screenHeight = Screen.height;
             }
+
             if (scaleMode == ScaleMode.ScaleWithScreenSize)
             {
                 if (designResolutionX == 0 || designResolutionY == 0)
                     return;
 
-                int dx = designResolutionX;
-                int dy = designResolutionY;
-                if (!ignoreOrientation && (screenWidth > screenHeight && dx < dy || screenWidth < screenHeight && dx > dy))
+                var dx = designResolutionX;
+                var dy = designResolutionY;
+                if (!ignoreOrientation &&
+                    (screenWidth > screenHeight && dx < dy || screenWidth < screenHeight && dx > dy))
                 {
                     //scale should not change when orientation change
-                    int tmp = dx;
+                    var tmp = dx;
                     dx = dy;
                     dy = tmp;
                 }
 
                 if (screenMatchMode == ScreenMatchMode.MatchWidthOrHeight)
                 {
-                    float s1 = (float)screenWidth / dx;
-                    float s2 = (float)screenHeight / dy;
+                    var s1 = (float) screenWidth / dx;
+                    var s2 = (float) screenHeight / dy;
                     scaleFactor = Mathf.Min(s1, s2);
                 }
                 else if (screenMatchMode == ScreenMatchMode.MatchWidth)
-                    scaleFactor = (float)screenWidth / dx;
+                {
+                    scaleFactor = (float) screenWidth / dx;
+                }
                 else
-                    scaleFactor = (float)screenHeight / dy;
+                {
+                    scaleFactor = (float) screenHeight / dy;
+                }
             }
             else if (scaleMode == ScaleMode.ConstantPhysicalSize)
             {
-                float dpi = Screen.dpi;
+                var dpi = Screen.dpi;
                 if (dpi == 0)
                     dpi = fallbackScreenDPI;
                 if (dpi == 0)
@@ -164,7 +163,9 @@ namespace FairyGUI
                 scaleFactor = dpi / (defaultSpriteDPI == 0 ? 96 : defaultSpriteDPI);
             }
             else
+            {
                 scaleFactor = constantScaleFactor;
+            }
 
             if (scaleFactor > 10)
                 scaleFactor = 10;
@@ -174,7 +175,7 @@ namespace FairyGUI
             StageCamera.screenSizeVer++;
         }
 
-        void UpdateScaleLevel()
+        private void UpdateScaleLevel()
         {
             if (scaleFactor > 3)
                 scaleLevel = 3; //x4

@@ -9,17 +9,18 @@ namespace FairyGUI
     /// </summary>
     public class PinchGesture : EventDispatcher
     {
-
         public GObject host { get; private set; }
 
         /// <summary>
         /// 当两个手指开始呈捏手势时派发该事件。
         /// </summary>
         public EventListener onBegin { get; private set; }
+
         /// <summary>
         /// 当其中一个手指离开屏幕时派发该事件。
         /// </summary>
         public EventListener onEnd { get; private set; }
+
         /// <summary>
         /// 当手势动作时派发该事件。
         /// </summary>
@@ -35,11 +36,11 @@ namespace FairyGUI
         /// </summary>
         public float delta;
 
-        float _startDistance;
-        float _lastScale;
-        int[] _touches;
-        bool _started;
-        bool _touchBegan;
+        private float _startDistance;
+        private float _lastScale;
+        private int[] _touches;
+        private bool _started;
+        private bool _touchBegan;
 
         public PinchGesture(GObject host)
         {
@@ -95,32 +96,30 @@ namespace FairyGUI
             }
         }
 
-        void __touchBegin(EventContext context)
+        private void __touchBegin(EventContext context)
         {
             if (Stage.inst.touchCount == 2)
-            {
                 if (!_started && !_touchBegan)
                 {
                     _touchBegan = true;
                     Stage.inst.GetAllTouch(_touches);
-                    Vector2 pt1 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[0]));
-                    Vector2 pt2 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[1]));
+                    var pt1 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[0]));
+                    var pt2 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[1]));
                     _startDistance = Vector2.Distance(pt1, pt2);
 
                     context.CaptureTouch();
                 }
-            }
         }
 
-        void __touchMove(EventContext context)
+        private void __touchMove(EventContext context)
         {
             if (!_touchBegan || Stage.inst.touchCount != 2)
                 return;
 
-            InputEvent evt = context.inputEvent;
-            Vector2 pt1 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[0]));
-            Vector2 pt2 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[1]));
-            float dist = Vector2.Distance(pt1, pt2);
+            var evt = context.inputEvent;
+            var pt1 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[0]));
+            var pt2 = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touches[1]));
+            var dist = Vector2.Distance(pt1, pt2);
 
             if (!_started && Mathf.Abs(dist - _startDistance) > UIConfig.touchDragSensitivity)
             {
@@ -133,15 +132,15 @@ namespace FairyGUI
 
             if (_started)
             {
-                float ss = dist / _startDistance;
+                var ss = dist / _startDistance;
                 delta = ss - _lastScale;
                 _lastScale = ss;
-                this.scale += delta;
+                scale += delta;
                 onAction.Call(evt);
             }
         }
 
-        void __touchEnd(EventContext context)
+        private void __touchEnd(EventContext context)
         {
             _touchBegan = false;
             if (_started)

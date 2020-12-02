@@ -3,11 +3,11 @@ using FairyGUI;
 
 public class PullToRefreshMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GList _list1;
-    GList _list2;
+    private GComponent _mainView;
+    private GList _list1;
+    private GList _list2;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -15,9 +15,9 @@ public class PullToRefreshMain : MonoBehaviour
         UIObjectFactory.SetPackageItemExtension("ui://PullToRefresh/Header", typeof(ScrollPaneHeader));
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _list1 = _mainView.GetChild("list1").asList;
         _list1.itemRenderer = RenderListItem1;
@@ -32,21 +32,21 @@ public class PullToRefreshMain : MonoBehaviour
         _list2.scrollPane.onPullUpRelease.Add(OnPullUpToRefresh);
     }
 
-    void RenderListItem1(int index, GObject obj)
+    private void RenderListItem1(int index, GObject obj)
     {
-        GButton item = obj.asButton;
+        var item = obj.asButton;
         item.title = "Item " + (_list1.numItems - index - 1);
     }
 
-    void RenderListItem2(int index, GObject obj)
+    private void RenderListItem2(int index, GObject obj)
     {
-        GButton item = obj.asButton;
+        var item = obj.asButton;
         item.title = "Item " + index;
     }
 
-    void OnPullDownToRefresh()
+    private void OnPullDownToRefresh()
     {
-        ScrollPaneHeader header = (ScrollPaneHeader)_list1.scrollPane.header;
+        var header = (ScrollPaneHeader) _list1.scrollPane.header;
         if (header.ReadyToRefresh)
         {
             header.SetRefreshStatus(2);
@@ -70,9 +70,9 @@ public class PullToRefreshMain : MonoBehaviour
         }
     }
 
-    void OnPullUpToRefresh()
+    private void OnPullUpToRefresh()
     {
-        GComponent footer = (GComponent)_list2.scrollPane.footer;
+        var footer = (GComponent) _list2.scrollPane.footer;
 
         footer.GetController("c1").selectedIndex = 1;
         _list2.scrollPane.LockFooter(footer.sourceHeight);
@@ -88,11 +88,8 @@ public class PullToRefreshMain : MonoBehaviour
         });
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

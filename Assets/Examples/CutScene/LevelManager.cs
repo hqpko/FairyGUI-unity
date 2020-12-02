@@ -7,23 +7,25 @@ using FairyGUI;
 
 public class LevelManager : MonoBehaviour
 {
-    static LevelManager _instance;
+    private static LevelManager _instance;
+
     public static LevelManager inst
     {
         get
         {
             if (_instance == null)
             {
-                GameObject go = new GameObject("LevelManager");
+                var go = new GameObject("LevelManager");
                 DontDestroyOnLoad(go);
                 _instance = go.AddComponent<LevelManager>();
             }
+
             return _instance;
         }
     }
 
-    GComponent _cutSceneView;
-    GComponent _mainView;
+    private GComponent _cutSceneView;
+    private GComponent _mainView;
 
     public LevelManager()
     {
@@ -39,15 +41,9 @@ public class LevelManager : MonoBehaviour
         _mainView.SetSize(GRoot.inst.width, GRoot.inst.height);
         _mainView.AddRelation(GRoot.inst, RelationType.Size);
 
-        _mainView.GetChild("n0").onClick.Add(() =>
-        {
-            LoadLevel("scene1");
-        });
+        _mainView.GetChild("n0").onClick.Add(() => { LoadLevel("scene1"); });
 
-        _mainView.GetChild("n1").onClick.Add(() =>
-        {
-            LoadLevel("scene2");
-        });
+        _mainView.GetChild("n1").onClick.Add(() => { LoadLevel("scene2"); });
     }
 
     public void LoadLevel(string levelName)
@@ -56,20 +52,20 @@ public class LevelManager : MonoBehaviour
         GRoot.inst.AddChild(_cutSceneView);
     }
 
-    IEnumerator DoLoad(string sceneName)
+    private IEnumerator DoLoad(string sceneName)
     {
         GRoot.inst.AddChild(_cutSceneView);
-        GProgressBar pb = _cutSceneView.GetChild("pb").asProgress;
+        var pb = _cutSceneView.GetChild("pb").asProgress;
         pb.value = 0;
 #if UNITY_5_3_OR_NEWER
-        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+        var op = SceneManager.LoadSceneAsync(sceneName);
 #else
         AsyncOperation op = Application.LoadLevelAsync(sceneName);
 #endif
-        float startTime = Time.time;
+        var startTime = Time.time;
         while (!op.isDone || pb.value != 100)
         {
-            int value = (int)((Time.time - startTime) * 100f / 3f);
+            var value = (int) ((Time.time - startTime) * 100f / 3f);
             if (value > 100)
                 value = 100;
             pb.value = value;

@@ -35,21 +35,21 @@ namespace FairyGUI
         protected Controller _relatedController;
         protected string _relatedPageId;
 
-        ButtonMode _mode;
-        bool _selected;
-        string _title;
-        string _icon;
-        string _selectedTitle;
-        string _selectedIcon;
-        Controller _buttonController;
-        int _downEffect;
-        float _downEffectValue;
-        bool _downScaled;
+        private ButtonMode _mode;
+        private bool _selected;
+        private string _title;
+        private string _icon;
+        private string _selectedTitle;
+        private string _selectedIcon;
+        private Controller _buttonController;
+        private int _downEffect;
+        private float _downEffectValue;
+        private bool _downScaled;
 
-        bool _down;
-        bool _over;
+        private bool _down;
+        private bool _over;
 
-        EventListener _onChanged;
+        private EventListener _onChanged;
 
         public const string UP = "up";
         public const string DOWN = "down";
@@ -71,24 +71,18 @@ namespace FairyGUI
         /// Dispatched when the button status was changed.
         /// 如果为单选或多选按钮，当按钮的选中状态发生改变时，此事件触发。
         /// </summary>
-        public EventListener onChanged
-        {
-            get { return _onChanged ?? (_onChanged = new EventListener(this, "onChanged")); }
-        }
+        public EventListener onChanged => _onChanged ?? (_onChanged = new EventListener(this, "onChanged"));
 
         /// <summary>
         /// Icon of the button.
         /// </summary>
-        override public string icon
+        public override string icon
         {
-            get
-            {
-                return _icon;
-            }
+            get => _icon;
             set
             {
                 _icon = value;
-                value = (_selected && _selectedIcon != null) ? _selectedIcon : _icon;
+                value = _selected && _selectedIcon != null ? _selectedIcon : _icon;
                 if (_iconObject != null)
                     _iconObject.icon = value;
                 UpdateGear(7);
@@ -100,15 +94,12 @@ namespace FairyGUI
         /// </summary>
         public string title
         {
-            get
-            {
-                return _title;
-            }
+            get => _title;
             set
             {
                 _title = value;
                 if (_titleObject != null)
-                    _titleObject.text = (_selected && _selectedTitle != null) ? _selectedTitle : _title;
+                    _titleObject.text = _selected && _selectedTitle != null ? _selectedTitle : _title;
                 UpdateGear(6);
             }
         }
@@ -116,10 +107,10 @@ namespace FairyGUI
         /// <summary>
         /// Same of the title.
         /// </summary>
-        override public string text
+        public override string text
         {
-            get { return this.title; }
-            set { this.title = value; }
+            get => title;
+            set => title = value;
         }
 
         /// <summary>
@@ -127,14 +118,11 @@ namespace FairyGUI
         /// </summary>
         public string selectedIcon
         {
-            get
-            {
-                return _selectedIcon;
-            }
+            get => _selectedIcon;
             set
             {
                 _selectedIcon = value;
-                value = (_selected && _selectedIcon != null) ? _selectedIcon : _icon;
+                value = _selected && _selectedIcon != null ? _selectedIcon : _icon;
                 if (_iconObject != null)
                     _iconObject.icon = value;
             }
@@ -145,15 +133,12 @@ namespace FairyGUI
         /// </summary>
         public string selectedTitle
         {
-            get
-            {
-                return _selectedTitle;
-            }
+            get => _selectedTitle;
             set
             {
                 _selectedTitle = value;
                 if (_titleObject != null)
-                    _titleObject.text = (_selected && _selectedTitle != null) ? _selectedTitle : _title;
+                    _titleObject.text = _selected && _selectedTitle != null ? _selectedTitle : _title;
             }
         }
 
@@ -164,7 +149,7 @@ namespace FairyGUI
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.color;
                 else
@@ -172,7 +157,7 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                 {
                     tf.color = value;
@@ -181,19 +166,17 @@ namespace FairyGUI
             }
         }
 
-
         public Color color
         {
-            get { return this.titleColor; }
-            set { this.titleColor = value; }
+            get => titleColor;
+            set => titleColor = value;
         }
-
 
         public int titleFontSize
         {
             get
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                     return tf.textFormat.size;
                 else
@@ -201,10 +184,10 @@ namespace FairyGUI
             }
             set
             {
-                GTextField tf = GetTextField();
+                var tf = GetTextField();
                 if (tf != null)
                 {
-                    TextFormat format = tf.textFormat;
+                    var format = tf.textFormat;
                     format.size = value;
                     tf.textFormat = format;
                 }
@@ -216,10 +199,7 @@ namespace FairyGUI
         /// </summary>
         public bool selected
         {
-            get
-            {
-                return _selected;
-            }
+            get => _selected;
 
             set
             {
@@ -234,10 +214,11 @@ namespace FairyGUI
                         _titleObject.text = _selected ? _selectedTitle : _title;
                     if (_selectedIcon != null)
                     {
-                        string str = _selected ? _selectedIcon : _icon;
+                        var str = _selected ? _selectedIcon : _icon;
                         if (_iconObject != null)
                             _iconObject.icon = str;
                     }
+
                     if (_relatedController != null
                         && parent != null
                         && !parent._buildingDisplayList)
@@ -249,10 +230,11 @@ namespace FairyGUI
                                 parent.AdjustRadioGroupDepth(this, _relatedController);
                         }
                         else if (_mode == ButtonMode.Check && _relatedController.selectedPageId == _relatedPageId)
+                        {
                             _relatedController.oppositePageId = _relatedPageId;
+                        }
                     }
                 }
-
             }
         }
 
@@ -262,16 +244,13 @@ namespace FairyGUI
         /// <seealso cref="ButtonMode"/>
         public ButtonMode mode
         {
-            get
-            {
-                return _mode;
-            }
+            get => _mode;
             set
             {
                 if (_mode != value)
                 {
                     if (value == ButtonMode.Common)
-                        this.selected = false;
+                        selected = false;
                     _mode = value;
                 }
             }
@@ -283,10 +262,7 @@ namespace FairyGUI
         /// </summary>
         public Controller relatedController
         {
-            get
-            {
-                return _relatedController;
-            }
+            get => _relatedController;
             set
             {
                 if (value != _relatedController)
@@ -297,17 +273,10 @@ namespace FairyGUI
             }
         }
 
-
         public string relatedPageId
         {
-            get
-            {
-                return _relatedPageId;
-            }
-            set
-            {
-                _relatedPageId = value;
-            }
+            get => _relatedPageId;
+            set => _relatedPageId = value;
         }
 
         /// <summary>
@@ -326,33 +295,27 @@ namespace FairyGUI
                     (object param) =>
                     {
                         SetState(UP);
-                        if (clickCall)
-                        {
-                            onClick.Call();
-                        }
+                        if (clickCall) onClick.Call();
                     }
                 );
             }
             else
             {
-                if (clickCall)
-                {
-                    onClick.Call();
-                }
+                if (clickCall) onClick.Call();
             }
+
             __click();
         }
-
 
         /// <returns></returns>
         public GTextField GetTextField()
         {
             if (_titleObject is GTextField)
-                return (GTextField)_titleObject;
+                return (GTextField) _titleObject;
             else if (_titleObject is GLabel)
-                return ((GLabel)_titleObject).GetTextField();
+                return ((GLabel) _titleObject).GetTextField();
             else if (_titleObject is GButton)
-                return ((GButton)_titleObject).GetTextField();
+                return ((GButton) _titleObject).GetTextField();
             else
                 return null;
         }
@@ -364,24 +327,24 @@ namespace FairyGUI
 
             if (_downEffect == 1)
             {
-                int cnt = this.numChildren;
+                var cnt = numChildren;
                 if (val == DOWN || val == SELECTED_OVER || val == SELECTED_DISABLED)
                 {
-                    Color color = new Color(_downEffectValue, _downEffectValue, _downEffectValue);
-                    for (int i = 0; i < cnt; i++)
+                    var color = new Color(_downEffectValue, _downEffectValue, _downEffectValue);
+                    for (var i = 0; i < cnt; i++)
                     {
-                        GObject obj = this.GetChildAt(i);
-                        if ((obj is IColorGear) && !(obj is GTextField))
-                            ((IColorGear)obj).color = color;
+                        var obj = GetChildAt(i);
+                        if (obj is IColorGear && !(obj is GTextField))
+                            ((IColorGear) obj).color = color;
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < cnt; i++)
+                    for (var i = 0; i < cnt; i++)
                     {
-                        GObject obj = this.GetChildAt(i);
-                        if ((obj is IColorGear) && !(obj is GTextField))
-                            ((IColorGear)obj).color = Color.white;
+                        var obj = GetChildAt(i);
+                        if (obj is IColorGear && !(obj is GTextField))
+                            ((IColorGear) obj).color = Color.white;
                     }
                 }
             }
@@ -392,7 +355,7 @@ namespace FairyGUI
                     if (!_downScaled)
                     {
                         _downScaled = true;
-                        SetScale(this.scaleX * _downEffectValue, this.scaleY * _downEffectValue);
+                        SetScale(scaleX * _downEffectValue, scaleY * _downEffectValue);
                     }
                 }
                 else
@@ -400,7 +363,7 @@ namespace FairyGUI
                     if (_downScaled)
                     {
                         _downScaled = false;
-                        SetScale(this.scaleX / _downEffectValue, this.scaleY / _downEffectValue);
+                        SetScale(scaleX / _downEffectValue, scaleY / _downEffectValue);
                     }
                 }
             }
@@ -408,7 +371,7 @@ namespace FairyGUI
 
         protected void SetCurrentState()
         {
-            if (this.grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
+            if (grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
             {
                 if (_selected)
                     SetState(SELECTED_DISABLED);
@@ -424,19 +387,19 @@ namespace FairyGUI
             }
         }
 
-        override public void HandleControllerChanged(Controller c)
+        public override void HandleControllerChanged(Controller c)
         {
             base.HandleControllerChanged(c);
 
             if (_relatedController == c)
-                this.selected = _relatedPageId == c.selectedPageId;
+                selected = _relatedPageId == c.selectedPageId;
         }
 
-        override protected void HandleGrayedChanged()
+        protected override void HandleGrayedChanged()
         {
             if (_buttonController != null && _buttonController.HasPage(DISABLED))
             {
-                if (this.grayed)
+                if (grayed)
                 {
                     if (_selected)
                         SetState(SELECTED_DISABLED);
@@ -452,22 +415,24 @@ namespace FairyGUI
                 }
             }
             else
+            {
                 base.HandleGrayedChanged();
+            }
         }
 
-        override protected void ConstructExtension(ByteBuffer buffer)
+        protected override void ConstructExtension(ByteBuffer buffer)
         {
             buffer.Seek(0, 6);
 
-            _mode = (ButtonMode)buffer.ReadByte();
-            string str = buffer.ReadS();
+            _mode = (ButtonMode) buffer.ReadByte();
+            var str = buffer.ReadS();
             if (str != null)
                 sound = UIPackage.GetItemAssetByURL(str) as NAudioClip;
             soundVolumeScale = buffer.ReadFloat();
             _downEffect = buffer.ReadByte();
             _downEffectValue = buffer.ReadFloat();
             if (_downEffect == 2)
-                SetPivot(0.5f, 0.5f, this.pivotAsAnchor);
+                SetPivot(0.5f, 0.5f, pivotAsAnchor);
 
             _buttonController = GetController("button");
             _titleObject = GetChild("title");
@@ -488,35 +453,35 @@ namespace FairyGUI
             displayObject.onClick.Add(__click);
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
             if (!buffer.Seek(beginPos, 6))
                 return;
 
-            if ((ObjectType)buffer.ReadByte() != packageItem.objectType)
+            if ((ObjectType) buffer.ReadByte() != packageItem.objectType)
                 return;
 
             string str;
 
             str = buffer.ReadS();
             if (str != null)
-                this.title = str;
+                title = str;
             str = buffer.ReadS();
             if (str != null)
-                this.selectedTitle = str;
+                selectedTitle = str;
             str = buffer.ReadS();
             if (str != null)
-                this.icon = str;
+                icon = str;
             str = buffer.ReadS();
             if (str != null)
-                this.selectedIcon = str;
+                selectedIcon = str;
             if (buffer.ReadBool())
-                this.titleColor = buffer.ReadColor();
-            int iv = buffer.ReadInt();
+                titleColor = buffer.ReadColor();
+            var iv = buffer.ReadInt();
             if (iv != 0)
-                this.titleFontSize = iv;
+                titleFontSize = iv;
             iv = buffer.ReadShort();
             if (iv >= 0)
                 _relatedController = parent.GetControllerAt(iv);
@@ -528,7 +493,7 @@ namespace FairyGUI
             if (buffer.ReadBool())
                 soundVolumeScale = buffer.ReadFloat();
 
-            this.selected = buffer.ReadBool();
+            selected = buffer.ReadBool();
         }
 
         private void __rollover()
@@ -540,7 +505,7 @@ namespace FairyGUI
             if (_down)
                 return;
 
-            if (this.grayed && _buttonController.HasPage(DISABLED))
+            if (grayed && _buttonController.HasPage(DISABLED))
                 return;
 
             SetState(_selected ? SELECTED_OVER : OVER);
@@ -555,7 +520,7 @@ namespace FairyGUI
             if (_down)
                 return;
 
-            if (this.grayed && _buttonController.HasPage(DISABLED))
+            if (grayed && _buttonController.HasPage(DISABLED))
                 return;
 
             SetState(_selected ? DOWN : UP);
@@ -571,7 +536,7 @@ namespace FairyGUI
 
             if (_mode == ButtonMode.Common)
             {
-                if (this.grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
+                if (grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
                     SetState(SELECTED_DISABLED);
                 else
                     SetState(DOWN);
@@ -580,9 +545,9 @@ namespace FairyGUI
             if (linkedPopup != null)
             {
                 if (linkedPopup is Window)
-                    ((Window)linkedPopup).ToggleStatus();
+                    ((Window) linkedPopup).ToggleStatus();
                 else
-                    this.root.TogglePopup(linkedPopup, this);
+                    root.TogglePopup(linkedPopup, this);
             }
         }
 
@@ -593,7 +558,7 @@ namespace FairyGUI
                 _down = false;
                 if (_mode == ButtonMode.Common)
                 {
-                    if (this.grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
+                    if (grayed && _buttonController != null && _buttonController.HasPage(DISABLED))
                         SetState(DISABLED);
                     else if (_over)
                         SetState(OVER);
@@ -605,9 +570,7 @@ namespace FairyGUI
                     if (!_over
                         && _buttonController != null
                         && (_buttonController.selectedPage == OVER || _buttonController.selectedPage == SELECTED_OVER))
-                    {
                         SetCurrentState();
-                    }
                 }
             }
         }
@@ -627,7 +590,7 @@ namespace FairyGUI
             {
                 if (changeStateOnClick)
                 {
-                    this.selected = !_selected;
+                    selected = !_selected;
                     DispatchEvent("onChanged", null);
                 }
             }
@@ -635,7 +598,7 @@ namespace FairyGUI
             {
                 if (changeStateOnClick && !_selected)
                 {
-                    this.selected = true;
+                    selected = true;
                     DispatchEvent("onChanged", null);
                 }
             }

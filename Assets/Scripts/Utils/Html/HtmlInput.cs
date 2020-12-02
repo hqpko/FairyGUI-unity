@@ -2,14 +2,13 @@
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlInput : IHtmlObject
     {
         public GTextInput textInput { get; private set; }
 
-        RichTextField _owner;
-        HtmlElement _element;
-        bool _hidden;
+        private RichTextField _owner;
+        private HtmlElement _element;
+        private bool _hidden;
 
         public static int defaultBorderSize = 2;
         public static Color defaultBorderColor = ToolSet.ColorFromRGB(0xA9A9A9);
@@ -17,55 +16,44 @@ namespace FairyGUI.Utils
 
         public HtmlInput()
         {
-            textInput = (GTextInput)UIObjectFactory.NewObject(ObjectType.InputText);
+            textInput = (GTextInput) UIObjectFactory.NewObject(ObjectType.InputText);
             textInput.gameObjectName = "HtmlInput";
             textInput.verticalAlign = VertAlignType.Middle;
         }
 
-        public DisplayObject displayObject
-        {
-            get { return textInput.displayObject; }
-        }
+        public DisplayObject displayObject => textInput.displayObject;
 
-        public HtmlElement element
-        {
-            get { return _element; }
-        }
+        public HtmlElement element => _element;
 
-        public float width
-        {
-            get { return _hidden ? 0 : textInput.width; }
-        }
+        public float width => _hidden ? 0 : textInput.width;
 
-        public float height
-        {
-            get { return _hidden ? 0 : textInput.height; }
-        }
+        public float height => _hidden ? 0 : textInput.height;
 
         public void Create(RichTextField owner, HtmlElement element)
         {
             _owner = owner;
             _element = element;
 
-            string type = element.GetString("type");
+            var type = element.GetString("type");
             if (type != null)
                 type = type.ToLower();
 
             _hidden = type == "hidden";
             if (!_hidden)
             {
-                int width = element.GetInt("width", 0);
-                int height = element.GetInt("height", 0);
-                int borderSize = element.GetInt("border", defaultBorderSize);
-                Color borderColor = element.GetColor("border-color", defaultBorderColor);
-                Color backgroundColor = element.GetColor("background-color", defaultBackgroundColor);
+                var width = element.GetInt("width", 0);
+                var height = element.GetInt("height", 0);
+                var borderSize = element.GetInt("border", defaultBorderSize);
+                var borderColor = element.GetColor("border-color", defaultBorderColor);
+                var backgroundColor = element.GetColor("background-color", defaultBackgroundColor);
 
                 if (width == 0)
                 {
                     width = element.space;
                     if (width > _owner.width / 2 || width < 100)
-                        width = (int)_owner.width / 2;
+                        width = (int) _owner.width / 2;
                 }
+
                 if (height == 0)
                     height = element.format.size + 10;
 
@@ -77,6 +65,7 @@ namespace FairyGUI.Utils
                 textInput.backgroundColor = backgroundColor;
                 textInput.SetSize(width, height);
             }
+
             textInput.text = element.GetString("value");
         }
 

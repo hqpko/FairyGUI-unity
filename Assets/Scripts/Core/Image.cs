@@ -28,13 +28,13 @@ namespace FairyGUI
 
         public NTexture texture
         {
-            get { return graphics.texture; }
-            set { UpdateTexture(value); }
+            get => graphics.texture;
+            set => UpdateTexture(value);
         }
 
         public Vector2 textureScale
         {
-            get { return _textureScale; }
+            get => _textureScale;
             set
             {
                 _textureScale = value;
@@ -44,7 +44,7 @@ namespace FairyGUI
 
         public Color color
         {
-            get { return graphics.color; }
+            get => graphics.color;
             set
             {
                 graphics.color = value;
@@ -54,7 +54,7 @@ namespace FairyGUI
 
         public FillMethod fillMethod
         {
-            get { return _fillMesh != null ? _fillMesh.method : FillMethod.None; }
+            get => _fillMesh != null ? _fillMesh.method : FillMethod.None;
             set
             {
                 if (_fillMesh == null)
@@ -75,7 +75,7 @@ namespace FairyGUI
 
         public int fillOrigin
         {
-            get { return _fillMesh != null ? _fillMesh.origin : 0; }
+            get => _fillMesh != null ? _fillMesh.origin : 0;
             set
             {
                 if (_fillMesh == null)
@@ -91,7 +91,7 @@ namespace FairyGUI
 
         public bool fillClockwise
         {
-            get { return _fillMesh != null ? _fillMesh.clockwise : true; }
+            get => _fillMesh != null ? _fillMesh.clockwise : true;
             set
             {
                 if (_fillMesh == null)
@@ -107,7 +107,7 @@ namespace FairyGUI
 
         public float fillAmount
         {
-            get { return _fillMesh != null ? _fillMesh.amount : 0; }
+            get => _fillMesh != null ? _fillMesh.amount : 0;
             set
             {
                 if (_fillMesh == null)
@@ -123,7 +123,7 @@ namespace FairyGUI
 
         public Rect? scale9Grid
         {
-            get { return _scale9Grid; }
+            get => _scale9Grid;
             set
             {
                 if (_scale9Grid != value)
@@ -136,7 +136,7 @@ namespace FairyGUI
 
         public bool scaleByTile
         {
-            get { return _scaleByTile; }
+            get => _scaleByTile;
             set
             {
                 if (_scaleByTile != value)
@@ -149,7 +149,7 @@ namespace FairyGUI
 
         public int tileGridIndice
         {
-            get { return _tileGridIndice; }
+            get => _tileGridIndice;
             set
             {
                 if (_tileGridIndice != value)
@@ -168,7 +168,7 @@ namespace FairyGUI
                 SetSize(0, 0);
         }
 
-        virtual protected void UpdateTexture(NTexture value)
+        protected virtual void UpdateTexture(NTexture value)
         {
             if (value == graphics.texture)
                 return;
@@ -188,12 +188,12 @@ namespace FairyGUI
             }
             else if (_scaleByTile)
             {
-                NTexture texture = graphics.texture;
+                var texture = graphics.texture;
                 if (texture.root == texture
                     && texture.nativeTexture != null
                     && texture.nativeTexture.wrapMode == TextureWrapMode.Repeat)
                 {
-                    Rect uvRect = vb.uvRect;
+                    var uvRect = vb.uvRect;
                     uvRect.width *= vb.contentRect.width / texture.width * _textureScale.x;
                     uvRect.height *= vb.contentRect.height / texture.height * _textureScale.y;
 
@@ -202,7 +202,7 @@ namespace FairyGUI
                 }
                 else
                 {
-                    Rect contentRect = vb.contentRect;
+                    var contentRect = vb.contentRect;
                     contentRect.width *= _textureScale.x;
                     contentRect.height *= _textureScale.y;
 
@@ -215,10 +215,12 @@ namespace FairyGUI
                 SliceFill(vb);
             }
             else
+            {
                 graphics.OnPopulateMesh(vb);
+            }
         }
 
-        static int[] TRIANGLES_9_GRID = new int[]
+        private static int[] TRIANGLES_9_GRID = new int[]
         {
             4, 0, 1, 1, 5, 4,
             5, 1, 2, 2, 6, 5,
@@ -232,20 +234,20 @@ namespace FairyGUI
             11, 15, 14
         };
 
-        static int[] gridTileIndice = new int[] {-1, 0, -1, 2, 4, 3, -1, 1, -1};
-        static float[] gridX = new float[4];
-        static float[] gridY = new float[4];
-        static float[] gridTexX = new float[4];
-        static float[] gridTexY = new float[4];
+        private static int[] gridTileIndice = new int[] {-1, 0, -1, 2, 4, 3, -1, 1, -1};
+        private static float[] gridX = new float[4];
+        private static float[] gridY = new float[4];
+        private static float[] gridTexX = new float[4];
+        private static float[] gridTexY = new float[4];
 
         public void SliceFill(VertexBuffer vb)
         {
-            NTexture texture = graphics.texture;
-            Rect gridRect = (Rect) _scale9Grid;
-            Rect contentRect = vb.contentRect;
+            var texture = graphics.texture;
+            var gridRect = (Rect) _scale9Grid;
+            var contentRect = vb.contentRect;
             contentRect.width *= _textureScale.x;
             contentRect.height *= _textureScale.y;
-            Rect uvRect = vb.uvRect;
+            var uvRect = vb.uvRect;
 
             float sourceW = texture.width;
             float sourceH = texture.height;
@@ -265,12 +267,12 @@ namespace FairyGUI
                 }
             }
 
-            float sx = uvRect.width / sourceW;
-            float sy = uvRect.height / sourceH;
-            float xMax = uvRect.xMax;
-            float yMax = uvRect.yMax;
-            float xMax2 = gridRect.xMax;
-            float yMax2 = gridRect.yMax;
+            var sx = uvRect.width / sourceW;
+            var sy = uvRect.height / sourceH;
+            var xMax = uvRect.xMax;
+            var yMax = uvRect.yMax;
+            var xMax2 = gridRect.xMax;
+            var yMax2 = gridRect.yMax;
 
             gridTexX[0] = uvRect.x;
             gridTexX[1] = uvRect.x + gridRect.x * sx;
@@ -281,7 +283,7 @@ namespace FairyGUI
             gridTexY[2] = yMax - yMax2 * sy;
             gridTexY[3] = uvRect.y;
 
-            if (contentRect.width >= (sourceW - gridRect.width))
+            if (contentRect.width >= sourceW - gridRect.width)
             {
                 gridX[1] = gridRect.x;
                 gridX[2] = contentRect.width - (sourceW - xMax2);
@@ -289,14 +291,14 @@ namespace FairyGUI
             }
             else
             {
-                float tmp = gridRect.x / (sourceW - xMax2);
+                var tmp = gridRect.x / (sourceW - xMax2);
                 tmp = contentRect.width * tmp / (1 + tmp);
                 gridX[1] = tmp;
                 gridX[2] = tmp;
                 gridX[3] = contentRect.width;
             }
 
-            if (contentRect.height >= (sourceH - gridRect.height))
+            if (contentRect.height >= sourceH - gridRect.height)
             {
                 gridY[1] = gridRect.y;
                 gridY[2] = contentRect.height - (sourceH - yMax2);
@@ -304,7 +306,7 @@ namespace FairyGUI
             }
             else
             {
-                float tmp = gridRect.y / (sourceH - yMax2);
+                var tmp = gridRect.y / (sourceH - yMax2);
                 tmp = contentRect.height * tmp / (1 + tmp);
                 gridY[1] = tmp;
                 gridY[2] = tmp;
@@ -313,12 +315,10 @@ namespace FairyGUI
 
             if (_tileGridIndice == 0)
             {
-                for (int cy = 0; cy < 4; cy++)
-                {
-                    for (int cx = 0; cx < 4; cx++)
-                        vb.AddVert(new Vector2(gridX[cx] / _textureScale.x, gridY[cy] / _textureScale.y),
-                            vb.vertexColor, new Vector2(gridTexX[cx], gridTexY[cy]));
-                }
+                for (var cy = 0; cy < 4; cy++)
+                for (var cx = 0; cx < 4; cx++)
+                    vb.AddVert(new Vector2(gridX[cx] / _textureScale.x, gridY[cy] / _textureScale.y),
+                        vb.vertexColor, new Vector2(gridTexX[cx], gridTexY[cy]));
 
                 vb.AddTriangles(TRIANGLES_9_GRID);
             }
@@ -329,7 +329,7 @@ namespace FairyGUI
                 int row, col;
                 int part;
 
-                for (int pi = 0; pi < 9; pi++)
+                for (var pi = 0; pi < 9; pi++)
                 {
                     col = pi % 3;
                     row = pi / 3;
@@ -340,8 +340,8 @@ namespace FairyGUI
                     if (part != -1 && (_tileGridIndice & (1 << part)) != 0)
                     {
                         TileFill(vb, drawRect, texRect,
-                            (part == 0 || part == 1 || part == 4) ? gridRect.width : drawRect.width,
-                            (part == 2 || part == 3 || part == 4) ? gridRect.height : drawRect.height);
+                            part == 0 || part == 1 || part == 4 ? gridRect.width : drawRect.width,
+                            part == 2 || part == 3 || part == 4 ? gridRect.height : drawRect.height);
                     }
                     else
                     {
@@ -358,35 +358,33 @@ namespace FairyGUI
             }
         }
 
-        void TileFill(VertexBuffer vb, Rect contentRect, Rect uvRect, float sourceW, float sourceH)
+        private void TileFill(VertexBuffer vb, Rect contentRect, Rect uvRect, float sourceW, float sourceH)
         {
-            int hc = Mathf.CeilToInt(contentRect.width / sourceW);
-            int vc = Mathf.CeilToInt(contentRect.height / sourceH);
-            float tailWidth = contentRect.width - (hc - 1) * sourceW;
-            float tailHeight = contentRect.height - (vc - 1) * sourceH;
-            float xMax = uvRect.xMax;
-            float yMax = uvRect.yMax;
+            var hc = Mathf.CeilToInt(contentRect.width / sourceW);
+            var vc = Mathf.CeilToInt(contentRect.height / sourceH);
+            var tailWidth = contentRect.width - (hc - 1) * sourceW;
+            var tailHeight = contentRect.height - (vc - 1) * sourceH;
+            var xMax = uvRect.xMax;
+            var yMax = uvRect.yMax;
 
-            for (int i = 0; i < hc; i++)
+            for (var i = 0; i < hc; i++)
+            for (var j = 0; j < vc; j++)
             {
-                for (int j = 0; j < vc; j++)
-                {
-                    Rect uvTmp = uvRect;
-                    if (i == hc - 1)
-                        uvTmp.xMax = Mathf.Lerp(uvRect.x, xMax, tailWidth / sourceW);
-                    if (j == vc - 1)
-                        uvTmp.yMin = Mathf.Lerp(uvRect.y, yMax, 1 - tailHeight / sourceH);
+                var uvTmp = uvRect;
+                if (i == hc - 1)
+                    uvTmp.xMax = Mathf.Lerp(uvRect.x, xMax, tailWidth / sourceW);
+                if (j == vc - 1)
+                    uvTmp.yMin = Mathf.Lerp(uvRect.y, yMax, 1 - tailHeight / sourceH);
 
-                    Rect drawRect = new Rect(contentRect.x + i * sourceW, contentRect.y + j * sourceH,
-                        i == (hc - 1) ? tailWidth : sourceW, j == (vc - 1) ? tailHeight : sourceH);
+                var drawRect = new Rect(contentRect.x + i * sourceW, contentRect.y + j * sourceH,
+                    i == hc - 1 ? tailWidth : sourceW, j == vc - 1 ? tailHeight : sourceH);
 
-                    drawRect.x /= _textureScale.x;
-                    drawRect.y /= _textureScale.y;
-                    drawRect.width /= _textureScale.x;
-                    drawRect.height /= _textureScale.y;
+                drawRect.x /= _textureScale.x;
+                drawRect.y /= _textureScale.y;
+                drawRect.width /= _textureScale.x;
+                drawRect.height /= _textureScale.y;
 
-                    vb.AddQuad(drawRect, vb.vertexColor, uvTmp);
-                }
+                vb.AddQuad(drawRect, vb.vertexColor, uvTmp);
             }
         }
     }

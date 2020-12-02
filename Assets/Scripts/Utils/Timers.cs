@@ -6,7 +6,6 @@ namespace FairyGUI
 {
     public delegate void TimerCallback(object param);
 
-
     public class Timers
     {
         public static int repeat;
@@ -14,15 +13,16 @@ namespace FairyGUI
 
         public static bool catchCallbackExceptions = false;
 
-        Dictionary<TimerCallback, Anymous_T> _items;
-        Dictionary<TimerCallback, Anymous_T> _toAdd;
-        List<Anymous_T> _toRemove;
-        List<Anymous_T> _pool;
+        private Dictionary<TimerCallback, Anymous_T> _items;
+        private Dictionary<TimerCallback, Anymous_T> _toAdd;
+        private List<Anymous_T> _toRemove;
+        private List<Anymous_T> _pool;
 
-        TimersEngine _engine;
-        GameObject gameObject;
+        private TimersEngine _engine;
+        private GameObject gameObject;
 
         private static Timers _inst;
+
         public static Timers inst
         {
             get
@@ -142,7 +142,7 @@ namespace FairyGUI
         private Anymous_T GetFromPool()
         {
             Anymous_T t;
-            int cnt = _pool.Count;
+            var cnt = _pool.Count;
             if (cnt > 0)
             {
                 t = _pool[cnt - 1];
@@ -151,7 +151,10 @@ namespace FairyGUI
                 t.elapsed = 0;
             }
             else
+            {
                 t = new Anymous_T();
+            }
+
             return t;
         }
 
@@ -163,7 +166,7 @@ namespace FairyGUI
 
         public void Update()
         {
-            float dt = Time.unscaledDeltaTime;
+            var dt = Time.unscaledDeltaTime;
             Dictionary<TimerCallback, Anymous_T>.Enumerator iter;
 
             if (_items.Count > 0)
@@ -171,7 +174,7 @@ namespace FairyGUI
                 iter = _items.GetEnumerator();
                 while (iter.MoveNext())
                 {
-                    Anymous_T i = iter.Current.Value;
+                    var i = iter.Current.Value;
                     if (i.deleted)
                     {
                         _toRemove.Add(i);
@@ -195,11 +198,11 @@ namespace FairyGUI
                             _toRemove.Add(i);
                         }
                     }
+
                     repeat = i.repeat;
                     if (i.callback != null)
                     {
                         if (catchCallbackExceptions)
-                        {
                             try
                             {
                                 i.callback(i.param);
@@ -207,28 +210,30 @@ namespace FairyGUI
                             catch (System.Exception e)
                             {
                                 i.deleted = true;
-                                Debug.LogWarning("FairyGUI: timer(internal=" + i.interval + ", repeat=" + i.repeat + ") callback error > " + e.Message);
+                                Debug.LogWarning("FairyGUI: timer(internal=" + i.interval + ", repeat=" + i.repeat +
+                                                 ") callback error > " + e.Message);
                             }
-                        }
                         else
                             i.callback(i.param);
                     }
                 }
+
                 iter.Dispose();
             }
 
-            int len = _toRemove.Count;
+            var len = _toRemove.Count;
             if (len > 0)
             {
-                for (int k = 0; k < len; k++)
+                for (var k = 0; k < len; k++)
                 {
-                    Anymous_T i = _toRemove[k];
+                    var i = _toRemove[k];
                     if (i.deleted && i.callback != null)
                     {
                         _items.Remove(i.callback);
                         ReturnToPool(i);
                     }
                 }
+
                 _toRemove.Clear();
             }
 
@@ -243,7 +248,7 @@ namespace FairyGUI
         }
     }
 
-    class Anymous_T
+    internal class Anymous_T
     {
         public float interval;
         public int repeat;
@@ -262,9 +267,9 @@ namespace FairyGUI
         }
     }
 
-    class TimersEngine : MonoBehaviour
+    internal class TimersEngine : MonoBehaviour
     {
-        void Update()
+        private void Update()
         {
             Timers.inst.Update();
         }

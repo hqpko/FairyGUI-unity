@@ -9,17 +9,18 @@ namespace FairyGUI
     /// </summary>
     public class LongPressGesture : EventDispatcher
     {
-
         public GObject host { get; private set; }
 
         /// <summary>
         /// 当手指按下时派发该事件。
         /// </summary>
         public EventListener onBegin { get; private set; }
+
         /// <summary>
         /// 手指离开屏幕时派发该事件。
         /// </summary>
         public EventListener onEnd { get; private set; }
+
         /// <summary>
         /// 当手指按下后一段时间后派发该事件。并且在手指离开前按一定周期派发该事件。
         /// </summary>
@@ -45,9 +46,9 @@ namespace FairyGUI
         /// </summary>
         public int holdRangeRadius;
 
-        Vector2 _startPoint;
-        bool _started;
-        int _touchId;
+        private Vector2 _startPoint;
+        private bool _started;
+        private int _touchId;
 
         public static float TRIGGER = 1.5f;
         public static float INTERVAL = 1f;
@@ -98,6 +99,7 @@ namespace FairyGUI
                     host.onTouchBegin.Remove(__touchBegin);
                     host.onTouchEnd.Remove(__touchEnd);
                 }
+
                 Timers.inst.Remove(__timer);
             }
         }
@@ -108,9 +110,9 @@ namespace FairyGUI
             _started = false;
         }
 
-        void __touchBegin(EventContext context)
+        private void __touchBegin(EventContext context)
         {
-            InputEvent evt = context.inputEvent;
+            var evt = context.inputEvent;
             _startPoint = host.GlobalToLocal(new Vector2(evt.x, evt.y));
             _started = false;
             _touchId = evt.touchId;
@@ -119,14 +121,15 @@ namespace FairyGUI
             context.CaptureTouch();
         }
 
-        void __timer(object param)
+        private void __timer(object param)
         {
-            Vector2 pt = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touchId));
+            var pt = host.GlobalToLocal(Stage.inst.GetTouchPosition(_touchId));
             if (Mathf.Pow(pt.x - _startPoint.x, 2) + Mathf.Pow(pt.y - _startPoint.y, 2) > Mathf.Pow(holdRangeRadius, 2))
             {
                 Timers.inst.Remove(__timer);
                 return;
             }
+
             if (!_started)
             {
                 _started = true;
@@ -139,7 +142,7 @@ namespace FairyGUI
             onAction.Call();
         }
 
-        void __touchEnd(EventContext context)
+        private void __touchEnd(EventContext context)
         {
             Timers.inst.Remove(__timer);
 

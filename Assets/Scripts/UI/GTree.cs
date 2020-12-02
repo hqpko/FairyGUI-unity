@@ -4,10 +4,10 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class GTree : GList
     {
         public delegate void TreeNodeRenderDelegate(GTreeNode node, GComponent obj);
+
         public delegate void TreeNodeWillExpandDelegate(GTreeNode node, bool expand);
 
         /// <summary>
@@ -20,13 +20,12 @@ namespace FairyGUI
         /// </summary>
         public TreeNodeWillExpandDelegate treeNodeWillExpand;
 
-        int _indent;
-        GTreeNode _rootNode;
-        int _clickToExpand;
-        bool _expandedStatusInEvt;
+        private int _indent;
+        private GTreeNode _rootNode;
+        private int _clickToExpand;
+        private bool _expandedStatusInEvt;
 
         private static List<int> helperIntList = new List<int>();
-
 
         public GTree()
         {
@@ -35,51 +34,43 @@ namespace FairyGUI
             _rootNode = new GTreeNode(true);
             _rootNode._SetTree(this);
             _rootNode.expanded = true;
-
         }
 
         /// <summary>
         /// TreeView的顶层节点，这是个虚拟节点，也就是他不会显示出来。
         /// </summary>
-        public GTreeNode rootNode
-        {
-            get { return _rootNode; }
-        }
+        public GTreeNode rootNode => _rootNode;
 
         /// <summary>
         /// TreeView每级的缩进，单位像素。
         /// </summary>
         public int indent
         {
-            get { return _indent; }
-            set { _indent = value; }
+            get => _indent;
+            set => _indent = value;
         }
-
 
         public int clickToExpand
         {
-            get { return _clickToExpand; }
-            set { _clickToExpand = value; }
+            get => _clickToExpand;
+            set => _clickToExpand = value;
         }
-
 
         /// <returns></returns>
         public GTreeNode GetSelectedNode()
         {
-            int i = this.selectedIndex;
+            var i = selectedIndex;
             if (i != -1)
-                return (GTreeNode)this.GetChildAt(i)._treeNode;
+                return (GTreeNode) GetChildAt(i)._treeNode;
             else
                 return null;
         }
 
-
-		/// <returns></returns>
-		public List<GTreeNode> GetSelectedNodes()
+        /// <returns></returns>
+        public List<GTreeNode> GetSelectedNodes()
         {
             return GetSelectedNodes(null);
         }
-
 
         /// <param name="result"></param>
         /// <returns></returns>
@@ -88,36 +79,36 @@ namespace FairyGUI
             if (result == null)
                 result = new List<GTreeNode>();
             helperIntList.Clear();
-            List<int> sels = GetSelection(helperIntList);
-            int cnt = sels.Count;
-            for (int i = 0; i < cnt; i++)
+            var sels = GetSelection(helperIntList);
+            var cnt = sels.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                GTreeNode node = GetChildAt(sels[i])._treeNode;
+                var node = GetChildAt(sels[i])._treeNode;
                 result.Add(node);
             }
+
             return result;
         }
 
-		/// <param name="node"></param>
+        /// <param name="node"></param>
         public void SelectNode(GTreeNode node)
         {
             SelectNode(node, false);
         }
 
-
         /// <param name="node"></param>
         /// <param name="scrollItToView"></param>
         public void SelectNode(GTreeNode node, bool scrollItToView)
         {
-            GTreeNode parentNode = node.parent;
+            var parentNode = node.parent;
             while (parentNode != null && parentNode != _rootNode)
             {
                 parentNode.expanded = true;
                 parentNode = parentNode.parent;
             }
+
             AddSelection(GetChildIndex(node.cell), scrollItToView);
         }
-
 
         /// <param name="node"></param>
         public void UnselectNode(GTreeNode node)
@@ -125,26 +116,23 @@ namespace FairyGUI
             RemoveSelection(GetChildIndex(node.cell));
         }
 
-
         public void ExpandAll()
         {
             ExpandAll(_rootNode);
         }
 
-
         /// <param name="folderNode"></param>
         public void ExpandAll(GTreeNode folderNode)
         {
             folderNode.expanded = true;
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                GTreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.isFolder)
                     ExpandAll(node);
             }
         }
-
 
         /// <param name="folderNode"></param>
         public void CollapseAll()
@@ -152,33 +140,32 @@ namespace FairyGUI
             CollapseAll(_rootNode);
         }
 
-
         /// <param name="folderNode"></param>
         public void CollapseAll(GTreeNode folderNode)
         {
             if (folderNode != _rootNode)
                 folderNode.expanded = false;
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                GTreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.isFolder)
                     CollapseAll(node);
             }
         }
 
-
         /// <param name="node"></param>
-        void CreateCell(GTreeNode node)
+        private void CreateCell(GTreeNode node)
         {
-            GComponent child = itemPool.GetObject(string.IsNullOrEmpty(node._resURL) ? this.defaultItem : node._resURL) as GComponent;
+            var child =
+                itemPool.GetObject(string.IsNullOrEmpty(node._resURL) ? defaultItem : node._resURL) as GComponent;
             if (child == null)
                 throw new Exception("FairyGUI: cannot create tree node object.");
-            child.displayObject.home = this.displayObject.cachedTransform;
+            child.displayObject.home = displayObject.cachedTransform;
             child._treeNode = node;
             node._cell = child;
 
-            GObject indentObj = node.cell.GetChild("indent");
+            var indentObj = node.cell.GetChild("indent");
             if (indentObj != null)
                 indentObj.width = (node.level - 1) * indent;
 
@@ -202,14 +189,13 @@ namespace FairyGUI
                 treeNodeRender(node, node._cell);
         }
 
-
         /// <param name="node"></param>
         internal void _AfterInserted(GTreeNode node)
         {
             if (node._cell == null)
                 CreateCell(node);
 
-            int index = GetInsertIndexForNode(node);
+            var index = GetInsertIndexForNode(node);
             AddChildAt(node.cell, index);
             if (treeNodeRender != null)
                 treeNodeRender(node, node._cell);
@@ -218,20 +204,19 @@ namespace FairyGUI
                 CheckChildren(node, index);
         }
 
-
         /// <param name="node"></param>
         /// <returns></returns>
-        int GetInsertIndexForNode(GTreeNode node)
+        private int GetInsertIndexForNode(GTreeNode node)
         {
-            GTreeNode prevNode = node.GetPrevSibling();
+            var prevNode = node.GetPrevSibling();
             if (prevNode == null)
                 prevNode = node.parent;
-            int insertIndex = GetChildIndex(prevNode.cell) + 1;
-            int myLevel = node.level;
-            int cnt = this.numChildren;
-            for (int i = insertIndex; i < cnt; i++)
+            var insertIndex = GetChildIndex(prevNode.cell) + 1;
+            var myLevel = node.level;
+            var cnt = numChildren;
+            for (var i = insertIndex; i < cnt; i++)
             {
-                GTreeNode testNode = GetChildAt(i)._treeNode;
+                var testNode = GetChildAt(i)._treeNode;
                 if (testNode.level <= myLevel)
                     break;
 
@@ -241,13 +226,11 @@ namespace FairyGUI
             return insertIndex;
         }
 
-
         /// <param name="node"></param>
         internal void _AfterRemoved(GTreeNode node)
         {
             RemoveNode(node);
         }
-
 
         /// <param name="node"></param>
         internal void _AfterExpanded(GTreeNode node)
@@ -258,23 +241,22 @@ namespace FairyGUI
                 return;
             }
 
-            if (this.treeNodeWillExpand != null)
-                this.treeNodeWillExpand(node, true);
+            if (treeNodeWillExpand != null)
+                treeNodeWillExpand(node, true);
 
             if (node._cell == null)
                 return;
 
-            if (this.treeNodeRender != null)
-                this.treeNodeRender(node, node._cell);
+            if (treeNodeRender != null)
+                treeNodeRender(node, node._cell);
 
-            Controller cc = node._cell.GetController("expanded");
+            var cc = node._cell.GetController("expanded");
             if (cc != null)
                 cc.selectedIndex = 1;
 
             if (node._cell.parent != null)
                 CheckChildren(node, GetChildIndex(node._cell));
         }
-
 
         /// <param name="node"></param>
         internal void _AfterCollapsed(GTreeNode node)
@@ -285,16 +267,16 @@ namespace FairyGUI
                 return;
             }
 
-            if (this.treeNodeWillExpand != null)
-                this.treeNodeWillExpand(node, false);
+            if (treeNodeWillExpand != null)
+                treeNodeWillExpand(node, false);
 
             if (node._cell == null)
                 return;
 
-            if (this.treeNodeRender != null)
-                this.treeNodeRender(node, node._cell);
+            if (treeNodeRender != null)
+                treeNodeRender(node, node._cell);
 
-            Controller cc = node._cell.GetController("expanded");
+            var cc = node._cell.GetController("expanded");
             if (cc != null)
                 cc.selectedIndex = 0;
 
@@ -302,43 +284,38 @@ namespace FairyGUI
                 HideFolderNode(node);
         }
 
-
         /// <param name="node"></param>
         internal void _AfterMoved(GTreeNode node)
         {
-            int startIndex = GetChildIndex(node._cell);
+            var startIndex = GetChildIndex(node._cell);
             int endIndex;
             if (node.isFolder)
                 endIndex = GetFolderEndIndex(startIndex, node.level);
             else
                 endIndex = startIndex + 1;
-            int insertIndex = GetInsertIndexForNode(node);
-            int cnt = endIndex - startIndex;
+            var insertIndex = GetInsertIndexForNode(node);
+            var cnt = endIndex - startIndex;
 
             if (insertIndex < startIndex)
-            {
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject obj = GetChildAt(startIndex + i);
+                    var obj = GetChildAt(startIndex + i);
                     SetChildIndex(obj, insertIndex + i);
                 }
-            }
             else
-            {
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject obj = GetChildAt(startIndex);
+                    var obj = GetChildAt(startIndex);
                     SetChildIndex(obj, insertIndex);
                 }
-            }
         }
 
         private int GetFolderEndIndex(int startIndex, int level)
         {
-            int cnt = this.numChildren;
-            for (int i = startIndex + 1; i < cnt; i++)
+            var cnt = numChildren;
+            for (var i = startIndex + 1; i < cnt; i++)
             {
-                GTreeNode node = GetChildAt(i)._treeNode;
+                var node = GetChildAt(i)._treeNode;
                 if (node.level <= level)
                     return i;
             }
@@ -346,17 +323,16 @@ namespace FairyGUI
             return cnt;
         }
 
-
         /// <param name="folderNode"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        int CheckChildren(GTreeNode folderNode, int index)
+        private int CheckChildren(GTreeNode folderNode, int index)
         {
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
                 index++;
-                GTreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.cell == null)
                     CreateCell(node);
 
@@ -370,14 +346,13 @@ namespace FairyGUI
             return index;
         }
 
-
         /// <param name="folderNode"></param>
-        void HideFolderNode(GTreeNode folderNode)
+        private void HideFolderNode(GTreeNode folderNode)
         {
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                GTreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.cell != null && node.cell.parent != null)
                     RemoveChild(node.cell);
 
@@ -386,9 +361,8 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="node"></param>
-        void RemoveNode(GTreeNode node)
+        private void RemoveNode(GTreeNode node)
         {
             if (node.cell != null)
             {
@@ -401,33 +375,33 @@ namespace FairyGUI
 
             if (node.isFolder)
             {
-                int cnt = node.numChildren;
-                for (int i = 0; i < cnt; i++)
+                var cnt = node.numChildren;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GTreeNode node2 = node.GetChildAt(i);
+                    var node2 = node.GetChildAt(i);
                     RemoveNode(node2);
                 }
             }
         }
 
-        void __cellTouchBegin(EventContext context)
+        private void __cellTouchBegin(EventContext context)
         {
-            GTreeNode node = ((GObject)context.sender)._treeNode;
+            var node = ((GObject) context.sender)._treeNode;
             _expandedStatusInEvt = node.expanded;
         }
 
-        void __expandedStateChanged(EventContext context)
+        private void __expandedStateChanged(EventContext context)
         {
-            Controller cc = (Controller)context.sender;
-            GTreeNode node = cc.parent._treeNode;
+            var cc = (Controller) context.sender;
+            var node = cc.parent._treeNode;
             node.expanded = cc.selectedIndex == 1;
         }
 
-        override protected void DispatchItemEvent(GObject item, EventContext context)
+        protected override void DispatchItemEvent(GObject item, EventContext context)
         {
             if (_clickToExpand != 0)
             {
-                GTreeNode node = item._treeNode;
+                var node = item._treeNode;
                 if (node != null && _expandedStatusInEvt == node.expanded)
                 {
                     if (_clickToExpand == 2)
@@ -436,14 +410,16 @@ namespace FairyGUI
                             node.expanded = !node.expanded;
                     }
                     else
+                    {
                         node.expanded = !node.expanded;
+                    }
                 }
             }
 
             base.DispatchItemEvent(item, context);
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
@@ -453,17 +429,17 @@ namespace FairyGUI
             _clickToExpand = buffer.ReadByte();
         }
 
-        override protected void ReadItems(ByteBuffer buffer)
+        protected override void ReadItems(ByteBuffer buffer)
         {
             int nextPos;
             string str;
             bool isFolder;
             GTreeNode lastNode = null;
             int level;
-            int prevLevel = 0;
+            var prevLevel = 0;
 
             int cnt = buffer.ReadShort();
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 nextPos = buffer.ReadShort();
                 nextPos += buffer.position;
@@ -471,7 +447,7 @@ namespace FairyGUI
                 str = buffer.ReadS();
                 if (str == null)
                 {
-                    str = this.defaultItem;
+                    str = defaultItem;
                     if (str == null)
                     {
                         buffer.position = nextPos;
@@ -482,23 +458,30 @@ namespace FairyGUI
                 isFolder = buffer.ReadBool();
                 level = buffer.ReadByte();
 
-                GTreeNode node = new GTreeNode(isFolder, str);
+                var node = new GTreeNode(isFolder, str);
                 node.expanded = true;
                 if (i == 0)
+                {
                     _rootNode.AddChild(node);
+                }
                 else
                 {
                     if (level > prevLevel)
+                    {
                         lastNode.AddChild(node);
+                    }
                     else if (level < prevLevel)
                     {
-                        for (int j = level; j <= prevLevel; j++)
+                        for (var j = level; j <= prevLevel; j++)
                             lastNode = lastNode.parent;
                         lastNode.AddChild(node);
                     }
                     else
+                    {
                         lastNode.parent.AddChild(node);
+                    }
                 }
+
                 lastNode = node;
                 prevLevel = level;
 

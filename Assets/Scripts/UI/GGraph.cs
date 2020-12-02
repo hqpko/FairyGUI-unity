@@ -13,13 +13,13 @@ namespace FairyGUI
     /// </summary>
     public class GGraph : GObject, IColorGear
     {
-        Shape _shape;
+        private Shape _shape;
 
         public GGraph()
         {
         }
 
-        override protected void CreateDisplayObject()
+        protected override void CreateDisplayObject()
         {
             _shape = new Shape();
             _shape.gOwner = this;
@@ -36,18 +36,18 @@ namespace FairyGUI
             if (parent == null)
                 throw new Exception("parent not set");
 
-            target.name = this.name;
-            target.alpha = this.alpha;
-            target.rotation = this.rotation;
-            target.visible = this.visible;
-            target.touchable = this.touchable;
-            target.grayed = this.grayed;
-            target.SetXY(this.x, this.y);
-            target.SetSize(this.width, this.height);
+            target.name = name;
+            target.alpha = alpha;
+            target.rotation = rotation;
+            target.visible = visible;
+            target.touchable = touchable;
+            target.grayed = grayed;
+            target.SetXY(x, y);
+            target.SetSize(width, height);
 
-            int index = parent.GetChildIndex(this);
+            var index = parent.GetChildIndex(this);
             parent.AddChildAt(target, index);
-            target.relations.CopyFrom(this.relations);
+            target.relations.CopyFrom(relations);
 
             parent.RemoveChild(this, true);
         }
@@ -62,7 +62,7 @@ namespace FairyGUI
             if (parent == null)
                 throw new Exception("parent not set");
 
-            int index = parent.GetChildIndex(this);
+            var index = parent.GetChildIndex(this);
             parent.AddChildAt(target, index);
         }
 
@@ -76,7 +76,7 @@ namespace FairyGUI
             if (parent == null)
                 throw new Exception("parent not set");
 
-            int index = parent.GetChildIndex(this);
+            var index = parent.GetChildIndex(this);
             index++;
             parent.AddChildAt(target, index);
         }
@@ -104,10 +104,10 @@ namespace FairyGUI
 
             if (displayObject != null)
             {
-                displayObject.alpha = this.alpha;
-                displayObject.rotation = this.rotation;
-                displayObject.visible = this.visible;
-                displayObject.touchable = this.touchable;
+                displayObject.alpha = alpha;
+                displayObject.rotation = rotation;
+                displayObject.visible = visible;
+                displayObject.touchable = touchable;
                 displayObject.gOwner = this;
             }
 
@@ -115,7 +115,6 @@ namespace FairyGUI
                 parent.ChildStateChanged(this);
             HandlePositionChanged();
         }
-
 
         public Color color
         {
@@ -140,10 +139,7 @@ namespace FairyGUI
         /// Get the shape object. It can be used for drawing.
         /// 获取图形的原生对象，可用于绘制图形。
         /// </summary>
-        public Shape shape
-        {
-            get { return _shape; }
-        }
+        public Shape shape => _shape;
 
         /// <summary>
         /// Draw a rectangle.
@@ -156,10 +152,9 @@ namespace FairyGUI
         /// <param name="fillColor">Fill color</param>
         public void DrawRect(float aWidth, float aHeight, int lineSize, Color lineColor, Color fillColor)
         {
-            this.SetSize(aWidth, aHeight);
+            SetSize(aWidth, aHeight);
             _shape.DrawRect(lineSize, lineColor, fillColor);
         }
-
 
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
@@ -167,20 +162,18 @@ namespace FairyGUI
         /// <param name="corner"></param>
         public void DrawRoundRect(float aWidth, float aHeight, Color fillColor, float[] corner)
         {
-            this.SetSize(aWidth, aHeight);
-            this.shape.DrawRoundRect(0, Color.white, fillColor, corner[0], corner[1], corner[2], corner[3]);
+            SetSize(aWidth, aHeight);
+            shape.DrawRoundRect(0, Color.white, fillColor, corner[0], corner[1], corner[2], corner[3]);
         }
-
 
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
         /// <param name="fillColor"></param>
         public void DrawEllipse(float aWidth, float aHeight, Color fillColor)
         {
-            this.SetSize(aWidth, aHeight);
+            SetSize(aWidth, aHeight);
             _shape.DrawEllipse(fillColor);
         }
-
 
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
@@ -188,10 +181,9 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         public void DrawPolygon(float aWidth, float aHeight, IList<Vector2> points, Color fillColor)
         {
-            this.SetSize(aWidth, aHeight);
+            SetSize(aWidth, aHeight);
             _shape.DrawPolygon(points, fillColor);
         }
-
 
         /// <param name="aWidth"></param>
         /// <param name="aHeight"></param>
@@ -199,13 +191,14 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         /// <param name="lineSize"></param>
         /// <param name="lineColor"></param>
-        public void DrawPolygon(float aWidth, float aHeight, IList<Vector2> points, Color fillColor, float lineSize, Color lineColor)
+        public void DrawPolygon(float aWidth, float aHeight, IList<Vector2> points, Color fillColor, float lineSize,
+            Color lineColor)
         {
-            this.SetSize(aWidth, aHeight);
+            SetSize(aWidth, aHeight);
             _shape.DrawPolygon(points, fillColor, lineSize, lineColor);
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
@@ -214,31 +207,32 @@ namespace FairyGUI
             int type = buffer.ReadByte();
             if (type != 0)
             {
-                int lineSize = buffer.ReadInt();
-                Color lineColor = buffer.ReadColor();
-                Color fillColor = buffer.ReadColor();
-                bool roundedRect = buffer.ReadBool();
-                Vector4 cornerRadius = new Vector4();
+                var lineSize = buffer.ReadInt();
+                var lineColor = buffer.ReadColor();
+                var fillColor = buffer.ReadColor();
+                var roundedRect = buffer.ReadBool();
+                var cornerRadius = new Vector4();
                 if (roundedRect)
-                {
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                         cornerRadius[i] = buffer.ReadFloat();
-                }
 
                 if (type == 1)
                 {
                     if (roundedRect)
-                        _shape.DrawRoundRect(lineSize, lineColor, fillColor, cornerRadius.x, cornerRadius.y, cornerRadius.z, cornerRadius.w);
+                        _shape.DrawRoundRect(lineSize, lineColor, fillColor, cornerRadius.x, cornerRadius.y,
+                            cornerRadius.z, cornerRadius.w);
                     else
                         _shape.DrawRect(lineSize, lineColor, fillColor);
                 }
                 else if (type == 2)
+                {
                     _shape.DrawEllipse(lineSize, fillColor, lineColor, fillColor, 0, 360);
+                }
                 else if (type == 3)
                 {
-                    int cnt = buffer.ReadShort() / 2;
-                    Vector2[] points = new Vector2[cnt];
-                    for (int i = 0; i < cnt; i++)
+                    var cnt = buffer.ReadShort() / 2;
+                    var points = new Vector2[cnt];
+                    for (var i = 0; i < cnt; i++)
                         points[i].Set(buffer.ReadFloat(), buffer.ReadFloat());
 
                     _shape.DrawPolygon(points, fillColor, lineSize, lineColor);
@@ -246,13 +240,13 @@ namespace FairyGUI
                 else if (type == 4)
                 {
                     int sides = buffer.ReadShort();
-                    float startAngle = buffer.ReadFloat();
+                    var startAngle = buffer.ReadFloat();
                     int cnt = buffer.ReadShort();
                     float[] distances = null;
                     if (cnt > 0)
                     {
                         distances = new float[cnt];
-                        for (int i = 0; i < cnt; i++)
+                        for (var i = 0; i < cnt; i++)
                             distances[i] = buffer.ReadFloat();
                     }
 

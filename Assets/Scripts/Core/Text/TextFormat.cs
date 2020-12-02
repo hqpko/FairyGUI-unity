@@ -54,27 +54,29 @@ namespace FairyGUI
         /// <param name="value"></param>
         public void SetColor(uint value)
         {
-            uint rr = (value >> 16) & 0x0000ff;
-            uint gg = (value >> 8) & 0x0000ff;
-            uint bb = value & 0x0000ff;
-            float r = rr / 255.0f;
-            float g = gg / 255.0f;
-            float b = bb / 255.0f;
+            var rr = (value >> 16) & 0x0000ff;
+            var gg = (value >> 8) & 0x0000ff;
+            var bb = value & 0x0000ff;
+            var r = rr / 255.0f;
+            var g = gg / 255.0f;
+            var b = bb / 255.0f;
             color = new Color(r, g, b, 1);
         }
 
         /// <param name="aFormat"></param>
         /// <returns></returns>
-        public bool EqualStyle(TextFormat aFormat) =>
-            size == aFormat.size
-            && color == aFormat.color
-            && bold == aFormat.bold
-            && underline == aFormat.underline
-            && italic == aFormat.italic
-            && strikethrough == aFormat.strikethrough
-            && gradientColor == aFormat.gradientColor
-            && align == aFormat.align
-            && specialStyle == aFormat.specialStyle;
+        public bool EqualStyle(TextFormat aFormat)
+        {
+            return size == aFormat.size
+                   && color == aFormat.color
+                   && bold == aFormat.bold
+                   && underline == aFormat.underline
+                   && italic == aFormat.italic
+                   && strikethrough == aFormat.strikethrough
+                   && gradientColor == aFormat.gradientColor
+                   && align == aFormat.align
+                   && specialStyle == aFormat.specialStyle;
+        }
 
         /// <summary>
         /// Only base NOT all formats will be copied
@@ -82,31 +84,35 @@ namespace FairyGUI
         /// <param name="source"></param>
         public void CopyFrom(TextFormat source)
         {
-            this.size = source.size;
-            this.font = source.font;
-            this.color = source.color;
-            this.lineSpacing = source.lineSpacing;
-            this.letterSpacing = source.letterSpacing;
-            this.bold = source.bold;
-            this.underline = source.underline;
-            this.italic = source.italic;
-            this.strikethrough = source.strikethrough;
+            size = source.size;
+            font = source.font;
+            color = source.color;
+            lineSpacing = source.lineSpacing;
+            letterSpacing = source.letterSpacing;
+            bold = source.bold;
+            underline = source.underline;
+            italic = source.italic;
+            strikethrough = source.strikethrough;
             if (source.gradientColor != null)
             {
-                this.gradientColor = new Color32[4];
-                source.gradientColor.CopyTo(this.gradientColor, 0);
+                gradientColor = new Color32[4];
+                source.gradientColor.CopyTo(gradientColor, 0);
             }
             else
-                this.gradientColor = null;
+            {
+                gradientColor = null;
+            }
 
-            this.align = source.align;
-            this.specialStyle = source.specialStyle;
+            align = source.align;
+            specialStyle = source.specialStyle;
         }
 
         public void FillVertexColors(Color32[] vertexColors)
         {
             if (gradientColor == null)
+            {
                 vertexColors[0] = vertexColors[1] = vertexColors[2] = vertexColors[3] = color;
+            }
             else
             {
                 vertexColors[0] = gradientColor[1];

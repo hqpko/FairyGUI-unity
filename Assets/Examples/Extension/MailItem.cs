@@ -3,19 +3,19 @@ using FairyGUI;
 
 public class MailItem : GButton
 {
-    GTextField _timeText;
-    Controller _readController;
-    Controller _fetchController;
-    Transition _trans;
+    private GTextField _timeText;
+    private Controller _readController;
+    private Controller _fetchController;
+    private Transition _trans;
 
     public override void ConstructFromXML(FairyGUI.Utils.XML cxml)
     {
         base.ConstructFromXML(cxml);
 
-        _timeText = this.GetChild("timeText").asTextField;
-        _readController = this.GetController("IsRead");
-        _fetchController = this.GetController("c1");
-        _trans = this.GetTransition("t0");
+        _timeText = GetChild("timeText").asTextField;
+        _readController = GetController("IsRead");
+        _fetchController = GetController("c1");
+        _trans = GetTransition("t0");
     }
 
     public void setTime(string value)
@@ -35,7 +35,7 @@ public class MailItem : GButton
 
     public void PlayEffect(float delay)
     {
-        this.visible = false;
+        visible = false;
         _trans.Play(1, delay, null);
     }
 }

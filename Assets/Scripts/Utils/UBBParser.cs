@@ -3,13 +3,12 @@ using System.Text;
 
 namespace FairyGUI.Utils
 {
-
     public class UBBParser
     {
         public static UBBParser inst = new UBBParser();
 
-        string _text;
-        int _readPos;
+        private string _text;
+        private int _readPos;
 
         public TagHandler defaultTagHandler;
         public Dictionary<string, TagHandler> handlers;
@@ -41,37 +40,44 @@ namespace FairyGUI.Utils
             if (!end)
             {
                 if (attr != null)
+                {
                     return "<a href=\"" + attr + "\" target=\"_blank\">";
+                }
                 else
                 {
-                    string href = GetTagText(false);
+                    var href = GetTagText(false);
                     return "<a href=\"" + href + "\" target=\"_blank\">";
                 }
             }
             else
+            {
                 return "</a>";
+            }
         }
 
         protected string onTag_IMG(string tagName, bool end, string attr)
         {
             if (!end)
             {
-                string src = GetTagText(true);
+                var src = GetTagText(true);
                 if (src == null || src.Length == 0)
                     return null;
 
                 if (defaultImgWidth != 0)
-                    return "<img src=\"" + src + "\" width=\"" + defaultImgWidth + "\" height=\"" + defaultImgHeight + "\"/>";
+                    return "<img src=\"" + src + "\" width=\"" + defaultImgWidth + "\" height=\"" + defaultImgHeight +
+                           "\"/>";
                 else
                     return "<img src=\"" + src + "\"/>";
             }
             else
+            {
                 return null;
+            }
         }
 
         protected string onTag_Simple(string tagName, bool end, string attr)
         {
-            return end ? ("</" + tagName + ">") : ("<" + tagName + ">");
+            return end ? "</" + tagName + ">" : "<" + tagName + ">";
         }
 
         protected string onTag_COLOR(string tagName, bool end, string attr)
@@ -108,7 +114,7 @@ namespace FairyGUI.Utils
 
         public string GetTagText(bool remove)
         {
-            int pos1 = _readPos;
+            var pos1 = _readPos;
             int pos2;
             StringBuilder buffer = null;
             while ((pos2 = _text.IndexOf('[', pos1)) != -1)
@@ -128,6 +134,7 @@ namespace FairyGUI.Utils
                     break;
                 }
             }
+
             if (pos2 == -1)
                 return null;
 
@@ -184,6 +191,7 @@ namespace FairyGUI.Utils
                     attr = tag.Substring(pos3 + 1);
                     tag = tag.Substring(0, pos3);
                 }
+
                 tag = tag.ToLower();
                 if (handlers.TryGetValue(tag, out func))
                 {
@@ -203,6 +211,7 @@ namespace FairyGUI.Utils
                 {
                     buffer.Append(_text, pos1, pos2 - pos1 + 1);
                 }
+
                 pos1 = _readPos;
             }
 

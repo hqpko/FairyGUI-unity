@@ -15,7 +15,7 @@ namespace FairyGUI
 
         public Color color
         {
-            get { return graphics.color; }
+            get => graphics.color;
             set
             {
                 graphics.color = value;
@@ -28,7 +28,7 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         public void DrawRect(float lineSize, Color lineColor, Color fillColor)
         {
-            RectMesh mesh = graphics.GetMeshFactory<RectMesh>();
+            var mesh = graphics.GetMeshFactory<RectMesh>();
             mesh.lineWidth = lineSize;
             mesh.lineColor = lineColor;
             mesh.fillColor = null;
@@ -42,7 +42,7 @@ namespace FairyGUI
         /// <param name="colors"></param>
         public void DrawRect(float lineSize, Color32[] colors)
         {
-            RectMesh mesh = graphics.GetMeshFactory<RectMesh>();
+            var mesh = graphics.GetMeshFactory<RectMesh>();
             mesh.lineWidth = lineSize;
             mesh.colors = colors;
 
@@ -59,7 +59,7 @@ namespace FairyGUI
         public void DrawRoundRect(float lineSize, Color lineColor, Color fillColor,
             float topLeftRadius, float topRightRadius, float bottomLeftRadius, float bottomRightRadius)
         {
-            RoundedRectMesh mesh = graphics.GetMeshFactory<RoundedRectMesh>();
+            var mesh = graphics.GetMeshFactory<RoundedRectMesh>();
             mesh.lineWidth = lineSize;
             mesh.lineColor = lineColor;
             mesh.fillColor = null;
@@ -75,7 +75,7 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         public void DrawEllipse(Color fillColor)
         {
-            EllipseMesh mesh = graphics.GetMeshFactory<EllipseMesh>();
+            var mesh = graphics.GetMeshFactory<EllipseMesh>();
             mesh.lineWidth = 0;
             mesh.startDegree = 0;
             mesh.endDegreee = 360;
@@ -95,7 +95,7 @@ namespace FairyGUI
         public void DrawEllipse(float lineSize, Color centerColor, Color lineColor, Color fillColor, float startDegree,
             float endDegree)
         {
-            EllipseMesh mesh = graphics.GetMeshFactory<EllipseMesh>();
+            var mesh = graphics.GetMeshFactory<EllipseMesh>();
             mesh.lineWidth = lineSize;
             if (centerColor.Equals(fillColor))
                 mesh.centerColor = null;
@@ -114,7 +114,7 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         public void DrawPolygon(IList<Vector2> points, Color fillColor)
         {
-            PolygonMesh mesh = graphics.GetMeshFactory<PolygonMesh>();
+            var mesh = graphics.GetMeshFactory<PolygonMesh>();
             mesh.points.Clear();
             mesh.points.AddRange(points);
             mesh.fillColor = null;
@@ -128,7 +128,7 @@ namespace FairyGUI
         /// <param name="colors"></param>
         public void DrawPolygon(IList<Vector2> points, Color32[] colors)
         {
-            PolygonMesh mesh = graphics.GetMeshFactory<PolygonMesh>();
+            var mesh = graphics.GetMeshFactory<PolygonMesh>();
             mesh.points.Clear();
             mesh.points.AddRange(points);
             mesh.fillColor = null;
@@ -143,7 +143,7 @@ namespace FairyGUI
         /// <param name="lineColor"></param>
         public void DrawPolygon(IList<Vector2> points, Color fillColor, float lineSize, Color lineColor)
         {
-            PolygonMesh mesh = graphics.GetMeshFactory<PolygonMesh>();
+            var mesh = graphics.GetMeshFactory<PolygonMesh>();
             mesh.points.Clear();
             mesh.points.AddRange(points);
             mesh.fillColor = null;
@@ -165,7 +165,7 @@ namespace FairyGUI
         public void DrawRegularPolygon(int sides, float lineSize, Color centerColor, Color lineColor, Color fillColor,
             float rotation, float[] distances)
         {
-            RegularPolygonMesh mesh = graphics.GetMeshFactory<RegularPolygonMesh>();
+            var mesh = graphics.GetMeshFactory<RegularPolygonMesh>();
             mesh.sides = sides;
             mesh.lineWidth = lineSize;
             mesh.centerColor = centerColor;
@@ -183,10 +183,7 @@ namespace FairyGUI
             graphics.meshFactory = null;
         }
 
-        public bool isEmpty
-        {
-            get { return graphics.meshFactory == null; }
-        }
+        public bool isEmpty => graphics.meshFactory == null;
 
         protected override DisplayObject HitTest()
         {
@@ -195,7 +192,7 @@ namespace FairyGUI
 
             Vector2 localPoint = WorldToLocal(HitTestContext.worldPoint, HitTestContext.direction);
 
-            IHitTest ht = graphics.meshFactory as IHitTest;
+            var ht = graphics.meshFactory as IHitTest;
             if (ht != null)
                 return ht.HitTest(_contentRect, localPoint) ? this : null;
             else if (_contentRect.Contains(localPoint))

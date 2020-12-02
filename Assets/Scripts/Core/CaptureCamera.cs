@@ -2,51 +2,44 @@
 
 namespace FairyGUI
 {
-
     public class CaptureCamera : MonoBehaviour
     {
+        [System.NonSerialized] public Transform cachedTransform;
 
-        [System.NonSerialized]
-        public Transform cachedTransform;
+        [System.NonSerialized] public Camera cachedCamera;
 
-        [System.NonSerialized]
-        public Camera cachedCamera;
+        [System.NonSerialized] private static CaptureCamera _main;
 
-        [System.NonSerialized]
-        static CaptureCamera _main;
-
-        [System.NonSerialized]
-        static int _layer = -1;
-        static int _hiddenLayer = -1;
+        [System.NonSerialized] private static int _layer = -1;
+        private static int _hiddenLayer = -1;
 
         public const string Name = "Capture Camera";
         public const string LayerName = "VUI";
         public const string HiddenLayerName = "Hidden VUI";
 
-        void OnEnable()
+        private void OnEnable()
         {
-            cachedCamera = this.GetComponent<Camera>();
-            cachedTransform = this.gameObject.transform;
+            cachedCamera = GetComponent<Camera>();
+            cachedTransform = gameObject.transform;
 
-            if (this.gameObject.name == Name)
+            if (gameObject.name == Name)
                 _main = this;
         }
-
 
         public static void CheckMain()
         {
             if (_main != null && _main.cachedCamera != null)
                 return;
 
-            GameObject go = GameObject.Find(Name);
+            var go = GameObject.Find(Name);
             if (go != null)
             {
                 _main = go.GetComponent<CaptureCamera>();
                 return;
             }
 
-            GameObject cameraObject = new GameObject(Name);
-            Camera camera = cameraObject.AddComponent<Camera>();
+            var cameraObject = new GameObject(Name);
+            var camera = cameraObject.AddComponent<Camera>();
             camera.depth = 0;
             camera.cullingMask = 1 << layer;
             camera.clearFlags = CameraClearFlags.SolidColor;
@@ -67,7 +60,6 @@ namespace FairyGUI
             cameraObject.AddComponent<CaptureCamera>();
         }
 
-
         public static int layer
         {
             get
@@ -78,14 +70,14 @@ namespace FairyGUI
                     if (_layer == -1)
                     {
                         _layer = 30;
-                        Debug.LogWarning("Please define two layers named '" + CaptureCamera.LayerName + "' and '" + CaptureCamera.HiddenLayerName + "'");
+                        Debug.LogWarning("Please define two layers named '" + LayerName + "' and '" + HiddenLayerName +
+                                         "'");
                     }
                 }
 
                 return _layer;
             }
         }
-
 
         public static int hiddenLayer
         {
@@ -96,7 +88,8 @@ namespace FairyGUI
                     _hiddenLayer = LayerMask.NameToLayer(HiddenLayerName);
                     if (_hiddenLayer == -1)
                     {
-                        Debug.LogWarning("Please define two layers named '" + CaptureCamera.LayerName + "' and '" + CaptureCamera.HiddenLayerName + "'");
+                        Debug.LogWarning("Please define two layers named '" + LayerName + "' and '" + HiddenLayerName +
+                                         "'");
                         _hiddenLayer = 31;
                     }
                 }
@@ -105,14 +98,13 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="stencilSupport"></param>
         /// <returns></returns>
         public static RenderTexture CreateRenderTexture(int width, int height, bool stencilSupport)
         {
-            RenderTexture texture = new RenderTexture(width, height, stencilSupport ? 24 : 0, RenderTextureFormat.ARGB32);
+            var texture = new RenderTexture(width, height, stencilSupport ? 24 : 0, RenderTextureFormat.ARGB32);
             texture.antiAliasing = 1;
             texture.filterMode = FilterMode.Bilinear;
             texture.anisoLevel = 0;
@@ -122,7 +114,6 @@ namespace FairyGUI
             return texture;
         }
 
-
         /// <param name="target"></param>
         /// <param name="texture"></param>
         /// <param name="contentHeight"></param>
@@ -131,9 +122,9 @@ namespace FairyGUI
         {
             CheckMain();
 
-            Matrix4x4 matrix = target.cachedTransform.localToWorldMatrix;
-            float scaleX = new Vector4(matrix.m00, matrix.m10, matrix.m20, matrix.m30).magnitude;
-            float scaleY = new Vector4(matrix.m01, matrix.m11, matrix.m21, matrix.m31).magnitude;
+            var matrix = target.cachedTransform.localToWorldMatrix;
+            var scaleX = new Vector4(matrix.m00, matrix.m10, matrix.m20, matrix.m30).magnitude;
+            var scaleY = new Vector4(matrix.m01, matrix.m11, matrix.m21, matrix.m31).magnitude;
 
             Vector3 forward;
             forward.x = matrix.m02;
@@ -145,32 +136,35 @@ namespace FairyGUI
             upwards.y = matrix.m11;
             upwards.z = matrix.m21;
 
-            float halfHeight = contentHeight * 0.5f;
+            var halfHeight = contentHeight * 0.5f;
 
-            Camera camera = _main.cachedCamera;
+            var camera = _main.cachedCamera;
             camera.targetTexture = texture;
-            float aspect = (float)texture.width / texture.height;
+            var aspect = (float) texture.width / texture.height;
             camera.aspect = aspect * scaleX / scaleY;
             camera.orthographicSize = halfHeight * scaleY;
-            _main.cachedTransform.localPosition = target.cachedTransform.TransformPoint(halfHeight * aspect - offset.x, -halfHeight + offset.y, 0);
+            _main.cachedTransform.localPosition =
+                target.cachedTransform.TransformPoint(halfHeight * aspect - offset.x, -halfHeight + offset.y, 0);
             if (forward != Vector3.zero)
                 _main.cachedTransform.localRotation = Quaternion.LookRotation(forward, upwards);
 
-            int oldLayer = 0;
+            var oldLayer = 0;
 
             if (target.graphics != null)
             {
                 oldLayer = target.graphics.gameObject.layer;
-                target.graphics.gameObject.layer = CaptureCamera.layer;
+                target.graphics.gameObject.layer = layer;
             }
 
             if (target is Container)
             {
-                oldLayer = ((Container)target).numChildren > 0 ? ((Container)target).GetChildAt(0).layer : CaptureCamera.hiddenLayer;
-                ((Container)target).SetChildrenLayer(CaptureCamera.layer);
+                oldLayer = ((Container) target).numChildren > 0
+                    ? ((Container) target).GetChildAt(0).layer
+                    : hiddenLayer;
+                ((Container) target).SetChildrenLayer(layer);
             }
 
-            RenderTexture old = RenderTexture.active;
+            var old = RenderTexture.active;
             RenderTexture.active = texture;
             GL.Clear(true, true, Color.clear);
             camera.Render();
@@ -180,7 +174,7 @@ namespace FairyGUI
                 target.graphics.gameObject.layer = oldLayer;
 
             if (target is Container)
-                ((Container)target).SetChildrenLayer(oldLayer);
+                ((Container) target).SetChildrenLayer(oldLayer);
         }
     }
 }

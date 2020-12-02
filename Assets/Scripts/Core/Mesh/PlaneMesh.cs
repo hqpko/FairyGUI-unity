@@ -2,29 +2,28 @@
 
 namespace FairyGUI
 {
-
     public class PlaneMesh : IMeshFactory
     {
         public int gridSize = 30;
 
         public void OnPopulateMesh(VertexBuffer vb)
         {
-            float w = vb.contentRect.width;
-            float h = vb.contentRect.height;
-            float xMax = vb.contentRect.xMax;
-            float yMax = vb.contentRect.yMax;
-            int hc = (int)Mathf.Min(Mathf.CeilToInt(w / gridSize), 9);
-            int vc = (int)Mathf.Min(Mathf.CeilToInt(h / gridSize), 9);
-            int eachPartX = Mathf.FloorToInt(w / hc);
-            int eachPartY = Mathf.FloorToInt(h / vc);
+            var w = vb.contentRect.width;
+            var h = vb.contentRect.height;
+            var xMax = vb.contentRect.xMax;
+            var yMax = vb.contentRect.yMax;
+            var hc = (int) Mathf.Min(Mathf.CeilToInt(w / gridSize), 9);
+            var vc = (int) Mathf.Min(Mathf.CeilToInt(h / gridSize), 9);
+            var eachPartX = Mathf.FloorToInt(w / hc);
+            var eachPartY = Mathf.FloorToInt(h / vc);
             float x, y;
-            for (int i = 0; i <= vc; i++)
+            for (var i = 0; i <= vc; i++)
             {
                 if (i == vc)
                     y = yMax;
                 else
                     y = vb.contentRect.y + i * eachPartY;
-                for (int j = 0; j <= hc; j++)
+                for (var j = 0; j <= hc; j++)
                 {
                     if (j == hc)
                         x = xMax;
@@ -34,12 +33,12 @@ namespace FairyGUI
                 }
             }
 
-            for (int i = 0; i < vc; i++)
+            for (var i = 0; i < vc; i++)
             {
-                int k = i * (hc + 1);
-                for (int j = 1; j <= hc; j++)
+                var k = i * (hc + 1);
+                for (var j = 1; j <= hc; j++)
                 {
-                    int m = k + j;
+                    var m = k + j;
                     vb.AddTriangle(m - 1, m, m + hc);
                     vb.AddTriangle(m, m + hc + 1, m + hc);
                 }

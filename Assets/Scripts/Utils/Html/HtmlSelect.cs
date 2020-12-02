@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FairyGUI.Utils
 {
-
     public class HtmlSelect : IHtmlObject
     {
         public GComboBox comboBox { get; private set; }
@@ -13,43 +12,30 @@ namespace FairyGUI.Utils
 
         public static string resource;
 
-        RichTextField _owner;
-        HtmlElement _element;
-        EventCallback0 _changeHandler;
+        private RichTextField _owner;
+        private HtmlElement _element;
+        private EventCallback0 _changeHandler;
 
         public HtmlSelect()
         {
             if (resource != null)
             {
                 comboBox = UIPackage.CreateObjectFromURL(resource).asComboBox;
-                _changeHandler = () =>
-                {
-                    _owner.DispatchEvent(CHANGED_EVENT, null, this);
-                };
+                _changeHandler = () => { _owner.DispatchEvent(CHANGED_EVENT, null, this); };
             }
             else
+            {
                 Debug.LogWarning("FairyGUI: Set HtmlSelect.resource first");
+            }
         }
 
-        public DisplayObject displayObject
-        {
-            get { return comboBox.displayObject; }
-        }
+        public DisplayObject displayObject => comboBox.displayObject;
 
-        public HtmlElement element
-        {
-            get { return _element; }
-        }
+        public HtmlElement element => _element;
 
-        public float width
-        {
-            get { return comboBox != null ? comboBox.width : 0; }
-        }
+        public float width => comboBox != null ? comboBox.width : 0;
 
-        public float height
-        {
-            get { return comboBox != null ? comboBox.height : 0; }
-        }
+        public float height => comboBox != null ? comboBox.height : 0;
 
         public void Create(RichTextField owner, HtmlElement element)
         {
@@ -61,11 +47,11 @@ namespace FairyGUI.Utils
 
             comboBox.onChanged.Add(_changeHandler);
 
-            int width = element.GetInt("width", comboBox.sourceWidth);
-            int height = element.GetInt("height", comboBox.sourceHeight);
+            var width = element.GetInt("width", comboBox.sourceWidth);
+            var height = element.GetInt("height", comboBox.sourceHeight);
             comboBox.SetSize(width, height);
-            comboBox.items = (string[])element.Get("items");
-            comboBox.values = (string[])element.Get("values");
+            comboBox.items = (string[]) element.Get("items");
+            comboBox.values = (string[]) element.Get("values");
             comboBox.value = element.GetString("value");
         }
 

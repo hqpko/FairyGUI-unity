@@ -189,7 +189,7 @@
     {
         Ascent,
         Descent,
-        Arch,
+        Arch
     }
 
     public enum PopupDirection
@@ -199,7 +199,6 @@
         Down
     }
 
-
     public enum FlipType
     {
         None,
@@ -207,7 +206,6 @@
         Vertical,
         Both
     }
-
 
     public enum FillMethod
     {
@@ -236,23 +234,20 @@
         /// <summary>
         /// The Image will be filled Radially with the radial center at the center.
         /// </summary>
-        Radial360 = 5,
+        Radial360 = 5
     }
-
 
     public enum OriginHorizontal
     {
         Left,
-        Right,
+        Right
     }
-
 
     public enum OriginVertical
     {
         Top,
         Bottom
     }
-
 
     public enum Origin90
     {
@@ -262,7 +257,6 @@
         BottomRight
     }
 
-
     public enum Origin180
     {
         Top,
@@ -270,7 +264,6 @@
         Left,
         Right
     }
-
 
     public enum Origin360
     {

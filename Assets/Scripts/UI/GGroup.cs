@@ -10,23 +10,23 @@ namespace FairyGUI
     /// </summary>
     public class GGroup : GObject
     {
-        GroupLayoutType _layout;
-        int _lineGap;
-        int _columnGap;
+        private GroupLayoutType _layout;
+        private int _lineGap;
+        private int _columnGap;
 
-        bool _excludeInvisibles;
-        bool _autoSizeDisabled;
-        int _mainGridIndex;
-        int _mainGridMinSize;
+        private bool _excludeInvisibles;
+        private bool _autoSizeDisabled;
+        private int _mainGridIndex;
+        private int _mainGridMinSize;
 
-        bool _percentReady;
-        bool _boundsChanged;
-        int _mainChildIndex;
-        float _totalSize;
-        int _numChildren;
+        private bool _percentReady;
+        private bool _boundsChanged;
+        private int _mainChildIndex;
+        private float _totalSize;
+        private int _numChildren;
         internal int _updating;
 
-        Action _refreshDelegate;
+        private Action _refreshDelegate;
 
         public GGroup()
         {
@@ -41,7 +41,7 @@ namespace FairyGUI
         /// </summary>
         public GroupLayoutType layout
         {
-            get { return _layout; }
+            get => _layout;
             set
             {
                 if (_layout != value)
@@ -52,10 +52,9 @@ namespace FairyGUI
             }
         }
 
-
         public int lineGap
         {
-            get { return _lineGap; }
+            get => _lineGap;
             set
             {
                 if (_lineGap != value)
@@ -66,10 +65,9 @@ namespace FairyGUI
             }
         }
 
-
         public int columnGap
         {
-            get { return _columnGap; }
+            get => _columnGap;
             set
             {
                 if (_columnGap != value)
@@ -80,10 +78,9 @@ namespace FairyGUI
             }
         }
 
-
         public bool excludeInvisibles
         {
-            get { return _excludeInvisibles; }
+            get => _excludeInvisibles;
             set
             {
                 if (_excludeInvisibles != value)
@@ -94,10 +91,9 @@ namespace FairyGUI
             }
         }
 
-
         public bool autoSizeDisabled
         {
-            get { return _autoSizeDisabled; }
+            get => _autoSizeDisabled;
             set
             {
                 if (_autoSizeDisabled != value)
@@ -108,10 +104,9 @@ namespace FairyGUI
             }
         }
 
-
         public int mainGridMinSize
         {
-            get { return _mainGridMinSize; }
+            get => _mainGridMinSize;
             set
             {
                 if (_mainGridMinSize != value)
@@ -122,10 +117,9 @@ namespace FairyGUI
             }
         }
 
-
         public int mainGridIndex
         {
-            get { return _mainGridIndex; }
+            get => _mainGridIndex;
             set
             {
                 if (_mainGridIndex != value)
@@ -169,7 +163,9 @@ namespace FairyGUI
             _boundsChanged = false;
 
             if (_autoSizeDisabled)
+            {
                 ResizeChildren(0, 0);
+            }
             else
             {
                 HandleLayout();
@@ -177,16 +173,16 @@ namespace FairyGUI
             }
         }
 
-        void UpdateBounds()
+        private void UpdateBounds()
         {
-            int cnt = parent.numChildren;
+            var cnt = parent.numChildren;
             int i;
             GObject child;
             float ax = int.MaxValue, ay = int.MaxValue;
             float ar = int.MinValue, ab = int.MinValue;
             float tmp;
-            bool empty = true;
-            bool skipInvisibles = _layout != GroupLayoutType.None && _excludeInvisibles;
+            var empty = true;
+            var skipInvisibles = _layout != GroupLayoutType.None && _excludeInvisibles;
 
             for (i = 0; i < cnt; i++)
             {
@@ -225,7 +221,9 @@ namespace FairyGUI
                 h = ab - ay;
             }
             else
+            {
                 w = h = 0;
+            }
 
             if ((_updating & 2) == 0)
             {
@@ -240,17 +238,17 @@ namespace FairyGUI
             }
         }
 
-        void HandleLayout()
+        private void HandleLayout()
         {
             _updating |= 1;
 
             if (_layout == GroupLayoutType.Horizontal)
             {
-                float curX = this.x;
-                int cnt = parent.numChildren;
-                for (int i = 0; i < cnt; i++)
+                var curX = x;
+                var cnt = parent.numChildren;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
                     if (_excludeInvisibles && !child.internalVisible3)
@@ -263,11 +261,11 @@ namespace FairyGUI
             }
             else if (_layout == GroupLayoutType.Vertical)
             {
-                float curY = this.y;
-                int cnt = parent.numChildren;
-                for (int i = 0; i < cnt; i++)
+                var curY = y;
+                var cnt = parent.numChildren;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
                     if (_excludeInvisibles && !child.internalVisible3)
@@ -289,16 +287,13 @@ namespace FairyGUI
 
             _updating |= 1;
 
-            int cnt = parent.numChildren;
+            var cnt = parent.numChildren;
             int i;
             GObject child;
             for (i = 0; i < cnt; i++)
             {
                 child = parent.GetChildAt(i);
-                if (child.group == this)
-                {
-                    child.SetXY(child.x + dx, child.y + dy);
-                }
+                if (child.group == this) child.SetXY(child.x + dx, child.y + dy);
             }
 
             _updating &= 2;
@@ -321,7 +316,7 @@ namespace FairyGUI
                 }
             }
 
-            int cnt = parent.numChildren;
+            var cnt = parent.numChildren;
 
             if (!_percentReady)
             {
@@ -330,10 +325,10 @@ namespace FairyGUI
                 _totalSize = 0;
                 _mainChildIndex = -1;
 
-                int j = 0;
-                for (int i = 0; i < cnt; i++)
+                var j = 0;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
 
@@ -357,21 +352,21 @@ namespace FairyGUI
                 {
                     if (_layout == GroupLayoutType.Horizontal)
                     {
-                        GObject child = parent.GetChildAt(_mainChildIndex);
+                        var child = parent.GetChildAt(_mainChildIndex);
                         _totalSize += _mainGridMinSize - child.width;
                         child._sizePercentInGroup = _mainGridMinSize / _totalSize;
                     }
                     else
                     {
-                        GObject child = parent.GetChildAt(_mainChildIndex);
+                        var child = parent.GetChildAt(_mainChildIndex);
                         _totalSize += _mainGridMinSize - child.height;
                         child._sizePercentInGroup = _mainGridMinSize / _totalSize;
                     }
                 }
 
-                for (int i = 0; i < cnt; i++)
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
 
@@ -379,7 +374,8 @@ namespace FairyGUI
                         continue;
 
                     if (_totalSize > 0)
-                        child._sizePercentInGroup = (_layout == GroupLayoutType.Horizontal ? child.width : child.height) / _totalSize;
+                        child._sizePercentInGroup =
+                            (_layout == GroupLayoutType.Horizontal ? child.width : child.height) / _totalSize;
                     else
                         child._sizePercentInGroup = 0;
                 }
@@ -387,24 +383,24 @@ namespace FairyGUI
 
             float remainSize = 0;
             float remainPercent = 1;
-            bool priorHandled = false;
+            var priorHandled = false;
 
             if (_layout == GroupLayoutType.Horizontal)
             {
-                remainSize = this.width - (_numChildren - 1) * _columnGap;
+                remainSize = width - (_numChildren - 1) * _columnGap;
                 if (_mainChildIndex != -1 && remainSize >= _totalSize)
                 {
-                    GObject child = parent.GetChildAt(_mainChildIndex);
+                    var child = parent.GetChildAt(_mainChildIndex);
                     child.SetSize(remainSize - (_totalSize - _mainGridMinSize), child._rawHeight + dh, true);
                     remainSize -= child.width;
                     remainPercent -= child._sizePercentInGroup;
                     priorHandled = true;
                 }
 
-                float curX = this.x;
-                for (int i = 0; i < cnt; i++)
+                var curX = x;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
 
@@ -416,7 +412,8 @@ namespace FairyGUI
 
                     if (!priorHandled || i != _mainChildIndex)
                     {
-                        child.SetSize(Mathf.Round(child._sizePercentInGroup / remainPercent * remainSize), child._rawHeight + dh, true);
+                        child.SetSize(Mathf.Round(child._sizePercentInGroup / remainPercent * remainSize),
+                            child._rawHeight + dh, true);
                         remainPercent -= child._sizePercentInGroup;
                         remainSize -= child.width;
                     }
@@ -428,20 +425,20 @@ namespace FairyGUI
             }
             else
             {
-                remainSize = this.height - (_numChildren - 1) * _lineGap;
+                remainSize = height - (_numChildren - 1) * _lineGap;
                 if (_mainChildIndex != -1 && remainSize >= _totalSize)
                 {
-                    GObject child = parent.GetChildAt(_mainChildIndex);
+                    var child = parent.GetChildAt(_mainChildIndex);
                     child.SetSize(child._rawWidth + dw, remainSize - (_totalSize - _mainGridMinSize), true);
                     remainSize -= child.height;
                     remainPercent -= child._sizePercentInGroup;
                     priorHandled = true;
                 }
 
-                float curY = this.y;
-                for (int i = 0; i < cnt; i++)
+                var curY = y;
+                for (var i = 0; i < cnt; i++)
                 {
-                    GObject child = parent.GetChildAt(i);
+                    var child = parent.GetChildAt(i);
                     if (child.group != this)
                         continue;
 
@@ -453,7 +450,8 @@ namespace FairyGUI
 
                     if (!priorHandled || i != _mainChildIndex)
                     {
-                        child.SetSize(child._rawWidth + dw, Mathf.Round(child._sizePercentInGroup / remainPercent * remainSize), true);
+                        child.SetSize(child._rawWidth + dw,
+                            Mathf.Round(child._sizePercentInGroup / remainPercent * remainSize), true);
                         remainPercent -= child._sizePercentInGroup;
                         remainSize -= child.height;
                     }
@@ -467,44 +465,44 @@ namespace FairyGUI
             _updating &= 1;
         }
 
-        override protected void HandleAlphaChanged()
+        protected override void HandleAlphaChanged()
         {
             base.HandleAlphaChanged();
 
-            if (this.underConstruct || parent == null)
+            if (underConstruct || parent == null)
                 return;
 
-            int cnt = parent.numChildren;
-            float a = this.alpha;
-            for (int i = 0; i < cnt; i++)
+            var cnt = parent.numChildren;
+            var a = alpha;
+            for (var i = 0; i < cnt; i++)
             {
-                GObject child = parent.GetChildAt(i);
+                var child = parent.GetChildAt(i);
                 if (child.group == this)
                     child.alpha = a;
             }
         }
 
-        override internal protected void HandleVisibleChanged()
+        protected internal override void HandleVisibleChanged()
         {
             if (parent == null)
                 return;
 
-            int cnt = parent.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = parent.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                GObject child = parent.GetChildAt(i);
+                var child = parent.GetChildAt(i);
                 if (child.group == this)
                     child.HandleVisibleChanged();
             }
         }
 
-        override public void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_BeforeAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_BeforeAdd(buffer, beginPos);
 
             buffer.Seek(beginPos, 5);
 
-            _layout = (GroupLayoutType)buffer.ReadByte();
+            _layout = (GroupLayoutType) buffer.ReadByte();
             _lineGap = buffer.ReadInt();
             _columnGap = buffer.ReadInt();
             if (buffer.version >= 2)
@@ -515,11 +513,11 @@ namespace FairyGUI
             }
         }
 
-        override public void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
+        public override void Setup_AfterAdd(ByteBuffer buffer, int beginPos)
         {
             base.Setup_AfterAdd(buffer, beginPos);
 
-            if (!this.visible)
+            if (!visible)
                 HandleVisibleChanged();
         }
     }

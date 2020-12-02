@@ -2,17 +2,14 @@
 
 namespace FairyGUI
 {
-
     public enum HitTestMode
     {
         Default,
         Raycast
     }
 
-
     public interface IHitTest
     {
-
         /// <param name="contentRect"></param>
         /// <param name="localPoint"></param>
         /// <returns></returns>

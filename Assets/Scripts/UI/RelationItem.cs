@@ -4,7 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    class RelationDef
+    internal class RelationDef
     {
         public bool percent;
         public RelationType type;
@@ -12,18 +12,18 @@ namespace FairyGUI
 
         public void copyFrom(RelationDef source)
         {
-            this.percent = source.percent;
-            this.type = source.type;
-            this.axis = source.axis;
+            percent = source.percent;
+            type = source.type;
+            axis = source.axis;
         }
     }
 
-    class RelationItem
+    internal class RelationItem
     {
-        GObject _owner;
-        GObject _target;
-        List<RelationDef> _defs;
-        Vector4 _targetData;
+        private GObject _owner;
+        private GObject _target;
+        private List<RelationDef> _defs;
+        private Vector4 _targetData;
 
         public RelationItem(GObject owner)
         {
@@ -33,7 +33,7 @@ namespace FairyGUI
 
         public GObject target
         {
-            get { return _target; }
+            get => _target;
             set
             {
                 if (_target != value)
@@ -56,12 +56,10 @@ namespace FairyGUI
                 return;
             }
 
-            int dc = _defs.Count;
-            for (int k = 0; k < dc; k++)
-            {
+            var dc = _defs.Count;
+            for (var k = 0; k < dc; k++)
                 if (_defs[k].type == relationType)
                     return;
-            }
 
             InternalAdd(relationType, usePercent);
         }
@@ -75,10 +73,13 @@ namespace FairyGUI
                 return;
             }
 
-            RelationDef info = new RelationDef();
+            var info = new RelationDef();
             info.percent = usePercent;
             info.type = relationType;
-            info.axis = (relationType <= RelationType.Right_Right || relationType == RelationType.Width || relationType >= RelationType.LeftExt_Left && relationType <= RelationType.RightExt_Right) ? 0 : 1;
+            info.axis = relationType <= RelationType.Right_Right || relationType == RelationType.Width ||
+                        relationType >= RelationType.LeftExt_Left && relationType <= RelationType.RightExt_Right
+                ? 0
+                : 1;
             _defs.Add(info);
         }
 
@@ -91,25 +92,23 @@ namespace FairyGUI
                 return;
             }
 
-            int dc = _defs.Count;
-            for (int k = 0; k < dc; k++)
-            {
+            var dc = _defs.Count;
+            for (var k = 0; k < dc; k++)
                 if (_defs[k].type == relationType)
                 {
                     _defs.RemoveAt(k);
                     break;
                 }
-            }
         }
 
         public void CopyFrom(RelationItem source)
         {
-            this.target = source.target;
+            target = source.target;
 
             _defs.Clear();
-            foreach (RelationDef info in source._defs)
+            foreach (var info in source._defs)
             {
-                RelationDef info2 = new RelationDef();
+                var info2 = new RelationDef();
                 info2.copyFrom(info);
                 _defs.Add(info2);
             }
@@ -124,23 +123,20 @@ namespace FairyGUI
             }
         }
 
-        public bool isEmpty
-        {
-            get { return _defs.Count == 0; }
-        }
+        public bool isEmpty => _defs.Count == 0;
 
         public void ApplyOnSelfSizeChanged(float dWidth, float dHeight, bool applyPivot)
         {
-            int cnt = _defs.Count;
+            var cnt = _defs.Count;
             if (cnt == 0)
                 return;
 
-            float ox = _owner.x;
-            float oy = _owner.y;
+            var ox = _owner.x;
+            var oy = _owner.y;
 
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
-                RelationDef info = _defs[i];
+                var info = _defs[i];
                 switch (info.type)
                 {
                     case RelationType.Center_Center:
@@ -174,14 +170,14 @@ namespace FairyGUI
 
                 if (_owner.parent != null)
                 {
-                    int transCount = _owner.parent._transitions.Count;
-                    for (int i = 0; i < transCount; i++)
+                    var transCount = _owner.parent._transitions.Count;
+                    for (var i = 0; i < transCount; i++)
                         _owner.parent._transitions[i].UpdateFromRelations(_owner.id, ox, oy);
                 }
             }
         }
 
-        void ApplyOnXYChanged(RelationDef info, float dx, float dy)
+        private void ApplyOnXYChanged(RelationDef info, float dx, float dy)
         {
             float tmp;
             switch (info.type)
@@ -219,7 +215,10 @@ namespace FairyGUI
                         _owner.xMin = tmp + dx;
                     }
                     else
+                    {
                         _owner.width = _owner._rawWidth - dx;
+                    }
+
                     break;
 
                 case RelationType.RightExt_Left:
@@ -231,7 +230,10 @@ namespace FairyGUI
                         _owner.xMin = tmp;
                     }
                     else
+                    {
                         _owner.width = _owner._rawWidth + dx;
+                    }
+
                     break;
 
                 case RelationType.TopExt_Top:
@@ -243,7 +245,10 @@ namespace FairyGUI
                         _owner.yMin = tmp + dy;
                     }
                     else
+                    {
                         _owner.height = _owner._rawHeight - dy;
+                    }
+
                     break;
 
                 case RelationType.BottomExt_Top:
@@ -255,12 +260,15 @@ namespace FairyGUI
                         _owner.yMin = tmp;
                     }
                     else
+                    {
                         _owner.height = _owner._rawHeight + dy;
+                    }
+
                     break;
             }
         }
 
-        void ApplyOnSizeChanged(RelationDef info)
+        private void ApplyOnSizeChanged(RelationDef info)
         {
             float pos = 0, pivot = 0, delta = 0;
             if (info.axis == 0)
@@ -278,7 +286,9 @@ namespace FairyGUI
                         delta = _target._width / _targetData.z;
                 }
                 else
+                {
                     delta = _target._width - _targetData.z;
+                }
             }
             else
             {
@@ -295,7 +305,9 @@ namespace FairyGUI
                         delta = _target._height / _targetData.w;
                 }
                 else
+                {
                     delta = _target._height - _targetData.w;
+                }
             }
 
             float v, tmp;
@@ -306,7 +318,7 @@ namespace FairyGUI
                     if (info.percent)
                         _owner.xMin = pos + (_owner.xMin - pos) * delta;
                     else if (pivot != 0)
-                        _owner.x += delta * (-pivot);
+                        _owner.x += delta * -pivot;
                     break;
                 case RelationType.Left_Center:
                     if (info.percent)
@@ -322,7 +334,8 @@ namespace FairyGUI
                     break;
                 case RelationType.Center_Center:
                     if (info.percent)
-                        _owner.xMin = pos + (_owner.xMin + _owner._rawWidth * 0.5f - pos) * delta - _owner._rawWidth * 0.5f;
+                        _owner.xMin = pos + (_owner.xMin + _owner._rawWidth * 0.5f - pos) * delta -
+                                      _owner._rawWidth * 0.5f;
                     else
                         _owner.x += delta * (0.5f - pivot);
                     break;
@@ -330,7 +343,7 @@ namespace FairyGUI
                     if (info.percent)
                         _owner.xMin = pos + (_owner.xMin + _owner._rawWidth - pos) * delta - _owner._rawWidth;
                     else if (pivot != 0)
-                        _owner.x += delta * (-pivot);
+                        _owner.x += delta * -pivot;
                     break;
                 case RelationType.Right_Center:
                     if (info.percent)
@@ -349,7 +362,7 @@ namespace FairyGUI
                     if (info.percent)
                         _owner.yMin = pos + (_owner.yMin - pos) * delta;
                     else if (pivot != 0)
-                        _owner.y += delta * (-pivot);
+                        _owner.y += delta * -pivot;
                     break;
                 case RelationType.Top_Middle:
                     if (info.percent)
@@ -365,7 +378,8 @@ namespace FairyGUI
                     break;
                 case RelationType.Middle_Middle:
                     if (info.percent)
-                        _owner.yMin = pos + (_owner.yMin + _owner._rawHeight * 0.5f - pos) * delta - _owner._rawHeight * 0.5f;
+                        _owner.yMin = pos + (_owner.yMin + _owner._rawHeight * 0.5f - pos) * delta -
+                                      _owner._rawHeight * 0.5f;
                     else
                         _owner.y += delta * (0.5f - pivot);
                     break;
@@ -373,7 +387,7 @@ namespace FairyGUI
                     if (info.percent)
                         _owner.yMin = pos + (_owner.yMin + _owner._rawHeight - pos) * delta - _owner._rawHeight;
                     else if (pivot != 0)
-                        _owner.y += delta * (-pivot);
+                        _owner.y += delta * -pivot;
                     break;
                 case RelationType.Bottom_Middle:
                     if (info.percent)
@@ -404,10 +418,15 @@ namespace FairyGUI
                             _owner.xMin = tmp;
                         }
                         else
+                        {
                             _owner.SetSize(_target._width + v, _owner._rawHeight, true);
+                        }
                     }
                     else
+                    {
                         _owner.width = _target._width + v;
+                    }
+
                     break;
                 case RelationType.Height:
                     if (_owner.underConstruct && _owner == _target.parent)
@@ -425,10 +444,15 @@ namespace FairyGUI
                             _owner.yMin = tmp;
                         }
                         else
+                        {
                             _owner.SetSize(_owner._rawWidth, _target._height + v, true);
+                        }
                     }
                     else
+                    {
                         _owner.height = _target._height + v;
+                    }
+
                     break;
 
                 case RelationType.LeftExt_Left:
@@ -436,7 +460,7 @@ namespace FairyGUI
                     if (info.percent)
                         v = pos + (tmp - pos) * delta - tmp;
                     else
-                        v = delta * (-pivot);
+                        v = delta * -pivot;
                     _owner.width = _owner._rawWidth - v;
                     _owner.xMin = tmp + v;
                     break;
@@ -454,7 +478,7 @@ namespace FairyGUI
                     if (info.percent)
                         v = pos + (tmp + _owner._rawWidth - pos) * delta - (tmp + _owner._rawWidth);
                     else
-                        v = delta * (-pivot);
+                        v = delta * -pivot;
                     _owner.width = _owner._rawWidth + v;
                     _owner.xMin = tmp;
                     break;
@@ -466,7 +490,8 @@ namespace FairyGUI
                         {
                             if (_owner.underConstruct)
                                 _owner.width = pos + _target._width - _target._width * pivot +
-                                    (_owner.sourceWidth - pos - _target.initWidth + _target.initWidth * pivot) * delta;
+                                               (_owner.sourceWidth - pos - _target.initWidth +
+                                                _target.initWidth * pivot) * delta;
                             else
                                 _owner.width = pos + (_owner._rawWidth - pos) * delta;
                         }
@@ -493,13 +518,14 @@ namespace FairyGUI
                             _owner.xMin = tmp;
                         }
                     }
+
                     break;
                 case RelationType.TopExt_Top:
                     tmp = _owner.yMin;
                     if (info.percent)
                         v = pos + (tmp - pos) * delta - tmp;
                     else
-                        v = delta * (-pivot);
+                        v = delta * -pivot;
                     _owner.height = _owner._rawHeight - v;
                     _owner.yMin = tmp + v;
                     break;
@@ -517,7 +543,7 @@ namespace FairyGUI
                     if (info.percent)
                         v = pos + (tmp + _owner._rawHeight - pos) * delta - (tmp + _owner._rawHeight);
                     else
-                        v = delta * (-pivot);
+                        v = delta * -pivot;
                     _owner.height = _owner._rawHeight + v;
                     _owner.yMin = tmp;
                     break;
@@ -529,7 +555,8 @@ namespace FairyGUI
                         {
                             if (_owner.underConstruct)
                                 _owner.height = pos + _target._height - _target._height * pivot +
-                                    (_owner.sourceHeight - pos - _target.initHeight + _target.initHeight * pivot) * delta;
+                                                (_owner.sourceHeight - pos - _target.initHeight +
+                                                 _target.initHeight * pivot) * delta;
                             else
                                 _owner.height = pos + (_owner._rawHeight - pos) * delta;
                         }
@@ -545,7 +572,8 @@ namespace FairyGUI
                         if (_owner == _target.parent)
                         {
                             if (_owner.underConstruct)
-                                _owner.height = _owner.sourceHeight + (_target._height - _target.initHeight) * (1 - pivot);
+                                _owner.height = _owner.sourceHeight +
+                                                (_target._height - _target.initHeight) * (1 - pivot);
                             else
                                 _owner.height = _owner._rawHeight + delta * (1 - pivot);
                         }
@@ -556,11 +584,12 @@ namespace FairyGUI
                             _owner.yMin = tmp;
                         }
                     }
+
                     break;
             }
         }
 
-        void AddRefTarget(GObject target)
+        private void AddRefTarget(GObject target)
         {
             if (target != _owner.parent)
                 target.onPositionChanged.Add(__targetXYChanged);
@@ -571,13 +600,13 @@ namespace FairyGUI
             _targetData.w = _target._height;
         }
 
-        void ReleaseRefTarget(GObject target)
+        private void ReleaseRefTarget(GObject target)
         {
             target.onPositionChanged.Remove(__targetXYChanged);
             target.onSizeChanged.Remove(__targetSizeChanged);
         }
 
-        void __targetXYChanged(EventContext context)
+        private void __targetXYChanged(EventContext context)
         {
             if (_owner.relations.handling != null
                 || _owner.group != null && _owner.group._updating != 0)
@@ -587,15 +616,15 @@ namespace FairyGUI
                 return;
             }
 
-            _owner.relations.handling = (GObject)context.sender;
+            _owner.relations.handling = (GObject) context.sender;
 
-            float ox = _owner.x;
-            float oy = _owner.y;
-            float dx = _target.x - _targetData.x;
-            float dy = _target.y - _targetData.y;
+            var ox = _owner.x;
+            var oy = _owner.y;
+            var dx = _target.x - _targetData.x;
+            var dy = _target.y - _targetData.y;
 
-            int cnt = _defs.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _defs.Count;
+            for (var i = 0; i < cnt; i++)
                 ApplyOnXYChanged(_defs[i], dx, dy);
 
             _targetData.x = _target.x;
@@ -610,8 +639,8 @@ namespace FairyGUI
 
                 if (_owner.parent != null)
                 {
-                    int transCount = _owner.parent._transitions.Count;
-                    for (int i = 0; i < transCount; i++)
+                    var transCount = _owner.parent._transitions.Count;
+                    for (var i = 0; i < transCount; i++)
                         _owner.parent._transitions[i].UpdateFromRelations(_owner.id, ox, oy);
                 }
             }
@@ -619,7 +648,7 @@ namespace FairyGUI
             _owner.relations.handling = null;
         }
 
-        void __targetSizeChanged(EventContext context)
+        private void __targetSizeChanged(EventContext context)
         {
             if (_owner.relations.handling != null
                 || _owner.group != null && _owner.group._updating != 0)
@@ -629,15 +658,15 @@ namespace FairyGUI
                 return;
             }
 
-            _owner.relations.handling = (GObject)context.sender;
+            _owner.relations.handling = (GObject) context.sender;
 
-            float ox = _owner.x;
-            float oy = _owner.y;
-            float ow = _owner._rawWidth;
-            float oh = _owner._rawHeight;
+            var ox = _owner.x;
+            var oy = _owner.y;
+            var ow = _owner._rawWidth;
+            var oh = _owner._rawHeight;
 
-            int cnt = _defs.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = _defs.Count;
+            for (var i = 0; i < cnt; i++)
                 ApplyOnSizeChanged(_defs[i]);
 
             _targetData.z = _target._width;
@@ -652,8 +681,8 @@ namespace FairyGUI
 
                 if (_owner.parent != null)
                 {
-                    int transCount = _owner.parent._transitions.Count;
-                    for (int i = 0; i < transCount; i++)
+                    var transCount = _owner.parent._transitions.Count;
+                    for (var i = 0; i < transCount; i++)
                         _owner.parent._transitions[i].UpdateFromRelations(_owner.id, ox, oy);
                 }
             }

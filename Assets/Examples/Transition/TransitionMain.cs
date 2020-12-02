@@ -3,24 +3,24 @@ using FairyGUI;
 
 public class TransitionMain : MonoBehaviour
 {
-    GComponent _mainView;
-    GGroup _btnGroup;
-    GComponent _g1;
-    GComponent _g2;
-    GComponent _g3;
-    GComponent _g4;
-    GComponent _g5;
-    GComponent _g6;
+    private GComponent _mainView;
+    private GGroup _btnGroup;
+    private GComponent _g1;
+    private GComponent _g2;
+    private GComponent _g3;
+    private GComponent _g4;
+    private GComponent _g5;
+    private GComponent _g6;
 
-    float _startValue;
-    float _endValue;
+    private float _startValue;
+    private float _endValue;
 
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
 
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
         _btnGroup = _mainView.GetChild("g0").asGroup;
 
@@ -42,11 +42,11 @@ public class TransitionMain : MonoBehaviour
         _mainView.GetChild("btn5").onClick.Add(() => { __play(_g6); });
     }
 
-    void __play(GComponent target)
+    private void __play(GComponent target)
     {
         _btnGroup.visible = false;
         GRoot.inst.AddChild(target);
-        Transition t = target.GetTransition("t0");
+        var t = target.GetTransition("t0");
 
         t.Play(() =>
         {
@@ -55,13 +55,13 @@ public class TransitionMain : MonoBehaviour
         });
     }
 
-    void __play4()
+    private void __play4()
     {
         _btnGroup.visible = false;
         _g4.x = GRoot.inst.width - _g4.width - 20;
         _g4.y = 100;
         GRoot.inst.AddChild(_g4);
-        Transition t = _g4.GetTransition("t0");
+        var t = _g4.GetTransition("t0");
         t.Play(3, 0, () =>
         {
             _btnGroup.visible = true;
@@ -69,15 +69,15 @@ public class TransitionMain : MonoBehaviour
         });
     }
 
-    void __play5()
+    private void __play5()
     {
         _btnGroup.visible = false;
         _g5.x = 20;
         _g5.y = GRoot.inst.height - _g5.height - 100;
         GRoot.inst.AddChild(_g5);
-        Transition t = _g5.GetTransition("t0");
+        var t = _g5.GetTransition("t0");
         _startValue = 10000;
-        int add = UnityEngine.Random.Range(1000, 3000);
+        var add = Random.Range(1000, 3000);
         _endValue = _startValue + add;
         _g5.GetChild("value").text = "" + _startValue;
         _g5.GetChild("add_value").text = "" + add;
@@ -88,18 +88,14 @@ public class TransitionMain : MonoBehaviour
         });
     }
 
-    void __playNum()
+    private void __playNum()
     {
         GTween.To(_startValue, _endValue, 0.3f).SetEase(EaseType.Linear)
             .OnUpdate((GTweener tweener) => { _g5.GetChild("value").text = "" + Mathf.Floor(tweener.value.x); });
-
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

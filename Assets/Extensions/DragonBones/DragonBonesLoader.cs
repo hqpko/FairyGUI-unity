@@ -1,5 +1,4 @@
 #if FAIRYGUI_DRAGONBONES
-
 using UnityEngine;
 using DragonBones;
 
@@ -33,7 +32,8 @@ namespace FairyGUI
             if (_armatureComponent != null)
                 FreeDragonBones();
 
-            _armatureComponent = UnityFactory.factory.BuildArmatureComponent(asset.armatureNames[0], asset.name, null, asset.name);
+            _armatureComponent =
+ UnityFactory.factory.BuildArmatureComponent(asset.armatureNames[0], asset.name, null, asset.name);
             _armatureComponent.gameObject.transform.localScale = new Vector3(100, 100, 1);
             _armatureComponent.gameObject.transform.localPosition = new Vector3(anchor.x, -anchor.y, 0);
             SetWrapTarget(_armatureComponent.gameObject, true, width, height);

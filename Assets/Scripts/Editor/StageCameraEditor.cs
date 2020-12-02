@@ -3,15 +3,14 @@ using FairyGUI;
 
 namespace FairyGUIEditor
 {
-
     [CustomEditor(typeof(StageCamera))]
     public class StageCameraEditor : Editor
     {
-        string[] propertyToExclude;
+        private string[] propertyToExclude;
 
-        void OnEnable()
+        private void OnEnable()
         {
-            propertyToExclude = new string[] { "m_Script" };
+            propertyToExclude = new string[] {"m_Script"};
         }
 
         public override void OnInspectorGUI()

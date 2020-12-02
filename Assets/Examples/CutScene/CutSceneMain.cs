@@ -7,7 +7,7 @@ using FairyGUI;
 /// </summary>
 public class CutSceneMain : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -18,11 +18,8 @@ public class CutSceneMain : MonoBehaviour
         LevelManager.inst.LoadLevel("scene1");
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

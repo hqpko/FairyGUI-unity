@@ -3,11 +3,11 @@ using FairyGUI;
 
 public class TurnCardMain : MonoBehaviour
 {
-    GComponent _mainView;
-    Card _c0;
-    Card _c1;
+    private GComponent _mainView;
+    private Card _c0;
+    private Card _c1;
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 60;
         Stage.inst.onKeyDown.Add(OnKeyDown);
@@ -16,30 +16,27 @@ public class TurnCardMain : MonoBehaviour
         UIObjectFactory.SetPackageItemExtension("ui://TurnCard/CardComponent", typeof(Card));
     }
 
-    void Start()
+    private void Start()
     {
-        _mainView = this.GetComponent<UIPanel>().ui;
+        _mainView = GetComponent<UIPanel>().ui;
 
-        _c0 = (Card)_mainView.GetChild("c0");
+        _c0 = (Card) _mainView.GetChild("c0");
 
-        _c1 = (Card)_mainView.GetChild("c1");
+        _c1 = (Card) _mainView.GetChild("c1");
         _c1.SetPerspective();
-        
+
         _c0.onClick.Add(__clickCard);
         _c1.onClick.Add(__clickCard);
     }
 
-    void __clickCard(EventContext context)
+    private void __clickCard(EventContext context)
     {
-        Card card = (Card)context.sender;
+        var card = (Card) context.sender;
         card.Turn();
     }
 
-    void OnKeyDown(EventContext context)
+    private void OnKeyDown(EventContext context)
     {
-        if (context.inputEvent.keyCode == KeyCode.Escape)
-        {
-            Application.Quit();
-        }
+        if (context.inputEvent.keyCode == KeyCode.Escape) Application.Quit();
     }
 }

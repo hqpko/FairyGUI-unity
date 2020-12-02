@@ -4,29 +4,27 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class DynamicFont : BaseFont
     {
-        Font _font;
-        int _size;
-        float _ascent;
-        float _lineHeight;
-        float _scale;
-        TextFormat _format;
-        FontStyle _style;
-        bool _boldVertice;
-        CharacterInfo _char;
-        CharacterInfo _lineChar;
-        bool _gotLineChar;
+        private Font _font;
+        private int _size;
+        private float _ascent;
+        private float _lineHeight;
+        private float _scale;
+        private TextFormat _format;
+        private FontStyle _style;
+        private bool _boldVertice;
+        private CharacterInfo _char;
+        private CharacterInfo _lineChar;
+        private bool _gotLineChar;
 
         public DynamicFont()
         {
-            this.canTint = true;
-            this.keepCrisp = true;
-            this.customOutline = true;
-            this.shader = ShaderConfig.textShader;
+            canTint = true;
+            keepCrisp = true;
+            customOutline = true;
+            shader = ShaderConfig.textShader;
         }
-
 
         /// <param name="name"></param>
         /// <param name="font"></param>
@@ -34,17 +32,17 @@ namespace FairyGUI
         public DynamicFont(string name, Font font) : this()
         {
             this.name = name;
-            this.nativeFont = font;
+            nativeFont = font;
         }
 
-        override public void Dispose()
+        public override void Dispose()
         {
             Font.textureRebuilt -= textureRebuildCallback;
         }
 
         public Font nativeFont
         {
-            get { return _font; }
+            get => _font;
             set
             {
                 if (_font != null)
@@ -68,18 +66,19 @@ namespace FairyGUI
             }
         }
 
-        override public void SetFormat(TextFormat format, float fontSizeScale)
+        public override void SetFormat(TextFormat format, float fontSizeScale)
         {
             _format = format;
-            float size = format.size * fontSizeScale;
+            var size = format.size * fontSizeScale;
             if (keepCrisp)
                 size *= UIContentScaler.scaleFactor;
-            if (_format.specialStyle == TextFormat.SpecialStyle.Subscript || _format.specialStyle == TextFormat.SpecialStyle.Superscript)
+            if (_format.specialStyle == TextFormat.SpecialStyle.Subscript ||
+                _format.specialStyle == TextFormat.SpecialStyle.Superscript)
                 size *= SupScale;
             _size = Mathf.FloorToInt(size);
             if (_size == 0)
                 _size = 1;
-            _scale = (float)_size / _font.fontSize;
+            _scale = (float) _size / _font.fontSize;
 
             if (format.bold && !customBold)
             {
@@ -91,7 +90,9 @@ namespace FairyGUI
                         _style = FontStyle.BoldAndItalic;
                 }
                 else
+                {
                     _style = FontStyle.Bold;
+                }
             }
             else
             {
@@ -101,16 +102,16 @@ namespace FairyGUI
                     _style = FontStyle.Normal;
             }
 
-            _boldVertice = format.bold && (customBold || (format.italic && customBoldAndItalic));
+            _boldVertice = format.bold && (customBold || format.italic && customBoldAndItalic);
             format.FillVertexColors(vertexColors);
         }
 
-        override public void PrepareCharacters(string text)
+        public override void PrepareCharacters(string text)
         {
             _font.RequestCharactersInTexture(text, _size, _style);
         }
 
-        override public bool GetGlyph(char ch, out float width, out float height, out float baseline)
+        public override bool GetGlyph(char ch, out float width, out float height, out float baseline)
         {
             if (!_font.GetCharacterInfo(ch, out _char, _size, _style))
             {
@@ -141,7 +142,7 @@ namespace FairyGUI
             else if (_format.specialStyle == TextFormat.SpecialStyle.Superscript)
             {
                 height = height / SupScale + baseline * SupOffset;
-                baseline *= (SupOffset + 1 / SupScale);
+                baseline *= SupOffset + 1 / SupScale;
             }
 
             height = Mathf.RoundToInt(height);
@@ -157,19 +158,19 @@ namespace FairyGUI
             return true;
         }
 
-        static Vector3 bottomLeft;
-        static Vector3 topLeft;
-        static Vector3 topRight;
-        static Vector3 bottomRight;
+        private static Vector3 bottomLeft;
+        private static Vector3 topLeft;
+        private static Vector3 topRight;
+        private static Vector3 bottomRight;
 
-        static Vector2 uvBottomLeft;
-        static Vector2 uvTopLeft;
-        static Vector2 uvTopRight;
-        static Vector2 uvBottomRight;
+        private static Vector2 uvBottomLeft;
+        private static Vector2 uvTopLeft;
+        private static Vector2 uvTopRight;
+        private static Vector2 uvBottomRight;
 
-        static Color32[] vertexColors = new Color32[4];
+        private static Color32[] vertexColors = new Color32[4];
 
-        static Vector3[] BOLD_OFFSET = new Vector3[]
+        private static Vector3[] BOLD_OFFSET = new Vector3[]
         {
             new Vector3(-0.5f, 0f, 0f),
             new Vector3(0.5f, 0f, 0f),
@@ -177,7 +178,7 @@ namespace FairyGUI
             new Vector3(0f, 0.5f, 0f)
         };
 
-        override public int DrawGlyph(float x, float y,
+        public override int DrawGlyph(float x, float y,
             List<Vector3> vertList, List<Vector2> uvList, List<Vector2> uv2List, List<Color32> colList)
         {
             topLeft.x = _char.minX;
@@ -230,9 +231,9 @@ namespace FairyGUI
 
             if (_boldVertice)
             {
-                for (int b = 0; b < 4; b++)
+                for (var b = 0; b < 4; b++)
                 {
-                    Vector3 boldOffset = BOLD_OFFSET[b];
+                    var boldOffset = BOLD_OFFSET[b];
 
                     vertList.Add(bottomLeft + boldOffset);
                     vertList.Add(topLeft + boldOffset);
@@ -253,10 +254,12 @@ namespace FairyGUI
                 return 20;
             }
             else
+            {
                 return 4;
+            }
         }
 
-        override public int DrawLine(float x, float y, float width, int fontSize, int type,
+        public override int DrawLine(float x, float y, float width, int fontSize, int type,
             List<Vector3> vertList, List<Vector2> uvList, List<Vector2> uv2List, List<Color32> colList)
         {
             if (!_gotLineChar)
@@ -271,7 +274,7 @@ namespace FairyGUI
 
             thickness = Mathf.Max(1, fontSize / 16f); //guest underline size
             if (type == 0)
-                offset = Mathf.RoundToInt(_lineChar.minY * (float)fontSize / 50 + thickness);
+                offset = Mathf.RoundToInt(_lineChar.minY * (float) fontSize / 50 + thickness);
             else
                 offset = Mathf.RoundToInt(_ascent * 0.4f * fontSize / _font.fontSize);
             if (thickness < 1)
@@ -321,9 +324,9 @@ namespace FairyGUI
 
             if (_boldVertice)
             {
-                for (int b = 0; b < 4; b++)
+                for (var b = 0; b < 4; b++)
                 {
-                    Vector3 boldOffset = BOLD_OFFSET[b];
+                    var boldOffset = BOLD_OFFSET[b];
 
                     vertList.Add(bottomLeft + boldOffset);
                     vertList.Add(topLeft + boldOffset);
@@ -344,20 +347,22 @@ namespace FairyGUI
                 return 20;
             }
             else
+            {
                 return 4;
+            }
         }
 
-        override public bool HasCharacter(char ch)
+        public override bool HasCharacter(char ch)
         {
             return _font.HasCharacter(ch);
         }
 
-        override public int GetLineHeight(int size)
+        public override int GetLineHeight(int size)
         {
             return Mathf.RoundToInt(_lineHeight * size / _font.fontSize);
         }
 
-        void textureRebuildCallback(Font targetFont)
+        private void textureRebuildCallback(Font targetFont)
         {
             if (_font != targetFont)
                 return;
@@ -368,7 +373,9 @@ namespace FairyGUI
                 mainTexture.destroyMethod = DestroyMethod.None;
             }
             else
+            {
                 mainTexture.Reload(_font.material.mainTexture, null);
+            }
 
             _gotLineChar = false;
 
