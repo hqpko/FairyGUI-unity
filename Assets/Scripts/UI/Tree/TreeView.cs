@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace FairyGUI
 {
-
     [Obsolete("Use GTree and GTreeNode instead")]
     public class TreeView : EventDispatcher
     {
@@ -23,7 +22,9 @@ namespace FairyGUI
         public int indent;
 
         public delegate GComponent TreeNodeCreateCellDelegate(TreeNode node);
+
         public delegate void TreeNodeRenderDelegate(TreeNode node);
+
         public delegate void TreeNodeWillExpandDelegate(TreeNode node, bool expand);
 
         /// <summary>
@@ -51,7 +52,6 @@ namespace FairyGUI
         /// </summary>
         public EventListener onRightClickNode { get; private set; }
 
-
         /// <param name="list"></param>
         public TreeView(GList list)
         {
@@ -71,45 +71,43 @@ namespace FairyGUI
             onRightClickNode = new EventListener(this, "onRightClickNode");
         }
 
-
         /// <returns></returns>
         public TreeNode GetSelectedNode()
         {
             if (list.selectedIndex != -1)
-                return (TreeNode)list.GetChildAt(list.selectedIndex).data;
+                return (TreeNode) list.GetChildAt(list.selectedIndex).data;
             else
                 return null;
         }
 
-
         /// <returns></returns>
         public List<TreeNode> GetSelection()
         {
-            List<int> sels = list.GetSelection();
-            int cnt = sels.Count;
-            List<TreeNode> ret = new List<TreeNode>();
-            for (int i = 0; i < cnt; i++)
+            var sels = list.GetSelection();
+            var cnt = sels.Count;
+            var ret = new List<TreeNode>();
+            for (var i = 0; i < cnt; i++)
             {
-                TreeNode node = (TreeNode)list.GetChildAt(sels[i]).data;
+                var node = (TreeNode) list.GetChildAt(sels[i]).data;
                 ret.Add(node);
             }
+
             return ret;
         }
-
 
         /// <param name="node"></param>
         /// <param name="scrollItToView"></param>
         public void AddSelection(TreeNode node, bool scrollItToView = false)
         {
-            TreeNode parentNode = node.parent;
+            var parentNode = node.parent;
             while (parentNode != null && parentNode != root)
             {
                 parentNode.expanded = true;
                 parentNode = parentNode.parent;
             }
+
             list.AddSelection(list.GetChildIndex(node.cell), scrollItToView);
         }
-
 
         /// <param name="node"></param>
         public void RemoveSelection(TreeNode node)
@@ -117,12 +115,10 @@ namespace FairyGUI
             list.RemoveSelection(list.GetChildIndex(node.cell));
         }
 
-
         public void ClearSelection()
         {
             list.ClearSelection();
         }
-
 
         /// <param name="node"></param>
         /// <returns></returns>
@@ -130,7 +126,6 @@ namespace FairyGUI
         {
             return list.GetChildIndex(node.cell);
         }
-
 
         /// <param name="node"></param>
         public void UpdateNode(TreeNode node)
@@ -142,14 +137,13 @@ namespace FairyGUI
                 treeNodeRender(node);
         }
 
-
         /// <param name="nodes"></param>
         public void UpdateNodes(List<TreeNode> nodes)
         {
-            int cnt = nodes.Count;
-            for (int i = 0; i < cnt; i++)
+            var cnt = nodes.Count;
+            for (var i = 0; i < cnt; i++)
             {
-                TreeNode node = nodes[i];
+                var node = nodes[i];
                 if (node.cell == null)
                     return;
 
@@ -158,38 +152,35 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="folderNode"></param>
         public void ExpandAll(TreeNode folderNode)
         {
             folderNode.expanded = true;
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                TreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.isFolder)
                     ExpandAll(node);
             }
         }
-
 
         /// <param name="folderNode"></param>
         public void CollapseAll(TreeNode folderNode)
         {
             if (folderNode != root)
                 folderNode.expanded = false;
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                TreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.isFolder)
                     CollapseAll(node);
             }
         }
 
-
         /// <param name="node"></param>
-        void CreateCell(TreeNode node)
+        private void CreateCell(TreeNode node)
         {
             if (treeNodeCreateCell != null)
                 node.cell = treeNodeCreateCell(node);
@@ -199,11 +190,11 @@ namespace FairyGUI
                 throw new Exception("Unable to create tree cell");
             node.cell.data = node;
 
-            GObject indentObj = node.cell.GetChild("indent");
+            var indentObj = node.cell.GetChild("indent");
             if (indentObj != null)
                 indentObj.width = (node.level - 1) * indent;
 
-            GButton expandButton = (GButton)node.cell.GetChild("expandButton");
+            var expandButton = (GButton) node.cell.GetChild("expandButton");
             if (expandButton != null)
             {
                 if (node.isFolder)
@@ -214,20 +205,21 @@ namespace FairyGUI
                     expandButton.selected = node.expanded;
                 }
                 else
+                {
                     expandButton.visible = false;
+                }
             }
 
             if (treeNodeRender != null)
                 treeNodeRender(node);
         }
 
-
         /// <param name="node"></param>
         internal void AfterInserted(TreeNode node)
         {
             CreateCell(node);
 
-            int index = GetInsertIndexForNode(node);
+            var index = GetInsertIndexForNode(node);
             list.AddChildAt(node.cell, index);
             if (treeNodeRender != null)
                 treeNodeRender(node);
@@ -236,20 +228,19 @@ namespace FairyGUI
                 CheckChildren(node, index);
         }
 
-
         /// <param name="node"></param>
         /// <returns></returns>
-        int GetInsertIndexForNode(TreeNode node)
+        private int GetInsertIndexForNode(TreeNode node)
         {
-            TreeNode prevNode = node.GetPrevSibling();
+            var prevNode = node.GetPrevSibling();
             if (prevNode == null)
                 prevNode = node.parent;
-            int insertIndex = list.GetChildIndex(prevNode.cell) + 1;
-            int myLevel = node.level;
-            int cnt = list.numChildren;
-            for (int i = insertIndex; i < cnt; i++)
+            var insertIndex = list.GetChildIndex(prevNode.cell) + 1;
+            var myLevel = node.level;
+            var cnt = list.numChildren;
+            for (var i = insertIndex; i < cnt; i++)
             {
-                TreeNode testNode = (TreeNode)list.GetChildAt(i).data;
+                var testNode = (TreeNode) list.GetChildAt(i).data;
                 if (testNode.level <= myLevel)
                     break;
 
@@ -259,13 +250,11 @@ namespace FairyGUI
             return insertIndex;
         }
 
-
         /// <param name="node"></param>
         internal void AfterRemoved(TreeNode node)
         {
             RemoveNode(node);
         }
-
 
         /// <param name="node"></param>
         internal void AfterExpanded(TreeNode node)
@@ -281,7 +270,7 @@ namespace FairyGUI
                 if (treeNodeRender != null)
                     treeNodeRender(node);
 
-                GButton expandButton = (GButton)node.cell.GetChild("expandButton");
+                var expandButton = (GButton) node.cell.GetChild("expandButton");
                 if (expandButton != null)
                     expandButton.selected = true;
             }
@@ -289,7 +278,6 @@ namespace FairyGUI
             if (node.cell.parent != null)
                 CheckChildren(node, list.GetChildIndex(node.cell));
         }
-
 
         /// <param name="node"></param>
         internal void AfterCollapsed(TreeNode node)
@@ -305,7 +293,7 @@ namespace FairyGUI
                 if (treeNodeRender != null)
                     treeNodeRender(node);
 
-                GButton expandButton = (GButton)node.cell.GetChild("expandButton");
+                var expandButton = (GButton) node.cell.GetChild("expandButton");
                 if (expandButton != null)
                     expandButton.selected = false;
             }
@@ -313,7 +301,6 @@ namespace FairyGUI
             if (node.cell.parent != null)
                 HideFolderNode(node);
         }
-
 
         /// <param name="node"></param>
         internal void AfterMoved(TreeNode node)
@@ -323,24 +310,23 @@ namespace FairyGUI
             else
                 HideFolderNode(node);
 
-            int index = GetInsertIndexForNode(node);
+            var index = GetInsertIndexForNode(node);
             list.AddChildAt(node.cell, index);
 
             if (node.isFolder && node.expanded)
                 CheckChildren(node, index);
         }
 
-
         /// <param name="folderNode"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        int CheckChildren(TreeNode folderNode, int index)
+        private int CheckChildren(TreeNode folderNode, int index)
         {
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
                 index++;
-                TreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.cell == null)
                     CreateCell(node);
 
@@ -354,14 +340,13 @@ namespace FairyGUI
             return index;
         }
 
-
         /// <param name="folderNode"></param>
-        void HideFolderNode(TreeNode folderNode)
+        private void HideFolderNode(TreeNode folderNode)
         {
-            int cnt = folderNode.numChildren;
-            for (int i = 0; i < cnt; i++)
+            var cnt = folderNode.numChildren;
+            for (var i = 0; i < cnt; i++)
             {
-                TreeNode node = folderNode.GetChildAt(i);
+                var node = folderNode.GetChildAt(i);
                 if (node.cell != null)
                 {
                     if (node.cell.parent != null)
@@ -370,14 +355,14 @@ namespace FairyGUI
                     node.cell.data = null;
                     node.cell = null;
                 }
+
                 if (node.isFolder && node.expanded)
                     HideFolderNode(node);
             }
         }
 
-
         /// <param name="node"></param>
-        void RemoveNode(TreeNode node)
+        private void RemoveNode(TreeNode node)
         {
             if (node.cell != null)
             {
@@ -390,24 +375,24 @@ namespace FairyGUI
 
             if (node.isFolder)
             {
-                int cnt = node.numChildren;
-                for (int i = 0; i < cnt; i++)
+                var cnt = node.numChildren;
+                for (var i = 0; i < cnt; i++)
                 {
-                    TreeNode node2 = node.GetChildAt(i);
+                    var node2 = node.GetChildAt(i);
                     RemoveNode(node2);
                 }
             }
         }
 
-        void __clickExpandButton(EventContext context)
+        private void __clickExpandButton(EventContext context)
         {
             context.StopPropagation();
 
-            GButton expandButton = (GButton)context.sender;
-            TreeNode node = (TreeNode)expandButton.parent.data;
+            var expandButton = (GButton) context.sender;
+            var node = (TreeNode) expandButton.parent.data;
             if (list.scrollPane != null)
             {
-                float posY = list.scrollPane.posY;
+                var posY = list.scrollPane.posY;
                 if (expandButton.selected)
                     node.expanded = true;
                 else
@@ -424,13 +409,13 @@ namespace FairyGUI
             }
         }
 
-        void __clickItem(EventContext context)
+        private void __clickItem(EventContext context)
         {
             float posY = 0;
             if (list.scrollPane != null)
                 posY = list.scrollPane.posY;
 
-            TreeNode node = (TreeNode)((GObject)context.data).data;
+            var node = (TreeNode) ((GObject) context.data).data;
             if (context.type == list.onRightClickItem.type)
                 onRightClickNode.Call(node);
             else

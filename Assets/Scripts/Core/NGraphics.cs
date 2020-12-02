@@ -6,21 +6,15 @@ using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-
     public class NGraphics : IMeshFactory
     {
-
         public GameObject gameObject { get; private set; }
-
 
         public MeshFilter meshFilter { get; private set; }
 
-
         public MeshRenderer meshRenderer { get; private set; }
 
-
         public Mesh mesh { get; private set; }
-
 
         public BlendMode blendMode;
 
@@ -54,6 +48,7 @@ namespace FairyGUI
             public Vector3 cameraPos;
             public Matrix4x4 matrix;
         }
+
         VertexMatrix _vertexMatrix;
 
         bool hasAlphaBackup;
@@ -68,7 +63,6 @@ namespace FairyGUI
 
         MaterialPropertyBlock _propertyBlock;
         bool _blockUpdated;
-
 
         /// <param name="gameObject"></param>
         public NGraphics(GameObject gameObject)
@@ -99,7 +93,6 @@ namespace FairyGUI
             Stats.LatestGraphicsCreation++;
         }
 
-
         public IMeshFactory meshFactory
         {
             get { return _meshFactory; }
@@ -113,7 +106,6 @@ namespace FairyGUI
             }
         }
 
-
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T GetMeshFactory<T>() where T : IMeshFactory, new()
@@ -123,9 +115,9 @@ namespace FairyGUI
                 _meshFactory = new T();
                 _meshDirty = true;
             }
-            return (T)_meshFactory;
-        }
 
+            return (T) _meshFactory;
+        }
 
         public Rect contentRect
         {
@@ -136,7 +128,6 @@ namespace FairyGUI
                 _meshDirty = true;
             }
         }
-
 
         public FlipType flip
         {
@@ -150,7 +141,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public NTexture texture
         {
@@ -173,7 +163,6 @@ namespace FairyGUI
             }
         }
 
-
         public string shader
         {
             get { return _shader; }
@@ -183,7 +172,6 @@ namespace FairyGUI
                 UpdateManager();
             }
         }
-
 
         /// <param name="shader"></param>
         /// <param name="texture"></param>
@@ -195,7 +183,6 @@ namespace FairyGUI
             else
                 UpdateManager();
         }
-
 
         public Material material
         {
@@ -214,7 +201,8 @@ namespace FairyGUI
                 if (_material != null)
                 {
                     _customMatarial = 1;
-                    if (_material.HasProperty(ShaderConfig.ID_Stencil) || _material.HasProperty(ShaderConfig.ID_ClipBox))
+                    if (_material.HasProperty(ShaderConfig.ID_Stencil) ||
+                        _material.HasProperty(ShaderConfig.ID_ClipBox))
                         _customMatarial |= 2;
 
                     meshRenderer.sharedMaterial = _material;
@@ -239,7 +227,6 @@ namespace FairyGUI
             _customMatarial |= 128;
         }
 
-
         public string[] materialKeywords
         {
             get { return _shaderKeywords; }
@@ -250,7 +237,6 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="keyword"></param>
         /// <param name="enabled"></param>
         public void ToggleKeyword(string keyword, bool enabled)
@@ -259,7 +245,7 @@ namespace FairyGUI
             {
                 if (_shaderKeywords == null)
                 {
-                    _shaderKeywords = new string[] { keyword };
+                    _shaderKeywords = new string[] {keyword};
                     UpdateMaterialFlags();
                 }
                 else if (Array.IndexOf(_shaderKeywords, keyword) == -1)
@@ -305,13 +291,11 @@ namespace FairyGUI
                 _materialFlags = 0;
         }
 
-
         public bool enabled
         {
             get { return meshRenderer.enabled; }
             set { meshRenderer.enabled = value; }
         }
-
 
         public int sortingOrder
         {
@@ -319,13 +303,11 @@ namespace FairyGUI
             set { meshRenderer.sortingOrder = value; }
         }
 
-
         /// <param name="value"></param>
         internal void _SetStencilEraserOrder(int value)
         {
             _stencilEraser.meshRenderer.sortingOrder = value;
         }
-
 
         /// <param name="value"></param>
         public Color color
@@ -333,7 +315,6 @@ namespace FairyGUI
             get { return _color; }
             set { _color = value; }
         }
-
 
         public void Tint()
         {
@@ -356,7 +337,7 @@ namespace FairyGUI
             for (int i = 0; i < vertCount; i++)
             {
                 Color32 col = _color;
-                col.a = (byte)(_alpha * (hasAlphaBackup ? _alphaBackup[i] : (byte)255));
+                col.a = (byte) (_alpha * (hasAlphaBackup ? _alphaBackup[i] : (byte) 255));
                 colors[i] = col;
             }
 
@@ -388,7 +369,7 @@ namespace FairyGUI
             for (int i = 0; i < vertCount; i++)
             {
                 Color32 col = colors[i];
-                col.a = (byte)(_alpha * (hasAlphaBackup ? _alphaBackup[i] : (byte)255));
+                col.a = (byte) (_alpha * (hasAlphaBackup ? _alphaBackup[i] : (byte) 255));
                 colors[i] = col;
             }
 
@@ -400,7 +381,6 @@ namespace FairyGUI
 #endif
         }
 
-
         public VertexMatrix vertexMatrix
         {
             get { return _vertexMatrix; }
@@ -410,7 +390,6 @@ namespace FairyGUI
                 _meshDirty = true;
             }
         }
-
 
         /// <returns></returns>
         public MaterialPropertyBlock materialPropertyBlock
@@ -425,12 +404,10 @@ namespace FairyGUI
             }
         }
 
-
         public void SetMeshDirty()
         {
             _meshDirty = true;
         }
-
 
         /// <returns></returns>
         public bool UpdateMesh()
@@ -444,7 +421,6 @@ namespace FairyGUI
                 return false;
         }
 
-
         public void Dispose()
         {
             if (mesh != null)
@@ -455,6 +431,7 @@ namespace FairyGUI
                     Object.DestroyImmediate(mesh);
                 mesh = null;
             }
+
             if ((_customMatarial & 128) != 0 && _material != null)
                 Object.DestroyImmediate(_material);
 
@@ -471,7 +448,6 @@ namespace FairyGUI
             _stencilEraser = null;
             meshModifier = null;
         }
-
 
         /// <param name="context"></param>
         /// <param name="alpha"></param>
@@ -505,25 +481,26 @@ namespace FairyGUI
                 {
                     if (_maskFlag == 1)
                     {
-                        _material = _manager.GetMaterial((int)MaterialFlags.AlphaMask | _materialFlags, BlendMode.Normal, context.clipInfo.clipId);
+                        _material = _manager.GetMaterial((int) MaterialFlags.AlphaMask | _materialFlags,
+                            BlendMode.Normal, context.clipInfo.clipId);
                         context.ApplyAlphaMaskProperties(_material, false);
                     }
                     else
                     {
                         int matFlags = _materialFlags;
                         if (grayed)
-                            matFlags |= (int)MaterialFlags.Grayed;
+                            matFlags |= (int) MaterialFlags.Grayed;
 
                         if (context.clipped)
                         {
                             if (context.stencilReferenceValue > 0)
-                                matFlags |= (int)MaterialFlags.StencilTest;
+                                matFlags |= (int) MaterialFlags.StencilTest;
                             if (context.rectMaskDepth > 0)
                             {
                                 if (context.clipInfo.soft)
-                                    matFlags |= (int)MaterialFlags.SoftClipped;
+                                    matFlags |= (int) MaterialFlags.SoftClipped;
                                 else
-                                    matFlags |= (int)MaterialFlags.Clipped;
+                                    matFlags |= (int) MaterialFlags.Clipped;
                             }
 
                             _material = _manager.GetMaterial(matFlags, blendMode, context.clipInfo.clipId);
@@ -574,7 +551,8 @@ namespace FairyGUI
             if (_manager != null)
             {
                 //这里使用maskId而不是clipInfo.clipId，是因为遮罩有两个用途，一个是写入遮罩，一个是擦除，两个不能用同一个材质
-                Material mat = _manager.GetMaterial((int)MaterialFlags.AlphaMask | _materialFlags, BlendMode.Normal, maskId);
+                Material mat = _manager.GetMaterial((int) MaterialFlags.AlphaMask | _materialFlags, BlendMode.Normal,
+                    maskId);
                 if (!Material.ReferenceEquals(mat, _stencilEraser.meshRenderer.sharedMaterial))
                     _stencilEraser.meshRenderer.sharedMaterial = mat;
 
@@ -595,6 +573,7 @@ namespace FairyGUI
                     if (meshModifier != null)
                         meshModifier();
                 }
+
                 return;
             }
 
@@ -613,6 +592,7 @@ namespace FairyGUI
                     vb.uvRect.xMin = vb.uvRect.xMax;
                     vb.uvRect.xMax = tmp;
                 }
+
                 if (_flip == FlipType.Vertical || _flip == FlipType.Both)
                 {
                     float tmp = vb.uvRect.yMin;
@@ -620,6 +600,7 @@ namespace FairyGUI
                     vb.uvRect.yMax = tmp;
                 }
             }
+
             vb.vertexColor = _color;
             _meshFactory.OnPopulateMesh(vb);
 
@@ -633,6 +614,7 @@ namespace FairyGUI
                     if (meshModifier != null)
                         meshModifier();
                 }
+
                 vb.End();
                 return;
             }
@@ -665,7 +647,7 @@ namespace FairyGUI
                     Color32 col = vb.colors[i];
                     _alphaBackup.Add(col.a);
 
-                    col.a = (byte)(col.a * _alpha);
+                    col.a = (byte) (col.a * _alpha);
                     vb.colors[i] = col;
                 }
             }
@@ -674,7 +656,7 @@ namespace FairyGUI
                 for (int i = 0; i < vertCount; i++)
                 {
                     Color32 col = vb.colors[i];
-                    col.a = (byte)(col.a * _alpha);
+                    col.a = (byte) (col.a * _alpha);
                     vb.colors[i] = col;
                 }
             }

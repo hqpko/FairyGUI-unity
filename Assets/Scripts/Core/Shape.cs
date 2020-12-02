@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class Shape : DisplayObject
     {
-
         public Shape()
         {
             CreateGameObject("Shape");
@@ -15,20 +13,15 @@ namespace FairyGUI
             graphics.meshFactory = null;
         }
 
-
         public Color color
         {
-            get
-            {
-                return graphics.color;
-            }
+            get { return graphics.color; }
             set
             {
                 graphics.color = value;
                 graphics.SetMeshDirty();
             }
         }
-
 
         /// <param name="lineSize"></param>
         /// <param name="lineColor"></param>
@@ -45,7 +38,6 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="lineSize"></param>
         /// <param name="colors"></param>
         public void DrawRect(float lineSize, Color32[] colors)
@@ -56,7 +48,6 @@ namespace FairyGUI
 
             graphics.SetMeshDirty();
         }
-
 
         /// <param name="lineSize"></param>
         /// <param name="lineColor"></param>
@@ -81,7 +72,6 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="fillColor"></param>
         public void DrawEllipse(Color fillColor)
         {
@@ -96,14 +86,14 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="lineSize"></param>
         /// <param name="centerColor"></param>
         /// <param name="lineColor"></param>
         /// <param name="fillColor"></param>
         /// <param name="startDegree"></param>
         /// <param name="endDegree"></param>
-        public void DrawEllipse(float lineSize, Color centerColor, Color lineColor, Color fillColor, float startDegree, float endDegree)
+        public void DrawEllipse(float lineSize, Color centerColor, Color lineColor, Color fillColor, float startDegree,
+            float endDegree)
         {
             EllipseMesh mesh = graphics.GetMeshFactory<EllipseMesh>();
             mesh.lineWidth = lineSize;
@@ -120,7 +110,6 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="points"></param>
         /// <param name="fillColor"></param>
         public void DrawPolygon(IList<Vector2> points, Color fillColor)
@@ -135,7 +124,6 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="points"></param>
         /// <param name="colors"></param>
         public void DrawPolygon(IList<Vector2> points, Color32[] colors)
@@ -148,7 +136,6 @@ namespace FairyGUI
 
             graphics.SetMeshDirty();
         }
-
 
         /// <param name="points"></param>
         /// <param name="fillColor"></param>
@@ -168,7 +155,6 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         /// <param name="sides"></param>
         /// <param name="lineSize"></param>
         /// <param name="centerColor"></param>
@@ -176,7 +162,8 @@ namespace FairyGUI
         /// <param name="fillColor"></param>
         /// <param name="rotation"></param>
         /// <param name="distances"></param>
-        public void DrawRegularPolygon(int sides, float lineSize, Color centerColor, Color lineColor, Color fillColor, float rotation, float[] distances)
+        public void DrawRegularPolygon(int sides, float lineSize, Color centerColor, Color lineColor, Color fillColor,
+            float rotation, float[] distances)
         {
             RegularPolygonMesh mesh = graphics.GetMeshFactory<RegularPolygonMesh>();
             mesh.sides = sides;
@@ -191,12 +178,10 @@ namespace FairyGUI
             graphics.SetMeshDirty();
         }
 
-
         public void Clear()
         {
             graphics.meshFactory = null;
         }
-
 
         public bool isEmpty
         {

@@ -6,7 +6,6 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-
     public class TextField : DisplayObject, IMeshFactory
     {
         VertAlignType _verticalAlign;
@@ -39,13 +38,15 @@ namespace FairyGUI
         const int GUTTER_X = 2;
         const int GUTTER_Y = 2;
         const float IMAGE_BASELINE = 0.8f;
+
         static float[] STROKE_OFFSET = new float[]
         {
-             -1, 0, 1, 0,
+            -1, 0, 1, 0,
             0, -1, 0, 1,
             -1, -1, 1, -1,
             -1, 1, 1, 1
         };
+
         static List<LineCharInfo> sLineChars = new List<LineCharInfo>();
 
         public TextField()
@@ -87,7 +88,6 @@ namespace FairyGUI
             }
         }
 
-
         public TextFormat textFormat
         {
             get { return _textFormat; }
@@ -97,7 +97,6 @@ namespace FairyGUI
                 ApplyFormat();
             }
         }
-
 
         public void ApplyFormat()
         {
@@ -116,7 +115,6 @@ namespace FairyGUI
                 _textChanged = true;
         }
 
-
         public AlignType align
         {
             get { return _textFormat.align; }
@@ -131,13 +129,9 @@ namespace FairyGUI
             }
         }
 
-
         public VertAlignType verticalAlign
         {
-            get
-            {
-                return _verticalAlign;
-            }
+            get { return _verticalAlign; }
             set
             {
                 if (_verticalAlign != value)
@@ -148,7 +142,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public string text
         {
@@ -163,7 +156,6 @@ namespace FairyGUI
                 _html = false;
             }
         }
-
 
         public string htmlText
         {
@@ -184,7 +176,6 @@ namespace FairyGUI
             get { return _parsedText; }
         }
 
-
         public AutoSizeType autoSize
         {
             get { return _autoSize; }
@@ -197,7 +188,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public bool wordWrap
         {
@@ -212,7 +202,6 @@ namespace FairyGUI
             }
         }
 
-
         public bool singleLine
         {
             get { return _singleLine; }
@@ -226,13 +215,9 @@ namespace FairyGUI
             }
         }
 
-
         public float stroke
         {
-            get
-            {
-                return _textFormat.outline;
-            }
+            get { return _textFormat.outline; }
             set
             {
                 if (_textFormat.outline != value)
@@ -243,13 +228,9 @@ namespace FairyGUI
             }
         }
 
-
         public Color strokeColor
         {
-            get
-            {
-                return _textFormat.outlineColor;
-            }
+            get { return _textFormat.outlineColor; }
             set
             {
                 if (_textFormat.outlineColor != value)
@@ -260,20 +241,15 @@ namespace FairyGUI
             }
         }
 
-
         public Vector2 shadowOffset
         {
-            get
-            {
-                return _textFormat.shadowOffset;
-            }
+            get { return _textFormat.shadowOffset; }
             set
             {
                 _textFormat.shadowOffset = value;
                 graphics.SetMeshDirty();
             }
         }
-
 
         public float textWidth
         {
@@ -286,7 +262,6 @@ namespace FairyGUI
             }
         }
 
-
         public float textHeight
         {
             get
@@ -297,7 +272,6 @@ namespace FairyGUI
                 return _textHeight;
             }
         }
-
 
         public int maxWidth
         {
@@ -312,7 +286,6 @@ namespace FairyGUI
             }
         }
 
-
         public List<HtmlElement> htmlElements
         {
             get
@@ -324,7 +297,6 @@ namespace FairyGUI
             }
         }
 
-
         public List<LineInfo> lines
         {
             get
@@ -335,7 +307,6 @@ namespace FairyGUI
                 return _lines;
             }
         }
-
 
         public List<CharPosition> charPositions
         {
@@ -350,12 +321,10 @@ namespace FairyGUI
             }
         }
 
-
         public RichTextField richTextField
         {
             get { return _richTextField; }
         }
-
 
         public bool Redraw()
         {
@@ -388,12 +357,10 @@ namespace FairyGUI
             return graphics.UpdateMesh();
         }
 
-
         public bool HasCharacter(char ch)
         {
             return _font.HasCharacter(ch);
         }
-
 
         /// <param name="startLine"></param>
         /// <param name="startCharX"></param>
@@ -418,7 +385,8 @@ namespace FairyGUI
             }
             else if (startLine == endLine - 1)
             {
-                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax, line1.y + line1.height);
+                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax,
+                    line1.y + line1.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
                 else
@@ -431,7 +399,8 @@ namespace FairyGUI
             }
             else
             {
-                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax, line1.y + line1.height);
+                Rect r = Rect.MinMaxRect(startCharX, line1.y, leftAlign ? (GUTTER_X + line1.width) : _contentRect.xMax,
+                    line1.y + line1.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
                 else
@@ -439,12 +408,14 @@ namespace FairyGUI
                 for (int i = startLine + 1; i < endLine; i++)
                 {
                     LineInfo line = _lines[i];
-                    r = Rect.MinMaxRect(GUTTER_X, r.yMax, leftAlign ? (GUTTER_X + line.width) : _contentRect.xMax, line.y + line.height);
+                    r = Rect.MinMaxRect(GUTTER_X, r.yMax, leftAlign ? (GUTTER_X + line.width) : _contentRect.xMax,
+                        line.y + line.height);
                     if (clipped)
                         resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
                     else
                         resultRects.Add(r);
                 }
+
                 r = Rect.MinMaxRect(GUTTER_X, r.yMax, endCharX, line2.y + line2.height);
                 if (clipped)
                     resultRects.Add(ToolSet.Intersection(ref r, ref _contentRect));
@@ -560,6 +531,7 @@ namespace FairyGUI
                 }
                 else
                     SetSize(_textWidth, _textHeight);
+
                 InvalidateBatchingState();
                 _flags &= ~Flags.UpdatingSize;
             }
@@ -569,12 +541,14 @@ namespace FairyGUI
                 if (_richTextField != null)
                 {
                     if (_input)
-                        _richTextField.height = Mathf.Max(_font.GetLineHeight(_textFormat.size) + GUTTER_Y * 2, _textHeight);
+                        _richTextField.height = Mathf.Max(_font.GetLineHeight(_textFormat.size) + GUTTER_Y * 2,
+                            _textHeight);
                     else
                         _richTextField.height = _textHeight;
                 }
                 else
                     this.height = _textHeight;
+
                 InvalidateBatchingState();
                 _flags &= ~Flags.UpdatingSize;
             }
@@ -646,8 +620,10 @@ namespace FairyGUI
                     }
                     else if (element.isEntity)
                         buffer.Append(' ');
+
                     i++;
                 }
+
                 _parsedText = buffer.ToString();
 
 #if RTL_TEXT_SUPPORT
@@ -675,6 +651,7 @@ namespace FairyGUI
                 wrap = true;
                 rectWidth = _maxWidth - GUTTER_X * 2;
             }
+
             _textWidth = _textHeight = 0;
 
             RequestText();
@@ -709,10 +686,11 @@ namespace FairyGUI
                         IHtmlObject htmlObject = element.htmlObject;
                         if (_richTextField != null && htmlObject == null)
                         {
-                            element.space = (int)(rectWidth - line.width - 4);
+                            element.space = (int) (rectWidth - line.width - 4);
                             htmlObject = _richTextField.htmlPageContext.CreateObject(_richTextField, element);
                             element.htmlObject = htmlObject;
                         }
+
                         if (htmlObject != null)
                         {
                             glyphWidth = htmlObject.width + 2;
@@ -747,11 +725,12 @@ namespace FairyGUI
                             wordLen = 0;
                         }
                         else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z'
-                            || ch >= '0' && ch <= '9'
-                            || ch == '.' || ch == '"' || ch == '\''
-                            || format.specialStyle == TextFormat.SpecialStyle.Subscript
-                            || format.specialStyle == TextFormat.SpecialStyle.Superscript
-                            || _textDirection != RTLSupport.DirectionType.UNKNOW && RTLSupport.IsArabicLetter(ch))
+                                                        || ch >= '0' && ch <= '9'
+                                                        || ch == '.' || ch == '"' || ch == '\''
+                                                        || format.specialStyle == TextFormat.SpecialStyle.Subscript
+                                                        || format.specialStyle == TextFormat.SpecialStyle.Superscript
+                                                        || _textDirection != RTLSupport.DirectionType.UNKNOW &&
+                                                        RTLSupport.IsArabicLetter(ch))
                         {
                             wordLen++;
                         }
@@ -764,7 +743,7 @@ namespace FairyGUI
                         wordPossible = true;
                     }
                     else if (format.specialStyle == TextFormat.SpecialStyle.Subscript
-                        || format.specialStyle == TextFormat.SpecialStyle.Superscript)
+                             || format.specialStyle == TextFormat.SpecialStyle.Superscript)
                     {
                         if (sLineChars.Count > 0)
                         {
@@ -778,7 +757,7 @@ namespace FairyGUI
                 else
                     wordPossible = false;
 
-                sLineChars.Add(new LineCharInfo() { width = glyphWidth, height = glyphHeight, baseline = baseline });
+                sLineChars.Add(new LineCharInfo() {width = glyphWidth, height = glyphHeight, baseline = baseline});
                 if (glyphWidth != 0)
                 {
                     if (posx != 0)
@@ -893,7 +872,7 @@ namespace FairyGUI
             if (line.width > _textWidth)
                 _textWidth = line.width;
 
-            line.charCount = (short)cnt;
+            line.charCount = (short) cnt;
         }
 
         void DoShrink()
@@ -920,7 +899,7 @@ namespace FairyGUI
                     if (high - low > 1 || high != low && cur == high)
                     {
                         cur = low + (high - low) / 2;
-                        _fontSizeScale = (float)cur / _textFormat.size;
+                        _fontSizeScale = (float) cur / _textFormat.size;
                     }
                     else
                         break;
@@ -937,7 +916,7 @@ namespace FairyGUI
                 {
                     int size = Mathf.FloorToInt(_textFormat.size * _fontSizeScale);
                     size--;
-                    _fontSizeScale = (float)size / _textFormat.size;
+                    _fontSizeScale = (float) size / _textFormat.size;
 
                     LineInfo.Return(_lines);
                     BuildLines2();
@@ -970,7 +949,7 @@ namespace FairyGUI
                         uint emojiKey = 0;
                         Emoji emoji;
                         if (highSurrogate)
-                            emojiKey = ((uint)source[j + 1] & 0x03FF) + ((((uint)ch & 0x03FF) + 0x40) << 10);
+                            emojiKey = ((uint) source[j + 1] & 0x03FF) + ((((uint) ch & 0x03FF) + 0x40) << 10);
                         else
                             emojiKey = ch;
                         if (_richTextField.emojies.TryGetValue(emojiKey, out emoji))
@@ -998,12 +977,14 @@ namespace FairyGUI
                     {
                         buffer.Append(source, appendPos, j - appendPos);
                         appendPos = j + 2;
-                        j++;//跳过lowSurrogate
+                        j++; //跳过lowSurrogate
                         buffer.Append(' ');
                     }
                 }
+
                 j++;
             }
+
             if (appendPos < textLength)
                 buffer.Append(source, appendPos, j - appendPos);
 
@@ -1032,7 +1013,9 @@ namespace FairyGUI
             _font.UpdateGraphics(graphics);
 
             float rectWidth = _contentRect.width > 0 ? (_contentRect.width - GUTTER_X * 2) : 0;
-            float rectHeight = _contentRect.height > 0 ? Mathf.Max(_contentRect.height, _font.GetLineHeight(format.size)) : 0;
+            float rectHeight = _contentRect.height > 0
+                ? Mathf.Max(_contentRect.height, _font.GetLineHeight(format.size))
+                : 0;
 
             if (_charPositions != null)
                 _charPositions.Clear();
@@ -1082,7 +1065,7 @@ namespace FairyGUI
                 if (_textDirection == RTLSupport.DirectionType.RTL)
                 {
                     if (lineAlign == AlignType.Center)
-                        indent_x = (int)((rectWidth + line.width) / 2);
+                        indent_x = (int) ((rectWidth + line.width) / 2);
                     else if (lineAlign == AlignType.Right)
                         indent_x = rectWidth;
                     else
@@ -1096,7 +1079,7 @@ namespace FairyGUI
                 else
                 {
                     if (lineAlign == AlignType.Center)
-                        indent_x = (int)((rectWidth - line.width) / 2);
+                        indent_x = (int) ((rectWidth - line.width) / 2);
                     else if (lineAlign == AlignType.Right)
                         indent_x = rectWidth - line.width;
                     else
@@ -1141,13 +1124,20 @@ namespace FairyGUI
                                     {
                                         float lineWidth;
                                         if (_textDirection == RTLSupport.DirectionType.UNKNOW)
-                                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) - underlineStart;
+                                            lineWidth = (clipping
+                                                ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth)
+                                                : posx) - underlineStart;
                                         else
-                                            lineWidth = underlineStart - (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
+                                            lineWidth = underlineStart - (clipping
+                                                ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth)
+                                                : posx);
                                         if (lineWidth > 0)
-                                            vertCount += (short)_font.DrawLine(underlineStart < posx ? underlineStart : posx, -(line.y + line.baseline), lineWidth,
+                                            vertCount += (short) _font.DrawLine(
+                                                underlineStart < posx ? underlineStart : posx,
+                                                -(line.y + line.baseline), lineWidth,
                                                 maxFontSize, 0, vertList, uvList, uv2List, colList);
                                     }
+
                                     maxFontSize = 0;
                                 }
                                 else
@@ -1162,13 +1152,20 @@ namespace FairyGUI
                                     {
                                         float lineWidth;
                                         if (_textDirection == RTLSupport.DirectionType.UNKNOW)
-                                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) - strikethroughStart;
+                                            lineWidth = (clipping
+                                                ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth)
+                                                : posx) - strikethroughStart;
                                         else
-                                            lineWidth = strikethroughStart - (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
+                                            lineWidth = strikethroughStart - (clipping
+                                                ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth)
+                                                : posx);
                                         if (lineWidth > 0)
-                                            vertCount += (short)_font.DrawLine(strikethroughStart < posx ? strikethroughStart : posx, -(line.y + line.baseline), lineWidth,
+                                            vertCount += (short) _font.DrawLine(
+                                                strikethroughStart < posx ? strikethroughStart : posx,
+                                                -(line.y + line.baseline), lineWidth,
                                                 minFontSize, 1, vertList, uvList, uv2List, colList);
                                     }
+
                                     minFontSize = int.MaxValue;
                                 }
                                 else
@@ -1189,7 +1186,7 @@ namespace FairyGUI
                         }
                         else if (element.type == HtmlElementType.Link)
                         {
-                            currentLink = (HtmlLink)element.htmlObject;
+                            currentLink = (HtmlLink) element.htmlObject;
                             if (currentLink != null)
                             {
                                 element.position = Vector2.zero;
@@ -1217,20 +1214,23 @@ namespace FairyGUI
                                 if (_charPositions != null)
                                 {
                                     CharPosition cp = new CharPosition();
-                                    cp.lineIndex = (short)i;
+                                    cp.lineIndex = (short) i;
                                     cp.charIndex = _charPositions.Count;
-                                    cp.imgIndex = (short)(elementIndex + 1);
+                                    cp.imgIndex = (short) (elementIndex + 1);
                                     cp.offsetX = posx;
-                                    cp.width = (short)htmlObj.width;
+                                    cp.width = (short) htmlObj.width;
                                     _charPositions.Add(cp);
                                 }
 
-                                if (lineClipped || clipping && (posx < GUTTER_X || posx > GUTTER_X && posx + htmlObj.width > _contentRect.width - GUTTER_X))
+                                if (lineClipped || clipping && (posx < GUTTER_X ||
+                                                                posx > GUTTER_X && posx + htmlObj.width >
+                                                                _contentRect.width - GUTTER_X))
                                     element.status |= 1;
                                 else
                                     element.status &= 254;
 
-                                element.position = new Vector2(posx + 1, line.y + line.baseline - htmlObj.height * IMAGE_BASELINE);
+                                element.position = new Vector2(posx + 1,
+                                    line.y + line.baseline - htmlObj.height * IMAGE_BASELINE);
                                 htmlObj.SetPosition(element.position.x, element.position.y);
 
                                 if (_textDirection == RTLSupport.DirectionType.RTL)
@@ -1260,7 +1260,8 @@ namespace FairyGUI
 
                         if (_textDirection == RTLSupport.DirectionType.RTL)
                         {
-                            if (lineClipped || clipping && (rectWidth < 7 || posx != (indent_x - GUTTER_X)) && posx < GUTTER_X - 0.5f) //超出区域，剪裁
+                            if (lineClipped || clipping && (rectWidth < 7 || posx != (indent_x - GUTTER_X)) &&
+                                posx < GUTTER_X - 0.5f) //超出区域，剪裁
                             {
                                 posx -= (letterSpacing + glyphWidth);
                                 continue;
@@ -1270,23 +1271,25 @@ namespace FairyGUI
                         }
                         else
                         {
-                            if (lineClipped || clipping && (rectWidth < 7 || posx != (GUTTER_X + indent_x)) && posx + glyphWidth > _contentRect.width - GUTTER_X + 0.5f) //超出区域，剪裁
+                            if (lineClipped || clipping && (rectWidth < 7 || posx != (GUTTER_X + indent_x)) &&
+                                posx + glyphWidth > _contentRect.width - GUTTER_X + 0.5f) //超出区域，剪裁
                             {
                                 posx += letterSpacing + glyphWidth;
                                 continue;
                             }
                         }
 
-                        vertCount = (short)_font.DrawGlyph(posx, -(line.y + line.baseline), vertList, uvList, uv2List, colList);
+                        vertCount = (short) _font.DrawGlyph(posx, -(line.y + line.baseline), vertList, uvList, uv2List,
+                            colList);
 
                         if (_charPositions != null)
                         {
                             CharPosition cp = new CharPosition();
-                            cp.lineIndex = (short)i;
+                            cp.lineIndex = (short) i;
                             cp.charIndex = _charPositions.Count;
                             cp.vertCount = vertCount;
                             cp.offsetX = posx;
-                            cp.width = (short)glyphWidth;
+                            cp.width = (short) glyphWidth;
                             _charPositions.Add(cp);
                         }
 
@@ -1300,7 +1303,7 @@ namespace FairyGUI
                         if (_charPositions != null)
                         {
                             CharPosition cp = new CharPosition();
-                            cp.lineIndex = (short)i;
+                            cp.lineIndex = (short) i;
                             cp.charIndex = _charPositions.Count;
                             cp.offsetX = posx;
                             _charPositions.Add(cp);
@@ -1311,7 +1314,7 @@ namespace FairyGUI
                         else
                             posx += letterSpacing;
                     }
-                }//text loop
+                } //text loop
 
                 if (!lineClipped)
                 {
@@ -1320,11 +1323,14 @@ namespace FairyGUI
                     {
                         float lineWidth;
                         if (_textDirection == RTLSupport.DirectionType.UNKNOW)
-                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) - underlineStart;
+                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) -
+                                        underlineStart;
                         else
-                            lineWidth = underlineStart - (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
+                            lineWidth = underlineStart -
+                                        (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
                         if (lineWidth > 0)
-                            vertCount += (short)_font.DrawLine(underlineStart < posx ? underlineStart : posx, -(line.y + line.baseline), lineWidth,
+                            vertCount += (short) _font.DrawLine(underlineStart < posx ? underlineStart : posx,
+                                -(line.y + line.baseline), lineWidth,
                                 maxFontSize, 0, vertList, uvList, uv2List, colList);
                     }
 
@@ -1332,11 +1338,14 @@ namespace FairyGUI
                     {
                         float lineWidth;
                         if (_textDirection == RTLSupport.DirectionType.UNKNOW)
-                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) - strikethroughStart;
+                            lineWidth = (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx) -
+                                        strikethroughStart;
                         else
-                            lineWidth = strikethroughStart - (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
+                            lineWidth = strikethroughStart -
+                                        (clipping ? Mathf.Clamp(posx, GUTTER_X, GUTTER_X + rectWidth) : posx);
                         if (lineWidth > 0)
-                            vertCount += (short)_font.DrawLine(strikethroughStart < posx ? strikethroughStart : posx, -(line.y + line.baseline), lineWidth,
+                            vertCount += (short) _font.DrawLine(strikethroughStart < posx ? strikethroughStart : posx,
+                                -(line.y + line.baseline), lineWidth,
                                 minFontSize, 1, vertList, uvList, uv2List, colList);
                     }
 
@@ -1347,8 +1356,7 @@ namespace FairyGUI
                         _charPositions[_charPositions.Count - 1] = cp;
                     }
                 }
-
-            }//line loop
+            } //line loop
 
             if (element != null && element.type == HtmlElementType.LinkEnd && currentLink != null)
                 currentLink.SetArea(linkStartLine, linkStartX, lineCount - 1, posx);
@@ -1356,7 +1364,7 @@ namespace FairyGUI
             if (_charPositions != null)
             {
                 CharPosition cp = new CharPosition();
-                cp.lineIndex = (short)(lineCount - 1);
+                cp.lineIndex = (short) (lineCount - 1);
                 cp.charIndex = _charPositions.Count;
                 cp.offsetX = posx;
                 _charPositions.Add(cp);
@@ -1384,6 +1392,7 @@ namespace FairyGUI
                     drawDirs = UIConfig.enhancedTextOutlineEffect ? 8 : 4;
                     allocCount += count * drawDirs;
                 }
+
                 if (hasShadow)
                     allocCount += count;
                 if (allocCount > 65000)
@@ -1407,7 +1416,8 @@ namespace FairyGUI
                             for (int i = 0; i < count; i++)
                             {
                                 Vector3 vert = vertList[i];
-                                vertList2.Add(new Vector3(vert.x + STROKE_OFFSET[j * 2] * outline, vert.y + STROKE_OFFSET[j * 2 + 1] * outline, 0));
+                                vertList2.Add(new Vector3(vert.x + STROKE_OFFSET[j * 2] * outline,
+                                    vert.y + STROKE_OFFSET[j * 2 + 1] * outline, 0));
                                 colList2.Add(col);
                             }
 
@@ -1464,7 +1474,7 @@ namespace FairyGUI
         {
             float oldOffset = _yOffset;
             if (_autoSize == AutoSizeType.Both || _autoSize == AutoSizeType.Height
-                || _verticalAlign == VertAlignType.Top)
+                                               || _verticalAlign == VertAlignType.Top)
                 _yOffset = 0;
             else
             {
@@ -1476,7 +1486,7 @@ namespace FairyGUI
                 if (dh < 0)
                     dh = 0;
                 if (_verticalAlign == VertAlignType.Middle)
-                    _yOffset = (int)(dh / 2);
+                    _yOffset = (int) (dh / 2);
                 else
                     _yOffset = dh;
             }
@@ -1490,7 +1500,6 @@ namespace FairyGUI
                 graphics.SetMeshDirty();
             }
         }
-
 
         public class LineInfo
         {
@@ -1531,7 +1540,6 @@ namespace FairyGUI
 
             static Stack<LineInfo> pool = new Stack<LineInfo>();
 
-    
             /// <returns></returns>
             public static LineInfo Borrow()
             {
@@ -1547,14 +1555,12 @@ namespace FairyGUI
                     return new LineInfo();
             }
 
-    
             /// <param name="value"></param>
             public static void Return(LineInfo value)
             {
                 pool.Push(value);
             }
 
-    
             /// <param name="values"></param>
             public static void Return(List<LineInfo> values)
             {
@@ -1566,14 +1572,12 @@ namespace FairyGUI
             }
         }
 
-
         public struct LineCharInfo
         {
             public float width;
             public float height;
             public float baseline;
         }
-
 
         public struct CharPosition
         {

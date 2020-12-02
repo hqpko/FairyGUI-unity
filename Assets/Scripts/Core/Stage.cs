@@ -2,22 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FairyGUI.Utils;
-
 #if UNITY_5_3_OR_NEWER
 using UnityEngine.SceneManagement;
+
 #endif
 
 namespace FairyGUI
 {
-
     public class Stage : Container
     {
         [Obsolete("Use size.y")]
-        public int stageHeight { get { return (int)_contentRect.height; } }
+        public int stageHeight
+        {
+            get { return (int) _contentRect.height; }
+        }
 
         [Obsolete("Use size.x")]
-        public int stageWidth { get { return (int)_contentRect.width; } }
-
+        public int stageWidth
+        {
+            get { return (int) _contentRect.width; }
+        }
 
         public float soundVolume { get; set; }
 
@@ -46,11 +50,13 @@ namespace FairyGUI
         List<DisplayObject> _focusInChain;
         List<Container> _focusHistory;
         Container _nextFocus;
+
         class CursorDef
         {
             public Texture2D texture;
             public Vector2 hotspot;
         }
+
         Dictionary<string, CursorDef> _cursors;
         string _currentCursor;
 
@@ -72,7 +78,6 @@ namespace FairyGUI
                 return _inst;
             }
         }
-
 
         public static void Instantiate()
         {
@@ -121,18 +126,11 @@ namespace FairyGUI
         /// 如果是false，表示是接受按键消息输入文字。常见于PC。
         /// 一般来说，不需要设置，底层会自动根据系统环境设置正确的值。
         /// </summary>
-        public static bool keyboardInput
-        {
-            get; set;
-        }
-
+        public static bool keyboardInput { get; set; }
 
         public static bool isTouchOnUI
         {
-            get
-            {
-                return _inst != null && _inst.touchTarget != null;
-            }
+            get { return _inst != null && _inst.touchTarget != null; }
         }
 
         /// <summary>
@@ -141,11 +139,7 @@ namespace FairyGUI
         /// 1. compoistion cursor pos.
         /// 2. mouse wheel speed.
         /// </summary>
-        public static float devicePixelRatio
-        {
-            get; set;
-        }
-
+        public static float devicePixelRatio { get; set; }
 
         public Stage()
             : base()
@@ -161,7 +155,7 @@ namespace FairyGUI
                 _touches[i] = new TouchInfo();
 
             bool isOSX = Application.platform == RuntimePlatform.OSXPlayer
-                || Application.platform == RuntimePlatform.OSXEditor;
+                         || Application.platform == RuntimePlatform.OSXEditor;
             if (Application.platform == RuntimePlatform.WindowsPlayer
                 || Application.platform == RuntimePlatform.WindowsEditor
                 || isOSX)
@@ -179,7 +173,8 @@ namespace FairyGUI
             _cursors = new Dictionary<string, CursorDef>();
 
             SetSize(Screen.width, Screen.height);
-            this.cachedTransform.localScale = new Vector3(StageCamera.DefaultUnitsPerPixel, StageCamera.DefaultUnitsPerPixel, StageCamera.DefaultUnitsPerPixel);
+            this.cachedTransform.localScale = new Vector3(StageCamera.DefaultUnitsPerPixel,
+                StageCamera.DefaultUnitsPerPixel, StageCamera.DefaultUnitsPerPixel);
 
             StageEngine engine = GameObject.FindObjectOfType<StageEngine>();
             if (engine != null)
@@ -219,12 +214,10 @@ namespace FairyGUI
 #endif
         }
 
-
         public EventListener onStageResized
         {
             get { return _onStageResized ?? (_onStageResized = new EventListener(this, "onStageResized")); }
         }
-
 
         public DisplayObject touchTarget
         {
@@ -240,7 +233,6 @@ namespace FairyGUI
             }
         }
 
-
         public DisplayObject focus
         {
             get
@@ -249,10 +241,7 @@ namespace FairyGUI
                     _focused = null;
                 return _focused;
             }
-            set
-            {
-                SetFous(value);
-            }
+            set { SetFous(value); }
         }
 
         public void SetFous(DisplayObject newFocus, bool byKey = false)
@@ -271,7 +260,7 @@ namespace FairyGUI
             {
                 if (!element.focusable)
                     return;
-                else if ((element is Container) && ((Container)element).tabStopChildren)
+                else if ((element is Container) && ((Container) element).tabStopChildren)
                 {
                     if (navRoot == null)
                         navRoot = element as Container;
@@ -321,6 +310,7 @@ namespace FairyGUI
                     _focusOutChain.RemoveRange(i, _focusOutChain.Count - i);
                     break;
                 }
+
                 if (element.focusable)
                     _focusInChain.Add(element);
 
@@ -340,6 +330,7 @@ namespace FairyGUI
                             return;
                     }
                 }
+
                 _focusOutChain.Clear();
             }
 
@@ -356,11 +347,12 @@ namespace FairyGUI
                             return;
                     }
                 }
+
                 _focusInChain.Clear();
             }
 
             if (_focused is InputTextField)
-                _lastInput = (InputTextField)_focused;
+                _lastInput = (InputTextField) _focused;
         }
 
         internal void _OnFocusRemoving(Container sender)
@@ -373,7 +365,7 @@ namespace FairyGUI
                 DisplayObject element = _focused;
                 while (element != null && element != sender)
                 {
-                    if ((element is Container) && ((Container)element).tabStopChildren && element == test)
+                    if ((element is Container) && ((Container) element).tabStopChildren && element == test)
                     {
                         i--;
                         if (i < 0)
@@ -398,7 +390,6 @@ namespace FairyGUI
             _focused = null;
         }
 
-
         /// <param name="backward"></param>
         public void DoKeyNavigate(bool backward)
         {
@@ -406,7 +397,7 @@ namespace FairyGUI
             DisplayObject element = _focused;
             while (element != null)
             {
-                if ((element is Container) && ((Container)element).tabStopChildren)
+                if ((element is Container) && ((Container) element).tabStopChildren)
                 {
                     navBase = element as Container;
                     break;
@@ -453,7 +444,6 @@ namespace FairyGUI
             }
         }
 
-
         public Vector2 touchPosition
         {
             get
@@ -462,7 +452,6 @@ namespace FairyGUI
                 return _touchPosition;
             }
         }
-
 
         /// <param name="touchId"></param>
         /// <returns></returns>
@@ -483,7 +472,6 @@ namespace FairyGUI
             return _touchPosition;
         }
 
-
         /// <param name="touchId"></param>
         /// <returns></returns>
         public DisplayObject GetTouchTarget(int touchId)
@@ -500,8 +488,6 @@ namespace FairyGUI
 
             return null;
         }
-
-
 
         public int touchCount
         {
@@ -523,9 +509,9 @@ namespace FairyGUI
                         break;
                 }
             }
+
             return result;
         }
-
 
         public void ResetInputState()
         {
@@ -538,8 +524,6 @@ namespace FairyGUI
             _touchCount = 0;
         }
 
-
-
         /// <param name="touchId"></param>
         public void CancelClick(int touchId)
         {
@@ -551,7 +535,6 @@ namespace FairyGUI
             }
         }
 
-
         public void EnableSound()
         {
             if (_audio == null)
@@ -560,7 +543,6 @@ namespace FairyGUI
                 _audio.bypassEffects = true;
             }
         }
-
 
         public void DisableSound()
         {
@@ -571,7 +553,6 @@ namespace FairyGUI
             }
         }
 
-
         /// <param name="clip"></param>
         /// <param name="volumeScale"></param>
         public void PlayOneShotSound(AudioClip clip, float volumeScale)
@@ -580,7 +561,6 @@ namespace FairyGUI
                 _audio.PlayOneShot(clip, volumeScale * this.soundVolume);
         }
 
-
         /// <param name="clip"></param>
         public void PlayOneShotSound(AudioClip clip)
         {
@@ -588,13 +568,11 @@ namespace FairyGUI
                 _audio.PlayOneShot(clip, this.soundVolume);
         }
 
-
         public IKeyboard keyboard
         {
             get { return _keyboard; }
             set { _keyboard = value; }
         }
-
 
         /// <param name="text"></param>
         /// <param name="autocorrection"></param>
@@ -609,10 +587,10 @@ namespace FairyGUI
         {
             if (_keyboard != null)
             {
-                _keyboard.Open(text, autocorrection, multiline, secure, alert, textPlaceholder, keyboardType, hideInput);
+                _keyboard.Open(text, autocorrection, multiline, secure, alert, textPlaceholder, keyboardType,
+                    hideInput);
             }
         }
-
 
         public void CloseKeyboard()
         {
@@ -632,7 +610,6 @@ namespace FairyGUI
                 _lastInput.ReplaceSelection(value);
         }
 
-
         /// <param name="screenPos"></param>
         /// <param name="buttonDown"></param>
         public void SetCustomInput(Vector2 screenPos, bool buttonDown)
@@ -642,7 +619,6 @@ namespace FairyGUI
             _customInputPos = screenPos;
             _frameGotHitTarget = 0;
         }
-
 
         /// <param name="screenPos"></param>
         /// <param name="buttonDown"></param>
@@ -658,7 +634,6 @@ namespace FairyGUI
             _frameGotHitTarget = 0;
         }
 
-
         /// <param name="hit"></param>
         /// <param name="buttonDown"></param>
         public void SetCustomInput(ref RaycastHit hit, bool buttonDown)
@@ -667,7 +642,6 @@ namespace FairyGUI
             HitTestContext.CacheRaycastHit(HitTestContext.cachedMainCamera, ref hit);
             SetCustomInput(screenPos, buttonDown);
         }
-
 
         /// <param name="hit"></param>
         /// <param name="buttonDown"></param>
@@ -704,11 +678,11 @@ namespace FairyGUI
                     else
                         SetFous(_nextFocus);
                 }
+
                 _nextFocus = null;
             }
 
-            if (beforeUpdate != null)
-                beforeUpdate();
+            beforeUpdate?.Invoke();
 
             _updateContext.Begin();
             Update(_updateContext);
@@ -724,8 +698,7 @@ namespace FairyGUI
                 BaseFont.textRebuildFlag = false;
             }
 
-            if (afterUpdate != null)
-                afterUpdate();
+            afterUpdate?.Invoke();
         }
 
         void GetHitTarget()
@@ -767,6 +740,7 @@ namespace FairyGUI
                         if (_touches[j].touchId == -1)
                             free = _touches[j];
                     }
+
                     if (touch == null)
                     {
                         touch = free;
@@ -923,7 +897,7 @@ namespace FairyGUI
         {
             _IMEComposite = Input.compositionString.Length > 0;
 
-            InputTextField textField = (InputTextField)_focused;
+            InputTextField textField = (InputTextField) _focused;
             if (!textField.editable)
                 return;
 
@@ -1019,6 +993,7 @@ namespace FairyGUI
                     touch.target.BubbleEvent("onTouchBegin", touch.evt);
                 }
             }
+
             if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2))
             {
                 if (touch.began)
@@ -1068,6 +1043,7 @@ namespace FairyGUI
                         break;
                     }
                 }
+
                 if (touch == null)
                     continue;
 
@@ -1159,6 +1135,7 @@ namespace FairyGUI
                     _rollOutChain.RemoveRange(i, _rollOutChain.Count - i);
                     break;
                 }
+
                 _rollOverChain.Add(element);
 
                 element = element.parent;
@@ -1173,6 +1150,7 @@ namespace FairyGUI
                     if (element.stage != null)
                         element.DispatchEvent("onRollOut", null);
                 }
+
                 _rollOutChain.Clear();
             }
 
@@ -1185,6 +1163,7 @@ namespace FairyGUI
                     if (element.stage != null)
                         element.DispatchEvent("onRollOver", null);
                 }
+
                 _rollOverChain.Clear();
             }
 
@@ -1216,7 +1195,7 @@ namespace FairyGUI
                 if (obj == GRoot.inst.displayObject)
                     j = 1000;
                 else if (obj is Container)
-                    j = ((Container)obj)._panelOrder;
+                    j = ((Container) obj)._panelOrder;
                 else
                     continue;
 
@@ -1229,10 +1208,10 @@ namespace FairyGUI
                     break;
                 }
             }
+
             if (i == numChildren)
                 AddChild(target);
         }
-
 
         static List<DisplayObject> sTempList1;
         static List<int> sTempList2;
@@ -1283,7 +1262,6 @@ namespace FairyGUI
             sTempDict.Clear();
         }
 
-
         /// <param name="texture"></param>
         public void MonitorTexture(NTexture texture)
         {
@@ -1325,6 +1303,7 @@ namespace FairyGUI
                     || touchId != -1 && touch.touchId == touchId)
                     break;
             }
+
             if (touch.touchMonitors.IndexOf(target) == -1)
                 touch.touchMonitors.Add(target);
         }
@@ -1364,22 +1343,19 @@ namespace FairyGUI
             return t;
         }
 
-
         /// <param name="cursorName"></param>
         /// <param name="texture"></param>
         /// <param name="hotspot"></param>
         public void RegisterCursor(string cursorName, Texture2D texture, Vector2 hotspot)
         {
-            _cursors[cursorName] = new CursorDef() { texture = texture, hotspot = hotspot };
+            _cursors[cursorName] = new CursorDef() {texture = texture, hotspot = hotspot};
         }
-
 
         /// <value></value>
         public string activeCursor
         {
             get { return _currentCursor; }
         }
-
 
         /// <param name="cursorName"></param>
         internal void _ChangeCursor(string cursorName)
@@ -1496,7 +1472,9 @@ namespace FairyGUI
         public void Move()
         {
             if (began)
-                holdTime = (Time.frameCount - downFrame) == 1 ? (1f / Application.targetFrameRate) : (Time.unscaledTime - downTime);
+                holdTime = (Time.frameCount - downFrame) == 1
+                    ? (1f / Application.targetFrameRate)
+                    : (Time.unscaledTime - downTime);
 
             UpdateEvent();
 
@@ -1510,9 +1488,9 @@ namespace FairyGUI
                     EventDispatcher e = touchMonitors[i];
                     if (e != null)
                     {
-                        if ((e is DisplayObject) && ((DisplayObject)e).stage == null)
+                        if ((e is DisplayObject) && ((DisplayObject) e).stage == null)
                             continue;
-                        if ((e is GObject) && !((GObject)e).onStage)
+                        if ((e is GObject) && !((GObject) e).onStage)
                             continue;
                         e.GetChainBridges("onTouchMove", sHelperChain, false);
                     }
@@ -1552,6 +1530,7 @@ namespace FairyGUI
                 }
                 else
                     clickCount = 1;
+
                 lastClickTime = Time.unscaledTime;
                 lastClickX = x;
                 lastClickY = y;
@@ -1559,7 +1538,9 @@ namespace FairyGUI
             }
 
             //当间隔一帧时，使用帧率计算时间，避免掉帧因素
-            holdTime = (Time.frameCount - downFrame) == 1 ? (1f / Application.targetFrameRate) : (Time.unscaledTime - downTime);
+            holdTime = (Time.frameCount - downFrame) == 1
+                ? (1f / Application.targetFrameRate)
+                : (Time.unscaledTime - downTime);
             UpdateEvent();
 
             if (touchMonitors.Count > 0)
@@ -1571,6 +1552,7 @@ namespace FairyGUI
                     if (e != null)
                         e.GetChainBridges("onTouchEnd", sHelperChain, false);
                 }
+
                 target.BubbleEvent("onTouchEnd", evt, sHelperChain);
 
                 touchMonitors.Clear();

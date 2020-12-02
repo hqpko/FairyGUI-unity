@@ -15,7 +15,7 @@ namespace FairyGUI
             public Rect rect;
             public Vector4 clipBox;
             public bool soft;
-            public Vector4 softness;//left-top-right-bottom
+            public Vector4 softness; //left-top-right-bottom
             public uint clipId;
             public int rectMaskDepth;
             public int referenceValue;
@@ -49,7 +49,6 @@ namespace FairyGUI
             _clipStack = new Stack<ClipInfo>();
         }
 
-
         public void Begin()
         {
             current = this;
@@ -81,7 +80,6 @@ namespace FairyGUI
             working = true;
         }
 
-
         public void End()
         {
             working = false;
@@ -91,7 +89,6 @@ namespace FairyGUI
 
             OnEnd = null;
         }
-
 
         /// <param name="clipId"></param>
         /// <param name="clipRect"></param>
@@ -123,32 +120,17 @@ namespace FairyGUI
             clipInfo.soft = softness != null;
             if (clipInfo.soft)
             {
-                clipInfo.softness = (Vector4)softness;
-                float vx = clipInfo.rect.width * Screen.height * 0.25f;
-                float vy = clipInfo.rect.height * Screen.height * 0.25f;
+                clipInfo.softness = (Vector4) softness;
+                var vx = clipInfo.rect.width * Screen.height * 0.25f;
+                var vy = clipInfo.rect.height * Screen.height * 0.25f;
 
-                if (clipInfo.softness.x > 0)
-                    clipInfo.softness.x = vx / clipInfo.softness.x;
-                else
-                    clipInfo.softness.x = 10000f;
-
-                if (clipInfo.softness.y > 0)
-                    clipInfo.softness.y = vy / clipInfo.softness.y;
-                else
-                    clipInfo.softness.y = 10000f;
-
-                if (clipInfo.softness.z > 0)
-                    clipInfo.softness.z = vx / clipInfo.softness.z;
-                else
-                    clipInfo.softness.z = 10000f;
-
-                if (clipInfo.softness.w > 0)
-                    clipInfo.softness.w = vy / clipInfo.softness.w;
-                else
-                    clipInfo.softness.w = 10000f;
+                const float defValue = 10000f;
+                clipInfo.softness.x = clipInfo.softness.x > 0 ? vx / clipInfo.softness.x : defValue;
+                clipInfo.softness.y = clipInfo.softness.y > 0 ? vy / clipInfo.softness.y : defValue;
+                clipInfo.softness.z = clipInfo.softness.z > 0 ? vx / clipInfo.softness.z : defValue;
+                clipInfo.softness.w = clipInfo.softness.w > 0 ? vy / clipInfo.softness.w : defValue;
             }
         }
-
 
         /// <param name="clipId"></param>
         /// <param name="reversedMask"></param>
@@ -176,7 +158,6 @@ namespace FairyGUI
             clipInfo.reversed = reversedMask;
             clipped = true;
         }
-
 
         public void LeaveClipping()
         {
@@ -216,19 +197,19 @@ namespace FairyGUI
 
             if (stencilReferenceValue > 0)
             {
-                mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Equal);
+                mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                 mat.SetInt(ShaderConfig.ID_Stencil, stencilCompareValue);
                 mat.SetInt(ShaderConfig.ID_Stencil2, stencilCompareValue);
-                mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Keep);
+                mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Keep);
                 mat.SetInt(ShaderConfig.ID_StencilReadMask, stencilReferenceValue | (stencilReferenceValue - 1));
                 mat.SetInt(ShaderConfig.ID_ColorMask, 15);
             }
             else
             {
-                mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Always);
+                mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Always);
                 mat.SetInt(ShaderConfig.ID_Stencil, 0);
                 mat.SetInt(ShaderConfig.ID_Stencil2, 0);
-                mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Keep);
+                mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Keep);
                 mat.SetInt(ShaderConfig.ID_StencilReadMask, 255);
                 mat.SetInt(ShaderConfig.ID_ColorMask, 15);
             }
@@ -237,15 +218,15 @@ namespace FairyGUI
             {
                 if (rectMaskDepth > 0)
                 {
-                    if (clipInfo.soft)
-                        mat.EnableKeyword("SOFT_CLIPPED");
-                    else
-                        mat.EnableKeyword("CLIPPED");
+                    // if (clipInfo.soft)
+                    // mat.EnableKeyword("SOFT_CLIPPED");
+                    // else
+                    // mat.EnableKeyword("CLIPPED");
                 }
                 else
                 {
-                    mat.DisableKeyword("CLIPPED");
-                    mat.DisableKeyword("SOFT_CLIPPED");
+                    // mat.DisableKeyword("CLIPPED");
+                    // mat.DisableKeyword("SOFT_CLIPPED");
                 }
             }
         }
@@ -256,20 +237,20 @@ namespace FairyGUI
             {
                 if (stencilReferenceValue == 1)
                 {
-                    mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Always);
+                    mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Always);
                     mat.SetInt(ShaderConfig.ID_Stencil, 1);
-                    mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Replace);
+                    mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Replace);
                     mat.SetInt(ShaderConfig.ID_StencilReadMask, 255);
                     mat.SetInt(ShaderConfig.ID_ColorMask, 0);
                 }
                 else
                 {
                     if (stencilReferenceValue != 0 & _clipStack.Peek().reversed)
-                        mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.NotEqual);
+                        mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.NotEqual);
                     else
-                        mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Equal);
+                        mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                     mat.SetInt(ShaderConfig.ID_Stencil, stencilReferenceValue | (stencilReferenceValue - 1));
-                    mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Replace);
+                    mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Replace);
                     mat.SetInt(ShaderConfig.ID_StencilReadMask, stencilReferenceValue - 1);
                     mat.SetInt(ShaderConfig.ID_ColorMask, 0);
                 }
@@ -279,18 +260,18 @@ namespace FairyGUI
                 if (stencilReferenceValue != 0 & _clipStack.Peek().reversed)
                 {
                     int refValue = stencilReferenceValue | (stencilReferenceValue - 1);
-                    mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Equal);
+                    mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                     mat.SetInt(ShaderConfig.ID_Stencil, refValue);
-                    mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Zero);
+                    mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Zero);
                     mat.SetInt(ShaderConfig.ID_StencilReadMask, refValue);
                     mat.SetInt(ShaderConfig.ID_ColorMask, 0);
                 }
                 else
                 {
                     int refValue = stencilReferenceValue - 1;
-                    mat.SetInt(ShaderConfig.ID_StencilComp, (int)UnityEngine.Rendering.CompareFunction.Equal);
+                    mat.SetInt(ShaderConfig.ID_StencilComp, (int) UnityEngine.Rendering.CompareFunction.Equal);
                     mat.SetInt(ShaderConfig.ID_Stencil, refValue);
-                    mat.SetInt(ShaderConfig.ID_StencilOp, (int)UnityEngine.Rendering.StencilOp.Replace);
+                    mat.SetInt(ShaderConfig.ID_StencilOp, (int) UnityEngine.Rendering.StencilOp.Replace);
                     mat.SetInt(ShaderConfig.ID_StencilReadMask, refValue);
                     mat.SetInt(ShaderConfig.ID_ColorMask, 0);
                 }

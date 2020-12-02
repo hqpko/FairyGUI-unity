@@ -2,7 +2,6 @@
 
 namespace FairyGUI
 {
-
     public class StageEngine : MonoBehaviour
     {
         public int ObjectsOnStage;

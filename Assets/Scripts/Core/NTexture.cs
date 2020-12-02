@@ -5,7 +5,6 @@ using Object = UnityEngine.Object;
 
 namespace FairyGUI
 {
-
     public enum DestroyMethod
     {
         Destroy,
@@ -15,7 +14,6 @@ namespace FairyGUI
         Custom
     }
 
-
     public class NTexture
     {
         /// <summary>
@@ -23,18 +21,13 @@ namespace FairyGUI
         /// </summary>
         public static event Action<Texture> CustomDestroyMethod;
 
-
         public Rect uvRect;
-
 
         public bool rotated;
 
-
         public int refCount;
 
-
         public float lastActive;
-
 
         public DestroyMethod destroyMethod;
 
@@ -70,40 +63,18 @@ namespace FairyGUI
 
         static NTexture _empty;
 
-
-        public static NTexture Empty
-        {
-            get
-            {
-                if (_empty == null)
-                    _empty = new NTexture(CreateEmptyTexture());
-
-                return _empty;
-            }
-        }
-
+        public static NTexture Empty => _empty ?? (_empty = new NTexture(CreateEmptyTexture()));
 
         public static void DisposeEmpty()
         {
-            if (_empty != null)
-            {
-                NTexture tmp = _empty;
-                _empty = null;
-                tmp.Dispose();
-            }
+            _empty?.Dispose();
+            _empty = null;
         }
-
-
-        /// <param name="texture"></param>
-        public NTexture(Texture texture) : this(texture, null, 1, 1)
-        {
-        }
-
 
         /// <param name="texture"></param>
         /// <param name="xScale"></param>
         /// <param name="yScale"></param>
-        public NTexture(Texture texture, Texture alphaTexture, float xScale, float yScale)
+        public NTexture(Texture texture, Texture alphaTexture = null, float xScale = 1, float yScale = 1)
         {
             _root = this;
             _nativeTexture = texture;
@@ -114,16 +85,17 @@ namespace FairyGUI
                 uvRect.y = -yScale;
                 uvRect.yMax = 0;
             }
+
             if (xScale < 0)
             {
                 uvRect.x = -xScale;
                 uvRect.xMax = 0;
             }
+
             if (_nativeTexture != null)
                 _originalSize = new Vector2(_nativeTexture.width, _nativeTexture.height);
             _region = new Rect(0, 0, _originalSize.x, _originalSize.y);
         }
-
 
         /// <param name="texture"></param>
         /// <param name="region"></param>
@@ -140,7 +112,6 @@ namespace FairyGUI
                 uvRect.Set(0, 0, 1, 1);
         }
 
-
         /// <param name="root"></param>
         /// <param name="region"></param>
         /// <param name="rotated"></param>
@@ -150,7 +121,8 @@ namespace FairyGUI
             this.rotated = rotated;
             region.x += root._region.x;
             region.y += root._region.y;
-            uvRect = new Rect(region.x * root.uvRect.width / root.width, 1 - region.yMax * root.uvRect.height / root.height,
+            uvRect = new Rect(region.x * root.uvRect.width / root.width,
+                1 - region.yMax * root.uvRect.height / root.height,
                 region.width * root.uvRect.width / root.width, region.height * root.uvRect.height / root.height);
             if (rotated)
             {
@@ -162,10 +134,10 @@ namespace FairyGUI
                 uvRect.width = uvRect.height;
                 uvRect.height = tmp;
             }
+
             _region = region;
             _originalSize = _region.size;
         }
-
 
         /// <param name="root"></param>
         /// <param name="region"></param>
@@ -178,7 +150,6 @@ namespace FairyGUI
             _originalSize = originalSize;
             _offset = offset;
         }
-
 
         /// <param name="sprite"></param>
         public NTexture(Sprite sprite)
@@ -194,18 +165,15 @@ namespace FairyGUI
                 _region.width / _nativeTexture.width, _region.height / _nativeTexture.height);
         }
 
-
         public int width
         {
-            get { return (int)_region.width; }
+            get { return (int) _region.width; }
         }
-
 
         public int height
         {
-            get { return (int)_region.height; }
+            get { return (int) _region.height; }
         }
-
 
         public Vector2 offset
         {
@@ -213,13 +181,11 @@ namespace FairyGUI
             set { _offset = value; }
         }
 
-
         public Vector2 originalSize
         {
             get { return _originalSize; }
             set { _originalSize = value; }
         }
-
 
         /// <param name="drawRect"></param>
         /// <returns></returns>
@@ -232,7 +198,6 @@ namespace FairyGUI
             float sy = drawRect.height / _originalSize.y;
             return new Rect(_offset.x * sx, _offset.y * sy, _region.width * sx, _region.height * sy);
         }
-
 
         /// <param name="uv"></param>
         public void GetUV(Vector2[] uv)
@@ -259,30 +224,25 @@ namespace FairyGUI
             }
         }
 
-
         public NTexture root
         {
             get { return _root; }
         }
-
 
         public bool disposed
         {
             get { return _root == null; }
         }
 
-
         public Texture nativeTexture
         {
             get { return _root != null ? _root._nativeTexture : null; }
         }
 
-
         public Texture alphaTexture
         {
             get { return _root != null ? _root._alphaTexture : null; }
         }
-
 
         public MaterialManager GetMaterialManager(string shaderName)
         {
@@ -307,12 +267,10 @@ namespace FairyGUI
             return mm;
         }
 
-
         public void Unload()
         {
             Unload(false);
         }
-
 
         public void Unload(bool destroyMaterials)
         {
@@ -332,7 +290,6 @@ namespace FairyGUI
                     RefreshMaterials();
             }
         }
-
 
         /// <param name="nativeTexture"></param>
         /// <param name="alphaTexture"></param>
@@ -375,9 +332,9 @@ namespace FairyGUI
                         Resources.UnloadAsset(_alphaTexture);
                     break;
                 case DestroyMethod.ReleaseTemp:
-                    RenderTexture.ReleaseTemporary((RenderTexture)_nativeTexture);
+                    RenderTexture.ReleaseTemporary((RenderTexture) _nativeTexture);
                     if (_alphaTexture is RenderTexture)
-                        RenderTexture.ReleaseTemporary((RenderTexture)_alphaTexture);
+                        RenderTexture.ReleaseTemporary((RenderTexture) _alphaTexture);
                     break;
                 case DestroyMethod.Custom:
                     if (CustomDestroyMethod == null)
@@ -388,6 +345,7 @@ namespace FairyGUI
                         if (_alphaTexture != null)
                             CustomDestroyMethod(_alphaTexture);
                     }
+
                     break;
             }
 
@@ -444,7 +402,6 @@ namespace FairyGUI
                     onRelease(this);
             }
         }
-
 
         public void Dispose()
         {

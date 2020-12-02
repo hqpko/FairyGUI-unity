@@ -3,24 +3,19 @@ using UnityEngine;
 
 namespace FairyGUI
 {
-
     public class NAudioClip
     {
         public static Action<AudioClip> CustomDestroyMethod;
 
-
         public DestroyMethod destroyMethod;
 
-
         public AudioClip nativeClip;
-
 
         /// <param name="audioClip"></param>
         public NAudioClip(AudioClip audioClip)
         {
             nativeClip = audioClip;
         }
-
 
         public void Unload()
         {
@@ -41,7 +36,6 @@ namespace FairyGUI
 
             nativeClip = null;
         }
-
 
         /// <param name="audioClip"></param>
         public void Reload(AudioClip audioClip)

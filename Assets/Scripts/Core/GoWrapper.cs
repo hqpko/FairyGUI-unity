@@ -31,7 +31,6 @@ namespace FairyGUI
 
         protected static List<Transform> helperTransformList = new List<Transform>();
 
-
         public GoWrapper()
         {
             _flags |= Flags.SkipBatching;
@@ -41,7 +40,6 @@ namespace FairyGUI
 
             CreateGameObject("GoWrapper");
         }
-
 
         /// <param name="go">包装对象。</param>
         public GoWrapper(GameObject go) : this()
@@ -138,10 +136,8 @@ namespace FairyGUI
                 };
                 _renderers.Add(ri);
             }
-            _renderers.Sort((RendererInfo c1, RendererInfo c2) =>
-            {
-                return c1.sortingOrder - c2.sortingOrder;
-            });
+
+            _renderers.Sort((RendererInfo c1, RendererInfo c2) => { return c1.sortingOrder - c2.sortingOrder; });
 
             _shouldCloneMaterial = true;
         }
@@ -167,7 +163,8 @@ namespace FairyGUI
                     if (mat == null)
                         continue;
 
-                    if (shouldSetRQ && mat.renderQueue != 3000) //Set the object rendering in Transparent Queue as UI objects
+                    if (shouldSetRQ && mat.renderQueue != 3000
+                    ) //Set the object rendering in Transparent Queue as UI objects
                         mat.renderQueue = 3000;
 
                     //确保相同的材质不会复制两次
@@ -177,6 +174,7 @@ namespace FairyGUI
                         newMat = new Material(mat);
                         _materialsBackup[mat] = newMat;
                     }
+
                     mats[j] = newMat;
                 }
 
@@ -212,6 +210,7 @@ namespace FairyGUI
                             mats[j] = kv.Key;
                     }
                 }
+
                 ri.renderer.sharedMaterials = mats;
             }
 
@@ -223,10 +222,7 @@ namespace FairyGUI
 
         public override int renderingOrder
         {
-            get
-            {
-                return base.renderingOrder;
-            }
+            get { return base.renderingOrder; }
             set
             {
                 base.renderingOrder = value;
@@ -287,6 +283,7 @@ namespace FairyGUI
         }
 
         private List<Material> helperMaterials = new List<Material>();
+
         virtual protected void ApplyClipping(UpdateContext context)
         {
 #if UNITY_2018_2_OR_NEWER
@@ -339,7 +336,8 @@ namespace FairyGUI
                 _wrapTarget = null;
 
                 if (_materialsBackup.Count > 0)
-                { //如果有备份，说明材质是复制出来的，应该删除
+                {
+                    //如果有备份，说明材质是复制出来的，应该删除
                     foreach (KeyValuePair<Material, Material> kv in _materialsBackup)
                         Material.DestroyImmediate(kv.Value);
                 }

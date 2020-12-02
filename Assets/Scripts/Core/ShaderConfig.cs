@@ -2,26 +2,19 @@
 
 namespace FairyGUI
 {
-
     public static class ShaderConfig
     {
-
         /// <param name="name"></param>
         /// <returns></returns>
         public delegate Shader GetFunction(string name);
 
-
         public static GetFunction Get = Shader.Find;
-
 
         public static string imageShader = "FairyGUI/Image";
 
-
         public static string textShader = "FairyGUI/Text";
 
-
         public static string bmFontShader = "FairyGUI/BMFont";
-
 
         public static string TMPFontShader = "FairyGUI/TMP";
 
@@ -60,7 +53,6 @@ namespace FairyGUI
             ID_Stencil2 = Shader.PropertyToID("_StencilRef");
         }
 
-
         /// <param name="name"></param>
         /// <returns></returns>
         public static Shader GetShader(string name)
@@ -71,6 +63,7 @@ namespace FairyGUI
                 Debug.LogWarning("FairyGUI: shader not found: " + name);
                 shader = Shader.Find("UI/Default");
             }
+
             shader.hideFlags = DisplayObject.hideFlags;
 
             return shader;

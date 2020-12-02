@@ -2,7 +2,6 @@
 
 namespace FairyGUI
 {
-
     public class Image : DisplayObject, IMeshFactory
     {
         protected Rect? _scale9Grid;
@@ -11,14 +10,8 @@ namespace FairyGUI
         protected int _tileGridIndice;
         protected FillMesh _fillMesh;
 
-        public Image() : this(null)
-        {
-        }
-
-
         /// <param name="texture"></param>
-        public Image(NTexture texture)
-            : base()
+        public Image(NTexture texture = null)
         {
             _flags |= Flags.TouchDisabled;
 
@@ -33,14 +26,10 @@ namespace FairyGUI
                 UpdateTexture(texture);
         }
 
-
         public NTexture texture
         {
             get { return graphics.texture; }
-            set
-            {
-                UpdateTexture(value);
-            }
+            set { UpdateTexture(value); }
         }
 
         public Vector2 textureScale
@@ -53,20 +42,15 @@ namespace FairyGUI
             }
         }
 
-
         public Color color
         {
-            get
-            {
-                return graphics.color;
-            }
+            get { return graphics.color; }
             set
             {
                 graphics.color = value;
                 graphics.Tint();
             }
         }
-
 
         public FillMethod fillMethod
         {
@@ -80,6 +64,7 @@ namespace FairyGUI
 
                     _fillMesh = new FillMesh();
                 }
+
                 if (_fillMesh.method != value)
                 {
                     _fillMesh.method = value;
@@ -87,7 +72,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public int fillOrigin
         {
@@ -105,7 +89,6 @@ namespace FairyGUI
             }
         }
 
-
         public bool fillClockwise
         {
             get { return _fillMesh != null ? _fillMesh.clockwise : true; }
@@ -121,7 +104,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public float fillAmount
         {
@@ -139,7 +121,6 @@ namespace FairyGUI
             }
         }
 
-
         public Rect? scale9Grid
         {
             get { return _scale9Grid; }
@@ -152,7 +133,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public bool scaleByTile
         {
@@ -167,7 +147,6 @@ namespace FairyGUI
             }
         }
 
-
         public int tileGridIndice
         {
             get { return _tileGridIndice; }
@@ -180,7 +159,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public void SetNativeSize()
         {
@@ -212,8 +190,8 @@ namespace FairyGUI
             {
                 NTexture texture = graphics.texture;
                 if (texture.root == texture
-                            && texture.nativeTexture != null
-                            && texture.nativeTexture.wrapMode == TextureWrapMode.Repeat)
+                    && texture.nativeTexture != null
+                    && texture.nativeTexture.wrapMode == TextureWrapMode.Repeat)
                 {
                     Rect uvRect = vb.uvRect;
                     uvRect.width *= vb.contentRect.width / texture.width * _textureScale.x;
@@ -240,20 +218,21 @@ namespace FairyGUI
                 graphics.OnPopulateMesh(vb);
         }
 
-        static int[] TRIANGLES_9_GRID = new int[] {
-            4,0,1,1,5,4,
-            5,1,2,2,6,5,
-            6,2,3,3,7,6,
-            8,4,5,5,9,8,
-            9,5,6,6,10,9,
-            10,6,7,7,11,10,
-            12,8,9,9,13,12,
-            13,9,10,10,14,13,
-            14,10,11,
-            11,15,14
+        static int[] TRIANGLES_9_GRID = new int[]
+        {
+            4, 0, 1, 1, 5, 4,
+            5, 1, 2, 2, 6, 5,
+            6, 2, 3, 3, 7, 6,
+            8, 4, 5, 5, 9, 8,
+            9, 5, 6, 6, 10, 9,
+            10, 6, 7, 7, 11, 10,
+            12, 8, 9, 9, 13, 12,
+            13, 9, 10, 10, 14, 13,
+            14, 10, 11,
+            11, 15, 14
         };
 
-        static int[] gridTileIndice = new int[] { -1, 0, -1, 2, 4, 3, -1, 1, -1 };
+        static int[] gridTileIndice = new int[] {-1, 0, -1, 2, 4, 3, -1, 1, -1};
         static float[] gridX = new float[4];
         static float[] gridY = new float[4];
         static float[] gridTexX = new float[4];
@@ -262,7 +241,7 @@ namespace FairyGUI
         public void SliceFill(VertexBuffer vb)
         {
             NTexture texture = graphics.texture;
-            Rect gridRect = (Rect)_scale9Grid;
+            Rect gridRect = (Rect) _scale9Grid;
             Rect contentRect = vb.contentRect;
             contentRect.width *= _textureScale.x;
             contentRect.height *= _textureScale.y;
@@ -337,8 +316,10 @@ namespace FairyGUI
                 for (int cy = 0; cy < 4; cy++)
                 {
                     for (int cx = 0; cx < 4; cx++)
-                        vb.AddVert(new Vector2(gridX[cx] / _textureScale.x, gridY[cy] / _textureScale.y), vb.vertexColor, new Vector2(gridTexX[cx], gridTexY[cy]));
+                        vb.AddVert(new Vector2(gridX[cx] / _textureScale.x, gridY[cy] / _textureScale.y),
+                            vb.vertexColor, new Vector2(gridTexX[cx], gridTexY[cy]));
                 }
+
                 vb.AddTriangles(TRIANGLES_9_GRID);
             }
             else
@@ -397,7 +378,7 @@ namespace FairyGUI
                         uvTmp.yMin = Mathf.Lerp(uvRect.y, yMax, 1 - tailHeight / sourceH);
 
                     Rect drawRect = new Rect(contentRect.x + i * sourceW, contentRect.y + j * sourceH,
-                            i == (hc - 1) ? tailWidth : sourceW, j == (vc - 1) ? tailHeight : sourceH);
+                        i == (hc - 1) ? tailWidth : sourceW, j == (vc - 1) ? tailHeight : sourceH);
 
                     drawRect.x /= _textureScale.x;
                     drawRect.y /= _textureScale.y;

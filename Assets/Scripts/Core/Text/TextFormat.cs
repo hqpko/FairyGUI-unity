@@ -2,7 +2,6 @@
 
 namespace FairyGUI
 {
-
     public partial class TextFormat
     {
         public enum SpecialStyle
@@ -12,51 +11,35 @@ namespace FairyGUI
             Subscript
         }
 
-
         public int size;
-
 
         public string font;
 
-
         public Color color;
-
 
         public int lineSpacing;
 
-
         public int letterSpacing;
-
 
         public bool bold;
 
-
         public bool underline;
-
 
         public bool italic;
 
-
         public bool strikethrough;
-
 
         public Color32[] gradientColor;
 
-
         public AlignType align;
-
 
         public SpecialStyle specialStyle;
 
-
         public float outline;
-
 
         public Color outlineColor;
 
-
         public Vector2 shadowOffset;
-
 
         public Color shadowColor;
 
@@ -67,7 +50,6 @@ namespace FairyGUI
             lineSpacing = 3;
             outlineColor = shadowColor = Color.black;
         }
-
 
         /// <param name="value"></param>
         public void SetColor(uint value)
@@ -81,19 +63,18 @@ namespace FairyGUI
             color = new Color(r, g, b, 1);
         }
 
-
         /// <param name="aFormat"></param>
         /// <returns></returns>
-        public bool EqualStyle(TextFormat aFormat)
-        {
-            return size == aFormat.size && color == aFormat.color
-                && bold == aFormat.bold && underline == aFormat.underline
-                && italic == aFormat.italic
-                && strikethrough == aFormat.strikethrough
-                && gradientColor == aFormat.gradientColor
-                && align == aFormat.align
-                && specialStyle == aFormat.specialStyle;
-        }
+        public bool EqualStyle(TextFormat aFormat) =>
+            size == aFormat.size
+            && color == aFormat.color
+            && bold == aFormat.bold
+            && underline == aFormat.underline
+            && italic == aFormat.italic
+            && strikethrough == aFormat.strikethrough
+            && gradientColor == aFormat.gradientColor
+            && align == aFormat.align
+            && specialStyle == aFormat.specialStyle;
 
         /// <summary>
         /// Only base NOT all formats will be copied
@@ -117,6 +98,7 @@ namespace FairyGUI
             }
             else
                 this.gradientColor = null;
+
             this.align = source.align;
             this.specialStyle = source.specialStyle;
         }

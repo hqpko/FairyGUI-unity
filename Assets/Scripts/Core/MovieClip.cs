@@ -2,25 +2,19 @@
 
 namespace FairyGUI
 {
-
     public class MovieClip : Image
     {
-
         public class Frame
         {
             public NTexture texture;
             public float addDelay;
         }
 
-
         public float interval;
-
 
         public bool swing;
 
-
         public float repeatDelay;
-
 
         public float timeScale;
 
@@ -46,7 +40,6 @@ namespace FairyGUI
 
         EventListener _onPlayEnd;
 
-
         public MovieClip()
         {
             interval = 0.1f;
@@ -64,25 +57,20 @@ namespace FairyGUI
             SetPlaySettings();
         }
 
-
         public EventListener onPlayEnd
         {
             get { return _onPlayEnd ?? (_onPlayEnd = new EventListener(this, "onPlayEnd")); }
         }
 
-
         public Frame[] frames
         {
-            get
-            {
-                return _frames;
-            }
+            get { return _frames; }
             set
             {
                 _frames = value;
                 _scale9Grid = null;
                 _scaleByTile = false;
-                
+
                 if (_frames == null)
                 {
                     _frameCount = 0;
@@ -90,6 +78,7 @@ namespace FairyGUI
                     CheckTimer();
                     return;
                 }
+
                 _frameCount = frames.Length;
 
                 if (_end == -1 || _end > _frameCount - 1)
@@ -111,7 +100,6 @@ namespace FairyGUI
             }
         }
 
-
         public bool playing
         {
             get { return _playing; }
@@ -124,7 +112,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public int frame
         {
@@ -143,7 +130,6 @@ namespace FairyGUI
             }
         }
 
-
         public void Rewind()
         {
             _frame = 0;
@@ -152,7 +138,6 @@ namespace FairyGUI
             _repeatedCount = 0;
             DrawFrame();
         }
-
 
         /// <param name="anotherMc"></param>
         public void SyncStatus(MovieClip anotherMc)
@@ -163,7 +148,6 @@ namespace FairyGUI
             _repeatedCount = anotherMc._repeatedCount;
             DrawFrame();
         }
-
 
         /// <param name="time"></param>
         public void Advance(float time)
@@ -227,7 +211,6 @@ namespace FairyGUI
             DrawFrame();
         }
 
-
         public void SetPlaySettings()
         {
             SetPlaySettings(0, -1, 0, -1);
@@ -290,6 +273,7 @@ namespace FairyGUI
             }
             else
                 dt = Time.deltaTime;
+
             if (timeScale != 1)
                 dt *= timeScale;
 
@@ -362,7 +346,7 @@ namespace FairyGUI
                     {
                         _times--;
                         if (_times == 0)
-                            _status = 2;  //ending
+                            _status = 2; //ending
                         else
                             _status = 1; //new loop
                     }

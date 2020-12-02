@@ -4,7 +4,7 @@ using FairyGUI.Utils;
 
 namespace FairyGUI
 {
-    class GearXYValue
+    internal class GearXYValue
     {
         public float x;
         public float y;
@@ -27,8 +27,8 @@ namespace FairyGUI
     {
         public bool positionsInPercent;
 
-        Dictionary<string, GearXYValue> _storage;
-        GearXYValue _default;
+        private Dictionary<string, GearXYValue> _storage;
+        private GearXYValue _default;
 
         public GearXY(GObject owner)
             : base(owner)
@@ -37,15 +37,18 @@ namespace FairyGUI
 
         protected override void Init()
         {
-            _default = new GearXYValue(_owner.x, _owner.y, _owner.x / _owner.parent.width, _owner.y / _owner.parent.height);
+            _default = new GearXYValue(_owner.x, _owner.y, _owner.x / _owner.parent.width,
+                _owner.y / _owner.parent.height);
             _storage = new Dictionary<string, GearXYValue>();
         }
 
-        override protected void AddStatus(string pageId, ByteBuffer buffer)
+        protected override void AddStatus(string pageId, ByteBuffer buffer)
         {
             GearXYValue gv;
             if (pageId == null)
+            {
                 gv = _default;
+            }
             else
             {
                 gv = new GearXYValue();
@@ -67,13 +70,13 @@ namespace FairyGUI
             gv.py = buffer.ReadFloat();
         }
 
-        override public void Apply()
+        public override void Apply()
         {
             GearXYValue gv;
             if (!_storage.TryGetValue(_controller.selectedPageId, out gv))
                 gv = _default;
 
-            Vector2 endPos = new Vector2();
+            var endPos = new Vector2();
 
             if (positionsInPercent && _owner.parent != null)
             {
@@ -96,9 +99,12 @@ namespace FairyGUI
                         _tweenConfig._tweener = null;
                     }
                     else
+                    {
                         return;
+                    }
                 }
-                Vector2 origin = _owner.xy;
+
+                var origin = _owner.xy;
 
                 if (endPos != origin)
                 {
@@ -121,7 +127,8 @@ namespace FairyGUI
         }
 
         public void OnTweenStart(GTweener tweener)
-        {//nothing
+        {
+            //nothing
         }
 
         public void OnTweenUpdate(GTweener tweener)
@@ -141,10 +148,11 @@ namespace FairyGUI
                 _owner.ReleaseDisplayLock(_tweenConfig._displayLockToken);
                 _tweenConfig._displayLockToken = 0;
             }
+
             _owner.DispatchEvent("onGearStop", this);
         }
 
-        override public void UpdateState()
+        public override void UpdateState()
         {
             GearXYValue gv;
             if (!_storage.TryGetValue(_controller.selectedPageId, out gv))
@@ -155,18 +163,18 @@ namespace FairyGUI
 
             gv.px = _owner.x / _owner.parent.width;
             gv.py = _owner.y / _owner.parent.height;
-
         }
 
-        override public void UpdateFromRelations(float dx, float dy)
+        public override void UpdateFromRelations(float dx, float dy)
         {
             if (_controller != null && _storage != null && !positionsInPercent)
             {
-                foreach (GearXYValue gv in _storage.Values)
+                foreach (var gv in _storage.Values)
                 {
                     gv.x += dx;
                     gv.y += dy;
                 }
+
                 _default.x += dx;
                 _default.y += dy;
 

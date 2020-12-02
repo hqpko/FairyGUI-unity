@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FairyGUI.Utils;
+
 #if FAIRYGUI_TOLUA
 using LuaInterface;
 #endif
@@ -17,10 +18,12 @@ namespace FairyGUI
         /// Root container.
         /// </summary>
         public Container rootContainer { get; private set; }
+
         /// <summary>
         /// Content container. If the component is not clipped, then container==rootContainer.
         /// </summary>
         public Container container { get; protected set; }
+
         /// <summary>
         /// ScrollPane of the component. If the component is not scrollable, the value is null.
         /// </summary>
@@ -126,7 +129,6 @@ namespace FairyGUI
             set { rootContainer.fairyBatching = value; }
         }
 
-
         /// <param name="childChanged"></param>
         public void InvalidateBatchingState(bool childChanged)
         {
@@ -145,7 +147,6 @@ namespace FairyGUI
             set { rootContainer.opaque = value; }
         }
 
-
         /// <value></value>
         public Margin margin
         {
@@ -153,12 +154,12 @@ namespace FairyGUI
             set
             {
                 _margin = value;
-                if (rootContainer.clipRect != null && scrollPane == null) //如果scrollPane不为空，则HandleSizeChanged里面的处理会促使ScrollPane处理
+                if (rootContainer.clipRect != null && scrollPane == null
+                ) //如果scrollPane不为空，则HandleSizeChanged里面的处理会促使ScrollPane处理
                     container.SetXY(_margin.left + _alignOffset.x, _margin.top + _alignOffset.y);
                 HandleSizeChanged();
             }
         }
-
 
         public ChildrenRenderOrder childrenRenderOrder
         {
@@ -172,7 +173,6 @@ namespace FairyGUI
                 }
             }
         }
-
 
         public int apexIndex
         {
@@ -248,6 +248,7 @@ namespace FairyGUI
                     ChildStateChanged(child);
                     SetBoundsChangedFlag();
                 }
+
                 return child;
             }
             else
@@ -269,6 +270,7 @@ namespace FairyGUI
                 if (target.sortingOrder < child.sortingOrder)
                     break;
             }
+
             return i;
         }
 
@@ -295,6 +297,7 @@ namespace FairyGUI
             {
                 RemoveChildAt(childIndex, dispose);
             }
+
             return child;
         }
 
@@ -420,7 +423,7 @@ namespace FairyGUI
                         break;
                     }
                     else
-                        gcom = (GComponent)obj;
+                        gcom = (GComponent) obj;
                 }
             }
 
@@ -573,6 +576,7 @@ namespace FairyGUI
                         if (g.inContainer)
                             displayIndex++;
                     }
+
                     container.SetChildIndex(child.displayObject, displayIndex);
                 }
                 else if (_childrenRenderOrder == ChildrenRenderOrder.Descent)
@@ -583,6 +587,7 @@ namespace FairyGUI
                         if (g.inContainer)
                             displayIndex++;
                     }
+
                     container.SetChildIndex(child.displayObject, displayIndex);
                 }
                 else
@@ -633,7 +638,6 @@ namespace FairyGUI
             get { return _children.Count; }
         }
 
-
         /// <param name="obj"></param>
         /// <returns></returns>
         public bool IsAncestorOf(GObject obj)
@@ -649,10 +653,9 @@ namespace FairyGUI
 
                 p = p.parent;
             }
+
             return false;
         }
-
-
 
         /// <param name="objs"></param>
         public void ChangeChildrenOrder(IList<GObject> objs)
@@ -666,6 +669,7 @@ namespace FairyGUI
 
                 _children[i] = obj;
             }
+
             BuildNativeDisplayList();
             SetBoundsChangedFlag();
         }
@@ -782,6 +786,7 @@ namespace FairyGUI
                     if (g.group == child)
                         ChildStateChanged(g);
                 }
+
                 return;
             }
 
@@ -804,6 +809,7 @@ namespace FairyGUI
                             if (g.displayObject != null && g.displayObject.parent != null)
                                 index++;
                         }
+
                         container.AddChildAt(child.displayObject, index);
                     }
                     else if (_childrenRenderOrder == ChildrenRenderOrder.Descent)
@@ -818,6 +824,7 @@ namespace FairyGUI
                             if (g.displayObject != null && g.displayObject.parent != null)
                                 index++;
                         }
+
                         container.AddChildAt(child.displayObject, index);
                     }
                     else
@@ -855,42 +862,43 @@ namespace FairyGUI
             switch (_childrenRenderOrder)
             {
                 case ChildrenRenderOrder.Ascent:
+                {
+                    for (int i = 0; i < cnt; i++)
                     {
-                        for (int i = 0; i < cnt; i++)
-                        {
-                            GObject child = _children[i];
-                            if (child.displayObject != null && child.internalVisible)
-                                container.AddChild(child.displayObject);
-                        }
+                        GObject child = _children[i];
+                        if (child.displayObject != null && child.internalVisible)
+                            container.AddChild(child.displayObject);
                     }
+                }
                     break;
                 case ChildrenRenderOrder.Descent:
+                {
+                    for (int i = cnt - 1; i >= 0; i--)
                     {
-                        for (int i = cnt - 1; i >= 0; i--)
-                        {
-                            GObject child = _children[i];
-                            if (child.displayObject != null && child.internalVisible)
-                                container.AddChild(child.displayObject);
-                        }
+                        GObject child = _children[i];
+                        if (child.displayObject != null && child.internalVisible)
+                            container.AddChild(child.displayObject);
                     }
+                }
                     break;
 
                 case ChildrenRenderOrder.Arch:
+                {
+                    int apex = Mathf.Clamp(_apexIndex, 0, cnt);
+                    for (int i = 0; i < apex; i++)
                     {
-                        int apex = Mathf.Clamp(_apexIndex, 0, cnt);
-                        for (int i = 0; i < apex; i++)
-                        {
-                            GObject child = _children[i];
-                            if (child.displayObject != null && child.internalVisible)
-                                container.AddChild(child.displayObject);
-                        }
-                        for (int i = cnt - 1; i >= apex; i--)
-                        {
-                            GObject child = _children[i];
-                            if (child.displayObject != null && child.internalVisible)
-                                container.AddChild(child.displayObject);
-                        }
+                        GObject child = _children[i];
+                        if (child.displayObject != null && child.internalVisible)
+                            container.AddChild(child.displayObject);
                     }
+
+                    for (int i = cnt - 1; i >= apex; i--)
+                    {
+                        GObject child = _children[i];
+                        if (child.displayObject != null && child.internalVisible)
+                            container.AddChild(child.displayObject);
+                    }
+                }
                     break;
             }
         }
@@ -904,6 +912,7 @@ namespace FairyGUI
                 GObject child = _children[i];
                 child.HandleControllerChanged(c);
             }
+
             _applyingController = null;
 
             c.RunActions();
@@ -933,12 +942,13 @@ namespace FairyGUI
                     myIndex = i;
                 }
                 else if ((child is GButton)
-                    && ((GButton)child).relatedController == c)
+                         && ((GButton) child).relatedController == c)
                 {
                     if (i > maxIndex)
                         maxIndex = i;
                 }
             }
+
             if (myIndex < maxIndex)
             {
                 if (_applyingController != null)
@@ -979,13 +989,11 @@ namespace FairyGUI
             }
         }
 
-
         public bool reversedMask
         {
             get { return container.reversedMask; }
             set { container.reversedMask = value; }
         }
-
 
         public string baseUserData
         {
@@ -1011,7 +1019,7 @@ namespace FairyGUI
             else if (rootContainer.clipRect != null)
             {
                 return child.x + child.width >= 0 && child.x <= this.width
-                    && child.y + child.height >= 0 && child.y <= this.height;
+                                                  && child.y + child.height >= 0 && child.y <= this.height;
             }
             else
                 return true;
@@ -1026,6 +1034,7 @@ namespace FairyGUI
                 if (IsChildInView(child))
                     return i;
             }
+
             return -1;
         }
 
@@ -1154,6 +1163,7 @@ namespace FairyGUI
                     if (tmp > ab)
                         ab = tmp;
                 }
+
                 aw = ar - ax;
                 ah = ab - ay;
             }
@@ -1277,12 +1287,13 @@ namespace FairyGUI
                             GObject prev = _children[i - 1];
                             if (xValue < prev.x + prev.width / 2) // top half part
                                 xValue = prev.x;
-                            else//bottom half part
+                            else //bottom half part
                                 xValue = obj.x;
                             break;
                         }
                     }
                 }
+
                 if (i == cnt)
                     xValue = obj.x;
             }
@@ -1372,7 +1383,7 @@ namespace FairyGUI
                 _margin.right = buffer.ReadInt();
             }
 
-            OverflowType overflow = (OverflowType)buffer.ReadByte();
+            OverflowType overflow = (OverflowType) buffer.ReadByte();
             if (overflow == OverflowType.Scroll)
             {
                 int savedPos = buffer.position;
@@ -1423,7 +1434,7 @@ namespace FairyGUI
                 {
                     buffer.Seek(curPos, 0);
 
-                    ObjectType type = (ObjectType)buffer.ReadByte();
+                    ObjectType type = (ObjectType) buffer.ReadByte();
                     string src = buffer.ReadS();
                     string pkgId = buffer.ReadS();
 
@@ -1510,7 +1521,8 @@ namespace FairyGUI
                 {
                     PackageItem pi = contentItem.owner.GetItem(hitTestId);
                     if (pi != null && pi.pixelHitTestData != null)
-                        rootContainer.hitArea = new PixelHitTest(pi.pixelHitTestData, i1, i2, sourceWidth, sourceHeight);
+                        rootContainer.hitArea =
+                            new PixelHitTest(pi.pixelHitTestData, i1, i2, sourceWidth, sourceHeight);
                 }
                 else if (i1 != 0 && i2 != -1)
                 {
