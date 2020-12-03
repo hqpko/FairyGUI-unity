@@ -40,8 +40,6 @@ namespace FairyGUI
         Vector2 _touchPosition;
         int _frameGotHitTarget;
         int _frameGotTouchPosition;
-        bool _customInput;
-        Vector2 _customInputPos;
         bool _customInputButtonDown;
         AudioSource _audio;
         List<NTexture> _toCollectTextures = new List<NTexture>();
@@ -610,49 +608,6 @@ namespace FairyGUI
                 _lastInput.ReplaceSelection(value);
         }
 
-        /// <param name="screenPos"></param>
-        /// <param name="buttonDown"></param>
-        public void SetCustomInput(Vector2 screenPos, bool buttonDown)
-        {
-            _customInput = true;
-            _customInputButtonDown = buttonDown;
-            _customInputPos = screenPos;
-            _frameGotHitTarget = 0;
-        }
-
-        /// <param name="screenPos"></param>
-        /// <param name="buttonDown"></param>
-        /// <param name="buttonUp"></param>
-        public void SetCustomInput(Vector2 screenPos, bool buttonDown, bool buttonUp)
-        {
-            _customInput = true;
-            if (buttonDown)
-                _customInputButtonDown = true;
-            else if (buttonUp)
-                _customInputButtonDown = false;
-            _customInputPos = screenPos;
-            _frameGotHitTarget = 0;
-        }
-
-        /// <param name="hit"></param>
-        /// <param name="buttonDown"></param>
-        public void SetCustomInput(ref RaycastHit hit, bool buttonDown)
-        {
-            Vector2 screenPos = HitTestContext.cachedMainCamera.WorldToScreenPoint(hit.point);
-            HitTestContext.CacheRaycastHit(HitTestContext.cachedMainCamera, ref hit);
-            SetCustomInput(screenPos, buttonDown);
-        }
-
-        /// <param name="hit"></param>
-        /// <param name="buttonDown"></param>
-        /// <param name="buttonUp"></param>
-        public void SetCustomInput(ref RaycastHit hit, bool buttonDown, bool buttonUp)
-        {
-            Vector2 screenPos = HitTestContext.cachedMainCamera.WorldToScreenPoint(hit.point);
-            HitTestContext.CacheRaycastHit(HitTestContext.cachedMainCamera, ref hit);
-            SetCustomInput(screenPos, buttonDown, buttonUp);
-        }
-
         public void ForceUpdate()
         {
             _updateContext.Begin();
@@ -708,16 +663,7 @@ namespace FairyGUI
 
             _frameGotHitTarget = Time.frameCount;
 
-            if (_customInput)
-            {
-                Vector2 pos = _customInputPos;
-                pos.y = _contentRect.height - pos.y;
-
-                TouchInfo touch = _touches[0];
-                _touchTarget = HitTest(pos, true);
-                touch.target = _touchTarget;
-            }
-            else if (touchScreen)
+            if (touchScreen)
             {
                 _touchTarget = null;
                 for (int i = 0; i < Input.touchCount; ++i)
@@ -848,12 +794,7 @@ namespace FairyGUI
 
             UpdateTouchPosition();
 
-            if (_customInput)
-            {
-                HandleCustomInput();
-                _customInput = false;
-            }
-            else if (touchScreen)
+            if (touchScreen)
                 HandleTouchEvents();
             else
                 HandleMouseEvents();
@@ -867,12 +808,7 @@ namespace FairyGUI
             if (_frameGotTouchPosition != Time.frameCount)
             {
                 _frameGotTouchPosition = Time.frameCount;
-                if (_customInput)
-                {
-                    _touchPosition = _customInputPos;
-                    _touchPosition.y = _contentRect.height - _touchPosition.y;
-                }
-                else if (touchScreen)
+                if (touchScreen)
                 {
                     for (int i = 0; i < Input.touchCount; ++i)
                     {
@@ -920,51 +856,6 @@ namespace FairyGUI
             }
             else
                 textField.CheckComposition();
-        }
-
-        void HandleCustomInput()
-        {
-            Vector2 pos = _customInputPos;
-            pos.y = _contentRect.height - pos.y;
-            TouchInfo touch = _touches[0];
-
-            if (touch.x != pos.x || touch.y != pos.y)
-            {
-                touch.x = pos.x;
-                touch.y = pos.y;
-                touch.Move();
-            }
-
-            if (touch.lastRollOver != touch.target)
-                HandleRollOver(touch);
-
-            if (_customInputButtonDown)
-            {
-                if (!touch.began)
-                {
-                    _touchCount = 1;
-                    touch.Begin();
-                    touch.button = 0;
-                    SetFous(touch.target);
-
-                    touch.UpdateEvent();
-                    touch.target.BubbleEvent("onTouchBegin", touch.evt);
-                }
-            }
-            else if (touch.began)
-            {
-                _touchCount = 0;
-                touch.End();
-
-                DisplayObject clickTarget = touch.ClickTest();
-                if (clickTarget != null)
-                {
-                    touch.UpdateEvent();
-                    clickTarget.BubbleEvent("onClick", touch.evt);
-                }
-
-                touch.button = -1;
-            }
         }
 
         void HandleMouseEvents()
